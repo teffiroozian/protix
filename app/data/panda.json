@@ -1,0 +1,16 @@
+{
+    "id": "panda",
+    "items": [
+        {
+            "name": "Grilled Teriyaki Chicken",
+            "calories": 300,
+            "protein": 36
+        },
+        { "name": "Broccoli Beef", "calories": 150, "protein": 9 },
+        {
+            "name": "Black Pepper Angus Steak",
+            "calories": 180,
+            "protein": 19
+        }
+    ]
+}

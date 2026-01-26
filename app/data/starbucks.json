@@ -1,0 +1,141 @@
+{
+    "id": "starbucks",
+    "items": [
+        {
+            "name": "Iced SF Vanilla Protein Matcha",
+            "calories": 250,
+            "protein": 36,
+            "carbs": 14,
+            "fat": 5,
+            "category": "Beverage"
+        },
+        {
+            "name": "Iced Protein Matcha",
+            "calories": 300,
+            "protein": 36,
+            "carbs": 29,
+            "fat": 5,
+            "category": "Beverage"
+        },
+        {
+            "name": "Iced SF Vanilla Protein Latte",
+            "calories": 200,
+            "protein": 29,
+            "carbs": 12,
+            "fat": 4,
+            "category": "Beverage"
+        },
+        {
+            "name": "Iced Vanilla Protein Latte",
+            "calories": 270,
+            "protein": 29,
+            "carbs": 31,
+            "fat": 4,
+            "category": "Beverage"
+        },
+        {
+            "name": "SF Protein Matcha",
+            "calories": 240,
+            "protein": 28,
+            "carbs": 18,
+            "fat": 7,
+            "category": "Beverage"
+        },
+        {
+            "name": "Protein Matcha",
+            "calories": 300,
+            "protein": 28,
+            "carbs": 32,
+            "fat": 7,
+            "category": "Beverage"
+        },
+        {
+            "name": "Bacon, Sausage & Egg Wrap",
+            "calories": 640,
+            "protein": 27,
+            "carbs": 57,
+            "fat": 33,
+            "category": "Wrap"
+        },
+        {
+            "name": "SF Vanilla Protein Latte",
+            "calories": 230,
+            "protein": 27,
+            "carbs": 17,
+            "fat": 6,
+            "category": "Beverage"
+        },
+        {
+            "name": "Vanilla Protein Latte",
+            "calories": 310,
+            "protein": 27,
+            "carbs": 36,
+            "fat": 6,
+            "category": "Beverage"
+        },
+        {
+            "name": "Iced Vanilla Cream Protein Latte",
+            "calories": 390,
+            "protein": 26,
+            "carbs": 27,
+            "fat": 21,
+            "category": "Beverage"
+        },
+        {
+            "name": "Ham & Swiss on Baguette",
+            "calories": 510,
+            "protein": 25,
+            "carbs": 43,
+            "fat": 25,
+            "category": "Sandwich"
+        },
+        {
+            "name": "Iced Banana Cream Protein Matcha",
+            "calories": 430,
+            "protein": 24,
+            "carbs": 39,
+            "fat": 20,
+            "category": "Beverage"
+        },
+        {
+            "name": "Eggs & Cheddar Protein Box",
+            "calories": 460,
+            "protein": 22,
+            "carbs": 40,
+            "fat": 24,
+            "category": "Box"
+        },
+        {
+            "name": "Crispy Grilled Cheese on Sourdough",
+            "calories": 520,
+            "protein": 21,
+            "carbs": 48,
+            "fat": 27,
+            "category": "Sandwich"
+        },
+        {
+            "name": "Egg, Pesto & Mozzarella Sandwich",
+            "calories": 390,
+            "protein": 21,
+            "carbs": 36,
+            "fat": 16,
+            "category": "Breakfast"
+        },
+        {
+            "name": "Double-Smoked Bacon, Cheddar & Egg Sandwich",
+            "calories": 500,
+            "protein": 21,
+            "carbs": 43,
+            "fat": 27,
+            "category": "Sandwich"
+        },
+        {
+            "name": "Impossible Breakfast Sandwich",
+            "calories": 420,
+            "protein": 21,
+            "carbs": 36,
+            "fat": 22,
+            "category": "Sandwich"
+        }
+    ]
+}

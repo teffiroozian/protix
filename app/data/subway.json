@@ -1,0 +1,117 @@
+{
+    "id": "subway",
+    "items": [
+        {
+            "name": "5 Meat Italian",
+            "calories": 1360,
+            "protein": 80,
+            "carbs": 92,
+            "fat": 74,
+            "category": "Sandwich"
+        },
+        {
+            "name": "Chicken & Bacon Ranch",
+            "calories": 1160,
+            "protein": 70,
+            "carbs": 88,
+            "fat": 58,
+            "category": "Sandwich"
+        },
+        {
+            "name": "Meatball Pepperoni",
+            "calories": 1380,
+            "protein": 66,
+            "carbs": 112,
+            "fat": 76,
+            "category": "Sandwich"
+        },
+        {
+            "name": "Grilled Chicken",
+            "calories": 1020,
+            "protein": 62,
+            "carbs": 86,
+            "fat": 48,
+            "category": "Sandwich"
+        },
+        {
+            "name": "Honey Mustard BBQ Chicken",
+            "calories": 1020,
+            "protein": 62,
+            "carbs": 106,
+            "fat": 40,
+            "category": "Sandwich"
+        },
+        {
+            "name": "Roast Beef",
+            "calories": 1000,
+            "protein": 62,
+            "carbs": 88,
+            "fat": 46,
+            "category": "Sandwich"
+        },
+        {
+            "name": "Subway Club",
+            "calories": 1000,
+            "protein": 62,
+            "carbs": 86,
+            "fat": 48,
+            "category": "Sandwich"
+        },
+        {
+            "name": "Chipotle Philly",
+            "calories": 980,
+            "protein": 60,
+            "carbs": 88,
+            "fat": 44,
+            "category": "Sandwich"
+        },
+        {
+            "name": "Big Hot Pastrami",
+            "calories": 1100,
+            "protein": 60,
+            "carbs": 88,
+            "fat": 60,
+            "category": "Sandwich"
+        },
+        {
+            "name": "Sweet Onion Teriyaki Chicken",
+            "calories": 860,
+            "protein": 58,
+            "carbs": 110,
+            "fat": 22,
+            "category": "Sandwich"
+        },
+        {
+            "name": "Steak Philly",
+            "calories": 1020,
+            "protein": 56,
+            "carbs": 86,
+            "fat": 50,
+            "category": "Sandwich"
+        },
+        {
+            "name": "B.M.T.",
+            "calories": 1220,
+            "protein": 54,
+            "carbs": 88,
+            "fat": 72,
+            "category": "Sandwich"
+        },
+        {
+            "name": "Spicy Italian",
+            "calories": 1360,
+            "protein": 54,
+            "carbs": 88,
+            "fat": 68,
+            "category": "Sandwich"
+        },
+        {
+            "name": "Meatball Marinara",
+            "calories": 1140,
+            "protein": 54,
+            "carbs": 106,
+            "fat": 56,
+            "category": "Sandwich"
+        }
+    ]
+}

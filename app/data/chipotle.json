@@ -1,0 +1,8 @@
+{
+    "id": "chipotle",
+    "items": [
+        { "name": "Chicken Bowl", "calories": 600, "protein": 45 },
+        { "name": "Steak Bowl", "calories": 650, "protein": 40 },
+        { "name": "Chicken Salad Bowl", "calories": 450, "protein": 38 }
+    ]
+}

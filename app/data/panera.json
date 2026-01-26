@@ -1,0 +1,133 @@
+{
+    "id": "panera",
+    "items": [
+        {
+            "name": "French Ciabatta Dipper",
+            "calories": 1120,
+            "protein": 68,
+            "carbs": 88,
+            "fat": 55,
+            "category": "Sandwich"
+        },
+        {
+            "name": "Chicken Pesto Ciabatta Dipper",
+            "calories": 930,
+            "protein": 63,
+            "carbs": 93,
+            "fat": 34,
+            "category": "Sandwich"
+        },
+        {
+            "name": "Toasted Italiano",
+            "calories": 1280,
+            "protein": 60,
+            "carbs": 116,
+            "fat": 64,
+            "category": "Sandwich"
+        },
+        {
+            "name": "Spicy Fiesta Chicken",
+            "calories": 850,
+            "protein": 54,
+            "carbs": 89,
+            "fat": 30,
+            "category": "Sandwich"
+        },
+        {
+            "name": "Chicken Bacon Rancher",
+            "calories": 900,
+            "protein": 52,
+            "carbs": 74,
+            "fat": 45,
+            "category": "Sandwich"
+        },
+        {
+            "name": "Ciabatta Cheesesteak",
+            "calories": 1050,
+            "protein": 52,
+            "carbs": 92,
+            "fat": 53,
+            "category": "Sandwich"
+        },
+        {
+            "name": "Grilled Chicken & Avo BLT",
+            "calories": 900,
+            "protein": 50,
+            "carbs": 55,
+            "fat": 54,
+            "category": "Sandwich"
+        },
+        {
+            "name": "Smokehouse BBQ Chicken",
+            "calories": 730,
+            "protein": 49,
+            "carbs": 90,
+            "fat": 20,
+            "category": "Sandwich"
+        },
+        {
+            "name": "Chipotle Chicken Avo Melt",
+            "calories": 930,
+            "protein": 48,
+            "carbs": 75,
+            "fat": 47,
+            "category": "Sandwich"
+        },
+        {
+            "name": "Bacon Turkey Bravo",
+            "calories": 840,
+            "protein": 47,
+            "carbs": 73,
+            "fat": 43,
+            "category": "Sandwich"
+        },
+        {
+            "name": "Toasted Frontega Chicken",
+            "calories": 790,
+            "protein": 45,
+            "carbs": 73,
+            "fat": 36,
+            "category": "Sandwich"
+        },
+        {
+            "name": "Green Goddess Chicken Cobb Salad",
+            "calories": 510,
+            "protein": 43,
+            "carbs": 22,
+            "fat": 29,
+            "category": "Salad"
+        },
+        {
+            "name": "Turkey & Cheddar Sandwich",
+            "calories": 790,
+            "protein": 41,
+            "carbs": 50,
+            "fat": 47,
+            "category": "Sandwich"
+        },
+        {
+            "name": "Balsamic Chicken Greens with Grains",
+            "calories": 600,
+            "protein": 39,
+            "carbs": 48,
+            "fat": 30,
+            "category": "Salad"
+        },
+        {
+            "name": "Harvest Medley Chicken Salad",
+            "calories": 790,
+            "protein": 39,
+            "carbs": 72,
+            "fat": 39,
+            "category": "Salad"
+        },
+        {
+            "name": "Asian Sesame Chicken Salad",
+            "calories": 450,
+            "protein": 39,
+            "carbs": 26,
+            "fat": 32,
+            "category": "Salad"
+        }
+    ]
+}
