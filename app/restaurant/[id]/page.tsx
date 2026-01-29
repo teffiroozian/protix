@@ -1,31 +1,26 @@
 import Link from "next/link";
 import Image from "next/image";
 import restaurants from "../../data/index.json";
+import RankingList from "@/components/RankingList";
+import type { MenuItem } from "@/types/menu";
 
-type MenuItem = {
-    name: string;
-    calories: number;
-    protein: number;
-};
 
 // calories per 1g protein (bigger number = more calories for each gram of protein)
 function caloriesPerProtein(item: MenuItem) {
-    if (!item.protein) return Number.POSITIVE_INFINITY;
-    return item.calories / item.protein;
+    if (!item.nutrition.protein) return Number.POSITIVE_INFINITY;
+    return item.nutrition.calories / item.nutrition.protein;
 }
 
-function topByProtein(items: MenuItem[], n = 5) {
-    return [...items].sort((a, b) => b.protein - a.protein).slice(0, n);
+function topByProtein(items: MenuItem[]) {
+  return [...items].sort((a, b) => b.nutrition.protein - a.nutrition.protein);
 }
 
-function topByCalorieProteinRatio(items: MenuItem[], n = 5) {
-    return [...items]
-        .sort((a, b) => caloriesPerProtein(b) - caloriesPerProtein(a))
-        .slice(0, n);
+function topByCalorieProteinRatio(items: MenuItem[]) {
+  return [...items].sort((a, b) => caloriesPerProtein(a) - caloriesPerProtein(b));
 }
 
-function lowestCalories(items: MenuItem[], n = 5) {
-    return [...items].sort((a, b) => a.calories - b.calories).slice(0, n);
+function lowestCalories(items: MenuItem[]) {
+  return [...items].sort((a, b) => a.nutrition.calories - b.nutrition.calories);
 }
 
 export default async function RestaurantPage({
@@ -51,9 +46,9 @@ export default async function RestaurantPage({
     const menu = await import(`../../data/${restaurant.menuFile}`);
     const items = menu.default.items;
 
-    const highestProtein = topByProtein(items, 5);
-    const highestCalorieProteinRatio = topByCalorieProteinRatio(items, 5);
-    const lowestCalorieItems = lowestCalories(items, 5);
+    const highestProtein = topByProtein(items);
+    const bestCalorieProteinRatio = topByCalorieProteinRatio(items);
+    const lowestCalorieItems = lowestCalories(items);
 
     return (
         <main style={{ maxWidth: 900, margin: "48px auto", padding: 16 }}>
@@ -80,12 +75,12 @@ export default async function RestaurantPage({
                 />
             </div>
 
-            <h1 style={{ fontSize: 40, fontWeight: 800, marginTop: 16 }}>
+            <h1 style={{ fontSize: 40, fontWeight: 800, marginTop: 8 }}>
                 {restaurant.name}
             </h1>
 
             <p style={{ marginTop: 8, opacity: 0.8 }}>
-                MVP page — later we’ll add goal filters and “top picks.”
+                High-protein menu breakdown
             </p>
 
             {/* Highest Protein */}
@@ -97,79 +92,21 @@ export default async function RestaurantPage({
                     Sorted by protein grams (highest first).
                 </p>
 
-                <ul
-                    style={{
-                        marginTop: 12,
-                        padding: 0,
-                        display: "grid",
-                        gap: 10,
-                    }}
-                >
-                    {highestProtein.map((item) => (
-                        <li
-                            key={`protein-${item.name}`}
-                            style={{
-                                listStyle: "none",
-                                border: "1px solid #eee",
-                                borderRadius: 12,
-                                padding: 14,
-                            }}
-                        >
-                            <div style={{ fontWeight: 700 }}>{item.name}</div>
-                            <div style={{ marginTop: 6, opacity: 0.8 }}>
-                                {item.protein}g protein • {item.calories}{" "}
-                                calories
-                            </div>
-                        </li>
-                    ))}
-                </ul>
+                <RankingList items={highestProtein} highlightTop={3} />
+
             </section>
 
-            {/* Highest Calorie : Protein Ratio */}
+            {/* Best Calorie : Protein Ratio */}
             <section style={{ marginTop: 80 }}>
                 <h2 style={{ fontSize: 28, fontWeight: 800 }}>
-                    Highest Calorie:Protein Ratio
+                    Best Calorie:Protein Ratio
                 </h2>
                 <p style={{ marginTop: 6, opacity: 0.75 }}>
-                    Sorted by calories per 1g protein (highest first).
+                    Sorted by calories per 1g protein (lowest first).
                 </p>
 
-                <ul
-                    style={{
-                        marginTop: 12,
-                        padding: 0,
-                        display: "grid",
-                        gap: 10,
-                    }}
-                >
-                    {highestCalorieProteinRatio.map((item) => (
-                        <li
-                            key={`ratio-${item.name}`}
-                            style={{
-                                listStyle: "none",
-                                border: "1px solid #eee",
-                                borderRadius: 12,
-                                padding: 14,
-                            }}
-                        >
-                            <div style={{ fontWeight: 700 }}>{item.name}</div>
-                            <div style={{ marginTop: 6, opacity: 0.8 }}>
-                                {item.protein}g protein • {item.calories}{" "}
-                                calories
-                            </div>
-                            <div
-                                style={{
-                                    marginTop: 6,
-                                    opacity: 0.7,
-                                    fontSize: 14,
-                                }}
-                            >
-                                Ratio: {caloriesPerProtein(item).toFixed(1)}{" "}
-                                cals / 1g protein
-                            </div>
-                        </li>
-                    ))}
-                </ul>
+                <RankingList items={bestCalorieProteinRatio} highlightTop={3} showRatio />
+
             </section>
 
             {/* Lowest Calories */}
@@ -181,32 +118,8 @@ export default async function RestaurantPage({
                     Sorted by calories (lowest first).
                 </p>
 
-                <ul
-                    style={{
-                        marginTop: 12,
-                        padding: 0,
-                        display: "grid",
-                        gap: 10,
-                    }}
-                >
-                    {lowestCalorieItems.map((item) => (
-                        <li
-                            key={`lowcal-${item.name}`}
-                            style={{
-                                listStyle: "none",
-                                border: "1px solid #eee",
-                                borderRadius: 12,
-                                padding: 14,
-                            }}
-                        >
-                            <div style={{ fontWeight: 700 }}>{item.name}</div>
-                            <div style={{ marginTop: 6, opacity: 0.8 }}>
-                                {item.protein}g protein • {item.calories}{" "}
-                                calories
-                            </div>
-                        </li>
-                    ))}
-                </ul>
+                <RankingList items={lowestCalorieItems} highlightTop={3} />
+
             </section>
         </main>
     );

@@ -3,107 +3,58 @@
     "items": [
         {
             "name": "Cool Wrap",
-            "calories": 350,
-            "protein": 42,
-            "carbs": 29,
-            "fat": 13,
-            "category": "Wrap"
+            "nutrition": {
+                "calories": 350,
+                "protein": 42,
+                "carbs": 29,
+                "totalFat": 13
+            },
+            "category": "Wrap",
+            "image": "/foodImages/chickfila/cfa-coolwrap.jpg"
         },
         {
             "name": "Pretzel Cheddar Club Sandwich",
-            "calories": 695,
-            "protein": 39,
-            "carbs": 55,
-            "fat": 34,
-            "category": "Sandwich"
+            "nutrition": {
+                "calories": 695,
+                "protein": 39,
+                "carbs": 55,
+                "totalFat": 34
+            },
+            "category": "Sandwich",
+            "image": "/foodImages/chickfila/cfa-pretzelcheddarclub.png"
         },
         {
             "name": "Grilled Chicken Club",
-            "calories": 520,
-            "protein": 37,
-            "carbs": 45,
-            "fat": 22,
-            "category": "Sandwich"
+            "nutrition": {
+                "calories": 520,
+                "protein": 37,
+                "carbs": 45,
+                "totalFat": 22
+            },
+            "category": "Sandwich",
+            "image": "/foodImages/chickfila/cfa-grilledchickenclub.webp"
         },
         {
             "name": "Cobb Salad",
-            "calories": 690,
-            "protein": 36,
-            "carbs": 22,
-            "fat": 50,
-            "category": "Salad"
+            "nutrition": {
+                "calories": 690,
+                "protein": 36,
+                "carbs": 22,
+                "totalFat": 50
+            },
+            "category": "Salad",
+            "image": "/foodImages/chickfila/cfa-cobbsalad.png"
         },
         {
             "name": "Spicy Deluxe Sandwich",
-            "calories": 540,
-            "protein": 34,
-            "carbs": 47,
-            "fat": 26,
-            "category": "Sandwich"
-        },
-        {
-            "name": "Hash Brown Scramble Burrito",
-            "calories": 700,
-            "protein": 34,
-            "carbs": 51,
-            "fat": 40,
-            "category": "Breakfast"
-        },
-        {
-            "name": "Spicy Southwest Salad",
-            "calories": 680,
-            "protein": 33,
-            "carbs": 27,
-            "fat": 49,
-            "category": "Salad"
-        },
-        {
-            "name": "Chicken Deluxe Sandwich",
-            "calories": 490,
-            "protein": 32,
-            "carbs": 43,
-            "fat": 22,
-            "category": "Sandwich"
-        },
-        {
-            "name": "3pc Chicken Strips",
-            "calories": 310,
-            "protein": 29,
-            "carbs": 16,
-            "fat": 14,
-            "category": "Bites"
-        },
-        {
-            "name": "Chicken Sandwich",
-            "calories": 420,
-            "protein": 29,
-            "carbs": 41,
-            "fat": 18,
-            "category": "Sandwich"
-        },
-        {
-            "name": "Hash Brown Scramble Bowl",
-            "calories": 470,
-            "protein": 29,
-            "carbs": 19,
-            "fat": 30,
-            "category": "Breakfast"
-        },
-        {
-            "name": "Spicy Chicken Sandwich",
-            "calories": 450,
-            "protein": 28,
-            "carbs": 45,
-            "fat": 19,
-            "category": "Sandwich"
-        },
-        {
-            "name": "Grilled Chicken Sandwich",
-            "calories": 390,
-            "protein": 28,
-            "carbs": 45,
-            "fat": 11,
-            "category": "Sandwich"
+            "nutrition": {
+                "calories": 540,
+                "protein": 34,
+                "carbs": 47,
+                "totalFat": 26
+            },
+            "category": "Sandwich",
+            "image": "/foodImages/chickfila/cfa-spicydeluxesandwich.webp"
         }
     ]
 }
