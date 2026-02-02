@@ -1,0 +1,142 @@
+.card {
+  list-style: none;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.18);
+  border-radius: 16px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.10);
+  overflow: hidden;
+}
+
+.header {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+
+  padding: 16px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  position: relative;
+}
+
+.leftMedia {
+  flex: 0 0 auto;
+}
+
+.image,
+.imagePlaceholder {
+  width: 170px;
+  height: 130px;
+  border-radius: 14px;
+}
+
+.image {
+  object-fit: cover;
+  display: block;
+}
+
+.imagePlaceholder {
+  background: #efefef;
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+}
+
+.rankWrap {
+  width: fit-content;
+  margin-bottom: 8px;
+}
+
+.rankNumber {
+  font-size: 22px;
+  font-weight: 800;
+  padding-bottom: 6px;
+  border-bottom: 4px solid #eab308; /* yellow */
+}
+
+.title {
+  margin-top: 8px;
+  font-size: 34px;
+  font-weight: 900;
+  letter-spacing: -0.6px;
+  line-height: 1.05;
+}
+
+.sub {
+  margin-top: 6px;
+  font-size: 16px;
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.macros {
+  margin-top: 18px;
+  display: flex;
+  gap: 48px;
+  align-items: flex-end;
+}
+
+.macroValue {
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: -0.4px;
+  line-height: 1;
+}
+
+.macroLabel {
+  margin-top: 6px;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.6px;
+  color: rgba(0, 0, 0, 0.75);
+}
+
+.protein {
+  color: #c2410c; /* orange */
+}
+
+.carbs {
+  color: #ca8a04; /* amber/gold */
+}
+
+.fat {
+  color: #2563eb; /* blue */
+}
+
+.expandIcon {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  font-size: 26px;
+  line-height: 1;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.75);
+}
+
+.ratio {
+  margin-top: 10px;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.55);
+  font-weight: 650;
+}
+
+/* Expand section */
+.details {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 250ms ease;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  background: #f7f7f7;
+}
+
+.detailsOpen {
+  max-height: 900px;
+}
+
+.detailsInner {
+  padding: 16px;
+}

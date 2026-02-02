@@ -3,6 +3,9 @@
 import { useId, useState } from "react";
 import type { MenuItem } from "@/types/menu";
 import NutritionLabel from "@/components/NutritionLabel";
+import styles from "./MenuItemCard.module.css";
+
+
 
 function caloriesPerProtein(item: { calories: number; protein: number }) {
   if (!item.protein) return Number.POSITIVE_INFINITY;
@@ -22,10 +25,13 @@ export default function MenuItemCard({
 }) {
   const [open, setOpen] = useState(false);
   const id = useId();
+  const protein = item.nutrition?.protein ?? 0;
+  const carbs = item.nutrition?.carbs ?? 0;
+  const fat = item.nutrition?.totalFat ?? 0;
 
   const isTop = typeof rankIndex === "number" && rankIndex < highlightTop;
   const badgeText =
-    typeof rankIndex === "number" ? `#${rankIndex + 1}` : null;
+    typeof rankIndex === "number" ? `${rankIndex + 1}` : null;
 
   const ratio = Math.round(caloriesPerProtein(item.nutrition));
 
@@ -52,7 +58,7 @@ export default function MenuItemCard({
           width: "100%",
           textAlign: "left",
           padding: 14,
-          background: "#171717",
+          background: "#ffffff",
           border: 0,
           cursor: "pointer",
           display: "flex",
@@ -64,7 +70,7 @@ export default function MenuItemCard({
         <div
           style={{
             display: "flex",
-            alignItems: "flex-start",
+            alignItems: "stretch",
             gap: 14,
           }}
         >
@@ -77,8 +83,8 @@ export default function MenuItemCard({
                 height: 200,
                 borderRadius: 12,
                 overflow: "hidden",
-                background: "rgb(255,255,255)",
-                border: "1px solid rgba(255,255,255,0.12)",
+                background: "#efefef",
+                border: "1px solid rgba(255,255,255,0.1)",
                 flex: "0 0 auto",
               }}
             >
@@ -94,78 +100,84 @@ export default function MenuItemCard({
             </div>
           )}
 
-          {/* Text content */}
-          <div>
-            {/* Ranking number */}
-            {badgeText && (
-              <div
-                style={{
-                  display: "inline-block",
-                  fontSize: 12,
-                  padding: "4px 10px",
-                  borderRadius: 999,
-                  marginBottom: 8,
-                  background: "rgba(255,255,255,0.14)",
-                  border: "1px solid rgba(255,255,255,0.18)",
-                  opacity: 0.95,
-                }}
-              >
-                {badgeText}
-              </div>
-            )}
-            {/* Item name */}
-            <div style={{ fontWeight: 700, fontSize: 22 }}>{item.name}</div>
-            <div
-              style={{
-                marginTop: 10,
-                display: "flex",
-                gap: 10,
-                flexWrap: "wrap",
-              }}
-            >
+          {/* Info content */}
+          <div style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            paddingTop: 6,
+            paddingBottom: 6
+          }}>
+            {/* Text content */}
+            <div>
+              {/* Ranking number */}
+              {badgeText && (
+                <div className="rankWrap">
+                  <div className="rankNumber">{badgeText}</div>
+                </div>
+              )}
 
-              {/* Protein tag */}
-              <div
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 6,
-                  padding: "6px 12px",
-                  borderRadius: 999,
-                  background: "rgba(34,197,94,0.15)", // green tint
-                  border: "1px solid rgba(34,197,94,0.35)",
-                  color: "rgb(187,247,208)",
-                  fontSize: 13,
-                  fontWeight: 500,
-                }}
-              >
-                {item.nutrition.protein}g protein
-              </div>
 
-              {/* Calories tag */}
-              <div
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 6,
-                  padding: "6px 12px",
-                  borderRadius: 999,
-                  background: "rgba(59,130,246,0.15)", // blue tint
-                  border: "1px solid rgba(59,130,246,0.35)",
-                  color: "rgb(191,219,254)",
-                  fontSize: 13,
-                  fontWeight: 500,
-                }}
-              >
+              {/* Item name */}
+              <div style={{ fontWeight: 800, fontSize: 24 }}>{item.name}</div>
+
+              {/* Calories */}
+              <div style={{ fontSize: 14, fontWeight: 800, opacity: 0.6, }} >
                 {item.nutrition.calories} calories
               </div>
-            </div>
 
-            {showRatio && Number.isFinite(ratio) && (
-              <div style={{ marginTop: 6, opacity: 0.7, fontSize: 14 }}>
-                Ratio: {ratio}:1 (1g protein per {ratio} cals)
+
+              {/* Calorie to protein ratio */}
+              {showRatio && Number.isFinite(ratio) && (
+                <div style={{ marginTop: 6, opacity: 0.7, fontSize: 14 }}>
+                  Ratio: {ratio}:1 (1g protein per {ratio} cals)
+                </div>
+
+              )}
+            </div>
+            {/* Macros */}
+            <div
+              style={{
+                marginTop: 14,
+                display: "flex",
+                gap: 32,
+                alignItems: "center",
+                justifyItems: "center",
+              }}
+            >
+              {/* Protein */}
+              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                <img src="/icons/protein.png" alt="Protein" width={32} height={32} />
+                <div style={{ display: "flex", alignItems: "baseline", gap: 10 }}>
+                  <div style={{ fontSize: 18, fontWeight: 700, lineHeight: 1 }}>
+                    {protein}g
+                  </div>
+                  <div style={{ opacity: 0.85, fontSize: 14, fontWeight: 600 }}>protein</div>
+                </div>
               </div>
-            )}
+
+              {/* Carbs */}
+              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                <img src="/icons/carbs.png" alt="Carbs" width={32} height={32} />
+                <div style={{ display: "flex", alignItems: "baseline", gap: 10 }}>
+                  <div style={{ fontSize: 18, fontWeight: 700, lineHeight: 1 }}>
+                    {carbs}g
+                  </div>
+                  <div style={{ opacity: 0.85, fontSize: 14, fontWeight: 600 }}>carbs</div>
+                </div>
+              </div>
+
+              {/* Fat */}
+              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                <img src="/icons/fat.png" alt="Fat" width={32} height={32} />
+                <div style={{ display: "flex", alignItems: "baseline", gap: 10 }}>
+                  <div style={{ fontSize: 18, fontWeight: 700, lineHeight: 1 }}>
+                    {fat}g
+                  </div>
+                  <div style={{ opacity: 0.85, fontSize: 14, fontWeight: 600 }}>fat</div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -179,8 +191,8 @@ export default function MenuItemCard({
         id={`${id}-details`}
         onClick={() => setOpen(false)}
         style={{
-          maxHeight: open ? 500 : 0,
-          transition: "max-height 180ms ease",
+          maxHeight: open ? 700 : 0,
+          transition: "max-height 400ms ease",
           overflow: "hidden",
           background: "rgba(0,0,0,0.02)",
           cursor: "pointer",

@@ -1,13 +1,20 @@
 {
     "id": "chickfila",
+    "name": "Chick-fil-A",
     "items": [
         {
             "name": "Cool Wrap",
             "nutrition": {
-                "calories": 350,
-                "protein": 42,
-                "carbs": 29,
-                "totalFat": 13
+                "calories": 660,
+                "totalFat": 45,
+                "saturatedFat": 9,
+                "transFat": 0,
+                "cholesterol": 110,
+                "sodium": 1420,
+                "carbs": 32,
+                "fiber": 14,
+                "sugars": 5,
+                "protein": 43
             },
             "category": "Wrap",
             "image": "/foodImages/chickfila/cfa-coolwrap.jpg"
