@@ -88,6 +88,9 @@ export default async function RestaurantPage({
                 <h2 style={{ fontSize: 28, fontWeight: 800 }}>
                     Highest Protein Items
                 </h2>
+                <h3 style={{ marginTop: 6, fontSize: 20, fontWeight: 700 }}>
+                    Hello
+                </h3>
                 <p style={{ marginTop: 6, opacity: 0.75 }}>
                     Sorted by protein grams (highest first).
                 </p>
@@ -101,6 +104,9 @@ export default async function RestaurantPage({
                 <h2 style={{ fontSize: 28, fontWeight: 800 }}>
                     Best Calorie:Protein Ratio
                 </h2>
+                <h3 style={{ marginTop: 6, fontSize: 20, fontWeight: 700 }}>
+                    Hello
+                </h3>
                 <p style={{ marginTop: 6, opacity: 0.75 }}>
                     Sorted by calories per 1g protein (lowest first).
                 </p>
@@ -114,6 +120,9 @@ export default async function RestaurantPage({
                 <h2 style={{ fontSize: 28, fontWeight: 800 }}>
                     Lowest Calorie Items
                 </h2>
+                <h3 style={{ marginTop: 6, fontSize: 20, fontWeight: 700 }}>
+                    Hello
+                </h3>
                 <p style={{ marginTop: 6, opacity: 0.75 }}>
                     Sorted by calories (lowest first).
                 </p>
