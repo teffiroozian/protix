@@ -16,10 +16,19 @@ export default function RankingList({
   showRatio?: boolean;
 }) {
   const [count, setCount] = useState(step);
-  const visibleItems = useMemo(() => items.slice(0, count), [items, count]);
-  const remaining = Math.max(0, items.length - count);
-  const isFullyExpanded = count >= items.length;
-  const canCollapse = items.length > step && isFullyExpanded;
+
+    const singlePortionItems = useMemo(() => {
+    return items.filter((item) => item.portionType === "single");
+  }, [items]);
+
+  const visibleItems = useMemo(
+    () => singlePortionItems.slice(0, count),
+    [singlePortionItems, count]
+  );
+
+  const remaining = Math.max(0, singlePortionItems.length - count);
+  const isFullyExpanded = count >= singlePortionItems.length;
+  const canCollapse = singlePortionItems.length > step && isFullyExpanded;
 
   return (
     <div>
@@ -30,7 +39,7 @@ export default function RankingList({
             item={item}
             showRatio={showRatio}
             rankIndex={index}
-            highlightTop={highlightTop}
+            isTopRanked={index < highlightTop}
           />
         ))}
       </ul>
@@ -47,12 +56,14 @@ export default function RankingList({
         {!isFullyExpanded && (
           <button
             type="button"
-            onClick={() => setCount((c) => Math.min(items.length, c + step))}
+            onClick={() =>
+              setCount((c) => Math.min(singlePortionItems.length, c + step))
+            }
             style={{
               padding: "10px 14px",
               borderRadius: 10,
-              border: "1px solid rgba(255,255,255,0.18)",
-              background: "rgba(255,255,255,0.08)",
+              border: "1px solid rgba(0,0,0,0.8)",
+              background: "rgba(0,0,0,0.8)",
               color: "white",
               cursor: "pointer",
               fontWeight: 700,
@@ -70,9 +81,9 @@ export default function RankingList({
             style={{
               padding: "10px 14px",
               borderRadius: 10,
-              border: "1px solid rgba(255,255,255,0.18)",
+              border: "2px solid rgba(0,0,0,0.8)",
               background: "transparent",
-              color: "rgba(255,255,255,0.9)",
+              color: "rgba(0,0,0,0.8)",
               cursor: "pointer",
               fontWeight: 700,
             }}

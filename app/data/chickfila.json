@@ -7,7 +7,7 @@
             "nutrition": {
                 "calories": 660,
                 "totalFat": 45,
-                "saturatedFat": 9,
+                "satFat": 9,
                 "transFat": 0,
                 "cholesterol": 110,
                 "sodium": 1420,
@@ -17,7 +17,8 @@
                 "protein": 43
             },
             "category": "Wrap",
-            "image": "/foodImages/chickfila/cfa-coolwrap.jpg"
+            "portionType": "single",
+            "image": "/foodImages/chickfila/cfa-coolwrap.webp"
         },
         {
             "name": "Pretzel Cheddar Club Sandwich",
@@ -28,6 +29,7 @@
                 "totalFat": 34
             },
             "category": "Sandwich",
+            "portionType": "single",
             "image": "/foodImages/chickfila/cfa-pretzelcheddarclub.png"
         },
         {
@@ -39,6 +41,7 @@
                 "totalFat": 22
             },
             "category": "Sandwich",
+            "portionType": "single",
             "image": "/foodImages/chickfila/cfa-grilledchickenclub.webp"
         },
         {
@@ -50,6 +53,7 @@
                 "totalFat": 50
             },
             "category": "Salad",
+            "portionType": "single",
             "image": "/foodImages/chickfila/cfa-cobbsalad.png"
         },
         {
@@ -61,7 +65,51 @@
                 "totalFat": 26
             },
             "category": "Sandwich",
+            "portionType": "single",
             "image": "/foodImages/chickfila/cfa-spicydeluxesandwich.webp"
+        },
+        {
+            "name": "Grilled Chicken Nuggets",
+            "nutrition": { "calories": 130, "protein": 25, "carbs": 1, "totalFat": 3 },
+            "category": "Nuggets",
+            "portionType": "single",
+            "image": "/foodImages/chickfila/cfa-grillednuggets.webp",
+            "defaultVariantId": "12pc",
+            "variants": [
+                {
+                    "id": "8pc",
+                    "label": "8 piece",
+                    "portionType": "single",
+                    "nutrition": {
+                        "calories": 130,
+                        "protein": 25,
+                        "carbs": 1,
+                        "totalFat": 3
+                    }
+                },
+                {
+                    "id": "12pc",
+                    "label": "12 piece",
+                    "portionType": "single",
+                    "nutrition": {
+                        "calories": 200,
+                        "protein": 38,
+                        "carbs": 2,
+                        "totalFat": 4
+                    }
+                },
+                {
+                    "id": "30pc",
+                    "label": "30 piece",
+                    "portionType": "shareable",
+                    "nutrition": {
+                        "calories": 500,
+                        "protein": 95,
+                        "carbs": 6,
+                        "totalFat": 10
+                    }
+                }
+            ]
         }
     ]
 }
