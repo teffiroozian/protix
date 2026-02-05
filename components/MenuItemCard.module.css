@@ -73,8 +73,15 @@
 .caloriesRow {
   display: flex;
   align-items: center;
-  gap: 10px;
   flex-wrap: wrap;
+}
+
+.divider {
+  width: 2px;
+  height: 20px;
+  background-color: rgba(0, 0, 0, 0.5);
+  margin: 0 10px;
+  border-radius: 99px;
 }
 
 .variantSelect {
@@ -142,45 +149,4 @@
 
 .detailsInner {
   padding: 12px;
-}
-
-/* New "Modifier" styles for the Featured Grid */
-.featuredContainer {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-}
-
-.featuredCard {
-  display: flex; 
-  flex-direction: column; /* Stacks image on top of text */
-  gap: 16px;
-  padding: 16px;
-  height: 100%;  
-}
-
-.featuredImage {
-  width: 100%; /* Overrides the 225px fixed width */
-  aspect-ratio: 1 / 1;
-  height: auto;
-}
-
-/* This is the wrapper around the title and calories */
-.featuredContent {
-  flex: 1;               /* This pushes everything below it to the bottom */
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
-/* This ensures the macros stay pinned to the bottom */
-.featuredMacros {
-  margin-top: auto;      /* Pushes the macro block to the very bottom of the card */
-  padding: 18px 6px 0 6px;
-  border-top: 1px solid #eee;
-
-  width: 100%;
-  display: flex;
-  justify-content: space-between; /* Spreads them to the edges */
-  gap: 0; /* Remove the fixed 60px gap from the base style */
 }

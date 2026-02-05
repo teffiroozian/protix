@@ -131,6 +131,8 @@ export default function ItemDetailsPanel({
           </>
         ) : null}
 
+        <div className={styles.detailsDivider} />
+
         {/* Optional extra line if you want */}
         {item.restaurant ? (
           <>

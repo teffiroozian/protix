@@ -92,18 +92,6 @@ export default async function RestaurantPage({
           </p>
         </div>
 
-        {/* Featured section goes here */}
-        <section id="featured" style={{ marginTop: 80, scrollMarginTop: 140 }}>
-          <h2 style={{ fontSize: 32, fontWeight: 800 }}>
-            Featured Items
-          </h2>
-
-          <p style={{ marginTop: 8, opacity: 0.8, marginBottom: 20 }}>
-            Fast picks based on protein, calories, and efficiency.
-          </p>
-
-        </section>
-
         {/* Highest Protein */}
         <section id="high-protein" style={{ marginTop: 80, scrollMarginTop: 140 }}>
           <h2 style={{ fontSize: 32, fontWeight: 800 }}>

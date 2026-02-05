@@ -99,6 +99,7 @@ export default function MenuItemCard({
                   onClick={(event) => event.stopPropagation()}
                   onKeyDown={(event) => event.stopPropagation()}
                 >
+                  <div className={styles.divider} />
                   <VariantSelector
                     variants={variants}
                     selectedId={selectedVariantId}

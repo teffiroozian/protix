@@ -78,7 +78,7 @@
             "variants": [
                 {
                     "id": "8pc",
-                    "label": "8 piece",
+                    "label": "8 ct",
                     "portionType": "single",
                     "nutrition": {
                         "calories": 130,
@@ -89,7 +89,7 @@
                 },
                 {
                     "id": "12pc",
-                    "label": "12 piece",
+                    "label": "12 ct",
                     "portionType": "single",
                     "nutrition": {
                         "calories": 200,
@@ -100,7 +100,7 @@
                 },
                 {
                     "id": "30pc",
-                    "label": "30 piece",
+                    "label": "30 ct",
                     "portionType": "shareable",
                     "nutrition": {
                         "calories": 500,
