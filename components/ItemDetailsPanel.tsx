@@ -1,5 +1,5 @@
 import styles from "./ItemDetails.module.css";
-import type { MenuItem } from "@/types/menu";
+import type { ItemVariant, MenuItem, Nutrition } from "@/types/menu";
 
 function format(n?: number, suffix = "") {
   return n === undefined || n === null ? "—" : `${n}${suffix}`;
@@ -10,8 +10,20 @@ function calToProteinRatio(calories: number, protein: number) {
   return `${Math.round(calories / protein)}:1`;
 }
 
-export default function ItemDetailsPanel({ item }: { item: MenuItem }) {
-  const n = item.nutrition;
+export default function ItemDetailsPanel({
+  item,
+  nutrition,
+  variants,
+  selectedVariantId,
+  onSelectVariant,
+}: {
+  item: MenuItem;
+  nutrition: Nutrition;
+  variants?: ItemVariant[] | null;
+  selectedVariantId?: string;
+  onSelectVariant?: (id: string) => void;
+}) {
+  const n = nutrition;
 
   return (
     <div className={styles.wrapper}>
@@ -94,6 +106,30 @@ export default function ItemDetailsPanel({ item }: { item: MenuItem }) {
             {calToProteinRatio(n.calories, n.protein)}
           </div>
         </div>
+
+        {variants && variants.length > 0 ? (
+          <>
+            <div className={styles.detailsDivider} />
+            <div className={`${styles.detailsRow} ${styles.portionRow}`}>
+              <div className={styles.detailsLabel}>Portion</div>
+              <div className={styles.portionOptions}>
+                {variants.map((variant) => {
+                  const isActive = variant.id === selectedVariantId;
+                  return (
+                    <button
+                      key={variant.id}
+                      type="button"
+                      className={`${styles.portionButton} ${isActive ? styles.portionButtonActive : ""}`}
+                      onClick={() => onSelectVariant?.(variant.id)}
+                    >
+                      {variant.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </>
+        ) : null}
 
         {/* Optional extra line if you want */}
         {item.restaurant ? (

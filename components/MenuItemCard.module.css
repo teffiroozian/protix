@@ -70,6 +70,26 @@
   color: rgba(0, 0, 0, 0.5);
 }
 
+.caloriesRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.variantDivider {
+  color: rgba(0, 0, 0, 0.35);
+  font-weight: 700;
+}
+
+.variantSelect {
+  display: inline-flex;
+  align-items: center;
+  background: #000;
+  border-radius: 999px;
+  padding: 2px 6px;
+}
+
 .macros {
   margin-top: auto;
   display: flex;

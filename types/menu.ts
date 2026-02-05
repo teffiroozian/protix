@@ -25,6 +25,7 @@ export type ItemVariant = {
   label: string;       // e.g. "8 piece"
   nutrition: Nutrition;
   portionType?: PortionType;   // Optional override: variant can differ from base item
+  isDefault?: boolean;
 };
 
 export type MenuItem = {
@@ -35,5 +36,7 @@ export type MenuItem = {
   category: string;
   portionType: PortionType;
   restaurant?: string;
+  variants?: ItemVariant[];
+  defaultVariantId?: string;
 
 };

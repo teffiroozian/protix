@@ -4,6 +4,7 @@ import { useId, useMemo, useState } from "react";
 import type { MenuItem } from "@/types/menu";
 import styles from "./MenuItemCard.module.css";
 import ItemDetailsPanel from "./ItemDetailsPanel";
+import VariantSelector from "./VariantSelector";
 
 
 function pad2(n: number) {
@@ -28,11 +29,23 @@ export default function MenuItemCard({
 }) {
   const [open, setOpen] = useState(false);
   const id = useId();
+  const variants = item.variants?.length ? item.variants : null;
+  const defaultVariantId = useMemo(() => {
+    if (!variants) return "";
+    if (item.defaultVariantId && variants.some((variant) => variant.id === item.defaultVariantId)) {
+      return item.defaultVariantId;
+    }
+    const flaggedDefault = variants.find((variant) => variant.isDefault);
+    return flaggedDefault?.id ?? variants[0]?.id ?? "";
+  }, [item.defaultVariantId, variants]);
+  const [selectedVariantId, setSelectedVariantId] = useState(defaultVariantId);
+  const selectedVariant = variants?.find((variant) => variant.id === selectedVariantId);
+  const nutrition = selectedVariant?.nutrition ?? item.nutrition;
 
-  const calories = item.nutrition?.calories ?? 0;
-  const protein = item.nutrition?.protein ?? 0;
-  const carbs = item.nutrition?.carbs ?? 0;
-  const fat = item.nutrition?.totalFat ?? 0;
+  const calories = nutrition?.calories ?? 0;
+  const protein = nutrition?.protein ?? 0;
+  const carbs = nutrition?.carbs ?? 0;
+  const fat = nutrition?.totalFat ?? 0;
 
   const rankText = typeof rankIndex === "number" ? pad2(rankIndex + 1) : null;
 
@@ -78,7 +91,28 @@ export default function MenuItemCard({
             {/* Name */}
             <div className={styles.title}>{item.name}</div>
             {/* Calories */}
-            <div className={styles.calories}>{calories} calories</div>
+            <div className={styles.caloriesRow}>
+              <div className={styles.calories}>{calories} cal</div>
+              {variants ? (
+                <>
+                  <span className={styles.variantDivider} aria-hidden="true">
+                    |
+                  </span>
+                  <div
+                    className={styles.variantSelect}
+                    onClick={(event) => event.stopPropagation()}
+                    onKeyDown={(event) => event.stopPropagation()}
+                  >
+                    <VariantSelector
+                      variants={variants}
+                      selectedId={selectedVariantId}
+                      onChange={setSelectedVariantId}
+                      ariaLabel={`${item.name} portion size`}
+                    />
+                  </div>
+                </>
+              ) : null}
+            </div>
           </div>
 
           {/* Macros */}
@@ -124,7 +158,13 @@ export default function MenuItemCard({
       {/* Expand details */}
       <div className={`${styles.details} ${open ? styles.detailsOpen : ""}`}>
         <div className={styles.detailsInner}>
-          <ItemDetailsPanel item={item} />
+          <ItemDetailsPanel
+            item={item}
+            nutrition={nutrition}
+            variants={variants}
+            selectedVariantId={selectedVariantId}
+            onSelectVariant={setSelectedVariantId}
+          />
         </div>
       </div>
 
