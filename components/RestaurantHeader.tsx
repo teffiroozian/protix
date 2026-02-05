@@ -56,11 +56,12 @@ export default function RestaurantHeader({
   );
 
   return (
-    <header
-      className="border-b border-slate-200/80 bg-gradient-to-b from-[rgba(var(--brand-rgb),0.12)] via-[rgba(var(--brand-rgb),0.04)] to-white"
-      style={{ "--brand-rgb": resolvedRgb } as CSSProperties}
-    >
-      <div className="mx-auto flex w-full max-w-5xl flex-col gap-8 px-6 pb-10 pt-8">
+    <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
+      <header
+        className="rounded-2xl border border-rose-200/70 bg-gradient-to-br from-rose-200/70 via-rose-100/80 to-amber-100/70 shadow-sm"
+        style={{ "--brand-rgb": resolvedRgb } as CSSProperties}
+      >
+        <div className="flex w-full max-w-5xl flex-col gap-8 px-6 pb-10 pt-8 sm:px-8">
         <div className="flex flex-col gap-4">
           <Link
             href="/"
@@ -102,6 +103,7 @@ export default function RestaurantHeader({
           ))}
         </div>
       </div>
-    </header>
+      </header>
+    </div>
   );
 }
