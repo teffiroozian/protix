@@ -20,7 +20,7 @@ export default function Home() {
   }, [query]);
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-5xl flex-col gap-12 px-4 py-12 sm:px-6">
+    <main className="mx-auto flex min-h-screen max-w-5xl flex-col gap-16 px-4 py-14 sm:px-6">
       <header className="flex flex-col gap-3">
         <h1 className="text-4xl font-semibold tracking-tight text-neutral-900 sm:text-5xl">
           High Protein Fast Food Finder
@@ -61,7 +61,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="flex flex-col gap-6">
+      <section className="flex flex-col gap-8">
         {filteredRestaurants.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-black/15 bg-white/70 px-6 py-10 text-center text-sm text-neutral-500">
             No results. Try a different search.
