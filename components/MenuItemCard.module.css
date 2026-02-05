@@ -70,6 +70,18 @@
   color: rgba(0, 0, 0, 0.5);
 }
 
+.caloriesRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.variantSelect {
+  display: inline-flex;
+  align-items: center;
+}
+
 .macros {
   margin-top: auto;
   display: flex;
