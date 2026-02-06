@@ -68,7 +68,7 @@ export default async function RestaurantPage({
       <main style={{ maxWidth: 900, margin: "24px auto 48px", padding: 16 }}>
 
         {/* Highest Protein */}
-        <section id="high-protein" style={{ marginTop: 96, scrollMarginTop: 220 }}>
+        <section id="high-protein" style={{ marginTop: 96, scrollMarginTop: 200 }}>
           <h2 style={{ fontSize: 32, fontWeight: 800 }}>
             Highest Protein Items
           </h2>
@@ -83,7 +83,7 @@ export default async function RestaurantPage({
         {/* Best Protein Ratio */}
         <section
           id="best-protein-ratio"
-          style={{ marginTop: 80, scrollMarginTop: 140 }}
+          style={{ marginTop: 80, scrollMarginTop: 200 }}
         >
           <h2 style={{ fontSize: 28, fontWeight: 800 }}>Best Protein Ratio</h2>
 
@@ -97,7 +97,7 @@ export default async function RestaurantPage({
         {/* Lowest Calories */}
         <section
           id="lowest-calorie"
-          style={{ marginTop: 80, scrollMarginTop: 140 }}
+          style={{ marginTop: 80, scrollMarginTop: 200 }}
         >
           <h2 style={{ fontSize: 28, fontWeight: 800 }}>Lowest Calorie Items</h2>
 

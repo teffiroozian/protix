@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
+import type { MouseEvent } from "react";
 
 type TabOption = {
   id: string;
@@ -37,6 +38,32 @@ export default function StickyRestaurantBar({
   const [activeTab, setActiveTab] = useState(resolvedTabs[0]?.id ?? "");
   const [isVisible, setIsVisible] = useState(false);
   const tabsRef = useRef<HTMLDivElement | null>(null);
+  const barRef = useRef<HTMLDivElement | null>(null);
+
+  const getScrollOffset = () => (barRef.current?.offsetHeight ?? 0) + 24;
+
+  const smoothScrollTo = (targetY: number, duration = 1000) => {
+    const startY = window.scrollY;
+    const difference = targetY - startY;
+    let startTime: number | null = null;
+
+    const easeInOutCubic = (t: number) =>
+      t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+    const step = (timestamp: number) => {
+      if (startTime === null) startTime = timestamp;
+      const elapsed = timestamp - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const easedProgress = easeInOutCubic(progress);
+      window.scrollTo(0, startY + difference * easedProgress);
+
+      if (elapsed < duration) {
+        window.requestAnimationFrame(step);
+      }
+    };
+
+    window.requestAnimationFrame(step);
+  };
 
   useEffect(() => {
     const hero = document.getElementById("restaurant-hero");
@@ -58,10 +85,58 @@ export default function StickyRestaurantBar({
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    const tabSections = resolvedTabs
+      .map((tab) => {
+        const id = tab.href.replace("#", "");
+        return document.getElementById(id);
+      })
+      .filter((section): section is HTMLElement => Boolean(section));
+
+    if (!tabSections.length) return;
+
+    const handleScroll = () => {
+      const offset = getScrollOffset() + 8;
+      const scrollPosition = window.scrollY + offset;
+
+      let currentTabId = resolvedTabs[0]?.id ?? "";
+      tabSections.forEach((section, index) => {
+        if (section.offsetTop <= scrollPosition) {
+          currentTabId = resolvedTabs[index]?.id ?? currentTabId;
+        }
+      });
+
+      setActiveTab(currentTabId);
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [resolvedTabs]);
+
   const handleScroll = (direction: "left" | "right") => {
     if (!tabsRef.current) return;
     const delta = direction === "left" ? -SCROLL_AMOUNT : SCROLL_AMOUNT;
     tabsRef.current.scrollBy({ left: delta, behavior: "smooth" });
+  };
+
+  const handleTabClick = (
+    event: MouseEvent<HTMLAnchorElement>,
+    tab: TabOption
+  ) => {
+    event.preventDefault();
+    const id = tab.href.replace("#", "");
+    const section = document.getElementById(id);
+    if (!section) return;
+
+    const offset = getScrollOffset();
+    const targetY = section.getBoundingClientRect().top + window.scrollY - offset;
+
+    setActiveTab(tab.id);
+    smoothScrollTo(targetY, 1000);
   };
 
   return (
@@ -72,7 +147,10 @@ export default function StickyRestaurantBar({
           : "-translate-y-full opacity-0 pointer-events-none"
       }`}
     >
-      <div className="w-full border-b border-slate-200/70 bg-white/95 backdrop-blur">
+      <div
+        ref={barRef}
+        className="w-full border-b border-slate-200/70 bg-white/95 backdrop-blur"
+      >
         <div className="mx-auto flex w-full max-w-5xl items-center gap-3 px-4 py-2 sm:px-6">
           <Link
             href="/"
@@ -117,7 +195,7 @@ export default function StickyRestaurantBar({
                 <a
                   key={tab.id}
                   href={tab.href}
-                  onClick={() => setActiveTab(tab.id)}
+                  onClick={(event) => handleTabClick(event, tab)}
                   className={`whitespace-nowrap rounded-full border px-3 py-1.5 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400/60 ${
                     isActive
                       ? "border-slate-900 bg-slate-900 text-white"
