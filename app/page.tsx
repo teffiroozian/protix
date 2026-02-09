@@ -8,11 +8,31 @@ import restaurants from "./data/index.json";
 export default function Home() {
   const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(-1);
+  const [isFocused, setIsFocused] = useState(false);
+
+  const popularRestaurantQueries = useMemo(
+    () => ["chick fil a", "chipotle", "panera", "panda express", "habit burger"],
+    []
+  );
+
+  const popularRestaurants = useMemo(
+    () =>
+      popularRestaurantQueries
+        .map((query) =>
+          restaurants.find((restaurant) =>
+            restaurant.name.toLowerCase().includes(query)
+          )
+        )
+        .filter((restaurant): restaurant is (typeof restaurants)[number] =>
+          Boolean(restaurant)
+        ),
+    [popularRestaurantQueries]
+  );
 
   const suggestions = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
     if (!normalizedQuery) {
-      return [];
+      return isFocused ? popularRestaurants.slice(0, 5) : [];
     }
 
     return restaurants
@@ -20,9 +40,9 @@ export default function Home() {
         restaurant.name.toLowerCase().includes(normalizedQuery)
       )
       .slice(0, 5);
-  }, [query]);
+  }, [query, isFocused, popularRestaurants]);
 
-  const showSuggestions = query.trim().length > 0 && suggestions.length > 0;
+  const showSuggestions = isFocused && suggestions.length > 0;
 
   const handleSelect = (name: string) => {
     setQuery(name);
@@ -53,6 +73,11 @@ export default function Home() {
             value={query}
             onChange={(event) => {
               setQuery(event.target.value);
+              setActiveIndex(-1);
+            }}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => {
+              setIsFocused(false);
               setActiveIndex(-1);
             }}
             onKeyDown={(event) => {
