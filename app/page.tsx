@@ -189,7 +189,7 @@ export default function Home() {
 
       <section className="mt-32 flex flex-col gap-8">
         <div>
-          <h2 className="text-xl font-semibold text-neutral-900">
+          <h2 className="text-3xl font-semibold text-neutral-900">
             Browse restaurants
           </h2>
           <p className="mt-2 text-sm text-neutral-500">
