@@ -1,8 +1,8 @@
 import Link from "next/link";
 import restaurants from "../../data/index.json";
-import RankingList from "@/components/RankingList";
 import StickyRestaurantBar from "@/components/StickyRestaurantBar";
 import RestaurantHeader from "@/components/RestaurantHeader";
+import RestaurantView from "@/components/RestaurantView";
 import type { MenuItem } from "@/types/menu";
 
 // calories per 1g protein (bigger number = more calories for each gram of protein)
@@ -66,47 +66,12 @@ export default async function RestaurantPage({
       </div>
 
       <main style={{ maxWidth: 900, margin: "24px auto 48px", padding: 16 }}>
-
-        {/* Highest Protein */}
-        <section id="high-protein" style={{ marginTop: 96, scrollMarginTop: 200 }}>
-          <h2 style={{ fontSize: 32, fontWeight: 800 }}>
-            Highest Protein Items
-          </h2>
-
-          <p style={{ marginTop: 8, opacity: 0.8, marginBottom: 20 }}>
-            Items with the most protein per serving size.
-          </p>
-
-          <RankingList items={highestProtein} highlightTop={3} />
-        </section>
-
-        {/* Best Protein Ratio */}
-        <section
-          id="best-protein-ratio"
-          style={{ marginTop: 80, scrollMarginTop: 200 }}
-        >
-          <h2 style={{ fontSize: 28, fontWeight: 800 }}>Best Protein Ratio</h2>
-
-          <p style={{ marginTop: 6, opacity: 0.75 }}>
-            Ranked by protein efficiency (more protein per calorie).
-          </p>
-
-          <RankingList items={bestCalorieProteinRatio} highlightTop={3} showRatio />
-        </section>
-
-        {/* Lowest Calories */}
-        <section
-          id="lowest-calorie"
-          style={{ marginTop: 80, scrollMarginTop: 200 }}
-        >
-          <h2 style={{ fontSize: 28, fontWeight: 800 }}>Lowest Calorie Items</h2>
-
-          <p style={{ marginTop: 6, opacity: 0.75 }}>
-            Lowest calorie foods on the menu.
-          </p>
-
-          <RankingList items={lowestCalorieItems} highlightTop={3} />
-        </section>
+        <RestaurantView
+          items={items}
+          highestProtein={highestProtein}
+          bestCalorieProteinRatio={bestCalorieProteinRatio}
+          lowestCalorieItems={lowestCalorieItems}
+        />
       </main>
     </div>
   );
