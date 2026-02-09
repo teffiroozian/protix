@@ -7,6 +7,7 @@ import MenuSections from "./MenuSections";
 import TopPicksList from "./TopPicksList";
 
 type ViewOption = "menu" | "top";
+type SortOption = "highest-protein" | "best-ratio" | "lowest-calories";
 
 export default function RestaurantView({
   items,
@@ -20,18 +21,25 @@ export default function RestaurantView({
   lowestCalorieItems: MenuItem[];
 }) {
   const [view, setView] = useState<ViewOption>("menu");
+  const [sort, setSort] = useState<SortOption>("highest-protein");
 
   return (
     <div>
-      <ControlsRow view={view} onChange={setView} />
+      <ControlsRow
+        view={view}
+        onChange={setView}
+        sort={sort}
+        onSortChange={setSort}
+      />
 
       {view === "menu" ? (
-        <MenuSections items={items} />
+        <MenuSections items={items} sort={sort} />
       ) : (
         <TopPicksList
           highestProtein={highestProtein}
           bestCalorieProteinRatio={bestCalorieProteinRatio}
           lowestCalorieItems={lowestCalorieItems}
+          sort={sort}
         />
       )}
     </div>

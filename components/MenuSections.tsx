@@ -3,6 +3,8 @@
 import type { MenuItem } from "@/types/menu";
 import MenuItemCard from "./MenuItemCard";
 
+type SortOption = "highest-protein" | "best-ratio" | "lowest-calories";
+
 function normalizeCategory(category: string) {
   return category.trim().toLowerCase();
 }
@@ -14,7 +16,30 @@ function titleCase(text: string) {
     .join(" ");
 }
 
-export default function MenuSections({ items }: { items: MenuItem[] }) {
+function caloriesPerProtein(item: MenuItem) {
+  if (!item.nutrition.protein) return Number.POSITIVE_INFINITY;
+  return item.nutrition.calories / item.nutrition.protein;
+}
+
+function sortItems(items: MenuItem[], sort: SortOption) {
+  const sorted = [...items];
+  if (sort === "highest-protein") {
+    sorted.sort((a, b) => b.nutrition.protein - a.nutrition.protein);
+  } else if (sort === "best-ratio") {
+    sorted.sort((a, b) => caloriesPerProtein(a) - caloriesPerProtein(b));
+  } else {
+    sorted.sort((a, b) => a.nutrition.calories - b.nutrition.calories);
+  }
+  return sorted;
+}
+
+export default function MenuSections({
+  items,
+  sort,
+}: {
+  items: MenuItem[];
+  sort: SortOption;
+}) {
   const grouped = items.reduce<Record<string, MenuItem[]>>((acc, item) => {
     const key = normalizeCategory(item.category || "Other");
     if (!acc[key]) acc[key] = [];
@@ -32,7 +57,7 @@ export default function MenuSections({ items }: { items: MenuItem[] }) {
             {titleCase(section)}
           </h2>
           <ul style={{ marginTop: 12, padding: 0, display: "grid", gap: 12 }}>
-            {grouped[section].map((item, index) => (
+            {sortItems(grouped[section], sort).map((item, index) => (
               <MenuItemCard key={`${item.name}-${index}`} item={item} />
             ))}
           </ul>
