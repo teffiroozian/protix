@@ -13,7 +13,7 @@ export default function Home() {
   const [isFocused, setIsFocused] = useState(false);
 
   const popularRestaurantQueries = useMemo(
-    () => ["chick fil a", "chipotle", "panera", "panda express", "habit burger"],
+    () => ["chick-fil-a", "chipotle", "panera", "panda express", "habit burger"],
     []
   );
 
