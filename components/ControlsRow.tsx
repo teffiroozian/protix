@@ -66,11 +66,32 @@ export default function ControlsRow({
     onFiltersChange({ ...filters, caloriesMax: undefined });
   };
 
+  const controlStyle = {
+    height: 36,
+    borderRadius: 999,
+    border: "1px solid rgba(0,0,0,0.18)",
+    background: "white",
+    fontWeight: 600,
+    fontSize: 14,
+  } as const;
+
+  const chipStyle = {
+    padding: "3px 8px",
+    borderRadius: 999,
+    border: "1px solid rgba(0,0,0,0.2)",
+    background: "rgba(0,0,0,0.05)",
+    fontWeight: 600,
+    fontSize: 12,
+    display: "inline-flex",
+    alignItems: "center",
+    gap: 6,
+  } as const;
+
   return (
     <div
       style={{
         display: "flex",
-        gap: 12,
+        gap: 14,
         alignItems: "center",
         flexWrap: "wrap",
       }}
@@ -79,11 +100,13 @@ export default function ControlsRow({
         style={{
           display: "flex",
           gap: 8,
-          padding: 6,
+          padding: 4,
           borderRadius: 999,
-          border: "1px solid rgba(0,0,0,0.12)",
-          background: "rgba(0,0,0,0.03)",
+          border: "1px solid rgba(0,0,0,0.18)",
+          background: "rgba(0,0,0,0.04)",
           width: "fit-content",
+          height: 36,
+          alignItems: "center",
         }}
       >
         {options.map((option) => {
@@ -94,60 +117,46 @@ export default function ControlsRow({
               type="button"
               onClick={() => onChange(option.value)}
               style={{
-                padding: "6px 16px",
+                padding: "6px 14px",
                 borderRadius: 999,
                 border: "1px solid rgba(0,0,0,0.2)",
                 background: isActive ? "rgba(0,0,0,0.85)" : "white",
                 color: isActive ? "white" : "rgba(0,0,0,0.8)",
                 fontWeight: 600,
+                fontSize: 14,
                 cursor: "pointer",
                 transition: "all 160ms ease",
+                height: 28,
               }}
             >
               {option.label}
-          </button>
-        );
-      })}
-    </div>
-    <label
+            </button>
+          );
+        })}
+      </div>
+      <select
+        value={sort}
+        aria-label={`Sort: ${activeSortLabel}`}
+        onChange={(event) => onSortChange(event.target.value as SortOption)}
         style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 8,
-          fontWeight: 600,
-          color: "rgba(0,0,0,0.8)",
+          ...controlStyle,
+          padding: "0 12px",
+          cursor: "pointer",
         }}
       >
-        Sort: {activeSortLabel}
-        <select
-          value={sort}
-          onChange={(event) => onSortChange(event.target.value as SortOption)}
-          style={{
-            padding: "6px 12px",
-            borderRadius: 999,
-            border: "1px solid rgba(0,0,0,0.2)",
-            background: "white",
-            fontWeight: 600,
-            cursor: "pointer",
-          }}
-        >
-          {sortOptions.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      </label>
+        {sortOptions.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
       <button
         type="button"
         onClick={openFilters}
         style={{
-          padding: "6px 16px",
-          borderRadius: 999,
-          border: "1px solid rgba(0,0,0,0.2)",
-          background: "white",
+          ...controlStyle,
+          padding: "0 16px",
           color: "rgba(0,0,0,0.8)",
-          fontWeight: 600,
           cursor: "pointer",
         }}
       >
@@ -308,19 +317,7 @@ export default function ControlsRow({
             }}
           >
             {filters.proteinMin ? (
-              <span
-                style={{
-                  padding: "4px 10px",
-                  borderRadius: 999,
-                  border: "1px solid rgba(0,0,0,0.2)",
-                  background: "rgba(0,0,0,0.05)",
-                  fontWeight: 600,
-                  fontSize: 12,
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 6,
-                }}
-              >
+              <span style={chipStyle}>
                 Protein {filters.proteinMin}g+
                 <button
                   type="button"
@@ -339,19 +336,7 @@ export default function ControlsRow({
               </span>
             ) : null}
             {filters.caloriesMax ? (
-              <span
-                style={{
-                  padding: "4px 10px",
-                  borderRadius: 999,
-                  border: "1px solid rgba(0,0,0,0.2)",
-                  background: "rgba(0,0,0,0.05)",
-                  fontWeight: 600,
-                  fontSize: 12,
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 6,
-                }}
-              >
+              <span style={chipStyle}>
                 Under {filters.caloriesMax} cal
                 <button
                   type="button"
@@ -373,7 +358,7 @@ export default function ControlsRow({
               type="button"
               onClick={resetFilters}
               style={{
-                padding: "4px 10px",
+                padding: "3px 8px",
                 borderRadius: 999,
                 border: "1px solid rgba(0,0,0,0.2)",
                 background: "white",
