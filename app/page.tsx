@@ -3,9 +3,11 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import restaurants from "./data/index.json";
 
 export default function Home() {
+  const router = useRouter();
   const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(-1);
   const [isFocused, setIsFocused] = useState(false);
@@ -44,9 +46,11 @@ export default function Home() {
 
   const showSuggestions = isFocused && suggestions.length > 0;
 
-  const handleSelect = (name: string) => {
-    setQuery(name);
+  const handleSelect = (restaurant: (typeof restaurants)[number]) => {
+    setQuery(restaurant.name);
     setActiveIndex(-1);
+    setIsFocused(false);
+    router.push(`/restaurant/${restaurant.id}`);
   };
 
   const handleClear = () => {
@@ -99,7 +103,7 @@ export default function Home() {
 
               if (event.key === "Enter" && activeIndex >= 0) {
                 event.preventDefault();
-                handleSelect(suggestions[activeIndex].name);
+                handleSelect(suggestions[activeIndex]);
               }
             }}
             placeholder="Start typing a restaurant name"
@@ -161,7 +165,7 @@ export default function Home() {
                       activeIndex === index ? "bg-neutral-100" : ""
                     }`}
                     onMouseDown={(event) => event.preventDefault()}
-                    onClick={() => handleSelect(restaurant.name)}
+                    onClick={() => handleSelect(restaurant)}
                   >
                     <span className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-lg bg-neutral-50">
                       <Image
