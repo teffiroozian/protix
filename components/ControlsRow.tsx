@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 type ViewOption = "menu" | "top";
 type SortOption = "highest-protein" | "best-ratio" | "lowest-calories";
@@ -41,16 +41,7 @@ export default function ControlsRow({
   const activeSortLabel =
     sortOptions.find((option) => option.value === sort)?.label ??
     "Highest Protein";
-  const activeFilterChips = useMemo(() => {
-    const chips: string[] = [];
-    if (filters.proteinMin) {
-      chips.push(`Protein ${filters.proteinMin}g+`);
-    }
-    if (filters.caloriesMax) {
-      chips.push(`Under ${filters.caloriesMax} cal`);
-    }
-    return chips;
-  }, [filters]);
+  const hasActiveFilters = Boolean(filters.proteinMin || filters.caloriesMax);
 
   const openFilters = () => {
     setDraftFilters(filters);
@@ -65,6 +56,14 @@ export default function ControlsRow({
   const resetFilters = () => {
     setDraftFilters({});
     onFiltersChange({});
+  };
+
+  const clearProteinFilter = () => {
+    onFiltersChange({ ...filters, proteinMin: undefined });
+  };
+
+  const clearCaloriesFilter = () => {
+    onFiltersChange({ ...filters, caloriesMax: undefined });
   };
 
   return (
@@ -298,7 +297,7 @@ export default function ControlsRow({
           </div>
         </div>
       ) : null}
-      {activeFilterChips.length ? (
+      {hasActiveFilters ? (
         <div style={{ width: "100%" }}>
           <div
             style={{
@@ -308,9 +307,8 @@ export default function ControlsRow({
               flexWrap: "wrap",
             }}
           >
-            {activeFilterChips.map((chip) => (
+            {filters.proteinMin ? (
               <span
-                key={chip}
                 style={{
                   padding: "4px 10px",
                   borderRadius: 999,
@@ -318,11 +316,59 @@ export default function ControlsRow({
                   background: "rgba(0,0,0,0.05)",
                   fontWeight: 600,
                   fontSize: 12,
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 6,
                 }}
               >
-                {chip}
+                Protein {filters.proteinMin}g+
+                <button
+                  type="button"
+                  onClick={clearProteinFilter}
+                  aria-label="Clear protein filter"
+                  style={{
+                    border: "none",
+                    background: "transparent",
+                    cursor: "pointer",
+                    fontWeight: 700,
+                    fontSize: 12,
+                  }}
+                >
+                  ✕
+                </button>
               </span>
-            ))}
+            ) : null}
+            {filters.caloriesMax ? (
+              <span
+                style={{
+                  padding: "4px 10px",
+                  borderRadius: 999,
+                  border: "1px solid rgba(0,0,0,0.2)",
+                  background: "rgba(0,0,0,0.05)",
+                  fontWeight: 600,
+                  fontSize: 12,
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 6,
+                }}
+              >
+                Under {filters.caloriesMax} cal
+                <button
+                  type="button"
+                  onClick={clearCaloriesFilter}
+                  aria-label="Clear calories filter"
+                  style={{
+                    border: "none",
+                    background: "transparent",
+                    cursor: "pointer",
+                    fontWeight: 700,
+                    fontSize: 12,
+                  }}
+                >
+                  ✕
+                </button>
+              </span>
+            ) : null}
             <button
               type="button"
               onClick={resetFilters}
