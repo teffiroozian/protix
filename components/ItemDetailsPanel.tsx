@@ -61,24 +61,21 @@ export default function ItemDetailsPanel({
     <div className={styles.wrapper}>
       {availableAddonSections.length > 0 ? (
         <section className={styles.addonsCard}>
-          <details>
-            <summary className={styles.addonsSummary}>Add-ons</summary>
-            <div className={styles.addonsContent}>
-              {availableAddonSections.map((section) => (
-                <div key={section.ref} className={styles.addonGroup}>
-                  <h3 className={styles.addonGroupTitle}>{section.title}</h3>
-                  <ul className={styles.addonList}>
-                    {section.addons.map((addon) => (
-                      <li key={`${section.ref}-${addon.name}`} className={styles.addonItem}>
-                        <span>{addon.calories} cal</span>
-                        <span>{addon.name}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </details>
+          <div className={styles.addonsContent}>
+            {availableAddonSections.map((section) => (
+              <div key={section.ref} className={styles.addonGroup}>
+                <h3 className={styles.addonGroupTitle}>{section.title}</h3>
+                <ul className={styles.addonList}>
+                  {section.addons.map((addon) => (
+                    <li key={`${section.ref}-${addon.name}`} className={styles.addonItem}>
+                      <span>{addon.calories} cal</span>
+                      <span>{addon.name}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </section>
       ) : null}
 
