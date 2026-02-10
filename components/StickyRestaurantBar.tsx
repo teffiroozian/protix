@@ -1,223 +1,266 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState } from "react";
-import type { MouseEvent } from "react";
+import { useState } from "react";
+import type {
+  Filters,
+  SortOption,
+  ViewOption,
+} from "@/types/restaurant-controls";
 
-type TabOption = {
-  id: string;
-  label: string;
-  href: string;
-};
+const PROTEIN_OPTIONS = [20, 30, 40];
+const CALORIE_OPTIONS = [500, 700, 900];
 
 type StickyRestaurantBarProps = {
   restaurantName: string;
-  restaurantLogo: string;
-  tabs?: TabOption[];
+  view: ViewOption;
+  onViewChange: (view: ViewOption) => void;
+  sort: SortOption;
+  onSortChange: (sort: SortOption) => void;
+  filters: Filters;
+  onFiltersChange: (filters: Filters) => void;
 };
 
-const DEFAULT_TABS: TabOption[] = [
-  { id: "high-protein", label: "High Protein", href: "#high-protein" },
-  {
-    id: "best-ratio",
-    label: "Best Protein Ratio",
-    href: "#best-protein-ratio",
-  },
-  { id: "lowest-cal", label: "Lowest Calorie", href: "#lowest-calorie" },
+const SORT_OPTIONS: Array<{ label: string; value: SortOption }> = [
+  { label: "Highest Protein", value: "highest-protein" },
+  { label: "Best Ratio", value: "best-ratio" },
+  { label: "Lowest Calories", value: "lowest-calories" },
 ];
-
-const SCROLL_AMOUNT = 220;
 
 export default function StickyRestaurantBar({
   restaurantName,
-  restaurantLogo,
-  tabs,
+  view,
+  onViewChange,
+  sort,
+  onSortChange,
+  filters,
+  onFiltersChange,
 }: StickyRestaurantBarProps) {
-  const resolvedTabs = useMemo(() => tabs ?? DEFAULT_TABS, [tabs]);
-  const [activeTab, setActiveTab] = useState(resolvedTabs[0]?.id ?? "");
-  const [isVisible, setIsVisible] = useState(false);
-  const tabsRef = useRef<HTMLDivElement | null>(null);
-  const barRef = useRef<HTMLDivElement | null>(null);
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+  const [draftFilters, setDraftFilters] = useState<Filters>(filters);
+  const hasActiveFilters = Boolean(filters.proteinMin || filters.caloriesMax);
 
-  const getScrollOffset = () => (barRef.current?.offsetHeight ?? 0) + 24;
-
-  const smoothScrollTo = (targetY: number, duration = 1000) => {
-    const startY = window.scrollY;
-    const difference = targetY - startY;
-    let startTime: number | null = null;
-
-    const easeInOutCubic = (t: number) =>
-      t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-
-    const step = (timestamp: number) => {
-      if (startTime === null) startTime = timestamp;
-      const elapsed = timestamp - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const easedProgress = easeInOutCubic(progress);
-      window.scrollTo(0, startY + difference * easedProgress);
-
-      if (elapsed < duration) {
-        window.requestAnimationFrame(step);
-      }
-    };
-
-    window.requestAnimationFrame(step);
+  const openFilters = () => {
+    setDraftFilters(filters);
+    setIsFiltersOpen(true);
   };
 
-  useEffect(() => {
-    const hero = document.getElementById("restaurant-hero");
-
-    if (!hero) {
-      setIsVisible(true);
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsVisible(!entry.isIntersecting);
-      },
-      { threshold: 0, rootMargin: "-80px 0px 0px 0px" }
-    );
-
-    observer.observe(hero);
-
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    const tabSections = resolvedTabs
-      .map((tab) => {
-        const id = tab.href.replace("#", "");
-        return document.getElementById(id);
-      })
-      .filter((section): section is HTMLElement => Boolean(section));
-
-    if (!tabSections.length) return;
-
-    const handleScroll = () => {
-      const offset = getScrollOffset() + 8;
-      const scrollPosition = window.scrollY + offset;
-
-      let currentTabId = resolvedTabs[0]?.id ?? "";
-      tabSections.forEach((section, index) => {
-        if (section.offsetTop <= scrollPosition) {
-          currentTabId = resolvedTabs[index]?.id ?? currentTabId;
-        }
-      });
-
-      setActiveTab(currentTabId);
-    };
-
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [resolvedTabs]);
-
-  const handleScroll = (direction: "left" | "right") => {
-    if (!tabsRef.current) return;
-    const delta = direction === "left" ? -SCROLL_AMOUNT : SCROLL_AMOUNT;
-    tabsRef.current.scrollBy({ left: delta, behavior: "smooth" });
+  const applyFilters = () => {
+    onFiltersChange(draftFilters);
+    setIsFiltersOpen(false);
   };
 
-  const handleTabClick = (
-    event: MouseEvent<HTMLAnchorElement>,
-    tab: TabOption
-  ) => {
-    event.preventDefault();
-    const id = tab.href.replace("#", "");
-    const section = document.getElementById(id);
-    if (!section) return;
+  const resetFilters = () => {
+    setDraftFilters({});
+    onFiltersChange({});
+  };
 
-    const offset = getScrollOffset();
-    const targetY = section.getBoundingClientRect().top + window.scrollY - offset;
+  const clearProteinFilter = () => {
+    onFiltersChange({ ...filters, proteinMin: undefined });
+  };
 
-    setActiveTab(tab.id);
-    smoothScrollTo(targetY, 1000);
+  const clearCaloriesFilter = () => {
+    onFiltersChange({ ...filters, caloriesMax: undefined });
   };
 
   return (
-    <div
-      className={`fixed left-0 right-0 top-0 z-50 transition duration-300 ${
-        isVisible
-          ? "translate-y-0 opacity-100"
-          : "-translate-y-full opacity-0 pointer-events-none"
-      }`}
-    >
-      <div
-        ref={barRef}
-        className="w-full border-b border-slate-200/70 bg-white/95 backdrop-blur"
-      >
-        <div className="mx-auto flex w-full max-w-5xl items-center gap-3 px-4 py-2 sm:px-6">
-          <Link
-            href="/"
-            className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-base font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:text-slate-900"
-            aria-label="Back to home"
-          >
-            ←
-          </Link>
+    <>
+      <div className="sticky top-0 z-50 w-full border-b border-slate-200/70 bg-white/95 backdrop-blur">
+        <div className="mx-auto flex w-full max-w-6xl flex-col">
+          <div className="flex w-full items-center gap-3 px-4 py-3 sm:px-6 lg:px-8">
+            <Link
+              href="/"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-base font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:text-slate-900"
+              aria-label="Back to home"
+            >
+              ←
+            </Link>
 
-          <div className="relative h-8 w-8 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
-            <Image
-              src={restaurantLogo}
-              alt={`${restaurantName} logo`}
-              fill
-              className="object-contain"
-            />
-          </div>
+            <div className="text-sm font-bold text-slate-900 sm:text-base">
+              {restaurantName}
+            </div>
 
-          <div className="text-sm font-bold text-slate-900 sm:text-base">
-            {restaurantName}
-          </div>
+            <div className="ml-2 flex items-center gap-1 rounded-full border border-slate-200 bg-slate-100 p-1">
+              {(["menu", "top"] as ViewOption[]).map((option) => {
+                const isActive = view === option;
+                return (
+                  <button
+                    key={option}
+                    type="button"
+                    onClick={() => onViewChange(option)}
+                    className={`rounded-full px-3 py-1 text-xs font-semibold transition sm:text-sm ${
+                      isActive
+                        ? "bg-slate-900 text-white"
+                        : "text-slate-700 hover:text-slate-900"
+                    }`}
+                  >
+                    {option === "menu" ? "Menu" : "Top Picks"}
+                  </button>
+                );
+              })}
+            </div>
 
-          <span className="text-slate-300">|</span>
-
-          <button
-            type="button"
-            onClick={() => handleScroll("left")}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-lg text-slate-600 shadow-sm transition hover:border-slate-300 hover:text-slate-900"
-            aria-label="Scroll tabs left"
-          >
-            ‹
-          </button>
-
-          <div
-            ref={tabsRef}
-            className="flex flex-1 items-center gap-2 overflow-x-auto scroll-smooth py-1"
-          >
-            {resolvedTabs.map((tab) => {
-              const isActive = tab.id === activeTab;
-
-              return (
-                <a
-                  key={tab.id}
-                  href={tab.href}
-                  onClick={(event) => handleTabClick(event, tab)}
-                  className={`whitespace-nowrap rounded-full border px-3 py-1.5 text-sm font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400/60 ${
-                    isActive
-                      ? "border-slate-900 bg-slate-900 text-white"
-                      : "border-slate-300 bg-white text-slate-900 hover:border-slate-400"
-                  }`}
+            <div className="ml-auto flex items-center gap-2">
+              <label className="text-xs font-semibold text-slate-600 sm:text-sm">
+                <span className="sr-only">Sort</span>
+                <select
+                  value={sort}
+                  onChange={(event) =>
+                    onSortChange(event.target.value as SortOption)
+                  }
+                  className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm transition focus:outline-none focus:ring-2 focus:ring-slate-400/60 sm:text-sm"
                 >
-                  {tab.label}
-                </a>
-              );
-            })}
+                  {SORT_OPTIONS.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      Sort: {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <button
+                type="button"
+                onClick={openFilters}
+                className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:text-slate-900 sm:text-sm"
+              >
+                <span aria-hidden="true">⚙️</span>
+                Filters
+              </button>
+            </div>
           </div>
 
-          <button
-            type="button"
-            onClick={() => handleScroll("right")}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-lg text-slate-600 shadow-sm transition hover:border-slate-300 hover:text-slate-900"
-            aria-label="Scroll tabs right"
-          >
-            ›
-          </button>
+          {hasActiveFilters ? (
+            <div className="flex w-full items-center gap-3 border-t border-slate-200/70 bg-white/95 px-4 py-2 sm:px-6 lg:px-8">
+              <div className="flex flex-1 flex-wrap items-center gap-2">
+                {filters.proteinMin ? (
+                  <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700">
+                    Protein {filters.proteinMin}g+
+                    <button
+                      type="button"
+                      onClick={clearProteinFilter}
+                      aria-label="Clear protein filter"
+                      className="text-xs font-bold text-slate-600"
+                    >
+                      ✕
+                    </button>
+                  </span>
+                ) : null}
+                {filters.caloriesMax ? (
+                  <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700">
+                    Under {filters.caloriesMax} cal
+                    <button
+                      type="button"
+                      onClick={clearCaloriesFilter}
+                      aria-label="Clear calories filter"
+                      className="text-xs font-bold text-slate-600"
+                    >
+                      ✕
+                    </button>
+                  </span>
+                ) : null}
+              </div>
+              <button
+                type="button"
+                onClick={resetFilters}
+                className="text-xs font-semibold text-slate-600 transition hover:text-slate-900"
+              >
+                Clear All
+              </button>
+            </div>
+          ) : null}
         </div>
       </div>
-    </div>
+
+      {isFiltersOpen ? (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-4"
+          onClick={() => setIsFiltersOpen(false)}
+        >
+          <div
+            className="w-full max-w-lg rounded-2xl bg-white p-5 shadow-2xl"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <h3 className="text-lg font-bold text-slate-900">Filters</h3>
+            <div className="mt-4 grid gap-4">
+              <div>
+                <div className="text-sm font-semibold text-slate-700">
+                  Protein minimum
+                </div>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {PROTEIN_OPTIONS.map((value) => {
+                    const isActive = draftFilters.proteinMin === value;
+                    return (
+                      <button
+                        key={value}
+                        type="button"
+                        onClick={() =>
+                          setDraftFilters((prev) => ({
+                            ...prev,
+                            proteinMin: value,
+                          }))
+                        }
+                        className={`rounded-full border px-3 py-1.5 text-sm font-semibold transition ${
+                          isActive
+                            ? "border-slate-900 bg-slate-900 text-white"
+                            : "border-slate-200 bg-white text-slate-700 hover:border-slate-300"
+                        }`}
+                      >
+                        {value}g+
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+              <div>
+                <div className="text-sm font-semibold text-slate-700">
+                  Calories max
+                </div>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {CALORIE_OPTIONS.map((value) => {
+                    const isActive = draftFilters.caloriesMax === value;
+                    return (
+                      <button
+                        key={value}
+                        type="button"
+                        onClick={() =>
+                          setDraftFilters((prev) => ({
+                            ...prev,
+                            caloriesMax: value,
+                          }))
+                        }
+                        className={`rounded-full border px-3 py-1.5 text-sm font-semibold transition ${
+                          isActive
+                            ? "border-slate-900 bg-slate-900 text-white"
+                            : "border-slate-200 bg-white text-slate-700 hover:border-slate-300"
+                        }`}
+                      >
+                        Under {value}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+            <div className="mt-5 flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={resetFilters}
+                className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700"
+              >
+                Reset
+              </button>
+              <button
+                type="button"
+                onClick={applyFilters}
+                className="rounded-full border border-slate-900 bg-slate-900 px-4 py-2 text-sm font-semibold text-white"
+              >
+                Apply
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
+    </>
   );
 }

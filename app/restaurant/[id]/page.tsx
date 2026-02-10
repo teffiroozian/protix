@@ -1,8 +1,6 @@
 import Link from "next/link";
 import restaurants from "../../data/index.json";
-import StickyRestaurantBar from "@/components/StickyRestaurantBar";
-import RestaurantHeader from "@/components/RestaurantHeader";
-import RestaurantView from "@/components/RestaurantView";
+import RestaurantPageShell from "@/components/RestaurantPageShell";
 import type { MenuItem } from "@/types/menu";
 
 // calories per 1g protein (bigger number = more calories for each gram of protein)
@@ -51,28 +49,14 @@ export default async function RestaurantPage({
   const lowestCalorieItems = lowestCalories(items);
 
   return (
-    <div style={{ width: "100%" }}>
-      <StickyRestaurantBar
-        restaurantName={restaurant.name}
-        restaurantLogo={restaurant.logo}
-      />
-
-      <div id="restaurant-hero" className="mt-6">
-        <RestaurantHeader
-          name={restaurant.name}
-          logo={restaurant.logo}
-          restaurantSlug={restaurant.id}
-        />
-      </div>
-
-      <main style={{ maxWidth: 900, margin: "24px auto 48px", padding: 16 }}>
-        <RestaurantView
-          items={items}
-          highestProtein={highestProtein}
-          bestCalorieProteinRatio={bestCalorieProteinRatio}
-          lowestCalorieItems={lowestCalorieItems}
-        />
-      </main>
-    </div>
+    <RestaurantPageShell
+      restaurantName={restaurant.name}
+      restaurantLogo={restaurant.logo}
+      restaurantSlug={restaurant.id}
+      items={items}
+      highestProtein={highestProtein}
+      bestCalorieProteinRatio={bestCalorieProteinRatio}
+      lowestCalorieItems={lowestCalorieItems}
+    />
   );
 }
