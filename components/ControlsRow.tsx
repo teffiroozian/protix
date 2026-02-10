@@ -118,7 +118,6 @@ export default function ControlsRow({
           color: "rgba(0,0,0,0.8)",
         }}
       >
-        Sort: {activeSortLabel}
         <select
           value={sort}
           onChange={(event) => onSortChange(event.target.value as SortOption)}
