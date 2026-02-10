@@ -78,17 +78,6 @@ export default function RestaurantHeader({
             </p>
           </div>
 
-          <div className="mt-2 flex flex-wrap gap-2">
-            {tags.map((tag) => (
-              <Link
-                key={tag.id}
-                href={tag.href}
-                className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-bold text-slate-900 transition hover:border-slate-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400/60"
-              >
-                {tag.label}
-              </Link>
-            ))}
-          </div>
         </div>
       </header>
     </div>
