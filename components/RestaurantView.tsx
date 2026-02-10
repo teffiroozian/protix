@@ -72,6 +72,7 @@ export default function RestaurantView({
         onSortChange={setSort}
         filters={filters}
         onFiltersChange={setFilters}
+        wrapperId="controls-row"
       />
 
       {view === "menu" ? (

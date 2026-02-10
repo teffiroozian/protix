@@ -30,13 +30,13 @@ export default function StickyRestaurantBar({
 }: StickyRestaurantBarProps) {
   const [isVisible, setIsVisible] = useState(() => {
     if (typeof document === "undefined") return false;
-    return !document.getElementById("restaurant-hero");
+    return !document.getElementById("controls-row");
   });
 
   useEffect(() => {
-    const hero = document.getElementById("restaurant-hero");
+    const controlsRow = document.getElementById("controls-row");
 
-    if (!hero) {
+    if (!controlsRow) {
       return;
     }
 
@@ -44,10 +44,10 @@ export default function StickyRestaurantBar({
       ([entry]) => {
         setIsVisible(!entry.isIntersecting);
       },
-      { threshold: 0, rootMargin: "-80px 0px 0px 0px" }
+      { threshold: 0 }
     );
 
-    observer.observe(hero);
+    observer.observe(controlsRow);
 
     return () => observer.disconnect();
   }, []);

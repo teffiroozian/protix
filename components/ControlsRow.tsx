@@ -130,6 +130,7 @@ export default function ControlsRow({
   filters,
   onFiltersChange,
   showChips = true,
+  wrapperId,
 }: {
   view: ViewOption;
   onChange: (view: ViewOption) => void;
@@ -138,6 +139,7 @@ export default function ControlsRow({
   filters: Filters;
   onFiltersChange: (filters: Filters) => void;
   showChips?: boolean;
+  wrapperId?: string;
 }) {
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [draftFilters, setDraftFilters] = useState<Filters>(filters);
@@ -323,6 +325,7 @@ export default function ControlsRow({
   return (
     <>
       <div
+        id={wrapperId}
         style={{
           display: "flex",
           gap: 12,
