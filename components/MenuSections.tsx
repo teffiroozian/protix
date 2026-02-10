@@ -1,9 +1,8 @@
 "use client";
 
 import type { MenuItem } from "@/types/menu";
+import type { SortOption } from "./ControlsRow";
 import MenuItemCard from "./MenuItemCard";
-
-type SortOption = "highest-protein" | "best-ratio" | "lowest-calories";
 
 function normalizeCategory(category: string) {
   return category.trim().toLowerCase();
@@ -21,7 +20,7 @@ function caloriesPerProtein(item: MenuItem) {
   return item.nutrition.calories / item.nutrition.protein;
 }
 
-function sortItems(items: MenuItem[], sort: SortOption) {
+export function sortItems(items: MenuItem[], sort: SortOption) {
   const sorted = [...items];
   if (sort === "highest-protein") {
     sorted.sort((a, b) => b.nutrition.protein - a.nutrition.protein);
@@ -46,8 +45,13 @@ export default function MenuSections({
     acc[key].push(item);
     return acc;
   }, {});
+  const sortedGrouped = Object.fromEntries(
+    Object.entries(grouped).map(([key, value]) => [key, sortItems(value, sort)])
+  );
 
-  const sections = Object.keys(grouped).sort((a, b) => a.localeCompare(b));
+  const sections = Object.keys(sortedGrouped).sort((a, b) =>
+    a.localeCompare(b)
+  );
 
   return (
     <div style={{ marginTop: 32, display: "grid", gap: 48 }}>
@@ -57,7 +61,7 @@ export default function MenuSections({
             {titleCase(section)}
           </h2>
           <ul style={{ marginTop: 12, padding: 0, display: "grid", gap: 12 }}>
-            {sortItems(grouped[section], sort).map((item, index) => (
+            {sortedGrouped[section].map((item, index) => (
               <MenuItemCard key={`${item.name}-${index}`} item={item} />
             ))}
           </ul>

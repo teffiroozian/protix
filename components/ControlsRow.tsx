@@ -1,16 +1,126 @@
 "use client";
 
 import { useState } from "react";
+import { createPortal } from "react-dom";
 
-type ViewOption = "menu" | "top";
-type SortOption = "highest-protein" | "best-ratio" | "lowest-calories";
-type Filters = {
+export type ViewOption = "menu" | "top";
+export type SortOption = "highest-protein" | "best-ratio" | "lowest-calories";
+export type Filters = {
   proteinMin?: number;
   caloriesMax?: number;
 };
 
 const PROTEIN_OPTIONS = [20, 30, 40];
 const CALORIE_OPTIONS = [500, 700, 900];
+
+export function FilterChips({
+  filters,
+  onClearProtein,
+  onClearCalories,
+  onClearAll,
+  withMargin = true,
+}: {
+  filters: Filters;
+  onClearProtein: () => void;
+  onClearCalories: () => void;
+  onClearAll: () => void;
+  withMargin?: boolean;
+}) {
+  return (
+    <div style={{ width: "100%" }}>
+      <div
+        style={{
+          marginTop: withMargin ? 10 : 0,
+          display: "flex",
+          gap: 8,
+          flexWrap: "wrap",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+          {filters.proteinMin ? (
+            <span
+              style={{
+                padding: "4px 10px",
+                borderRadius: 999,
+                border: "1px solid rgba(0,0,0,0.2)",
+                background: "rgba(0,0,0,0.05)",
+                fontWeight: 600,
+                fontSize: 12,
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 6,
+              }}
+            >
+              Protein {filters.proteinMin}g+
+              <button
+                type="button"
+                onClick={onClearProtein}
+                aria-label="Clear protein filter"
+                style={{
+                  border: "none",
+                  background: "transparent",
+                  cursor: "pointer",
+                  fontWeight: 700,
+                  fontSize: 12,
+                }}
+              >
+                ✕
+              </button>
+            </span>
+          ) : null}
+          {filters.caloriesMax ? (
+            <span
+              style={{
+                padding: "4px 10px",
+                borderRadius: 999,
+                border: "1px solid rgba(0,0,0,0.2)",
+                background: "rgba(0,0,0,0.05)",
+                fontWeight: 600,
+                fontSize: 12,
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 6,
+              }}
+            >
+              Under {filters.caloriesMax} cal
+              <button
+                type="button"
+                onClick={onClearCalories}
+                aria-label="Clear calories filter"
+                style={{
+                  border: "none",
+                  background: "transparent",
+                  cursor: "pointer",
+                  fontWeight: 700,
+                  fontSize: 12,
+                }}
+              >
+                ✕
+              </button>
+            </span>
+          ) : null}
+        </div>
+        <button
+          type="button"
+          onClick={onClearAll}
+          style={{
+            padding: "4px 10px",
+            borderRadius: 999,
+            border: "1px solid rgba(0,0,0,0.2)",
+            background: "white",
+            fontWeight: 600,
+            fontSize: 12,
+            cursor: "pointer",
+          }}
+        >
+          Clear All
+        </button>
+      </div>
+    </div>
+  );
+}
 
 export default function ControlsRow({
   view,
@@ -19,6 +129,8 @@ export default function ControlsRow({
   onSortChange,
   filters,
   onFiltersChange,
+  showChips = true,
+  wrapperId,
 }: {
   view: ViewOption;
   onChange: (view: ViewOption) => void;
@@ -26,6 +138,8 @@ export default function ControlsRow({
   onSortChange: (sort: SortOption) => void;
   filters: Filters;
   onFiltersChange: (filters: Filters) => void;
+  showChips?: boolean;
+  wrapperId?: string;
 }) {
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [draftFilters, setDraftFilters] = useState<Filters>(filters);
@@ -38,9 +152,6 @@ export default function ControlsRow({
     { label: "Best Ratio (protein / calories)", value: "best-ratio" },
     { label: "Lowest Calories", value: "lowest-calories" },
   ];
-  const activeSortLabel =
-    sortOptions.find((option) => option.value === sort)?.label ??
-    "Highest Protein";
   const hasActiveFilters = Boolean(filters.proteinMin || filters.caloriesMax);
 
   const openFilters = () => {
@@ -66,93 +177,7 @@ export default function ControlsRow({
     onFiltersChange({ ...filters, caloriesMax: undefined });
   };
 
-  return (
-    <div
-      style={{
-        display: "flex",
-        gap: 12,
-        alignItems: "center",
-        flexWrap: "wrap",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          gap: 8,
-          padding: 6,
-          borderRadius: 999,
-          border: "1px solid rgba(0,0,0,0.12)",
-          background: "rgba(0,0,0,0.03)",
-          width: "fit-content",
-        }}
-      >
-        {options.map((option) => {
-          const isActive = view === option.value;
-          return (
-            <button
-              key={option.value}
-              type="button"
-              onClick={() => onChange(option.value)}
-              style={{
-                padding: "6px 16px",
-                borderRadius: 999,
-                border: "1px solid rgba(0,0,0,0.2)",
-                background: isActive ? "rgba(0,0,0,0.85)" : "white",
-                color: isActive ? "white" : "rgba(0,0,0,0.8)",
-                fontWeight: 600,
-                cursor: "pointer",
-                transition: "all 160ms ease",
-              }}
-            >
-              {option.label}
-          </button>
-        );
-      })}
-    </div>
-    <label
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 8,
-          fontWeight: 600,
-          color: "rgba(0,0,0,0.8)",
-        }}
-      >
-        <select
-          value={sort}
-          onChange={(event) => onSortChange(event.target.value as SortOption)}
-          style={{
-            padding: "6px 12px",
-            borderRadius: 999,
-            border: "1px solid rgba(0,0,0,0.2)",
-            background: "white",
-            fontWeight: 600,
-            cursor: "pointer",
-          }}
-        >
-          {sortOptions.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      </label>
-      <button
-        type="button"
-        onClick={openFilters}
-        style={{
-          padding: "6px 16px",
-          borderRadius: 999,
-          border: "1px solid rgba(0,0,0,0.2)",
-          background: "white",
-          color: "rgba(0,0,0,0.8)",
-          fontWeight: 600,
-          cursor: "pointer",
-        }}
-      >
-        Filters
-      </button>
-      {isFiltersOpen ? (
+  const filtersDialog = isFiltersOpen ? (
         <div
           role="dialog"
           aria-modal="true"
@@ -295,97 +320,110 @@ export default function ControlsRow({
             </div>
           </div>
         </div>
-      ) : null}
-      {hasActiveFilters ? (
-        <div style={{ width: "100%" }}>
-          <div
+      ) : null;
+
+  return (
+    <>
+      <div
+        id={wrapperId}
+        style={{
+          display: "flex",
+          gap: 12,
+          alignItems: "center",
+          flexWrap: "wrap",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            gap: 8,
+            padding: 6,
+            borderRadius: 999,
+            border: "1px solid rgba(0,0,0,0.12)",
+            background: "rgba(0,0,0,0.03)",
+            width: "fit-content",
+          }}
+        >
+          {options.map((option) => {
+            const isActive = view === option.value;
+            return (
+              <button
+                key={option.value}
+                type="button"
+                onClick={() => onChange(option.value)}
+                style={{
+                  padding: "6px 16px",
+                  borderRadius: 999,
+                  border: "1px solid rgba(0,0,0,0.2)",
+                  background: isActive ? "rgba(0,0,0,0.85)" : "white",
+                  color: isActive ? "white" : "rgba(0,0,0,0.8)",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  transition: "all 160ms ease",
+                }}
+              >
+                {option.label}
+              </button>
+            );
+          })}
+        </div>
+        <label
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+            fontWeight: 600,
+            color: "rgba(0,0,0,0.8)",
+          }}
+        >
+          <select
+            value={sort}
+            onChange={(event) => onSortChange(event.target.value as SortOption)}
             style={{
-              marginTop: 10,
-              display: "flex",
-              gap: 8,
-              flexWrap: "wrap",
+              padding: "6px 12px",
+              borderRadius: 999,
+              border: "1px solid rgba(0,0,0,0.2)",
+              background: "white",
+              fontWeight: 600,
+              cursor: "pointer",
             }}
           >
-            {filters.proteinMin ? (
-              <span
-                style={{
-                  padding: "4px 10px",
-                  borderRadius: 999,
-                  border: "1px solid rgba(0,0,0,0.2)",
-                  background: "rgba(0,0,0,0.05)",
-                  fontWeight: 600,
-                  fontSize: 12,
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 6,
-                }}
-              >
-                Protein {filters.proteinMin}g+
-                <button
-                  type="button"
-                  onClick={clearProteinFilter}
-                  aria-label="Clear protein filter"
-                  style={{
-                    border: "none",
-                    background: "transparent",
-                    cursor: "pointer",
-                    fontWeight: 700,
-                    fontSize: 12,
-                  }}
-                >
-                  ✕
-                </button>
-              </span>
-            ) : null}
-            {filters.caloriesMax ? (
-              <span
-                style={{
-                  padding: "4px 10px",
-                  borderRadius: 999,
-                  border: "1px solid rgba(0,0,0,0.2)",
-                  background: "rgba(0,0,0,0.05)",
-                  fontWeight: 600,
-                  fontSize: 12,
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 6,
-                }}
-              >
-                Under {filters.caloriesMax} cal
-                <button
-                  type="button"
-                  onClick={clearCaloriesFilter}
-                  aria-label="Clear calories filter"
-                  style={{
-                    border: "none",
-                    background: "transparent",
-                    cursor: "pointer",
-                    fontWeight: 700,
-                    fontSize: 12,
-                  }}
-                >
-                  ✕
-                </button>
-              </span>
-            ) : null}
-            <button
-              type="button"
-              onClick={resetFilters}
-              style={{
-                padding: "4px 10px",
-                borderRadius: 999,
-                border: "1px solid rgba(0,0,0,0.2)",
-                background: "white",
-                fontWeight: 600,
-                fontSize: 12,
-                cursor: "pointer",
-              }}
-            >
-              Clear
-            </button>
-          </div>
-        </div>
-      ) : null}
-    </div>
+            {sortOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </label>
+        <button
+          type="button"
+          onClick={openFilters}
+          style={{
+            padding: "6px 16px",
+            borderRadius: 999,
+            border: "1px solid rgba(0,0,0,0.2)",
+            background: "white",
+            color: "rgba(0,0,0,0.8)",
+            fontWeight: 600,
+            cursor: "pointer",
+          }}
+        >
+          Filters
+        </button>
+        {hasActiveFilters && showChips ? (
+          <FilterChips
+            filters={filters}
+            onClearProtein={clearProteinFilter}
+            onClearCalories={clearCaloriesFilter}
+            onClearAll={resetFilters}
+          />
+        ) : null}
+      </div>
+      {filtersDialog
+        ? typeof document === "undefined"
+          ? filtersDialog
+          : createPortal(filtersDialog, document.body)
+        : null}
+    </>
   );
 }
