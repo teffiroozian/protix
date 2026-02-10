@@ -1,5 +1,12 @@
 import styles from "./ItemDetails.module.css";
-import type { ItemVariant, MenuItem, Nutrition } from "@/types/menu";
+import type {
+  AddonOption,
+  AddonRef,
+  ItemVariant,
+  MenuItem,
+  Nutrition,
+  RestaurantAddons,
+} from "@/types/menu";
 
 function format(n?: number, suffix = "") {
   return n === undefined || n === null ? "—" : `${n}${suffix}`;
@@ -10,23 +17,71 @@ function calToProteinRatio(calories: number, protein: number) {
   return `${Math.round(calories / protein)}:1`;
 }
 
+const addonSectionTitles: Record<AddonRef, string> = {
+  sauces: "Sauces",
+  dressings: "Dressings",
+};
+
+function sortByCalories(addons: AddonOption[]) {
+  return [...addons].sort((a, b) => a.calories - b.calories);
+}
+
 export default function ItemDetailsPanel({
   item,
   nutrition,
   variants,
   selectedVariantId,
   onSelectVariant,
+  addons,
 }: {
   item: MenuItem;
   nutrition: Nutrition;
   variants?: ItemVariant[] | null;
   selectedVariantId?: string;
   onSelectVariant?: (id: string) => void;
+  addons?: RestaurantAddons;
 }) {
   const n = nutrition;
+  const addonRefs = item.addonRefs ?? [];
+  const availableAddonSections = addonRefs
+    .map((ref) => {
+      const list = addons?.[ref];
+      if (!list || list.length === 0) return null;
+      return {
+        ref,
+        title: addonSectionTitles[ref],
+        addons: sortByCalories(list),
+      };
+    })
+    .filter((section): section is { ref: AddonRef; title: string; addons: AddonOption[] } =>
+      section !== null
+    );
 
   return (
     <div className={styles.wrapper}>
+      {availableAddonSections.length > 0 ? (
+        <section className={styles.addonsCard}>
+          <details>
+            <summary className={styles.addonsSummary}>Add-ons</summary>
+            <div className={styles.addonsContent}>
+              {availableAddonSections.map((section) => (
+                <div key={section.ref} className={styles.addonGroup}>
+                  <h3 className={styles.addonGroupTitle}>{section.title}</h3>
+                  <ul className={styles.addonList}>
+                    {section.addons.map((addon) => (
+                      <li key={`${section.ref}-${addon.name}`} className={styles.addonItem}>
+                        <span>{addon.calories} cal</span>
+                        <span>{addon.name}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </details>
+        </section>
+      ) : null}
+
       {/* Left: Nutrition label */}
       <section className={styles.labelCard}>
         <div className={styles.amountPerServing}>Amount per serving</div>

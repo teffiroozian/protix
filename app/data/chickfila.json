@@ -18,7 +18,10 @@
             },
             "category": "Wrap",
             "portionType": "single",
-            "image": "/foodImages/chickfila/cfa-coolwrap.webp"
+            "image": "/foodImages/chickfila/cfa-coolwrap.webp",
+            "addonRefs": [
+                "dressings"
+            ]
         },
         {
             "name": "Pretzel Cheddar Club Sandwich",
@@ -70,7 +73,12 @@
         },
         {
             "name": "Grilled Chicken Nuggets",
-            "nutrition": { "calories": 130, "protein": 25, "carbs": 1, "totalFat": 3 },
+            "nutrition": {
+                "calories": 130,
+                "protein": 25,
+                "carbs": 1,
+                "totalFat": 3
+            },
             "category": "Nuggets",
             "portionType": "single",
             "image": "/foodImages/chickfila/cfa-grillednuggets.webp",
@@ -109,7 +117,40 @@
                         "totalFat": 10
                     }
                 }
+            ],
+            "addonRefs": [
+                "sauces"
             ]
         }
-    ]
+    ],
+    "addons": {
+        "sauces": [
+            {
+                "name": "Zesty Buffalo Sauce",
+                "calories": 25
+            },
+            {
+                "name": "Honey Roasted BBQ Sauce",
+                "calories": 60
+            },
+            {
+                "name": "Chick-fil-A Sauce",
+                "calories": 140
+            }
+        ],
+        "dressings": [
+            {
+                "name": "Light Italian Dressing",
+                "calories": 25
+            },
+            {
+                "name": "Garden Herb Ranch Dressing",
+                "calories": 280
+            },
+            {
+                "name": "Avocado Lime Ranch Dressing",
+                "calories": 310
+            }
+        ]
+    }
 }

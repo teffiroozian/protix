@@ -162,3 +162,43 @@
   background: #000;
   color: #fff;
 }
+
+.addonsCard {
+  grid-column: 1 / -1;
+  background: #fff;
+  border-radius: 18px;
+  padding: 14px 18px;
+  border: 1px solid rgba(0,0,0,0.15);
+}
+
+.addonsSummary {
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.addonsContent {
+  margin-top: 12px;
+  display: grid;
+  gap: 12px;
+}
+
+.addonGroupTitle {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.addonList {
+  margin-top: 6px;
+  padding-left: 0;
+  list-style: none;
+  display: grid;
+  gap: 4px;
+}
+
+.addonItem {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 10px;
+  font-size: 15px;
+}

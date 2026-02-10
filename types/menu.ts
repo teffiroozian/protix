@@ -28,6 +28,15 @@ export type ItemVariant = {
   isDefault?: boolean;
 };
 
+export type AddonRef = "sauces" | "dressings";
+
+export type AddonOption = {
+  name: string;
+  calories: number;
+};
+
+export type RestaurantAddons = Partial<Record<AddonRef, AddonOption[]>>;
+
 export type MenuItem = {
   id?: string;          // optional but recommended later
   name: string;
@@ -38,5 +47,6 @@ export type MenuItem = {
   restaurant?: string;
   variants?: ItemVariant[];
   defaultVariantId?: string;
+  addonRefs?: AddonRef[];
 
 };

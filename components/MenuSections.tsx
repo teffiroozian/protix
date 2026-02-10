@@ -1,6 +1,6 @@
 "use client";
 
-import type { MenuItem } from "@/types/menu";
+import type { MenuItem, RestaurantAddons } from "@/types/menu";
 import type { SortOption } from "./ControlsRow";
 import MenuItemCard from "./MenuItemCard";
 
@@ -35,9 +35,11 @@ export function sortItems(items: MenuItem[], sort: SortOption) {
 export default function MenuSections({
   items,
   sort,
+  addons,
 }: {
   items: MenuItem[];
   sort: SortOption;
+  addons?: RestaurantAddons;
 }) {
   const grouped = items.reduce<Record<string, MenuItem[]>>((acc, item) => {
     const key = normalizeCategory(item.category || "Other");
@@ -62,7 +64,7 @@ export default function MenuSections({
           </h2>
           <ul style={{ marginTop: 12, padding: 0, display: "grid", gap: 12 }}>
             {sortedGrouped[section].map((item, index) => (
-              <MenuItemCard key={`${item.name}-${index}`} item={item} />
+              <MenuItemCard key={`${item.name}-${index}`} item={item} addons={addons} />
             ))}
           </ul>
         </section>
