@@ -18,6 +18,7 @@
             },
             "category": "Wrap",
             "portionType": "single",
+            "addonRefs": ["dressings"],
             "image": "/foodImages/chickfila/cfa-coolwrap.webp"
         },
         {
@@ -70,8 +71,14 @@
         },
         {
             "name": "Grilled Chicken Nuggets",
-            "nutrition": { "calories": 130, "protein": 25, "carbs": 1, "totalFat": 3 },
+            "nutrition": {
+                "calories": 130,
+                "protein": 25,
+                "carbs": 1,
+                "totalFat": 3
+            },
             "category": "Nuggets",
+            "addonRefs": ["dressings"],
             "portionType": "single",
             "image": "/foodImages/chickfila/cfa-grillednuggets.webp",
             "defaultVariantId": "12pc",
@@ -111,5 +118,27 @@
                 }
             ]
         }
-    ]
+    ],
+    "addons": {
+        "sauces": [
+            {
+                "name": "Barbecue Sauce",
+                "calories": 45
+            },
+            {
+                "name": "Chick-fil-A Sauce",
+                "calories": 140
+            }
+        ],
+        "dressings": [
+            {
+                "name": "Avocado Lime Ranch Dressing",
+                "calories": 310
+            },
+            {
+                "name": "Light Italian Dressing",
+                "calories": 25
+            }
+        ]
+    }
 }
