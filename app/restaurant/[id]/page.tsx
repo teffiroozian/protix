@@ -1,6 +1,5 @@
 import Link from "next/link";
 import restaurants from "../../data/index.json";
-import StickyRestaurantBar from "@/components/StickyRestaurantBar";
 import RestaurantHeader from "@/components/RestaurantHeader";
 import RestaurantView from "@/components/RestaurantView";
 import type { MenuItem } from "@/types/menu";
@@ -52,11 +51,6 @@ export default async function RestaurantPage({
 
   return (
     <div style={{ width: "100%" }}>
-      <StickyRestaurantBar
-        restaurantName={restaurant.name}
-        restaurantLogo={restaurant.logo}
-      />
-
       <div id="restaurant-hero" className="mt-6">
         <RestaurantHeader
           name={restaurant.name}
@@ -67,6 +61,7 @@ export default async function RestaurantPage({
 
       <main style={{ maxWidth: 900, margin: "24px auto 48px", padding: 16 }}>
         <RestaurantView
+          restaurantName={restaurant.name}
           items={items}
           highestProtein={highestProtein}
           bestCalorieProteinRatio={bestCalorieProteinRatio}
