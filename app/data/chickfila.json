@@ -18,10 +18,8 @@
             },
             "category": "Wrap",
             "portionType": "single",
-            "image": "/foodImages/chickfila/cfa-coolwrap.webp",
-            "addonRefs": [
-                "dressings"
-            ]
+            "addonRefs": ["dressings"],
+            "image": "/foodImages/chickfila/cfa-coolwrap.webp"
         },
         {
             "name": "Pretzel Cheddar Club Sandwich",
@@ -80,6 +78,7 @@
                 "totalFat": 3
             },
             "category": "Nuggets",
+            "addonRefs": ["dressings"],
             "portionType": "single",
             "image": "/foodImages/chickfila/cfa-grillednuggets.webp",
             "defaultVariantId": "12pc",
