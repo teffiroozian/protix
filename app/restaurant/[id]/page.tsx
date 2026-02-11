@@ -2,7 +2,7 @@ import Link from "next/link";
 import restaurants from "../../data/index.json";
 import RestaurantHeader from "@/components/RestaurantHeader";
 import RestaurantView from "@/components/RestaurantView";
-import type { MenuItem, RestaurantAddons } from "@/types/menu";
+import type { CommonChange, MenuItem, RestaurantAddons } from "@/types/menu";
 
 // calories per 1g protein (bigger number = more calories for each gram of protein)
 function caloriesPerProtein(item: MenuItem) {
@@ -45,6 +45,7 @@ export default async function RestaurantPage({
   const menu = await import(`../../data/${restaurant.menuFile}`);
   const items = menu.default.items as MenuItem[];
   const addons = (menu.default.addons ?? {}) as RestaurantAddons;
+  const commonChanges = (menu.default.commonChanges ?? []) as CommonChange[];
 
   const highestProtein = topByProtein(items);
   const bestCalorieProteinRatio = topByCalorieProteinRatio(items);
@@ -69,6 +70,7 @@ export default async function RestaurantPage({
           bestCalorieProteinRatio={bestCalorieProteinRatio}
           lowestCalorieItems={lowestCalorieItems}
           addons={addons}
+          commonChanges={commonChanges}
         />
       </main>
     </div>

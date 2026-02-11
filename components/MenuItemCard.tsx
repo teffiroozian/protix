@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useMemo, useState } from "react";
-import type { AddonOption, AddonRef, MenuItem, RestaurantAddons } from "@/types/menu";
+import type { AddonOption, AddonRef, CommonChange, MacroDelta, MenuItem, RestaurantAddons } from "@/types/menu";
 import styles from "./MenuItemCard.module.css";
 import ItemDetailsPanel from "./ItemDetailsPanel";
 import VariantSelector from "./VariantSelector";
@@ -13,6 +13,25 @@ function pad2(n: number) {
 function caloriesPerProtein(item: { calories: number; protein: number }) {
   if (!item.protein) return Number.POSITIVE_INFINITY;
   return item.calories / item.protein;
+}
+
+function formatDelta(value: number) {
+  return `${value >= 0 ? "+" : ""}${value}`;
+}
+
+
+function normalizeCategory(category: string) {
+  return category.trim().toLowerCase();
+}
+
+function getApplicableCommonChanges(item: MenuItem, commonChanges?: CommonChange[]) {
+  if (!commonChanges || commonChanges.length === 0) return [];
+  const itemCategory = normalizeCategory(item.category || "");
+  return commonChanges.filter((change) => {
+    const categories = change.appliesTo?.categories;
+    if (!categories || categories.length === 0) return false;
+    return categories.some((category) => normalizeCategory(category) === itemCategory);
+  });
 }
 
 const emptyAddon: AddonOption = {
@@ -30,12 +49,14 @@ export default function MenuItemCard({
   showRatio = false,
   isTopRanked,
   addons,
+  commonChanges,
 }: {
   item: MenuItem;
   rankIndex?: number;
   showRatio?: boolean;
   isTopRanked?: boolean;
   addons?: RestaurantAddons;
+  commonChanges?: CommonChange[];
 }) {
   const [open, setOpen] = useState(false);
   const id = useId();
@@ -50,8 +71,13 @@ export default function MenuItemCard({
   }, [item.defaultVariantId, variants]);
   const [selectedVariantId, setSelectedVariantId] = useState(defaultVariantId);
   const [selectedAddons, setSelectedAddons] = useState<Partial<Record<AddonRef, AddonOption>>>({});
+  const [selectedCommonChangeIds, setSelectedCommonChangeIds] = useState<string[]>([]);
   const selectedVariant = variants?.find((variant) => variant.id === selectedVariantId);
   const baseNutrition = selectedVariant?.nutrition ?? item.nutrition;
+  const applicableCommonChanges = useMemo(
+    () => getApplicableCommonChanges(item, commonChanges),
+    [item, commonChanges]
+  );
 
   const addonTotals = useMemo(
     () =>
@@ -67,17 +93,46 @@ export default function MenuItemCard({
     [selectedAddons]
   );
 
-  const hasActiveAddon = useMemo(
-    () => Object.values(selectedAddons).some((addon) => addon && addon.name !== "None"),
-    [selectedAddons]
+  const commonChangeTotals = useMemo(
+    () =>
+      applicableCommonChanges.reduce<MacroDelta>(
+        (sum, change) => {
+          if (!selectedCommonChangeIds.includes(change.id)) return sum;
+          return {
+            calories: sum.calories + change.delta.calories,
+            protein: sum.protein + change.delta.protein,
+            carbs: sum.carbs + change.delta.carbs,
+            fat: sum.fat + change.delta.fat,
+          };
+        },
+        { calories: 0, protein: 0, carbs: 0, fat: 0 }
+      ),
+    [applicableCommonChanges, selectedCommonChangeIds]
+  );
+
+  const customizationTotals = useMemo(
+    () => ({
+      calories: addonTotals.calories + commonChangeTotals.calories,
+      protein: addonTotals.protein + commonChangeTotals.protein,
+      carbs: addonTotals.carbs + commonChangeTotals.carbs,
+      fat: addonTotals.fat + commonChangeTotals.fat,
+    }),
+    [addonTotals, commonChangeTotals]
+  );
+
+  const hasActiveCustomization = useMemo(
+    () =>
+      Object.values(selectedAddons).some((addon) => addon && addon.name !== "None") ||
+      selectedCommonChangeIds.length > 0,
+    [selectedAddons, selectedCommonChangeIds]
   );
 
   const nutrition = {
     ...baseNutrition,
-    calories: baseNutrition.calories + addonTotals.calories,
-    protein: baseNutrition.protein + addonTotals.protein,
-    carbs: baseNutrition.carbs + addonTotals.carbs,
-    totalFat: baseNutrition.totalFat + addonTotals.fat,
+    calories: baseNutrition.calories + customizationTotals.calories,
+    protein: baseNutrition.protein + customizationTotals.protein,
+    carbs: baseNutrition.carbs + customizationTotals.carbs,
+    totalFat: baseNutrition.totalFat + customizationTotals.fat,
   };
 
   const calories = nutrition.calories;
@@ -124,8 +179,8 @@ export default function MenuItemCard({
             <div className={styles.caloriesRow}>
               <div className={styles.caloriesWrap}>
                 <div className={styles.calories}>{calories} calories</div>
-                {hasActiveAddon ? (
-                  <span className={styles.macroDelta}>+{addonTotals.calories}</span>
+                {hasActiveCustomization ? (
+                  <span className={styles.macroDelta}>{formatDelta(customizationTotals.calories)}</span>
                 ) : null}
               </div>
               {variants ? (
@@ -156,21 +211,21 @@ export default function MenuItemCard({
             <div className={styles.macro}>
               <div className={styles.macroValueWrap}>
                 <div className={`${styles.macroValue} ${styles.protein}`}>{protein}g</div>
-                {hasActiveAddon ? <span className={styles.macroDelta}>+{addonTotals.protein}</span> : null}
+                {hasActiveCustomization ? <span className={styles.macroDelta}>{formatDelta(customizationTotals.protein)}</span> : null}
               </div>
               <div className={styles.macroLabel}>PROTEIN</div>
             </div>
             <div className={styles.macro}>
               <div className={styles.macroValueWrap}>
                 <div className={`${styles.macroValue} ${styles.carbs}`}>{carbs}g</div>
-                {hasActiveAddon ? <span className={styles.macroDelta}>+{addonTotals.carbs}</span> : null}
+                {hasActiveCustomization ? <span className={styles.macroDelta}>{formatDelta(customizationTotals.carbs)}</span> : null}
               </div>
               <div className={styles.macroLabel}>CARBS</div>
             </div>
             <div className={styles.macro}>
               <div className={styles.macroValueWrap}>
                 <div className={`${styles.macroValue} ${styles.fat}`}>{fat}g</div>
-                {hasActiveAddon ? <span className={styles.macroDelta}>+{addonTotals.fat}</span> : null}
+                {hasActiveCustomization ? <span className={styles.macroDelta}>{formatDelta(customizationTotals.fat)}</span> : null}
               </div>
               <div className={styles.macroLabel}>FAT</div>
             </div>
@@ -191,8 +246,17 @@ export default function MenuItemCard({
             addons={addons}
             selectedAddons={selectedAddons}
             onSelectAddon={(ref, addon) => setSelectedAddons((prev) => ({ ...prev, [ref]: addon ?? emptyAddon }))}
-            addonTotals={addonTotals}
-            showAddonDeltas={hasActiveAddon}
+            commonChanges={applicableCommonChanges}
+            selectedCommonChangeIds={selectedCommonChangeIds}
+            onToggleCommonChange={(changeId) =>
+              setSelectedCommonChangeIds((prev) =>
+                prev.includes(changeId)
+                  ? prev.filter((id) => id !== changeId)
+                  : [...prev, changeId]
+              )
+            }
+            customizationTotals={customizationTotals}
+            showCustomizationDeltas={hasActiveCustomization}
           />
         </div>
       </div>
