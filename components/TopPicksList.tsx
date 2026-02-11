@@ -1,6 +1,6 @@
 "use client";
 
-import type { MenuItem } from "@/types/menu";
+import type { MenuItem, RestaurantAddons } from "@/types/menu";
 import RankingList from "./RankingList";
 
 type SortOption = "highest-protein" | "best-ratio" | "lowest-calories";
@@ -10,11 +10,13 @@ export default function TopPicksList({
   bestCalorieProteinRatio,
   lowestCalorieItems,
   sort,
+  addons,
 }: {
   highestProtein: MenuItem[];
   bestCalorieProteinRatio: MenuItem[];
   lowestCalorieItems: MenuItem[];
   sort: SortOption;
+  addons?: RestaurantAddons;
 }) {
   const sections = [
     {
@@ -29,7 +31,7 @@ export default function TopPicksList({
             Items with the most protein per serving size.
           </p>
 
-          <RankingList items={highestProtein} highlightTop={3} />
+          <RankingList items={highestProtein} highlightTop={3} addons={addons} />
         </section>
       ),
     },
@@ -50,6 +52,7 @@ export default function TopPicksList({
             items={bestCalorieProteinRatio}
             highlightTop={3}
             showRatio
+            addons={addons}
           />
         </section>
       ),
@@ -67,7 +70,7 @@ export default function TopPicksList({
             Lowest calorie foods on the menu.
           </p>
 
-          <RankingList items={lowestCalorieItems} highlightTop={3} />
+          <RankingList items={lowestCalorieItems} highlightTop={3} addons={addons} />
         </section>
       ),
     },

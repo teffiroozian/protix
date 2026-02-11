@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { MenuItem } from "@/types/menu";
+import type { MenuItem, RestaurantAddons } from "@/types/menu";
 import ControlsRow, {
   type Filters,
   type SortOption,
@@ -17,12 +17,14 @@ export default function RestaurantView({
   highestProtein,
   bestCalorieProteinRatio,
   lowestCalorieItems,
+  addons,
 }: {
   restaurantName: string;
   items: MenuItem[];
   highestProtein: MenuItem[];
   bestCalorieProteinRatio: MenuItem[];
   lowestCalorieItems: MenuItem[];
+  addons?: RestaurantAddons;
 }) {
   const [view, setView] = useState<ViewOption>("menu");
   const [sort, setSort] = useState<SortOption>("highest-protein");
@@ -76,13 +78,14 @@ export default function RestaurantView({
       />
 
       {view === "menu" ? (
-        <MenuSections items={filteredItems} sort={sort} />
+        <MenuSections items={filteredItems} sort={sort} addons={addons} />
       ) : (
         <TopPicksList
           highestProtein={filteredHighestProtein}
           bestCalorieProteinRatio={filteredBestRatio}
           lowestCalorieItems={filteredLowestCalories}
           sort={sort}
+          addons={addons}
         />
       )}
     </div>

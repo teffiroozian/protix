@@ -116,14 +116,21 @@
                         "totalFat": 10
                     }
                 }
+            ],
+            "addonRefs": [
+                "sauces"
             ]
         }
     ],
     "addons": {
         "sauces": [
             {
-                "name": "Barbecue Sauce",
-                "calories": 45
+                "name": "Zesty Buffalo Sauce",
+                "calories": 25
+            },
+            {
+                "name": "Honey Roasted BBQ Sauce",
+                "calories": 60
             },
             {
                 "name": "Chick-fil-A Sauce",
@@ -132,12 +139,16 @@
         ],
         "dressings": [
             {
-                "name": "Avocado Lime Ranch Dressing",
-                "calories": 310
-            },
-            {
                 "name": "Light Italian Dressing",
                 "calories": 25
+            },
+            {
+                "name": "Garden Herb Ranch Dressing",
+                "calories": 280
+            },
+            {
+                "name": "Avocado Lime Ranch Dressing",
+                "calories": 310
             }
         ]
     }

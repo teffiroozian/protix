@@ -1,5 +1,12 @@
 import styles from "./ItemDetails.module.css";
-import type { ItemVariant, MenuItem, Nutrition } from "@/types/menu";
+import type {
+  AddonOption,
+  AddonRef,
+  ItemVariant,
+  MenuItem,
+  Nutrition,
+  RestaurantAddons,
+} from "@/types/menu";
 
 function format(n?: number, suffix = "") {
   return n === undefined || n === null ? "—" : `${n}${suffix}`;
@@ -10,23 +17,113 @@ function calToProteinRatio(calories: number, protein: number) {
   return `${Math.round(calories / protein)}:1`;
 }
 
+const addonSectionTitles: Record<AddonRef, string> = {
+  sauces: "Sauces",
+  dressings: "Dressings",
+};
+
+const rowScrollPx = 240;
+
+function sortByCalories(addons: AddonOption[]) {
+  return [...addons].sort((a, b) => a.calories - b.calories);
+}
+
+function withNoneOption(addons: AddonOption[]) {
+  return [{ name: "None", calories: 0, image: "none" }, ...addons];
+}
+
+function scrollAddonRow(ref: AddonRef, direction: "left" | "right") {
+  const row = document.getElementById(`addon-row-${ref}`);
+  if (!row) return;
+  row.scrollBy({
+    left: direction === "left" ? -rowScrollPx : rowScrollPx,
+    behavior: "smooth",
+  });
+}
+
 export default function ItemDetailsPanel({
   item,
   nutrition,
   variants,
   selectedVariantId,
   onSelectVariant,
+  addons,
 }: {
   item: MenuItem;
   nutrition: Nutrition;
   variants?: ItemVariant[] | null;
   selectedVariantId?: string;
   onSelectVariant?: (id: string) => void;
+  addons?: RestaurantAddons;
 }) {
   const n = nutrition;
+  const addonRefs = item.addonRefs ?? [];
+  const availableAddonSections = addonRefs
+    .map((ref) => {
+      const list = addons?.[ref];
+      if (!list || list.length === 0) return null;
+      return {
+        ref,
+        title: addonSectionTitles[ref],
+        addons: withNoneOption(sortByCalories(list)),
+      };
+    })
+    .filter((section): section is { ref: AddonRef; title: string; addons: AddonOption[] } =>
+      section !== null
+    );
 
   return (
     <div className={styles.wrapper}>
+      {availableAddonSections.length > 0 ? (
+        <section className={styles.addonsCard}>
+          <div className={styles.addonsContent}>
+            {availableAddonSections.map((section) => (
+              <div key={section.ref} className={styles.addonGroup}>
+                <div className={styles.addonGroupHeader}>
+                  <h3 className={styles.addonGroupTitle}>{section.title}</h3>
+                  <div className={styles.addonScrollButtons}>
+                    <button
+                      type="button"
+                      className={styles.addonArrowButton}
+                      aria-label={`Scroll ${section.title} left`}
+                      onClick={() => scrollAddonRow(section.ref, "left")}
+                    >
+                      &lt;
+                    </button>
+                    <button
+                      type="button"
+                      className={styles.addonArrowButton}
+                      aria-label={`Scroll ${section.title} right`}
+                      onClick={() => scrollAddonRow(section.ref, "right")}
+                    >
+                      &gt;
+                    </button>
+                  </div>
+                </div>
+                <ul id={`addon-row-${section.ref}`} className={styles.addonList}>
+                  {section.addons.map((addon) => (
+                    <li key={`${section.ref}-${addon.name}`} className={styles.addonItem}>
+                      {addon.image === "none" ? (
+                        <div className={`${styles.addonImage} ${styles.addonImageNone}`}>✕</div>
+                      ) : addon.image ? (
+                        <div
+                          className={styles.addonImage}
+                          style={{ backgroundImage: `url(${addon.image})` }}
+                        />
+                      ) : (
+                        <div className={styles.addonImage} />
+                      )}
+                      <div className={styles.addonName}>{addon.name}</div>
+                      <div className={styles.addonCalories}>+{addon.calories} Cal</div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </section>
+      ) : null}
+
       {/* Left: Nutrition label */}
       <section className={styles.labelCard}>
         <div className={styles.amountPerServing}>Amount per serving</div>

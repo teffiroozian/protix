@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useMemo, useState } from "react";
-import type { MenuItem } from "@/types/menu";
+import type { MenuItem, RestaurantAddons } from "@/types/menu";
 import styles from "./MenuItemCard.module.css";
 import ItemDetailsPanel from "./ItemDetailsPanel";
 import VariantSelector from "./VariantSelector";
@@ -21,11 +21,13 @@ export default function MenuItemCard({
   rankIndex,
   showRatio = false,
   isTopRanked,
+  addons,
 }: {
   item: MenuItem;
   rankIndex?: number;
   showRatio?: boolean;
   isTopRanked?: boolean;
+  addons?: RestaurantAddons;
 }) {
   const [open, setOpen] = useState(false);
   const id = useId();
@@ -160,6 +162,7 @@ export default function MenuItemCard({
             variants={variants}
             selectedVariantId={selectedVariantId}
             onSelectVariant={setSelectedVariantId}
+            addons={addons}
           />
         </div>
       </div>
