@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import ControlsRow, {
   FilterChips,
@@ -11,22 +10,30 @@ import ControlsRow, {
 
 type StickyRestaurantBarProps = {
   restaurantName: string;
+  restaurantLogo: string;
   view: ViewOption;
   onChange: (view: ViewOption) => void;
   sort: SortOption;
   onSortChange: (sort: SortOption) => void;
   filters: Filters;
   onFiltersChange: (filters: Filters) => void;
+  categoryOptions: Array<{ id: string; label: string }>;
+  activeCategory?: string;
+  onCategorySelect?: (id: string) => void;
 };
 
 export default function StickyRestaurantBar({
   restaurantName,
+  restaurantLogo,
   view,
   onChange,
   sort,
   onSortChange,
   filters,
   onFiltersChange,
+  categoryOptions,
+  activeCategory,
+  onCategorySelect,
 }: StickyRestaurantBarProps) {
   const [isVisible, setIsVisible] = useState(() => {
     if (typeof document === "undefined") return false;
@@ -51,6 +58,7 @@ export default function StickyRestaurantBar({
 
     return () => observer.disconnect();
   }, []);
+
   const hasActiveFilters = Boolean(filters.proteinMin || filters.caloriesMax);
 
   const clearProteinFilter = () => {
@@ -73,33 +81,22 @@ export default function StickyRestaurantBar({
           : "-translate-y-full opacity-0 pointer-events-none"
       }`}
     >
-      <div
-        className="w-full border-b border-slate-200/70 bg-white/95 backdrop-blur"
-      >
-        <div className="mx-auto flex w-full max-w-5xl flex-wrap items-center gap-3 px-4 py-2 sm:flex-nowrap sm:px-6">
-          <Link
-            href="/"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-base font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:text-slate-900"
-            aria-label="Back to home"
-          >
-            ←
-          </Link>
-
-          <div className="text-sm font-bold text-slate-900 sm:text-base">
-            {restaurantName}
-          </div>
-
-          <div className="min-w-[280px] flex-1">
-            <ControlsRow
-              view={view}
-              onChange={onChange}
-              sort={sort}
-              onSortChange={onSortChange}
-              filters={filters}
-              onFiltersChange={onFiltersChange}
-              showChips={false}
-            />
-          </div>
+      <div className="w-full border-b border-slate-200/70 bg-white/95 backdrop-blur">
+        <div className="mx-auto w-full max-w-5xl px-4 py-2 sm:px-6">
+          <ControlsRow
+            view={view}
+            onChange={onChange}
+            sort={sort}
+            onSortChange={onSortChange}
+            filters={filters}
+            onFiltersChange={onFiltersChange}
+            restaurantName={restaurantName}
+            restaurantLogo={restaurantLogo}
+            categoryOptions={categoryOptions}
+            activeCategory={activeCategory}
+            onCategorySelect={onCategorySelect}
+            showChips={false}
+          />
         </div>
       </div>
 

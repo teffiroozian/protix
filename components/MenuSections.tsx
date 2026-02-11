@@ -8,6 +8,10 @@ function normalizeCategory(category: string) {
   return category.trim().toLowerCase();
 }
 
+export function categorySectionId(category: string) {
+  return `menu-section-${normalizeCategory(category).replace(/[^a-z0-9]+/g, "-")}`;
+}
+
 const CATEGORY_PRIORITY_GROUPS = [
   { label: "Entrees", aliases: ["entree", "entrees"] },
   { label: "Burgers", aliases: ["burger", "burgers"] },
@@ -77,6 +81,22 @@ export function sortItems(items: MenuItem[], sort: SortOption) {
   return sorted;
 }
 
+export function getOrderedMenuSections(items: MenuItem[]) {
+  const sectionSet = new Set(
+    items.map((item) => normalizeCategory(item.category || "Other"))
+  );
+
+  return [...sectionSet].sort((a, b) => {
+    const priorityDiff = categoryPriority(a) - categoryPriority(b);
+    if (priorityDiff !== 0) return priorityDiff;
+    return a.localeCompare(b);
+  });
+}
+
+export function getCategoryLabel(category: string) {
+  return categoryHeading(category);
+}
+
 export default function MenuSections({
   items,
   sort,
@@ -96,16 +116,16 @@ export default function MenuSections({
     Object.entries(grouped).map(([key, value]) => [key, sortItems(value, sort)])
   );
 
-  const sections = Object.keys(sortedGrouped).sort((a, b) => {
-    const priorityDiff = categoryPriority(a) - categoryPriority(b);
-    if (priorityDiff !== 0) return priorityDiff;
-    return a.localeCompare(b);
-  });
+  const sections = getOrderedMenuSections(items);
 
   return (
     <div style={{ marginTop: 32, display: "grid", gap: 48 }}>
       {sections.map((section) => (
-        <section key={section} style={{ scrollMarginTop: 200 }}>
+        <section
+          key={section}
+          id={categorySectionId(section)}
+          style={{ scrollMarginTop: 200 }}
+        >
           <h2 style={{ fontSize: 28, fontWeight: 800 }}>
             {categoryHeading(section)}
           </h2>

@@ -7,12 +7,24 @@ import ControlsRow, {
   type SortOption,
   type ViewOption,
 } from "./ControlsRow";
+import {
+  categorySectionId,
+  getCategoryLabel,
+  getOrderedMenuSections,
+} from "./MenuSections";
 import MenuSections from "./MenuSections";
 import TopPicksList from "./TopPicksList";
 import StickyRestaurantBar from "./StickyRestaurantBar";
 
+const rankingSectionIdBySort: Record<SortOption, string> = {
+  "highest-protein": "high-protein",
+  "best-ratio": "best-protein-ratio",
+  "lowest-calories": "lowest-calorie",
+};
+
 export default function RestaurantView({
   restaurantName,
+  restaurantLogo,
   items,
   highestProtein,
   bestCalorieProteinRatio,
@@ -20,6 +32,7 @@ export default function RestaurantView({
   addons,
 }: {
   restaurantName: string;
+  restaurantLogo: string;
   items: MenuItem[];
   highestProtein: MenuItem[];
   bestCalorieProteinRatio: MenuItem[];
@@ -42,6 +55,27 @@ export default function RestaurantView({
     });
   }, [items, filters]);
 
+  const orderedSections = useMemo(
+    () => getOrderedMenuSections(filteredItems),
+    [filteredItems]
+  );
+  const [activeCategory, setActiveCategory] = useState<string>(
+    () => orderedSections[0] ?? ""
+  );
+
+  const resolvedActiveCategory = orderedSections.includes(activeCategory)
+    ? activeCategory
+    : (orderedSections[0] ?? "");
+
+  const categoryOptions = useMemo(
+    () =>
+      orderedSections.map((section) => ({
+        id: section,
+        label: getCategoryLabel(section),
+      })),
+    [orderedSections]
+  );
+
   const filteredHighestProtein = useMemo(
     () => highestProtein.filter((item) => filteredItems.includes(item)),
     [highestProtein, filteredItems]
@@ -55,25 +89,52 @@ export default function RestaurantView({
     [lowestCalorieItems, filteredItems]
   );
 
+  const handleCategorySelect = (categoryId: string) => {
+    setActiveCategory(categoryId);
+    const section = document.getElementById(categorySectionId(categoryId));
+    if (!section) return;
+
+    section.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const handleSortChange = (nextSort: SortOption) => {
+    setSort(nextSort);
+
+    const sectionId = rankingSectionIdBySort[nextSort];
+    const section = document.getElementById(sectionId);
+    if (!section) return;
+
+    section.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
     <div>
       <StickyRestaurantBar
         restaurantName={restaurantName}
+        restaurantLogo={restaurantLogo}
         view={view}
         onChange={setView}
         sort={sort}
-        onSortChange={setSort}
+        onSortChange={handleSortChange}
         filters={filters}
         onFiltersChange={setFilters}
+        categoryOptions={categoryOptions}
+        activeCategory={resolvedActiveCategory}
+        onCategorySelect={handleCategorySelect}
       />
 
       <ControlsRow
         view={view}
         onChange={setView}
         sort={sort}
-        onSortChange={setSort}
+        onSortChange={handleSortChange}
         filters={filters}
         onFiltersChange={setFilters}
+        restaurantName={restaurantName}
+        restaurantLogo={restaurantLogo}
+        categoryOptions={categoryOptions}
+        activeCategory={resolvedActiveCategory}
+        onCategorySelect={handleCategorySelect}
         wrapperId="controls-row"
       />
 
