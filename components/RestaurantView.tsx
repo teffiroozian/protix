@@ -16,7 +16,6 @@ import MenuSections from "./MenuSections";
 import TopPicksList from "./TopPicksList";
 import StickyRestaurantBar from "./StickyRestaurantBar";
 
-
 const rankingSectionIdBySort: Record<SortOption, string> = {
   "highest-protein": "high-protein",
   "best-ratio": "best-protein-ratio",
@@ -44,20 +43,6 @@ export default function RestaurantView({
   const [sort, setSort] = useState<SortOption>("highest-protein");
   const [filters, setFilters] = useState<Filters>({});
 
-  const orderedSections = useMemo(() => getOrderedMenuSections(items), [items]);
-  const [activeCategory, setActiveCategory] = useState<string>(
-    () => orderedSections[0] ?? ""
-  );
-
-  const categoryOptions = useMemo(
-    () =>
-      orderedSections.map((section) => ({
-        id: section,
-        label: getCategoryLabel(section),
-      })),
-    [orderedSections]
-  );
-
   const filteredItems = useMemo(() => {
     return items.filter((item) => {
       if (filters.proteinMin && item.nutrition.protein < filters.proteinMin) {
@@ -69,6 +54,27 @@ export default function RestaurantView({
       return true;
     });
   }, [items, filters]);
+
+  const orderedSections = useMemo(
+    () => getOrderedMenuSections(filteredItems),
+    [filteredItems]
+  );
+  const [activeCategory, setActiveCategory] = useState<string>(
+    () => orderedSections[0] ?? ""
+  );
+
+  const resolvedActiveCategory = orderedSections.includes(activeCategory)
+    ? activeCategory
+    : (orderedSections[0] ?? "");
+
+  const categoryOptions = useMemo(
+    () =>
+      orderedSections.map((section) => ({
+        id: section,
+        label: getCategoryLabel(section),
+      })),
+    [orderedSections]
+  );
 
   const filteredHighestProtein = useMemo(
     () => highestProtein.filter((item) => filteredItems.includes(item)),
@@ -113,7 +119,7 @@ export default function RestaurantView({
         filters={filters}
         onFiltersChange={setFilters}
         categoryOptions={categoryOptions}
-        activeCategory={activeCategory}
+        activeCategory={resolvedActiveCategory}
         onCategorySelect={handleCategorySelect}
       />
 
@@ -127,7 +133,7 @@ export default function RestaurantView({
         restaurantName={restaurantName}
         restaurantLogo={restaurantLogo}
         categoryOptions={categoryOptions}
-        activeCategory={activeCategory}
+        activeCategory={resolvedActiveCategory}
         onCategorySelect={handleCategorySelect}
         wrapperId="controls-row"
       />

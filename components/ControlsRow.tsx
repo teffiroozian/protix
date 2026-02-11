@@ -54,10 +54,10 @@ export function FilterChips({
           gap: 8,
           flexWrap: "wrap",
           alignItems: "center",
-          justifyContent: "space-between",
+          justifyContent: "flex-end",
         }}
       >
-        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "flex-end" }}>
           {filters.proteinMin ? (
             <span
               style={{
@@ -121,21 +121,23 @@ export function FilterChips({
             </span>
           ) : null}
         </div>
-        <button
-          type="button"
-          onClick={onClearAll}
-          style={{
-            padding: "4px 10px",
-            borderRadius: 999,
-            border: "1px solid rgba(0,0,0,0.2)",
-            background: "white",
-            fontWeight: 600,
-            fontSize: 12,
-            cursor: "pointer",
-          }}
-        >
-          Clear All
-        </button>
+        <div style={{ display: "flex", gap: 8, alignItems: "center", marginLeft: "auto", flexWrap: "wrap", justifyContent: "flex-end" }}>
+          <button
+            type="button"
+            onClick={onClearAll}
+            style={{
+              padding: "4px 10px",
+              borderRadius: 999,
+              border: "1px solid rgba(0,0,0,0.2)",
+              background: "white",
+              fontWeight: 600,
+              fontSize: 12,
+              cursor: "pointer",
+            }}
+          >
+            Clear All
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -437,7 +439,15 @@ export default function ControlsRow({
           </div>
         </div>
 
-        <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+        <div
+          style={{
+            display: "flex",
+            gap: 10,
+            alignItems: "center",
+            borderTop: "1px solid rgba(0,0,0,0.1)",
+            paddingTop: 10,
+          }}
+        >
           <button
             type="button"
             onClick={() => scrollNav("left")}
