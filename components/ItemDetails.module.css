@@ -221,14 +221,6 @@
 
 .addonItem {
   flex: 0 0 200px;
-  border: 1px solid rgba(0,0,0,0.15);
-  border-radius: 10px;
-  padding: 8px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  background: #f9f9f9;
 }
 
 .addonImage {
@@ -260,4 +252,34 @@
   font-size: 16px;
   font-weight: 700;
   color: rgba(0, 0, 0, 0.5);
+}
+
+
+.valueWithDelta {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.deltaValue {
+  font-size: 14px;
+  font-weight: 700;
+  color: #16a34a;
+}
+
+.addonTileButton {
+  border: 1px solid rgba(0,0,0,0.15);
+  border-radius: 10px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  background: #f9f9f9;
+  width: 100%;
+  cursor: pointer;
+}
+
+.addonTileButtonActive {
+  border: 3px solid #16a34a;
 }

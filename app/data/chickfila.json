@@ -18,7 +18,9 @@
             },
             "category": "Wrap",
             "portionType": "single",
-            "addonRefs": ["dressings"],
+            "addonRefs": [
+                "dressings"
+            ],
             "image": "/foodImages/chickfila/cfa-coolwrap.webp"
         },
         {
@@ -125,29 +127,47 @@
         "sauces": [
             {
                 "name": "Zesty Buffalo Sauce",
-                "calories": 25
+                "calories": 25,
+                "protein": 0,
+                "carbs": 1,
+                "fat": 2
             },
             {
                 "name": "Honey Roasted BBQ Sauce",
-                "calories": 60
+                "calories": 60,
+                "protein": 0,
+                "carbs": 8,
+                "fat": 3
             },
             {
                 "name": "Chick-fil-A Sauce",
-                "calories": 140
+                "calories": 140,
+                "protein": 0,
+                "carbs": 7,
+                "fat": 13
             }
         ],
         "dressings": [
             {
                 "name": "Light Italian Dressing",
-                "calories": 25
+                "calories": 25,
+                "protein": 0,
+                "carbs": 3,
+                "fat": 2
             },
             {
                 "name": "Garden Herb Ranch Dressing",
-                "calories": 280
+                "calories": 280,
+                "protein": 1,
+                "carbs": 5,
+                "fat": 29
             },
             {
                 "name": "Avocado Lime Ranch Dressing",
-                "calories": 310
+                "calories": 310,
+                "protein": 1,
+                "carbs": 6,
+                "fat": 32
             }
         ]
     }

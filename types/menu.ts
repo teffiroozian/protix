@@ -33,6 +33,9 @@ export type AddonRef = "sauces" | "dressings";
 export type AddonOption = {
   name: string;
   calories: number;
+  protein: number;
+  carbs: number;
+  fat: number;
   image?: string;
 };
 
