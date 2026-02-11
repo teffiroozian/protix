@@ -8,6 +8,51 @@ function normalizeCategory(category: string) {
   return category.trim().toLowerCase();
 }
 
+const CATEGORY_PRIORITY_GROUPS = [
+  { label: "Entrees", aliases: ["entree", "entrees"] },
+  { label: "Burgers", aliases: ["burger", "burgers"] },
+  { label: "Sandwiches", aliases: ["sandwich", "sandwiches"] },
+  {
+    label: "Chicken",
+    aliases: ["wings", "wing", "tenders", "tender", "nuggets", "nugget"],
+  },
+  {
+    label: "Bowls & Plates",
+    aliases: ["bowl", "bowls", "plate", "plates", "bowls & plates"],
+  },
+  { label: "Salads", aliases: ["salad", "salads"] },
+  { label: "Wraps", aliases: ["wrap", "wraps"] },
+  { label: "Breakfast", aliases: ["breakfast"] },
+  { label: "Kids", aliases: ["kid", "kids"] },
+  { label: "Sides", aliases: ["side", "sides"] },
+  {
+    label: "Sauce & Dressings",
+    aliases: ["sauce", "sauces", "dressing", "dressings", "sauce & dressings"],
+  },
+  { label: "Desserts", aliases: ["dessert", "desserts"] },
+  { label: "Drinks", aliases: ["drink", "drinks", "beverage", "beverages"] },
+] as const;
+
+const categoryPriorityLookup = new Map(
+  CATEGORY_PRIORITY_GROUPS.flatMap((group, index) =>
+    group.aliases.map((alias) => [normalizeCategory(alias), index] as const)
+  )
+);
+
+const categoryLabelLookup = new Map(
+  CATEGORY_PRIORITY_GROUPS.flatMap((group) =>
+    group.aliases.map((alias) => [normalizeCategory(alias), group.label] as const)
+  )
+);
+
+function categoryPriority(category: string) {
+  return categoryPriorityLookup.get(category) ?? Number.POSITIVE_INFINITY;
+}
+
+function categoryHeading(category: string) {
+  return categoryLabelLookup.get(category) ?? titleCase(category);
+}
+
 function titleCase(text: string) {
   return text
     .split(" ")
@@ -51,16 +96,18 @@ export default function MenuSections({
     Object.entries(grouped).map(([key, value]) => [key, sortItems(value, sort)])
   );
 
-  const sections = Object.keys(sortedGrouped).sort((a, b) =>
-    a.localeCompare(b)
-  );
+  const sections = Object.keys(sortedGrouped).sort((a, b) => {
+    const priorityDiff = categoryPriority(a) - categoryPriority(b);
+    if (priorityDiff !== 0) return priorityDiff;
+    return a.localeCompare(b);
+  });
 
   return (
     <div style={{ marginTop: 32, display: "grid", gap: 48 }}>
       {sections.map((section) => (
         <section key={section} style={{ scrollMarginTop: 200 }}>
           <h2 style={{ fontSize: 28, fontWeight: 800 }}>
-            {titleCase(section)}
+            {categoryHeading(section)}
           </h2>
           <ul style={{ marginTop: 12, padding: 0, display: "grid", gap: 12 }}>
             {sortedGrouped[section].map((item, index) => (
