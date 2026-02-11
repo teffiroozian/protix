@@ -144,7 +144,7 @@
 }
 
 .detailsOpen {
-  max-height: 900px;
+  max-height: none;
 }
 
 .detailsInner {
