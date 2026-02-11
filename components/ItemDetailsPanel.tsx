@@ -2,7 +2,9 @@ import styles from "./ItemDetails.module.css";
 import type {
   AddonOption,
   AddonRef,
+  CommonChange,
   ItemVariant,
+  MacroDelta,
   MenuItem,
   Nutrition,
   RestaurantAddons,
@@ -17,6 +19,10 @@ function calToProteinRatio(calories: number, protein: number) {
   return `${Math.round(calories / protein)}:1`;
 }
 
+function formatDelta(value: number, suffix = "") {
+  return `${value >= 0 ? "+" : ""}${value}${suffix}`;
+}
+
 const addonSectionTitles: Record<AddonRef, string> = {
   sauces: "Sauces",
   dressings: "Dressings",
@@ -24,21 +30,22 @@ const addonSectionTitles: Record<AddonRef, string> = {
 
 const rowScrollPx = 240;
 
+function scrollRow(rowId: string, direction: "left" | "right") {
+  const row = document.getElementById(rowId);
+  if (!row) return;
+  row.scrollBy({
+    left: direction === "left" ? -rowScrollPx : rowScrollPx,
+    behavior: "smooth",
+  });
+}
+
+
 function sortByCalories(addons: AddonOption[]) {
   return [...addons].sort((a, b) => a.calories - b.calories);
 }
 
 function withNoneOption(addons: AddonOption[]) {
   return [{ name: "None", calories: 0, protein: 0, carbs: 0, fat: 0, image: "none" }, ...addons];
-}
-
-function scrollAddonRow(ref: AddonRef, direction: "left" | "right") {
-  const row = document.getElementById(`addon-row-${ref}`);
-  if (!row) return;
-  row.scrollBy({
-    left: direction === "left" ? -rowScrollPx : rowScrollPx,
-    behavior: "smooth",
-  });
 }
 
 export default function ItemDetailsPanel({
@@ -50,8 +57,11 @@ export default function ItemDetailsPanel({
   addons,
   selectedAddons,
   onSelectAddon,
-  addonTotals,
-  showAddonDeltas,
+  commonChanges,
+  selectedCommonChangeIds,
+  onToggleCommonChange,
+  customizationTotals,
+  showCustomizationDeltas,
 }: {
   item: MenuItem;
   nutrition: Nutrition;
@@ -61,8 +71,11 @@ export default function ItemDetailsPanel({
   addons?: RestaurantAddons;
   selectedAddons?: Partial<Record<AddonRef, AddonOption>>;
   onSelectAddon?: (ref: AddonRef, addon: AddonOption) => void;
-  addonTotals?: Pick<AddonOption, "calories" | "protein" | "carbs" | "fat">;
-  showAddonDeltas?: boolean;
+  commonChanges?: CommonChange[];
+  selectedCommonChangeIds?: string[];
+  onToggleCommonChange?: (id: string) => void;
+  customizationTotals?: MacroDelta;
+  showCustomizationDeltas?: boolean;
 }) {
   const n = nutrition;
   const addonRefs = item.addonRefs ?? [];
@@ -80,7 +93,7 @@ export default function ItemDetailsPanel({
       section !== null
     );
 
-  const activeAddonTotals = addonTotals ?? { calories: 0, protein: 0, carbs: 0, fat: 0 };
+  const activeCustomizationTotals = customizationTotals ?? { calories: 0, protein: 0, carbs: 0, fat: 0 };
 
   return (
     <div className={styles.wrapper}>
@@ -99,7 +112,7 @@ export default function ItemDetailsPanel({
                       type="button"
                       className={styles.addonArrowButton}
                       aria-label={`Scroll ${section.title} left`}
-                      onClick={() => scrollAddonRow(section.ref, "left")}
+                      onClick={() => scrollRow(`addon-row-${section.ref}`, "left")}
                     >
                       &lt;
                     </button>
@@ -107,7 +120,7 @@ export default function ItemDetailsPanel({
                       type="button"
                       className={styles.addonArrowButton}
                       aria-label={`Scroll ${section.title} right`}
-                      onClick={() => scrollAddonRow(section.ref, "right")}
+                      onClick={() => scrollRow(`addon-row-${section.ref}`, "right")}
                     >
                       &gt;
                     </button>
@@ -151,6 +164,55 @@ export default function ItemDetailsPanel({
         </section>
       ) : null}
 
+      {commonChanges && commonChanges.length > 0 ? (
+        <section className={styles.addonsCard}>
+          <div className={styles.addonsContent}>
+            <div className={styles.addonGroup}>
+              <div className={styles.addonGroupHeader}>
+                <h3 className={styles.addonGroupTitle}>Common Changes</h3>
+                <div className={styles.addonScrollButtons}>
+                  <button
+                    type="button"
+                    className={styles.addonArrowButton}
+                    aria-label="Scroll Common Changes left"
+                    onClick={() => scrollRow("common-changes-row", "left")}
+                  >
+                    &lt;
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.addonArrowButton}
+                    aria-label="Scroll Common Changes right"
+                    onClick={() => scrollRow("common-changes-row", "right")}
+                  >
+                    &gt;
+                  </button>
+                </div>
+              </div>
+              <ul id="common-changes-row" className={styles.addonList}>
+                {commonChanges.map((change) => {
+                  const isActive = selectedCommonChangeIds?.includes(change.id) ?? false;
+                  const calorieDeltaLabel = `${change.delta.calories >= 0 ? "+" : ""}${change.delta.calories} Cal`;
+                  return (
+                    <li key={change.id} className={styles.addonItem}>
+                      <button
+                        type="button"
+                        className={`${styles.addonTileButton} ${isActive ? styles.addonTileButtonActive : ""}`}
+                        onClick={() => onToggleCommonChange?.(change.id)}
+                      >
+                        <div className={`${styles.addonImage} ${styles.addonImageNone}`}>↺</div>
+                        <div className={styles.addonName}>{change.label}</div>
+                        <div className={styles.addonCalories}>{calorieDeltaLabel}</div>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          </div>
+        </section>
+      ) : null}
+
       {/* Left: Nutrition label */}
       <section className={styles.labelCard}>
         <div className={styles.amountPerServing}>Amount per serving</div>
@@ -159,8 +221,8 @@ export default function ItemDetailsPanel({
           <div className={styles.caloriesText}>Calories</div>
           <div className={styles.valueWithDelta}>
             <div className={styles.caloriesValue}>{n.calories}</div>
-            {showAddonDeltas ? (
-              <span className={styles.deltaValue}>+{activeAddonTotals.calories}</span>
+            {showCustomizationDeltas ? (
+              <span className={styles.deltaValue}>{formatDelta(activeCustomizationTotals.calories)}</span>
             ) : null}
           </div>
         </div>
@@ -171,7 +233,7 @@ export default function ItemDetailsPanel({
           <div className={styles.rowTitle}>Total Fat</div>
           <div className={styles.valueWithDelta}>
             <div className={styles.rowValue}>{format(n.totalFat, "g")}</div>
-            {showAddonDeltas ? <span className={styles.deltaValue}>+{activeAddonTotals.fat}g</span> : null}
+            {showCustomizationDeltas ? <span className={styles.deltaValue}>{formatDelta(activeCustomizationTotals.fat, "g")}</span> : null}
           </div>
         </div>
 
@@ -199,7 +261,7 @@ export default function ItemDetailsPanel({
           <div className={styles.rowTitle}>Carbohydrates</div>
           <div className={styles.valueWithDelta}>
             <div className={styles.rowValue}>{format(n.carbs, "g")}</div>
-            {showAddonDeltas ? <span className={styles.deltaValue}>+{activeAddonTotals.carbs}g</span> : null}
+            {showCustomizationDeltas ? <span className={styles.deltaValue}>{formatDelta(activeCustomizationTotals.carbs, "g")}</span> : null}
           </div>
         </div>
 
@@ -217,7 +279,7 @@ export default function ItemDetailsPanel({
           <div className={styles.rowTitle}>Protein</div>
           <div className={styles.valueWithDelta}>
             <div className={styles.rowValue}>{format(n.protein, "g")}</div>
-            {showAddonDeltas ? <span className={styles.deltaValue}>+{activeAddonTotals.protein}g</span> : null}
+            {showCustomizationDeltas ? <span className={styles.deltaValue}>{formatDelta(activeCustomizationTotals.protein, "g")}</span> : null}
           </div>
         </div>
 

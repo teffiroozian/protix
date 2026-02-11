@@ -41,6 +41,22 @@ export type AddonOption = {
 
 export type RestaurantAddons = Partial<Record<AddonRef, AddonOption[]>>;
 
+export type MacroDelta = {
+  calories: number;
+  protein: number;
+  carbs: number;
+  fat: number;
+};
+
+export type CommonChange = {
+  id: string;
+  label: string;
+  appliesTo?: {
+    categories?: string[];
+  };
+  delta: MacroDelta;
+};
+
 export type MenuItem = {
   id?: string;          // optional but recommended later
   name: string;

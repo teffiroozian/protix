@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { MenuItem, RestaurantAddons } from "@/types/menu";
+import type { CommonChange, MenuItem, RestaurantAddons } from "@/types/menu";
 import ControlsRow, {
   type Filters,
   type SortOption,
@@ -30,6 +30,7 @@ export default function RestaurantView({
   bestCalorieProteinRatio,
   lowestCalorieItems,
   addons,
+  commonChanges,
 }: {
   restaurantName: string;
   restaurantLogo: string;
@@ -38,6 +39,7 @@ export default function RestaurantView({
   bestCalorieProteinRatio: MenuItem[];
   lowestCalorieItems: MenuItem[];
   addons?: RestaurantAddons;
+  commonChanges?: CommonChange[];
 }) {
   const [view, setView] = useState<ViewOption>("menu");
   const [sort, setSort] = useState<SortOption>("highest-protein");
@@ -139,7 +141,7 @@ export default function RestaurantView({
       />
 
       {view === "menu" ? (
-        <MenuSections items={filteredItems} sort={sort} addons={addons} />
+        <MenuSections items={filteredItems} sort={sort} addons={addons} commonChanges={commonChanges} />
       ) : (
         <TopPicksList
           highestProtein={filteredHighestProtein}
@@ -147,6 +149,7 @@ export default function RestaurantView({
           lowestCalorieItems={filteredLowestCalories}
           sort={sort}
           addons={addons}
+          commonChanges={commonChanges}
         />
       )}
     </div>

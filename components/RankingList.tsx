@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { MenuItem, RestaurantAddons } from "@/types/menu";
+import type { CommonChange, MenuItem, RestaurantAddons } from "@/types/menu";
 import MenuItemCard from "./MenuItemCard";
 
 export default function RankingList({
@@ -10,12 +10,14 @@ export default function RankingList({
   highlightTop = 3,
   showRatio = false,
   addons,
+  commonChanges,
 }: {
   items: MenuItem[];
   step?: number;
   highlightTop?: number;
   showRatio?: boolean;
   addons?: RestaurantAddons;
+  commonChanges?: CommonChange[];
 }) {
   const [count, setCount] = useState(step);
 
@@ -43,6 +45,7 @@ export default function RankingList({
             rankIndex={index}
             isTopRanked={index < highlightTop}
             addons={addons}
+            commonChanges={commonChanges}
           />
         ))}
       </ul>
