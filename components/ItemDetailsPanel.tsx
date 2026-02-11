@@ -22,8 +22,23 @@ const addonSectionTitles: Record<AddonRef, string> = {
   dressings: "Dressings",
 };
 
+const rowScrollPx = 240;
+
 function sortByCalories(addons: AddonOption[]) {
   return [...addons].sort((a, b) => a.calories - b.calories);
+}
+
+function withNoneOption(addons: AddonOption[]) {
+  return [{ name: "None", calories: 0, image: "none" }, ...addons];
+}
+
+function scrollAddonRow(ref: AddonRef, direction: "left" | "right") {
+  const row = document.getElementById(`addon-row-${ref}`);
+  if (!row) return;
+  row.scrollBy({
+    left: direction === "left" ? -rowScrollPx : rowScrollPx,
+    behavior: "smooth",
+  });
 }
 
 export default function ItemDetailsPanel({
@@ -50,7 +65,7 @@ export default function ItemDetailsPanel({
       return {
         ref,
         title: addonSectionTitles[ref],
-        addons: sortByCalories(list),
+        addons: withNoneOption(sortByCalories(list)),
       };
     })
     .filter((section): section is { ref: AddonRef; title: string; addons: AddonOption[] } =>
@@ -64,12 +79,42 @@ export default function ItemDetailsPanel({
           <div className={styles.addonsContent}>
             {availableAddonSections.map((section) => (
               <div key={section.ref} className={styles.addonGroup}>
-                <h3 className={styles.addonGroupTitle}>{section.title}</h3>
-                <ul className={styles.addonList}>
+                <div className={styles.addonGroupHeader}>
+                  <h3 className={styles.addonGroupTitle}>{section.title}</h3>
+                  <div className={styles.addonScrollButtons}>
+                    <button
+                      type="button"
+                      className={styles.addonArrowButton}
+                      aria-label={`Scroll ${section.title} left`}
+                      onClick={() => scrollAddonRow(section.ref, "left")}
+                    >
+                      &lt;
+                    </button>
+                    <button
+                      type="button"
+                      className={styles.addonArrowButton}
+                      aria-label={`Scroll ${section.title} right`}
+                      onClick={() => scrollAddonRow(section.ref, "right")}
+                    >
+                      &gt;
+                    </button>
+                  </div>
+                </div>
+                <ul id={`addon-row-${section.ref}`} className={styles.addonList}>
                   {section.addons.map((addon) => (
                     <li key={`${section.ref}-${addon.name}`} className={styles.addonItem}>
-                      <span>{addon.calories} cal</span>
-                      <span>{addon.name}</span>
+                      {addon.image === "none" ? (
+                        <div className={`${styles.addonImage} ${styles.addonImageNone}`}>✕</div>
+                      ) : addon.image ? (
+                        <div
+                          className={styles.addonImage}
+                          style={{ backgroundImage: `url(${addon.image})` }}
+                        />
+                      ) : (
+                        <div className={styles.addonImage} />
+                      )}
+                      <div className={styles.addonName}>{addon.name}</div>
+                      <div className={styles.addonCalories}>+{addon.calories} Cal</div>
                     </li>
                   ))}
                 </ul>

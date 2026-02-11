@@ -33,6 +33,7 @@ export type AddonRef = "sauces" | "dressings";
 export type AddonOption = {
   name: string;
   calories: number;
+  image?: string;
 };
 
 export type RestaurantAddons = Partial<Record<AddonRef, AddonOption[]>>;
