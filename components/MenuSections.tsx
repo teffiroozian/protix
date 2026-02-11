@@ -53,6 +53,26 @@ function categoryHeading(category: string) {
   return categoryLabelLookup.get(category) ?? titleCase(category);
 }
 
+
+
+function toSectionId(value: string) {
+  return `menu-${value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "")}`;
+}
+
+export function getMenuSections(items: Array<{ category?: string }>) {
+  const unique = new Set(items.map((item) => normalizeCategory(item.category || "Other")));
+  return [...unique]
+    .sort((a, b) => {
+      const priorityDiff = categoryPriority(a) - categoryPriority(b);
+      if (priorityDiff !== 0) return priorityDiff;
+      return a.localeCompare(b);
+    })
+    .map((key) => ({ key, label: categoryHeading(key), id: toSectionId(key) }));
+}
+
 function titleCase(text: string) {
   return text
     .split(" ")
@@ -96,21 +116,15 @@ export default function MenuSections({
     Object.entries(grouped).map(([key, value]) => [key, sortItems(value, sort)])
   );
 
-  const sections = Object.keys(sortedGrouped).sort((a, b) => {
-    const priorityDiff = categoryPriority(a) - categoryPriority(b);
-    if (priorityDiff !== 0) return priorityDiff;
-    return a.localeCompare(b);
-  });
+  const sections = getMenuSections(items);
 
   return (
     <div style={{ marginTop: 32, display: "grid", gap: 48 }}>
       {sections.map((section) => (
-        <section key={section} style={{ scrollMarginTop: 200 }}>
-          <h2 style={{ fontSize: 28, fontWeight: 800 }}>
-            {categoryHeading(section)}
-          </h2>
+        <section key={section.key} id={section.id} style={{ scrollMarginTop: 200 }}>
+          <h2 style={{ fontSize: 28, fontWeight: 800 }}>{section.label}</h2>
           <ul style={{ marginTop: 12, padding: 0, display: "grid", gap: 12 }}>
-            {sortedGrouped[section].map((item, index) => (
+            {(sortedGrouped[section.key] ?? []).map((item, index) => (
               <MenuItemCard key={`${item.name}-${index}`} item={item} addons={addons} />
             ))}
           </ul>

@@ -2,17 +2,14 @@
 
 import { useMemo, useState } from "react";
 import type { MenuItem, RestaurantAddons } from "@/types/menu";
-import ControlsRow, {
-  type Filters,
-  type SortOption,
-  type ViewOption,
-} from "./ControlsRow";
+import { type Filters, type SortOption, type ViewOption } from "./ControlsRow";
 import MenuSections from "./MenuSections";
 import TopPicksList from "./TopPicksList";
 import StickyRestaurantBar from "./StickyRestaurantBar";
 
 export default function RestaurantView({
   restaurantName,
+  restaurantLogo,
   items,
   highestProtein,
   bestCalorieProteinRatio,
@@ -20,6 +17,7 @@ export default function RestaurantView({
   addons,
 }: {
   restaurantName: string;
+  restaurantLogo: string;
   items: MenuItem[];
   highestProtein: MenuItem[];
   bestCalorieProteinRatio: MenuItem[];
@@ -59,6 +57,8 @@ export default function RestaurantView({
     <div>
       <StickyRestaurantBar
         restaurantName={restaurantName}
+        restaurantLogo={restaurantLogo}
+        menuItems={items}
         view={view}
         onChange={setView}
         sort={sort}
@@ -67,15 +67,6 @@ export default function RestaurantView({
         onFiltersChange={setFilters}
       />
 
-      <ControlsRow
-        view={view}
-        onChange={setView}
-        sort={sort}
-        onSortChange={setSort}
-        filters={filters}
-        onFiltersChange={setFilters}
-        wrapperId="controls-row"
-      />
 
       {view === "menu" ? (
         <MenuSections items={filteredItems} sort={sort} addons={addons} />

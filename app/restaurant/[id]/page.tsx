@@ -63,6 +63,7 @@ export default async function RestaurantPage({
       <main style={{ maxWidth: 900, margin: "24px auto 48px", padding: 16 }}>
         <RestaurantView
           restaurantName={restaurant.name}
+          restaurantLogo={restaurant.logo}
           items={items}
           highestProtein={highestProtein}
           bestCalorieProteinRatio={bestCalorieProteinRatio}
