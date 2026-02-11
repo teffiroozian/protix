@@ -13,7 +13,7 @@ const CATEGORY_PRIORITY_GROUPS = [
   { label: "Burgers", aliases: ["burger", "burgers"] },
   { label: "Sandwiches", aliases: ["sandwich", "sandwiches"] },
   {
-    label: "Wings, Tenders, Nuggets",
+    label: "Chicken",
     aliases: ["wings", "wing", "tenders", "tender", "nuggets", "nugget"],
   },
   {
