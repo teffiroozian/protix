@@ -16,6 +16,13 @@ import MenuSections from "./MenuSections";
 import TopPicksList from "./TopPicksList";
 import StickyRestaurantBar from "./StickyRestaurantBar";
 
+
+const rankingSectionIdBySort: Record<SortOption, string> = {
+  "highest-protein": "high-protein",
+  "best-ratio": "best-protein-ratio",
+  "lowest-calories": "lowest-calorie",
+};
+
 export default function RestaurantView({
   restaurantName,
   restaurantLogo,
@@ -84,6 +91,16 @@ export default function RestaurantView({
     section.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
+  const handleSortChange = (nextSort: SortOption) => {
+    setSort(nextSort);
+
+    const sectionId = rankingSectionIdBySort[nextSort];
+    const section = document.getElementById(sectionId);
+    if (!section) return;
+
+    section.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
     <div>
       <StickyRestaurantBar
@@ -92,7 +109,7 @@ export default function RestaurantView({
         view={view}
         onChange={setView}
         sort={sort}
-        onSortChange={setSort}
+        onSortChange={handleSortChange}
         filters={filters}
         onFiltersChange={setFilters}
         categoryOptions={categoryOptions}
@@ -104,7 +121,7 @@ export default function RestaurantView({
         view={view}
         onChange={setView}
         sort={sort}
-        onSortChange={setSort}
+        onSortChange={handleSortChange}
         filters={filters}
         onFiltersChange={setFilters}
         restaurantName={restaurantName}

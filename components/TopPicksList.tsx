@@ -9,7 +9,6 @@ export default function TopPicksList({
   highestProtein,
   bestCalorieProteinRatio,
   lowestCalorieItems,
-  sort,
   addons,
 }: {
   highestProtein: MenuItem[];
@@ -75,14 +74,9 @@ export default function TopPicksList({
       ),
     },
   ];
-  const orderedSections = [
-    sections.find((section) => section.key === sort),
-    ...sections.filter((section) => section.key !== sort),
-  ].filter(Boolean) as typeof sections;
-
   return (
     <div>
-      {orderedSections.map((section) => (
+      {sections.map((section) => (
         <div key={section.key}>{section.content}</div>
       ))}
     </div>
