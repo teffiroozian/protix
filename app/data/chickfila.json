@@ -78,7 +78,6 @@
                 "totalFat": 3
             },
             "category": "Nuggets",
-            "addonRefs": ["dressings"],
             "portionType": "single",
             "image": "/foodImages/chickfila/cfa-grillednuggets.webp",
             "defaultVariantId": "12pc",
