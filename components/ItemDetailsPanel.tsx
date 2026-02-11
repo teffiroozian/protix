@@ -29,7 +29,7 @@ function sortByCalories(addons: AddonOption[]) {
 }
 
 function withNoneOption(addons: AddonOption[]) {
-  return [{ name: "None", calories: 0, image: "none" }, ...addons];
+  return [{ name: "None", calories: 0, protein: 0, carbs: 0, fat: 0, image: "none" }, ...addons];
 }
 
 function scrollAddonRow(ref: AddonRef, direction: "left" | "right") {
@@ -48,6 +48,10 @@ export default function ItemDetailsPanel({
   selectedVariantId,
   onSelectVariant,
   addons,
+  selectedAddons,
+  onSelectAddon,
+  addonTotals,
+  showAddonDeltas,
 }: {
   item: MenuItem;
   nutrition: Nutrition;
@@ -55,6 +59,10 @@ export default function ItemDetailsPanel({
   selectedVariantId?: string;
   onSelectVariant?: (id: string) => void;
   addons?: RestaurantAddons;
+  selectedAddons?: Partial<Record<AddonRef, AddonOption>>;
+  onSelectAddon?: (ref: AddonRef, addon: AddonOption) => void;
+  addonTotals?: Pick<AddonOption, "calories" | "protein" | "carbs" | "fat">;
+  showAddonDeltas?: boolean;
 }) {
   const n = nutrition;
   const addonRefs = item.addonRefs ?? [];
@@ -71,6 +79,8 @@ export default function ItemDetailsPanel({
     .filter((section): section is { ref: AddonRef; title: string; addons: AddonOption[] } =>
       section !== null
     );
+
+  const activeAddonTotals = addonTotals ?? { calories: 0, protein: 0, carbs: 0, fat: 0 };
 
   return (
     <div className={styles.wrapper}>
@@ -105,18 +115,28 @@ export default function ItemDetailsPanel({
                 <ul id={`addon-row-${section.ref}`} className={styles.addonList}>
                   {section.addons.map((addon) => (
                     <li key={`${section.ref}-${addon.name}`} className={styles.addonItem}>
-                      {addon.image === "none" ? (
-                        <div className={`${styles.addonImage} ${styles.addonImageNone}`}>✕</div>
-                      ) : addon.image ? (
-                        <div
-                          className={styles.addonImage}
-                          style={{ backgroundImage: `url(${addon.image})` }}
-                        />
-                      ) : (
-                        <div className={styles.addonImage} />
-                      )}
-                      <div className={styles.addonName}>{addon.name}</div>
-                      <div className={styles.addonCalories}>+{addon.calories} Cal</div>
+                      <button
+                        type="button"
+                        className={`${styles.addonTileButton} ${
+                          (selectedAddons?.[section.ref]?.name ?? "None") === addon.name
+                            ? styles.addonTileButtonActive
+                            : ""
+                        }`}
+                        onClick={() => onSelectAddon?.(section.ref, addon)}
+                      >
+                        {addon.image === "none" ? (
+                          <div className={`${styles.addonImage} ${styles.addonImageNone}`}>✕</div>
+                        ) : addon.image ? (
+                          <div
+                            className={styles.addonImage}
+                            style={{ backgroundImage: `url(${addon.image})` }}
+                          />
+                        ) : (
+                          <div className={styles.addonImage} />
+                        )}
+                        <div className={styles.addonName}>{addon.name}</div>
+                        <div className={styles.addonCalories}>+{addon.calories} Cal</div>
+                      </button>
                     </li>
                   ))}
                 </ul>
@@ -132,14 +152,22 @@ export default function ItemDetailsPanel({
 
         <div className={styles.caloriesRow}>
           <div className={styles.caloriesText}>Calories</div>
-          <div className={styles.caloriesValue}>{n.calories}</div>
+          <div className={styles.valueWithDelta}>
+            <div className={styles.caloriesValue}>{n.calories}</div>
+            {showAddonDeltas ? (
+              <span className={styles.deltaValue}>+{activeAddonTotals.calories}</span>
+            ) : null}
+          </div>
         </div>
 
         <div className={styles.thickRule} />
 
         <div className={styles.row}>
           <div className={styles.rowTitle}>Total Fat</div>
-          <div className={styles.rowValue}>{format(n.totalFat, "g")}</div>
+          <div className={styles.valueWithDelta}>
+            <div className={styles.rowValue}>{format(n.totalFat, "g")}</div>
+            {showAddonDeltas ? <span className={styles.deltaValue}>+{activeAddonTotals.fat}g</span> : null}
+          </div>
         </div>
 
         <div className={styles.subRow}>
@@ -164,7 +192,10 @@ export default function ItemDetailsPanel({
 
         <div className={styles.row}>
           <div className={styles.rowTitle}>Carbohydrates</div>
-          <div className={styles.rowValue}>{format(n.carbs, "g")}</div>
+          <div className={styles.valueWithDelta}>
+            <div className={styles.rowValue}>{format(n.carbs, "g")}</div>
+            {showAddonDeltas ? <span className={styles.deltaValue}>+{activeAddonTotals.carbs}g</span> : null}
+          </div>
         </div>
 
         <div className={styles.subRow}>
@@ -179,7 +210,10 @@ export default function ItemDetailsPanel({
 
         <div className={styles.row}>
           <div className={styles.rowTitle}>Protein</div>
-          <div className={styles.rowValue}>{format(n.protein, "g")}</div>
+          <div className={styles.valueWithDelta}>
+            <div className={styles.rowValue}>{format(n.protein, "g")}</div>
+            {showAddonDeltas ? <span className={styles.deltaValue}>+{activeAddonTotals.protein}g</span> : null}
+          </div>
         </div>
 
         <div className={styles.footerText}>

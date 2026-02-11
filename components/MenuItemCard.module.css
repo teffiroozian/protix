@@ -144,9 +144,27 @@
 }
 
 .detailsOpen {
-  max-height: 900px;
+  max-height: none;
 }
 
 .detailsInner {
   padding: 12px;
+}
+
+.caloriesWrap {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.macroValueWrap {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.macroDelta {
+  font-size: 14px;
+  font-weight: 700;
+  color: #16a34a;
 }
