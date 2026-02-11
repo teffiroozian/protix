@@ -130,7 +130,8 @@
                 "calories": 25,
                 "protein": 0,
                 "carbs": 1,
-                "fat": 2
+                "fat": 2,
+                "image": "/foodImages/chickfila/addOns/sauce_buffalo.webp"
             },
             {
                 "name": "Honey Roasted BBQ Sauce",

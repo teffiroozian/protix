@@ -93,6 +93,7 @@ export default function ItemDetailsPanel({
                 {/* addOn Title Group */}
                 <div className={styles.addonGroupHeader}>
                   <h3 className={styles.addonGroupTitle}>{section.title}</h3>
+                  {/* Horiontal Scrolling Arrows */}
                   <div className={styles.addonScrollButtons}>
                     <button
                       type="button"
@@ -115,6 +116,7 @@ export default function ItemDetailsPanel({
                 <ul id={`addon-row-${section.ref}`} className={styles.addonList}>
                   {section.addons.map((addon) => (
                     <li key={`${section.ref}-${addon.name}`} className={styles.addonItem}>
+                      {/* addOn Card */}
                       <button
                         type="button"
                         className={`${styles.addonTileButton} ${
@@ -124,6 +126,7 @@ export default function ItemDetailsPanel({
                         }`}
                         onClick={() => onSelectAddon?.(section.ref, addon)}
                       >
+                        {/* addOn Image */}
                         {addon.image === "none" ? (
                           <div className={`${styles.addonImage} ${styles.addonImageNone}`}>✕</div>
                         ) : addon.image ? (
@@ -134,7 +137,9 @@ export default function ItemDetailsPanel({
                         ) : (
                           <div className={styles.addonImage} />
                         )}
+                        {/* addOn Name */}
                         <div className={styles.addonName}>{addon.name}</div>
+                        {/* addOn Calories */}
                         <div className={styles.addonCalories}>+{addon.calories} Cal</div>
                       </button>
                     </li>
