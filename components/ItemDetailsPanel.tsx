@@ -76,9 +76,11 @@ export default function ItemDetailsPanel({
     <div className={styles.wrapper}>
       {availableAddonSections.length > 0 ? (
         <section className={styles.addonsCard}>
+          {/* addOn Card */}
           <div className={styles.addonsContent}>
             {availableAddonSections.map((section) => (
               <div key={section.ref} className={styles.addonGroup}>
+                {/* addOn Title Group */}
                 <div className={styles.addonGroupHeader}>
                   <h3 className={styles.addonGroupTitle}>{section.title}</h3>
                   <div className={styles.addonScrollButtons}>
