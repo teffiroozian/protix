@@ -7,12 +7,18 @@ import ControlsRow, {
   type SortOption,
   type ViewOption,
 } from "./ControlsRow";
+import {
+  categorySectionId,
+  getCategoryLabel,
+  getOrderedMenuSections,
+} from "./MenuSections";
 import MenuSections from "./MenuSections";
 import TopPicksList from "./TopPicksList";
 import StickyRestaurantBar from "./StickyRestaurantBar";
 
 export default function RestaurantView({
   restaurantName,
+  restaurantLogo,
   items,
   highestProtein,
   bestCalorieProteinRatio,
@@ -20,6 +26,7 @@ export default function RestaurantView({
   addons,
 }: {
   restaurantName: string;
+  restaurantLogo: string;
   items: MenuItem[];
   highestProtein: MenuItem[];
   bestCalorieProteinRatio: MenuItem[];
@@ -29,6 +36,20 @@ export default function RestaurantView({
   const [view, setView] = useState<ViewOption>("menu");
   const [sort, setSort] = useState<SortOption>("highest-protein");
   const [filters, setFilters] = useState<Filters>({});
+
+  const orderedSections = useMemo(() => getOrderedMenuSections(items), [items]);
+  const [activeCategory, setActiveCategory] = useState<string>(
+    () => orderedSections[0] ?? ""
+  );
+
+  const categoryOptions = useMemo(
+    () =>
+      orderedSections.map((section) => ({
+        id: section,
+        label: getCategoryLabel(section),
+      })),
+    [orderedSections]
+  );
 
   const filteredItems = useMemo(() => {
     return items.filter((item) => {
@@ -55,16 +76,28 @@ export default function RestaurantView({
     [lowestCalorieItems, filteredItems]
   );
 
+  const handleCategorySelect = (categoryId: string) => {
+    setActiveCategory(categoryId);
+    const section = document.getElementById(categorySectionId(categoryId));
+    if (!section) return;
+
+    section.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
     <div>
       <StickyRestaurantBar
         restaurantName={restaurantName}
+        restaurantLogo={restaurantLogo}
         view={view}
         onChange={setView}
         sort={sort}
         onSortChange={setSort}
         filters={filters}
         onFiltersChange={setFilters}
+        categoryOptions={categoryOptions}
+        activeCategory={activeCategory}
+        onCategorySelect={handleCategorySelect}
       />
 
       <ControlsRow
@@ -74,6 +107,11 @@ export default function RestaurantView({
         onSortChange={setSort}
         filters={filters}
         onFiltersChange={setFilters}
+        restaurantName={restaurantName}
+        restaurantLogo={restaurantLogo}
+        categoryOptions={categoryOptions}
+        activeCategory={activeCategory}
+        onCategorySelect={handleCategorySelect}
         wrapperId="controls-row"
       />
 
