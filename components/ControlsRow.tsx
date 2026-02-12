@@ -157,6 +157,8 @@ export default function ControlsRow({
   onCategorySelect,
   showChips = true,
   wrapperId,
+  searchQuery,
+  onSearchChange,
 }: {
   view: ViewOption;
   onChange: (view: ViewOption) => void;
@@ -171,6 +173,8 @@ export default function ControlsRow({
   onCategorySelect?: (id: string) => void;
   showChips?: boolean;
   wrapperId?: string;
+  searchQuery: string;
+  onSearchChange: (value: string) => void;
 }) {
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [draftFilters, setDraftFilters] = useState<Filters>(filters);
@@ -402,6 +406,39 @@ export default function ControlsRow({
               {restaurantName}
             </div>
           </div>
+
+          <label
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              flex: 1,
+              minWidth: 220,
+              maxWidth: 380,
+              padding: "8px 12px",
+              borderRadius: 999,
+              border: "1px solid rgba(0,0,0,0.15)",
+              background: "white",
+            }}
+          >
+            <span aria-hidden="true" style={{ fontSize: 14, opacity: 0.7 }}>
+              🔍
+            </span>
+            <input
+              type="search"
+              value={searchQuery}
+              onChange={(event) => onSearchChange(event.target.value)}
+              placeholder="Search menu items..."
+              aria-label="Search menu items"
+              style={{
+                border: "none",
+                outline: "none",
+                width: "100%",
+                fontSize: 14,
+                background: "transparent",
+              }}
+            />
+          </label>
 
           <div
             style={{

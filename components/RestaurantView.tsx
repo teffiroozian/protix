@@ -44,6 +44,13 @@ export default function RestaurantView({
   const [view, setView] = useState<ViewOption>("menu");
   const [sort, setSort] = useState<SortOption>("highest-protein");
   const [filters, setFilters] = useState<Filters>({});
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const searchTerms = searchQuery
+    .trim()
+    .toLowerCase()
+    .split(/\s+/)
+    .filter(Boolean);
 
   const filteredItems = useMemo(() => {
     return items.filter((item) => {
@@ -53,9 +60,26 @@ export default function RestaurantView({
       if (filters.caloriesMax && item.nutrition.calories > filters.caloriesMax) {
         return false;
       }
-      return true;
+      if (!searchTerms.length) {
+        return true;
+      }
+
+      const category = (item.category || "Other").toLowerCase();
+      const categoryLabel = getCategoryLabel(item.category || "Other").toLowerCase();
+
+      const categoryVariants = [category, categoryLabel].flatMap((value) => {
+        const trimmed = value.trim();
+        if (!trimmed) return [];
+        if (trimmed.endsWith("s")) {
+          return [trimmed, trimmed.slice(0, -1)];
+        }
+        return [trimmed, `${trimmed}s`];
+      });
+
+      const searchableText = [item.name.toLowerCase(), ...categoryVariants].join(" ");
+      return searchTerms.every((term) => searchableText.includes(term));
     });
-  }, [items, filters]);
+  }, [items, filters, searchTerms]);
 
   const orderedSections = useMemo(
     () => getOrderedMenuSections(filteredItems),
@@ -123,6 +147,8 @@ export default function RestaurantView({
         categoryOptions={categoryOptions}
         activeCategory={resolvedActiveCategory}
         onCategorySelect={handleCategorySelect}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
       />
 
       <ControlsRow
@@ -138,6 +164,8 @@ export default function RestaurantView({
         activeCategory={resolvedActiveCategory}
         onCategorySelect={handleCategorySelect}
         wrapperId="controls-row"
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
       />
 
       {view === "menu" ? (
