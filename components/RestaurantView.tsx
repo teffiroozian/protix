@@ -64,10 +64,19 @@ export default function RestaurantView({
         return true;
       }
 
-      const categoryLabel = getCategoryLabel(item.category || "Other");
-      const searchableText = [item.name, item.category, categoryLabel]
-        .join(" ")
-        .toLowerCase();
+      const category = (item.category || "Other").toLowerCase();
+      const categoryLabel = getCategoryLabel(item.category || "Other").toLowerCase();
+
+      const categoryVariants = [category, categoryLabel].flatMap((value) => {
+        const trimmed = value.trim();
+        if (!trimmed) return [];
+        if (trimmed.endsWith("s")) {
+          return [trimmed, trimmed.slice(0, -1)];
+        }
+        return [trimmed, `${trimmed}s`];
+      });
+
+      const searchableText = [item.name.toLowerCase(), ...categoryVariants].join(" ");
       return searchTerms.every((term) => searchableText.includes(term));
     });
   }, [items, filters, searchTerms]);
