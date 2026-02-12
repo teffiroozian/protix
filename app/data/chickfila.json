@@ -137,14 +137,16 @@
                 "calories": 60,
                 "protein": 0,
                 "carbs": 8,
-                "fat": 3
+                "fat": 3,
+                "image": "/foodImages/chickfila/addOns/sauce_honey_roasted_bbq.webp"
             },
             {
                 "name": "Chick-fil-A Sauce",
                 "calories": 140,
                 "protein": 0,
                 "carbs": 7,
-                "fat": 13
+                "fat": 13,
+                "image": "/foodImages/chickfila/addOns/sauce_cfa_sauce.webp"
             }
         ],
         "dressings": [
@@ -153,21 +155,24 @@
                 "calories": 25,
                 "protein": 0,
                 "carbs": 3,
-                "fat": 2
+                "fat": 2,
+                "image": "/foodImages/chickfila/addOns/dressing_light_italian.webp"
             },
             {
                 "name": "Garden Herb Ranch Dressing",
                 "calories": 280,
                 "protein": 1,
                 "carbs": 5,
-                "fat": 29
+                "fat": 29,
+                "image": "/foodImages/chickfila/addOns/dressing_garden_herb_ranch.webp"
             },
             {
                 "name": "Avocado Lime Ranch Dressing",
                 "calories": 310,
                 "protein": 1,
                 "carbs": 6,
-                "fat": 32
+                "fat": 32,
+                "image": "/foodImages/chickfila/addOns/dressing_avocado_lime_ranch.webp"
             }
         ]
     },

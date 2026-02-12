@@ -114,7 +114,7 @@ export default function ItemDetailsPanel({
                       aria-label={`Scroll ${section.title} left`}
                       onClick={() => scrollRow(`addon-row-${section.ref}`, "left")}
                     >
-                      &lt;
+                      ⬅
                     </button>
                     <button
                       type="button"
@@ -122,7 +122,7 @@ export default function ItemDetailsPanel({
                       aria-label={`Scroll ${section.title} right`}
                       onClick={() => scrollRow(`addon-row-${section.ref}`, "right")}
                     >
-                      &gt;
+                      ➡
                     </button>
                   </div>
                 </div>
@@ -177,7 +177,7 @@ export default function ItemDetailsPanel({
                     aria-label="Scroll Common Changes left"
                     onClick={() => scrollRow("common-changes-row", "left")}
                   >
-                    &lt;
+                    ⬅
                   </button>
                   <button
                     type="button"
@@ -185,7 +185,7 @@ export default function ItemDetailsPanel({
                     aria-label="Scroll Common Changes right"
                     onClick={() => scrollRow("common-changes-row", "right")}
                   >
-                    &gt;
+                    ➡
                   </button>
                 </div>
               </div>

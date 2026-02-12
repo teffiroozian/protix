@@ -150,7 +150,7 @@
   background: transparent;
   color: rgba(0, 0, 0, 0.6);
   border-radius: 8px;
-  padding: 12px 12px;
+  padding: 6px 12px;
   font-size: 18px;
   font-weight: 700;
   cursor: pointer;
@@ -232,20 +232,18 @@
 
 .addonImage {
   width: 100%;
-  height: 100px;
+  height: 150px;
   border-radius: 8px;
   background-size: cover;
   background-position: center;
   display: grid;
   place-items: center;
-  color: #fff;
-  font-size: 26px;
+  color: #000;
+  font-size: 32px;
   font-weight: 700;
 }
 
-.addonImageNone {
-  background: #000;
-}
+
 
 .addonName {
   font-size: 18px;
@@ -285,8 +283,9 @@
   width: 100%;
   height: 100%;
   cursor: pointer;
+  box-sizing: border-box;
 }
 
 .addonTileButtonActive {
-  border: 3px solid #16a34a;
+  box-shadow: inset 0 0 0 3px #16a34a;
 }

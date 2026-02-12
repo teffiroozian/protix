@@ -19,7 +19,7 @@ const CALORIE_OPTIONS = [500, 700, 900];
 
 const VIEW_OPTIONS: Array<{ label: string; value: ViewOption }> = [
   { label: "Menu View", value: "menu" },
-  { label: "Item Ranking", value: "top" },
+  { label: "Macro Ranking", value: "top" },
 ];
 
 const SORT_OPTIONS: Array<{ label: string; value: SortOption }> = [
@@ -453,12 +453,27 @@ export default function ControlsRow({
               maxWidth: 380,
               padding: "8px 12px",
               borderRadius: 999,
-              border: "1px solid rgba(0,0,0,0.15)",
+              border: "1px solid rgba(0,0,0,0.25)",
               background: "white",
             }}
           >
-            <span aria-hidden="true" style={{ fontSize: 14, opacity: 0.7 }}>
-              🔍
+            <span className="pointer-events-none flex items-center text-neutral-400">
+              <svg
+                aria-hidden="true"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M11 19a8 8 0 1 1 0-16 8 8 0 0 1 0 16Zm10 2-4.35-4.35"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
             </span>
             <input
               type="search"
@@ -570,7 +585,6 @@ export default function ControlsRow({
                   }}
                 >
                   {option.label}
-                  {isActive ? " ●" : ""}
                 </button>
               );
             })}
