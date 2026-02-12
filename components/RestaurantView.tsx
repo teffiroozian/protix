@@ -112,17 +112,47 @@ export default function RestaurantView({
     [orderedSections]
   );
 
+  const filteredItemKeys = useMemo(
+    () =>
+      new Set(
+        filteredItems.map((item) =>
+          item.id
+            ? `id:${item.id}`
+            : `name:${item.name.toLowerCase()}|category:${(item.category || "").toLowerCase()}`
+        )
+      ),
+    [filteredItems]
+  );
+
   const filteredHighestProtein = useMemo(
-    () => highestProtein.filter((item) => filteredItems.includes(item)),
-    [highestProtein, filteredItems]
+    () =>
+      highestProtein.filter((item) => {
+        const key = item.id
+          ? `id:${item.id}`
+          : `name:${item.name.toLowerCase()}|category:${(item.category || "").toLowerCase()}`;
+        return filteredItemKeys.has(key);
+      }),
+    [highestProtein, filteredItemKeys]
   );
   const filteredBestRatio = useMemo(
-    () => bestCalorieProteinRatio.filter((item) => filteredItems.includes(item)),
-    [bestCalorieProteinRatio, filteredItems]
+    () =>
+      bestCalorieProteinRatio.filter((item) => {
+        const key = item.id
+          ? `id:${item.id}`
+          : `name:${item.name.toLowerCase()}|category:${(item.category || "").toLowerCase()}`;
+        return filteredItemKeys.has(key);
+      }),
+    [bestCalorieProteinRatio, filteredItemKeys]
   );
   const filteredLowestCalories = useMemo(
-    () => lowestCalorieItems.filter((item) => filteredItems.includes(item)),
-    [lowestCalorieItems, filteredItems]
+    () =>
+      lowestCalorieItems.filter((item) => {
+        const key = item.id
+          ? `id:${item.id}`
+          : `name:${item.name.toLowerCase()}|category:${(item.category || "").toLowerCase()}`;
+        return filteredItemKeys.has(key);
+      }),
+    [lowestCalorieItems, filteredItemKeys]
   );
 
   const handleCategorySelect = (categoryId: string) => {
@@ -188,6 +218,8 @@ export default function RestaurantView({
           sort={sort}
           addons={addons}
           commonChanges={commonChanges}
+          includeSidesDrinks={Boolean(filters.includeSidesDrinks)}
+          includeLargeShareables={Boolean(filters.includeLargeShareables)}
         />
       )}
     </div>

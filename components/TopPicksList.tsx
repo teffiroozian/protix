@@ -11,6 +11,8 @@ export default function TopPicksList({
   lowestCalorieItems,
   addons,
   commonChanges,
+  includeSidesDrinks = false,
+  includeLargeShareables = false,
 }: {
   highestProtein: MenuItem[];
   bestCalorieProteinRatio: MenuItem[];
@@ -18,6 +20,8 @@ export default function TopPicksList({
   sort: SortOption;
   addons?: RestaurantAddons;
   commonChanges?: CommonChange[];
+  includeSidesDrinks?: boolean;
+  includeLargeShareables?: boolean;
 }) {
   const sections = [
     {
@@ -32,7 +36,14 @@ export default function TopPicksList({
             Items with the most protein per serving size.
           </p>
 
-          <RankingList items={highestProtein} highlightTop={3} addons={addons} commonChanges={commonChanges} />
+          <RankingList
+            items={highestProtein}
+            highlightTop={3}
+            addons={addons}
+            commonChanges={commonChanges}
+            includeSidesDrinks={includeSidesDrinks}
+            includeLargeShareables={includeLargeShareables}
+          />
         </section>
       ),
     },
@@ -55,6 +66,8 @@ export default function TopPicksList({
             showRatio
             addons={addons}
             commonChanges={commonChanges}
+            includeSidesDrinks={includeSidesDrinks}
+            includeLargeShareables={includeLargeShareables}
           />
         </section>
       ),
@@ -72,7 +85,14 @@ export default function TopPicksList({
             Lowest calorie foods on the menu.
           </p>
 
-          <RankingList items={lowestCalorieItems} highlightTop={3} addons={addons} commonChanges={commonChanges} />
+          <RankingList
+            items={lowestCalorieItems}
+            highlightTop={3}
+            addons={addons}
+            commonChanges={commonChanges}
+            includeSidesDrinks={includeSidesDrinks}
+            includeLargeShareables={includeLargeShareables}
+          />
         </section>
       ),
     },
