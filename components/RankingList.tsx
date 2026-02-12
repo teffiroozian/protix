@@ -11,6 +11,8 @@ export default function RankingList({
   showRatio = false,
   addons,
   commonChanges,
+  includeSidesDrinks = false,
+  includeLargeShareables = false,
 }: {
   items: MenuItem[];
   step?: number;
@@ -18,21 +20,28 @@ export default function RankingList({
   showRatio?: boolean;
   addons?: RestaurantAddons;
   commonChanges?: CommonChange[];
+  includeSidesDrinks?: boolean;
+  includeLargeShareables?: boolean;
 }) {
   const [count, setCount] = useState(step);
 
-    const singlePortionItems = useMemo(() => {
-    return items.filter((item) => item.portionType === "single");
-  }, [items]);
+    const rankableItems = useMemo(() => {
+    return items.filter((item) => {
+      if (item.portionType === "single") return true;
+      if (includeLargeShareables && item.portionType === "shareable") return true;
+      if (includeSidesDrinks && (item.portionType === "side" || item.portionType === "drink")) return true;
+      return false;
+    });
+  }, [items, includeSidesDrinks, includeLargeShareables]);
 
   const visibleItems = useMemo(
-    () => singlePortionItems.slice(0, count),
-    [singlePortionItems, count]
+    () => rankableItems.slice(0, count),
+    [rankableItems, count]
   );
 
-  const remaining = Math.max(0, singlePortionItems.length - count);
-  const isFullyExpanded = count >= singlePortionItems.length;
-  const canCollapse = singlePortionItems.length > step && isFullyExpanded;
+  const remaining = Math.max(0, rankableItems.length - count);
+  const isFullyExpanded = count >= rankableItems.length;
+  const canCollapse = rankableItems.length > step && isFullyExpanded;
 
   return (
     <div>
@@ -63,7 +72,7 @@ export default function RankingList({
           <button
             type="button"
             onClick={() =>
-              setCount((c) => Math.min(singlePortionItems.length, c + step))
+              setCount((c) => Math.min(rankableItems.length, c + step))
             }
             style={{
               padding: "10px 14px",

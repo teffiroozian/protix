@@ -54,6 +54,16 @@ export default function RestaurantView({
 
   const filteredItems = useMemo(() => {
     return items.filter((item) => {
+      if (view === "top" && !filters.includeSidesDrinks) {
+        if (item.portionType === "drink" || item.portionType === "side") {
+          return false;
+        }
+      }
+
+      if (view === "top" && !filters.includeLargeShareables && item.portionType === "shareable") {
+        return false;
+      }
+
       if (filters.proteinMin && item.nutrition.protein < filters.proteinMin) {
         return false;
       }
@@ -79,7 +89,7 @@ export default function RestaurantView({
       const searchableText = [item.name.toLowerCase(), ...categoryVariants].join(" ");
       return searchTerms.every((term) => searchableText.includes(term));
     });
-  }, [items, filters, searchTerms]);
+  }, [items, filters, searchTerms, view]);
 
   const orderedSections = useMemo(
     () => getOrderedMenuSections(filteredItems),
@@ -102,17 +112,47 @@ export default function RestaurantView({
     [orderedSections]
   );
 
+  const filteredItemKeys = useMemo(
+    () =>
+      new Set(
+        filteredItems.map((item) =>
+          item.id
+            ? `id:${item.id}`
+            : `name:${item.name.toLowerCase()}|category:${(item.category || "").toLowerCase()}`
+        )
+      ),
+    [filteredItems]
+  );
+
   const filteredHighestProtein = useMemo(
-    () => highestProtein.filter((item) => filteredItems.includes(item)),
-    [highestProtein, filteredItems]
+    () =>
+      highestProtein.filter((item) => {
+        const key = item.id
+          ? `id:${item.id}`
+          : `name:${item.name.toLowerCase()}|category:${(item.category || "").toLowerCase()}`;
+        return filteredItemKeys.has(key);
+      }),
+    [highestProtein, filteredItemKeys]
   );
   const filteredBestRatio = useMemo(
-    () => bestCalorieProteinRatio.filter((item) => filteredItems.includes(item)),
-    [bestCalorieProteinRatio, filteredItems]
+    () =>
+      bestCalorieProteinRatio.filter((item) => {
+        const key = item.id
+          ? `id:${item.id}`
+          : `name:${item.name.toLowerCase()}|category:${(item.category || "").toLowerCase()}`;
+        return filteredItemKeys.has(key);
+      }),
+    [bestCalorieProteinRatio, filteredItemKeys]
   );
   const filteredLowestCalories = useMemo(
-    () => lowestCalorieItems.filter((item) => filteredItems.includes(item)),
-    [lowestCalorieItems, filteredItems]
+    () =>
+      lowestCalorieItems.filter((item) => {
+        const key = item.id
+          ? `id:${item.id}`
+          : `name:${item.name.toLowerCase()}|category:${(item.category || "").toLowerCase()}`;
+        return filteredItemKeys.has(key);
+      }),
+    [lowestCalorieItems, filteredItemKeys]
   );
 
   const handleCategorySelect = (categoryId: string) => {
@@ -178,6 +218,8 @@ export default function RestaurantView({
           sort={sort}
           addons={addons}
           commonChanges={commonChanges}
+          includeSidesDrinks={Boolean(filters.includeSidesDrinks)}
+          includeLargeShareables={Boolean(filters.includeLargeShareables)}
         />
       )}
     </div>
