@@ -232,7 +232,7 @@ export default function MenuItemCard({
           </div>
         </div>
 
-        <div className={styles.expandIcon}>{open ? "−" : "+"}</div>
+        <div className={`${styles.expandIcon} ${open ? styles.expandIconOpen : ""}`}>+</div>
       </button>
 
       <div className={`${styles.details} ${open ? styles.detailsOpen : ""}`}>

@@ -133,6 +133,12 @@
   line-height: 1;
   font-weight: 500;
   color: rgba(0, 0, 0, 0.75);
+  transition: transform 180ms ease;
+  transform-origin: center;
+}
+
+.expandIconOpen {
+  transform: rotate(45deg);
 }
 
 /* Expand section */
