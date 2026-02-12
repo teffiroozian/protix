@@ -120,12 +120,19 @@ export default function MenuItemCard({
     [addonTotals, commonChangeTotals]
   );
 
-  const hasActiveCustomization = useMemo(
+  const hasMods = useMemo(
     () =>
       Object.values(selectedAddons).some((addon) => addon && addon.name !== "None") ||
       selectedCommonChangeIds.length > 0,
     [selectedAddons, selectedCommonChangeIds]
   );
+
+  const hasActiveCustomization = hasMods;
+
+  function resetMods() {
+    setSelectedAddons({});
+    setSelectedCommonChangeIds([]);
+  }
 
   const nutrition = {
     ...baseNutrition,
@@ -232,7 +239,30 @@ export default function MenuItemCard({
           </div>
         </div>
 
-        <div className={`${styles.expandIcon} ${open ? styles.expandIconOpen : ""}`}>+</div>
+        <div className={styles.iconActions}>
+          {hasMods ? (
+            <div
+              role="button"
+              tabIndex={0}
+              aria-label="Reset customizations"
+              className={`${styles.iconButton} ${styles.resetIcon}`}
+              onClick={(event) => {
+                event.stopPropagation();
+                resetMods();
+              }}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  resetMods();
+                }
+              }}
+            >
+              ↺
+            </div>
+          ) : null}
+          <div className={`${styles.iconButton} ${styles.expandIcon} ${open ? styles.expandIconOpen : ""}`}>+</div>
+        </div>
       </button>
 
       <div className={`${styles.details} ${open ? styles.detailsOpen : ""}`}>
