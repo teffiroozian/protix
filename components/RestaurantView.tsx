@@ -64,7 +64,10 @@ export default function RestaurantView({
         return true;
       }
 
-      const searchableText = [item.name, item.category].join(" ").toLowerCase();
+      const categoryLabel = getCategoryLabel(item.category || "Other");
+      const searchableText = [item.name, item.category, categoryLabel]
+        .join(" ")
+        .toLowerCase();
       return searchTerms.every((term) => searchableText.includes(term));
     });
   }, [items, filters, searchTerms]);
