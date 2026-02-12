@@ -48,8 +48,8 @@ function withNoneOption(addons: AddonOption[]) {
   return [{ name: "None", calories: 0, protein: 0, carbs: 0, fat: 0, image: "none" }, ...addons];
 }
 
-function formatSummary(title: string, name: string, calories: number) {
-  return `${title} • ${name} (${calories >= 0 ? "+" : ""}${calories}cal)`;
+function formatSummaryDetail(name: string, calories: number) {
+  return `• ${name} (${calories >= 0 ? "+" : ""}${calories}cal)`;
 }
 
 export default function ItemDetailsPanel({
@@ -110,25 +110,36 @@ export default function ItemDetailsPanel({
               const sectionStateKey = `addon-${section.ref}`;
               const isSectionOpen = sectionOpenState[sectionStateKey] ?? true;
               const selectedAddon = selectedAddons?.[section.ref] ?? section.addons[0];
-              const summaryText = formatSummary(section.title, selectedAddon?.name ?? "None", selectedAddon?.calories ?? 0);
+              const summaryDetail = formatSummaryDetail(selectedAddon?.name ?? "None", selectedAddon?.calories ?? 0);
               return (
                 <div key={section.ref} className={styles.addonGroup}>
-                  <div className={styles.addonGroupHeader}>
-                    <button
-                      type="button"
-                      className={styles.addonGroupToggle}
-                      onClick={() =>
+                  <div
+                    className={styles.addonGroupHeader}
+                    role="button"
+                    tabIndex={0}
+                    onClick={() =>
+                      setSectionOpenState((prev) => ({
+                        ...prev,
+                        [sectionStateKey]: !(prev[sectionStateKey] ?? true),
+                      }))
+                    }
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
                         setSectionOpenState((prev) => ({
                           ...prev,
                           [sectionStateKey]: !(prev[sectionStateKey] ?? true),
-                        }))
+                        }));
                       }
-                    >
-                      <h3 className={styles.addonGroupTitle}>{isSectionOpen ? section.title : summaryText}</h3>
-                    </button>
+                    }}
+                  >
+                    <h3 className={styles.addonGroupTitle}>
+                      {section.title}
+                      {!isSectionOpen ? <span className={styles.addonSummaryDetail}> {summaryDetail}</span> : null}
+                    </h3>
                     <div className={styles.addonHeaderControls}>
                       {isSectionOpen ? (
-                        <div className={styles.addonScrollButtons}>
+                        <div className={styles.addonScrollButtons} onClick={(event) => event.stopPropagation()}>
                           <button
                             type="button"
                             className={styles.addonArrowButton}
@@ -147,19 +158,9 @@ export default function ItemDetailsPanel({
                           </button>
                         </div>
                       ) : null}
-                      <button
-                        type="button"
-                        className={styles.chevronButton}
-                        aria-label={`${isSectionOpen ? "Collapse" : "Expand"} ${section.title}`}
-                        onClick={() =>
-                          setSectionOpenState((prev) => ({
-                            ...prev,
-                            [sectionStateKey]: !(prev[sectionStateKey] ?? true),
-                          }))
-                        }
-                      >
+                      <span className={styles.chevronButton} aria-hidden="true">
                         {isSectionOpen ? "˄" : "˅"}
-                      </button>
+                      </span>
                     </div>
                   </div>
                   {isSectionOpen ? (
@@ -214,30 +215,40 @@ export default function ItemDetailsPanel({
                   (sum, change) => sum + change.delta.calories,
                   0
                 );
-                const commonSummary = formatSummary(
-                  "Common Changes",
+                const commonSummaryDetail = formatSummaryDetail(
                   firstSelectedCommon?.label ?? "None",
                   firstSelectedCommon ? totalCommonCalories : 0
                 );
 
                 return (
                   <>
-                    <div className={styles.addonGroupHeader}>
-                      <button
-                        type="button"
-                        className={styles.addonGroupToggle}
-                        onClick={() =>
+                    <div
+                      className={styles.addonGroupHeader}
+                      role="button"
+                      tabIndex={0}
+                      onClick={() =>
+                        setSectionOpenState((prev) => ({
+                          ...prev,
+                          [commonKey]: !(prev[commonKey] ?? true),
+                        }))
+                      }
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                          event.preventDefault();
                           setSectionOpenState((prev) => ({
                             ...prev,
                             [commonKey]: !(prev[commonKey] ?? true),
-                          }))
+                          }));
                         }
-                      >
-                        <h3 className={styles.addonGroupTitle}>{isCommonOpen ? "Common Changes" : commonSummary}</h3>
-                      </button>
+                      }}
+                    >
+                      <h3 className={styles.addonGroupTitle}>
+                        Common Changes
+                        {!isCommonOpen ? <span className={styles.addonSummaryDetail}> {commonSummaryDetail}</span> : null}
+                      </h3>
                       <div className={styles.addonHeaderControls}>
                         {isCommonOpen ? (
-                          <div className={styles.addonScrollButtons}>
+                          <div className={styles.addonScrollButtons} onClick={(event) => event.stopPropagation()}>
                             <button
                               type="button"
                               className={styles.addonArrowButton}
@@ -256,19 +267,9 @@ export default function ItemDetailsPanel({
                             </button>
                           </div>
                         ) : null}
-                        <button
-                          type="button"
-                          className={styles.chevronButton}
-                          aria-label={`${isCommonOpen ? "Collapse" : "Expand"} Common Changes`}
-                          onClick={() =>
-                            setSectionOpenState((prev) => ({
-                              ...prev,
-                              [commonKey]: !(prev[commonKey] ?? true),
-                            }))
-                          }
-                        >
+                        <span className={styles.chevronButton} aria-hidden="true">
                           {isCommonOpen ? "˄" : "˅"}
-                        </button>
+                        </span>
                       </div>
                     </div>
                     {isCommonOpen ? (
