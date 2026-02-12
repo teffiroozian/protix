@@ -46,7 +46,11 @@ export default function RestaurantView({
   const [filters, setFilters] = useState<Filters>({});
   const [searchQuery, setSearchQuery] = useState("");
 
-  const normalizedSearch = searchQuery.trim().toLowerCase();
+  const searchTerms = searchQuery
+    .trim()
+    .toLowerCase()
+    .split(/\s+/)
+    .filter(Boolean);
 
   const filteredItems = useMemo(() => {
     return items.filter((item) => {
@@ -56,14 +60,14 @@ export default function RestaurantView({
       if (filters.caloriesMax && item.nutrition.calories > filters.caloriesMax) {
         return false;
       }
-      if (!normalizedSearch) {
+      if (!searchTerms.length) {
         return true;
       }
 
       const searchableText = [item.name, item.category].join(" ").toLowerCase();
-      return searchableText.includes(normalizedSearch);
+      return searchTerms.every((term) => searchableText.includes(term));
     });
-  }, [items, filters, normalizedSearch]);
+  }, [items, filters, searchTerms]);
 
   const orderedSections = useMemo(
     () => getOrderedMenuSections(filteredItems),
