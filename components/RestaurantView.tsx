@@ -44,6 +44,9 @@ export default function RestaurantView({
   const [view, setView] = useState<ViewOption>("menu");
   const [sort, setSort] = useState<SortOption>("highest-protein");
   const [filters, setFilters] = useState<Filters>({});
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const normalizedSearch = searchQuery.trim().toLowerCase();
 
   const filteredItems = useMemo(() => {
     return items.filter((item) => {
@@ -53,9 +56,14 @@ export default function RestaurantView({
       if (filters.caloriesMax && item.nutrition.calories > filters.caloriesMax) {
         return false;
       }
-      return true;
+      if (!normalizedSearch) {
+        return true;
+      }
+
+      const searchableText = [item.name, item.category].join(" ").toLowerCase();
+      return searchableText.includes(normalizedSearch);
     });
-  }, [items, filters]);
+  }, [items, filters, normalizedSearch]);
 
   const orderedSections = useMemo(
     () => getOrderedMenuSections(filteredItems),
@@ -123,6 +131,8 @@ export default function RestaurantView({
         categoryOptions={categoryOptions}
         activeCategory={resolvedActiveCategory}
         onCategorySelect={handleCategorySelect}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
       />
 
       <ControlsRow
@@ -138,6 +148,8 @@ export default function RestaurantView({
         activeCategory={resolvedActiveCategory}
         onCategorySelect={handleCategorySelect}
         wrapperId="controls-row"
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
       />
 
       {view === "menu" ? (

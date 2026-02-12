@@ -20,6 +20,8 @@ type StickyRestaurantBarProps = {
   categoryOptions: Array<{ id: string; label: string }>;
   activeCategory?: string;
   onCategorySelect?: (id: string) => void;
+  searchQuery: string;
+  onSearchChange: (value: string) => void;
 };
 
 export default function StickyRestaurantBar({
@@ -34,6 +36,8 @@ export default function StickyRestaurantBar({
   categoryOptions,
   activeCategory,
   onCategorySelect,
+  searchQuery,
+  onSearchChange,
 }: StickyRestaurantBarProps) {
   const [isVisible, setIsVisible] = useState(() => {
     if (typeof document === "undefined") return false;
@@ -95,6 +99,8 @@ export default function StickyRestaurantBar({
             categoryOptions={categoryOptions}
             activeCategory={activeCategory}
             onCategorySelect={onCategorySelect}
+            searchQuery={searchQuery}
+            onSearchChange={onSearchChange}
             showChips={false}
           />
         </div>
