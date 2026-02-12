@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { CommonChange, MenuItem, RestaurantAddons } from "@/types/menu";
 import ControlsRow, {
   type Filters,
@@ -95,13 +95,86 @@ export default function RestaurantView({
     () => getOrderedMenuSections(filteredItems),
     [filteredItems]
   );
-  const [activeCategory, setActiveCategory] = useState<string>(
+  const [activeTab, setActiveTab] = useState<string>(
     () => orderedSections[0] ?? ""
   );
+  const [isAutoScrolling, setIsAutoScrolling] = useState(false);
+  const [scrollTarget, setScrollTarget] = useState<string | null>(null);
 
-  const resolvedActiveCategory = orderedSections.includes(activeCategory)
-    ? activeCategory
+  const isAutoScrollingRef = useRef(isAutoScrolling);
+  const scrollTargetRef = useRef(scrollTarget);
+
+  useEffect(() => {
+    isAutoScrollingRef.current = isAutoScrolling;
+  }, [isAutoScrolling]);
+
+  useEffect(() => {
+    scrollTargetRef.current = scrollTarget;
+  }, [scrollTarget]);
+
+  const resolvedActiveCategory = orderedSections.includes(activeTab)
+    ? activeTab
     : (orderedSections[0] ?? "");
+
+  const getHeaderOffset = () => {
+    const stickyHeader = document.querySelector('[data-sticky-restaurant-bar="true"]');
+    if (!(stickyHeader instanceof HTMLElement)) return 0;
+    return stickyHeader.getBoundingClientRect().height;
+  };
+
+  useEffect(() => {
+    if (view !== "menu" || !orderedSections.length) return;
+
+    const sections = orderedSections
+      .map((sectionId) => document.getElementById(categorySectionId(sectionId)))
+      .filter((section): section is HTMLElement => section instanceof HTMLElement);
+
+    if (!sections.length) return;
+
+    const updateActiveSection = () => {
+      const headerOffset = getHeaderOffset();
+      const currentTarget = scrollTargetRef.current;
+
+      if (currentTarget) {
+        const targetSection = document.getElementById(categorySectionId(currentTarget));
+        if (targetSection) {
+          const targetTop = targetSection.getBoundingClientRect().top;
+          if (targetTop <= headerOffset + 1) {
+            setIsAutoScrolling(false);
+            setScrollTarget(null);
+          }
+        }
+      }
+
+      if (isAutoScrollingRef.current) return;
+
+      const sectionInView = sections
+        .map((section) => {
+          const rect = section.getBoundingClientRect();
+          return {
+            id: section.id.replace("menu-section-", ""),
+            topDistance: Math.abs(rect.top - headerOffset),
+            visible: rect.bottom > headerOffset + 1,
+          };
+        })
+        .filter((section) => section.visible)
+        .sort((a, b) => a.topDistance - b.topDistance)[0];
+
+      if (!sectionInView) return;
+      if (sectionInView.id !== resolvedActiveCategory) {
+        setActiveTab(sectionInView.id);
+      }
+    };
+
+    const observer = new IntersectionObserver(updateActiveSection, {
+      threshold: [0.1, 0.6, 0.9],
+    });
+
+    sections.forEach((section) => observer.observe(section));
+    updateActiveSection();
+
+    return () => observer.disconnect();
+  }, [orderedSections, resolvedActiveCategory, view]);
 
   const categoryOptions = useMemo(
     () =>
@@ -156,11 +229,20 @@ export default function RestaurantView({
   );
 
   const handleCategorySelect = (categoryId: string) => {
-    setActiveCategory(categoryId);
+    setActiveTab(categoryId);
+    setIsAutoScrolling(true);
+    setScrollTarget(categoryId);
+
     const section = document.getElementById(categorySectionId(categoryId));
     if (!section) return;
 
-    section.scrollIntoView({ behavior: "smooth", block: "start" });
+    const headerOffset = getHeaderOffset();
+    const targetTop = section.getBoundingClientRect().top + window.scrollY - headerOffset;
+
+    window.scrollTo({
+      top: targetTop,
+      behavior: "smooth",
+    });
   };
 
   const handleSortChange = (nextSort: SortOption) => {
