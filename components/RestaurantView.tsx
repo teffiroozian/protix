@@ -54,6 +54,16 @@ export default function RestaurantView({
 
   const filteredItems = useMemo(() => {
     return items.filter((item) => {
+      if (view === "top" && !filters.includeSidesDrinks) {
+        if (item.portionType === "drink" || item.portionType === "side") {
+          return false;
+        }
+      }
+
+      if (view === "top" && !filters.includeLargeShareables && item.portionType === "shareable") {
+        return false;
+      }
+
       if (filters.proteinMin && item.nutrition.protein < filters.proteinMin) {
         return false;
       }
@@ -79,7 +89,7 @@ export default function RestaurantView({
       const searchableText = [item.name.toLowerCase(), ...categoryVariants].join(" ");
       return searchTerms.every((term) => searchableText.includes(term));
     });
-  }, [items, filters, searchTerms]);
+  }, [items, filters, searchTerms, view]);
 
   const orderedSections = useMemo(
     () => getOrderedMenuSections(filteredItems),

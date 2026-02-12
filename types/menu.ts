@@ -4,6 +4,7 @@ export type PortionType =
   | "shareable"
   | "addon"
   | "drink"
+  | "side"
   | "dessert";
 
 export type Nutrition = {

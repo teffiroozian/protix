@@ -10,6 +10,8 @@ export type SortOption = "highest-protein" | "best-ratio" | "lowest-calories";
 export type Filters = {
   proteinMin?: number;
   caloriesMax?: number;
+  includeSidesDrinks?: boolean;
+  includeLargeShareables?: boolean;
 };
 
 const PROTEIN_OPTIONS = [20, 30, 40];
@@ -324,6 +326,40 @@ export default function ControlsRow({
               })}
             </div>
           </div>
+
+          {view === "top" ? (
+            <div>
+              <div style={{ fontWeight: 600, marginBottom: 8 }}>Include in rankings</div>
+              <div style={{ display: "grid", gap: 8 }}>
+                <label style={{ display: "inline-flex", alignItems: "center", gap: 8, fontWeight: 500 }}>
+                  <input
+                    type="checkbox"
+                    checked={Boolean(draftFilters.includeSidesDrinks)}
+                    onChange={(event) =>
+                      setDraftFilters((prev) => ({
+                        ...prev,
+                        includeSidesDrinks: event.target.checked,
+                      }))
+                    }
+                  />
+                  Sides & drinks
+                </label>
+                <label style={{ display: "inline-flex", alignItems: "center", gap: 8, fontWeight: 500 }}>
+                  <input
+                    type="checkbox"
+                    checked={Boolean(draftFilters.includeLargeShareables)}
+                    onChange={(event) =>
+                      setDraftFilters((prev) => ({
+                        ...prev,
+                        includeLargeShareables: event.target.checked,
+                      }))
+                    }
+                  />
+                  Large sizes / shareables
+                </label>
+              </div>
+            </div>
+          ) : null}
         </div>
         <div
           style={{
