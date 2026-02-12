@@ -1,3 +1,4 @@
+import { useState } from "react";
 import styles from "./ItemDetails.module.css";
 import type {
   AddonOption,
@@ -39,13 +40,16 @@ function scrollRow(rowId: string, direction: "left" | "right") {
   });
 }
 
-
 function sortByCalories(addons: AddonOption[]) {
   return [...addons].sort((a, b) => a.calories - b.calories);
 }
 
 function withNoneOption(addons: AddonOption[]) {
   return [{ name: "None", calories: 0, protein: 0, carbs: 0, fat: 0, image: "none" }, ...addons];
+}
+
+function formatSummaryDetail(name: string, calories: number) {
+  return `• ${name} (${calories >= 0 ? "+" : ""}${calories}cal)`;
 }
 
 export default function ItemDetailsPanel({
@@ -79,6 +83,8 @@ export default function ItemDetailsPanel({
 }) {
   const n = nutrition;
   const addonRefs = item.addonRefs ?? [];
+  const [sectionOpenState, setSectionOpenState] = useState<Record<string, boolean>>({});
+
   const availableAddonSections = addonRefs
     .map((ref) => {
       const list = addons?.[ref];
@@ -99,67 +105,97 @@ export default function ItemDetailsPanel({
     <div className={styles.wrapper}>
       {availableAddonSections.length > 0 ? (
         <section className={styles.addonsCard}>
-          {/* addOn Card */}
           <div className={styles.addonsContent}>
-            {availableAddonSections.map((section) => (
-              <div key={section.ref} className={styles.addonGroup}>
-                {/* addOn Title Group */}
-                <div className={styles.addonGroupHeader}>
-                  <h3 className={styles.addonGroupTitle}>{section.title}</h3>
-                  {/* Horiontal Scrolling Arrows */}
-                  <div className={styles.addonScrollButtons}>
-                    <button
-                      type="button"
-                      className={styles.addonArrowButton}
-                      aria-label={`Scroll ${section.title} left`}
-                      onClick={() => scrollRow(`addon-row-${section.ref}`, "left")}
-                    >
-                      ⬅
-                    </button>
-                    <button
-                      type="button"
-                      className={styles.addonArrowButton}
-                      aria-label={`Scroll ${section.title} right`}
-                      onClick={() => scrollRow(`addon-row-${section.ref}`, "right")}
-                    >
-                      ➡
-                    </button>
+            {availableAddonSections.map((section) => {
+              const sectionStateKey = `addon-${section.ref}`;
+              const isSectionOpen = sectionOpenState[sectionStateKey] ?? true;
+              const selectedAddon = selectedAddons?.[section.ref] ?? section.addons[0];
+              const summaryDetail = formatSummaryDetail(selectedAddon?.name ?? "None", selectedAddon?.calories ?? 0);
+              return (
+                <div key={section.ref} className={styles.addonGroup}>
+                  <div
+                    className={styles.addonGroupHeader}
+                    role="button"
+                    tabIndex={0}
+                    onClick={() =>
+                      setSectionOpenState((prev) => ({
+                        ...prev,
+                        [sectionStateKey]: !(prev[sectionStateKey] ?? true),
+                      }))
+                    }
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        setSectionOpenState((prev) => ({
+                          ...prev,
+                          [sectionStateKey]: !(prev[sectionStateKey] ?? true),
+                        }));
+                      }
+                    }}
+                  >
+                    <h3 className={styles.addonGroupTitle}>
+                      {section.title}
+                      {!isSectionOpen ? <span className={styles.addonSummaryDetail}> {summaryDetail}</span> : null}
+                    </h3>
+                    <div className={styles.addonHeaderControls}>
+                      {isSectionOpen ? (
+                        <div className={styles.addonScrollButtons} onClick={(event) => event.stopPropagation()}>
+                          <button
+                            type="button"
+                            className={styles.addonArrowButton}
+                            aria-label={`Scroll ${section.title} left`}
+                            onClick={() => scrollRow(`addon-row-${section.ref}`, "left")}
+                          >
+                            ⬅
+                          </button>
+                          <button
+                            type="button"
+                            className={styles.addonArrowButton}
+                            aria-label={`Scroll ${section.title} right`}
+                            onClick={() => scrollRow(`addon-row-${section.ref}`, "right")}
+                          >
+                            ➡
+                          </button>
+                        </div>
+                      ) : null}
+                      <span className={styles.chevronButton} aria-hidden="true">
+                        {isSectionOpen ? "˄" : "˅"}
+                      </span>
+                    </div>
                   </div>
+                  {isSectionOpen ? (
+                    <ul id={`addon-row-${section.ref}`} className={styles.addonList}>
+                      {section.addons.map((addon) => (
+                        <li key={`${section.ref}-${addon.name}`} className={styles.addonItem}>
+                          <button
+                            type="button"
+                            className={`${styles.addonTileButton} ${
+                              (selectedAddons?.[section.ref]?.name ?? "None") === addon.name
+                                ? styles.addonTileButtonActive
+                                : ""
+                            }`}
+                            onClick={() => onSelectAddon?.(section.ref, addon)}
+                          >
+                            {addon.image === "none" ? (
+                              <div className={`${styles.addonImage} ${styles.addonImageNone}`}>✕</div>
+                            ) : addon.image ? (
+                              <div
+                                className={styles.addonImage}
+                                style={{ backgroundImage: `url(${addon.image})` }}
+                              />
+                            ) : (
+                              <div className={styles.addonImage} />
+                            )}
+                            <div className={styles.addonName}>{addon.name}</div>
+                            <div className={styles.addonCalories}>+{addon.calories} Cal</div>
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
                 </div>
-                <ul id={`addon-row-${section.ref}`} className={styles.addonList}>
-                  {section.addons.map((addon) => (
-                    <li key={`${section.ref}-${addon.name}`} className={styles.addonItem}>
-                      {/* addOn Card */}
-                      <button
-                        type="button"
-                        className={`${styles.addonTileButton} ${
-                          (selectedAddons?.[section.ref]?.name ?? "None") === addon.name
-                            ? styles.addonTileButtonActive
-                            : ""
-                        }`}
-                        onClick={() => onSelectAddon?.(section.ref, addon)}
-                      >
-                        {/* addOn Image */}
-                        {addon.image === "none" ? (
-                          <div className={`${styles.addonImage} ${styles.addonImageNone}`}>✕</div>
-                        ) : addon.image ? (
-                          <div
-                            className={styles.addonImage}
-                            style={{ backgroundImage: `url(${addon.image})` }}
-                          />
-                        ) : (
-                          <div className={styles.addonImage} />
-                        )}
-                        {/* addOn Name */}
-                        <div className={styles.addonName}>{addon.name}</div>
-                        {/* addOn Calories */}
-                        <div className={styles.addonCalories}>+{addon.calories} Cal</div>
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
       ) : null}
@@ -168,52 +204,103 @@ export default function ItemDetailsPanel({
         <section className={styles.addonsCard}>
           <div className={styles.addonsContent}>
             <div className={styles.addonGroup}>
-              <div className={styles.addonGroupHeader}>
-                <h3 className={styles.addonGroupTitle}>Common Changes</h3>
-                <div className={styles.addonScrollButtons}>
-                  <button
-                    type="button"
-                    className={styles.addonArrowButton}
-                    aria-label="Scroll Common Changes left"
-                    onClick={() => scrollRow("common-changes-row", "left")}
-                  >
-                    ⬅
-                  </button>
-                  <button
-                    type="button"
-                    className={styles.addonArrowButton}
-                    aria-label="Scroll Common Changes right"
-                    onClick={() => scrollRow("common-changes-row", "right")}
-                  >
-                    ➡
-                  </button>
-                </div>
-              </div>
-              <ul id="common-changes-row" className={styles.addonList}>
-                {commonChanges.map((change) => {
-                  const isActive = selectedCommonChangeIds?.includes(change.id) ?? false;
-                  const calorieDeltaLabel = `${change.delta.calories >= 0 ? "+" : ""}${change.delta.calories} Cal`;
-                  return (
-                    <li key={change.id} className={styles.addonItem}>
-                      <button
-                        type="button"
-                        className={`${styles.addonTileButton} ${isActive ? styles.addonTileButtonActive : ""}`}
-                        onClick={() => onToggleCommonChange?.(change.id)}
-                      >
-                        <div className={`${styles.addonImage} ${styles.addonImageNone}`}>↺</div>
-                        <div className={styles.addonName}>{change.label}</div>
-                        <div className={styles.addonCalories}>{calorieDeltaLabel}</div>
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
+              {(() => {
+                const commonKey = "common-changes";
+                const isCommonOpen = sectionOpenState[commonKey] ?? true;
+                const selectedCommonChanges = commonChanges.filter((change) =>
+                  selectedCommonChangeIds?.includes(change.id)
+                );
+                const firstSelectedCommon = selectedCommonChanges[0] ?? null;
+                const totalCommonCalories = selectedCommonChanges.reduce(
+                  (sum, change) => sum + change.delta.calories,
+                  0
+                );
+                const commonSummaryDetail = formatSummaryDetail(
+                  firstSelectedCommon?.label ?? "None",
+                  firstSelectedCommon ? totalCommonCalories : 0
+                );
+
+                return (
+                  <>
+                    <div
+                      className={styles.addonGroupHeader}
+                      role="button"
+                      tabIndex={0}
+                      onClick={() =>
+                        setSectionOpenState((prev) => ({
+                          ...prev,
+                          [commonKey]: !(prev[commonKey] ?? true),
+                        }))
+                      }
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                          event.preventDefault();
+                          setSectionOpenState((prev) => ({
+                            ...prev,
+                            [commonKey]: !(prev[commonKey] ?? true),
+                          }));
+                        }
+                      }}
+                    >
+                      <h3 className={styles.addonGroupTitle}>
+                        Common Changes
+                        {!isCommonOpen ? <span className={styles.addonSummaryDetail}> {commonSummaryDetail}</span> : null}
+                      </h3>
+                      <div className={styles.addonHeaderControls}>
+                        {isCommonOpen ? (
+                          <div className={styles.addonScrollButtons} onClick={(event) => event.stopPropagation()}>
+                            <button
+                              type="button"
+                              className={styles.addonArrowButton}
+                              aria-label="Scroll Common Changes left"
+                              onClick={() => scrollRow("common-changes-row", "left")}
+                            >
+                              ⬅
+                            </button>
+                            <button
+                              type="button"
+                              className={styles.addonArrowButton}
+                              aria-label="Scroll Common Changes right"
+                              onClick={() => scrollRow("common-changes-row", "right")}
+                            >
+                              ➡
+                            </button>
+                          </div>
+                        ) : null}
+                        <span className={styles.chevronButton} aria-hidden="true">
+                          {isCommonOpen ? "˄" : "˅"}
+                        </span>
+                      </div>
+                    </div>
+                    {isCommonOpen ? (
+                      <ul id="common-changes-row" className={styles.addonList}>
+                        {commonChanges.map((change) => {
+                          const isActive = selectedCommonChangeIds?.includes(change.id) ?? false;
+                          const calorieDeltaLabel = `${change.delta.calories >= 0 ? "+" : ""}${change.delta.calories} Cal`;
+                          return (
+                            <li key={change.id} className={styles.addonItem}>
+                              <button
+                                type="button"
+                                className={`${styles.addonTileButton} ${isActive ? styles.addonTileButtonActive : ""}`}
+                                onClick={() => onToggleCommonChange?.(change.id)}
+                              >
+                                <div className={`${styles.addonImage} ${styles.addonImageNone}`}>↺</div>
+                                <div className={styles.addonName}>{change.label}</div>
+                                <div className={styles.addonCalories}>{calorieDeltaLabel}</div>
+                              </button>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    ) : null}
+                  </>
+                );
+              })()}
             </div>
           </div>
         </section>
       ) : null}
 
-      {/* Left: Nutrition label */}
       <section className={styles.labelCard}>
         <div className={styles.amountPerServing}>Amount per serving</div>
 
@@ -289,7 +376,6 @@ export default function ItemDetailsPanel({
         </div>
       </section>
 
-      {/* Right: Details */}
       <section className={styles.detailsCard}>
         <div className={styles.detailsTitle}>Details</div>
 
@@ -333,7 +419,6 @@ export default function ItemDetailsPanel({
 
         <div className={styles.detailsDivider} />
 
-        {/* Optional extra line if you want */}
         {item.restaurant ? (
           <>
             <div className={styles.detailsDivider} />

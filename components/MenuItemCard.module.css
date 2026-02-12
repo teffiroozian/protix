@@ -125,14 +125,34 @@
   color: #2563eb; /* blue */
 }
 
-.expandIcon {
+.iconActions {
   position: absolute;
   top: 18px;
   right: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.iconButton {
   font-size: 26px;
   line-height: 1;
   font-weight: 500;
   color: rgba(0, 0, 0, 0.75);
+  transition: color 180ms ease;
+}
+
+.header:hover .iconButton {
+  color: rgba(0, 0, 0, 0.95);
+}
+
+.expandIcon {
+  transition: transform 180ms ease;
+  transform-origin: center;
+}
+
+.expandIconOpen {
+  transform: rotate(45deg);
 }
 
 /* Expand section */
@@ -168,3 +188,8 @@
   font-weight: 700;
   color: #16a34a;
 }
+
+.resetIcon {
+  cursor: pointer;
+}
+

@@ -153,7 +153,7 @@
   padding: 6px 12px;
   font-size: 18px;
   font-weight: 700;
-  cursor: pointer;
+  cursor: inherit;
   width: 100%;
   text-align: center;
 }
@@ -185,12 +185,41 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  cursor: pointer;
 }
 
 .addonGroupTitle {
   font-size: 24px;
   font-weight: 700;
   margin: 0;
+}
+
+.addonSummaryDetail {
+  font-size: 18px;
+  color: rgba(0,0,0,0.5);
+  font-weight: 600;
+}
+
+
+
+.addonHeaderControls {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chevronButton {
+  border: 1px solid rgba(0,0,0,0.4);
+  background: #fff;
+  border-radius: 6px;
+  width: 28px;
+  height: 28px;
+  cursor: inherit;
+  font-size: 16px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .addonScrollButtons {
