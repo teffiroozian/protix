@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { CommonChange, MenuItem, RestaurantAddons } from "@/types/menu";
 import ControlsRow, {
   type Filters,
@@ -98,6 +98,7 @@ export default function RestaurantView({
   const [activeCategory, setActiveCategory] = useState<string>(
     () => orderedSections[0] ?? ""
   );
+  const sectionVisibilityRef = useRef(new Map<string, number>());
 
   const resolvedActiveCategory = orderedSections.includes(activeCategory)
     ? activeCategory
@@ -172,6 +173,64 @@ export default function RestaurantView({
 
     section.scrollIntoView({ behavior: "smooth", block: "start" });
   };
+
+  useEffect(() => {
+    if (view !== "menu") return;
+    if (!orderedSections.length) return;
+
+    const visibilityBySection = sectionVisibilityRef.current;
+    visibilityBySection.clear();
+
+    const updateActiveSection = () => {
+      let nextActive: string | null = null;
+      let maxRatio = 0;
+
+      for (const section of orderedSections) {
+        const ratio = visibilityBySection.get(section) ?? 0;
+        if (ratio >= 0.6 && ratio >= maxRatio) {
+          maxRatio = ratio;
+          nextActive = section;
+        }
+      }
+
+      if (nextActive && nextActive !== activeCategory) {
+        setActiveCategory(nextActive);
+      }
+    };
+
+    const sectionIdLookup = new Map<string, string>();
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const sectionId = sectionIdLookup.get(entry.target.id);
+          if (!sectionId) continue;
+
+          visibilityBySection.set(
+            sectionId,
+            entry.isIntersecting ? entry.intersectionRatio : 0
+          );
+        }
+
+        updateActiveSection();
+      },
+      { threshold: 0.6 }
+    );
+
+    orderedSections.forEach((section) => {
+      const elementId = categorySectionId(section);
+      const element = document.getElementById(elementId);
+      if (!element) return;
+
+      visibilityBySection.set(section, 0);
+      sectionIdLookup.set(elementId, section);
+      observer.observe(element);
+    });
+
+    updateActiveSection();
+
+    return () => observer.disconnect();
+  }, [activeCategory, orderedSections, view]);
 
   return (
     <div>
