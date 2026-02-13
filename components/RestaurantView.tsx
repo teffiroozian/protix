@@ -58,7 +58,7 @@ export default function RestaurantView({
       return;
     }
 
-    viewTopRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    viewTopRef.current?.scrollIntoView({ block: "start" });
   }, [autoScrollOnViewChange, view]);
 
   const searchTerms = searchQuery
