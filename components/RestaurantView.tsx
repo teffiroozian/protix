@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { CommonChange, MenuItem, RestaurantAddons } from "@/types/menu";
 import ControlsRow, {
   type Filters,
@@ -31,6 +31,7 @@ export default function RestaurantView({
   lowestCalorieItems,
   addons,
   commonChanges,
+  autoScrollOnViewChange = false,
 }: {
   restaurantName: string;
   restaurantLogo: string;
@@ -40,11 +41,25 @@ export default function RestaurantView({
   lowestCalorieItems: MenuItem[];
   addons?: RestaurantAddons;
   commonChanges?: CommonChange[];
+  autoScrollOnViewChange?: boolean;
 }) {
   const [view, setView] = useState<ViewOption>("menu");
   const [sort, setSort] = useState<SortOption>("highest-protein");
   const [filters, setFilters] = useState<Filters>({});
   const [searchQuery, setSearchQuery] = useState("");
+  const viewTopRef = useRef<HTMLDivElement | null>(null);
+  const hasMountedRef = useRef(false);
+
+  useEffect(() => {
+    if (!autoScrollOnViewChange) return;
+
+    if (!hasMountedRef.current) {
+      hasMountedRef.current = true;
+      return;
+    }
+
+    viewTopRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [autoScrollOnViewChange, view]);
 
   const searchTerms = searchQuery
     .trim()
@@ -207,6 +222,8 @@ export default function RestaurantView({
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
       />
+
+      <div ref={viewTopRef} style={{ scrollMarginTop: 200 }} />
 
       {view === "menu" ? (
         <MenuSections items={filteredItems} sort={sort} addons={addons} commonChanges={commonChanges} />
