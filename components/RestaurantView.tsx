@@ -99,6 +99,7 @@ export default function RestaurantView({
     () => orderedSections[0] ?? ""
   );
   const sectionVisibilityRef = useRef(new Map<string, number>());
+  const rankingVisibilityRef = useRef(new Map<SortOption, number>());
 
   const resolvedActiveCategory = orderedSections.includes(activeCategory)
     ? activeCategory
@@ -231,6 +232,67 @@ export default function RestaurantView({
 
     return () => observer.disconnect();
   }, [activeCategory, orderedSections, view]);
+
+
+  useEffect(() => {
+    if (view !== "top") return;
+
+    const rankingEntries = Object.entries(rankingSectionIdBySort) as Array<
+      [SortOption, string]
+    >;
+
+    const visibilityBySection = rankingVisibilityRef.current;
+    visibilityBySection.clear();
+
+    const sectionIdLookup = new Map<string, SortOption>();
+
+    const updateActiveSort = () => {
+      let nextSort: SortOption | null = null;
+      let maxRatio = 0;
+
+      for (const [sortOption] of rankingEntries) {
+        const ratio = visibilityBySection.get(sortOption) ?? 0;
+        if (ratio >= 0.6 && ratio >= maxRatio) {
+          maxRatio = ratio;
+          nextSort = sortOption;
+        }
+      }
+
+      if (nextSort && nextSort !== sort) {
+        setSort(nextSort);
+      }
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const sortOption = sectionIdLookup.get(entry.target.id);
+          if (!sortOption) continue;
+
+          visibilityBySection.set(
+            sortOption,
+            entry.isIntersecting ? entry.intersectionRatio : 0
+          );
+        }
+
+        updateActiveSort();
+      },
+      { threshold: 0.6 }
+    );
+
+    rankingEntries.forEach(([sortOption, sectionId]) => {
+      const element = document.getElementById(sectionId);
+      if (!element) return;
+
+      visibilityBySection.set(sortOption, 0);
+      sectionIdLookup.set(sectionId, sortOption);
+      observer.observe(element);
+    });
+
+    updateActiveSort();
+
+    return () => observer.disconnect();
+  }, [sort, view]);
 
   return (
     <div>
