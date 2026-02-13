@@ -3,7 +3,100 @@
     "name": "Chick-fil-A",
     "items": [
         {
-            "name": "Cool Wrap",
+            "name": "Chick-fil-A Chicken Sandwich",
+            "nutrition": {
+                "calories": 420,
+                "totalFat": 18,
+                "satFat": 3.5,
+                "transFat": 0,
+                "cholesterol": 70,
+                "sodium": 1460,
+                "carbs": 41,
+                "fiber": 1,
+                "sugars": 6,
+                "protein": 29
+            },
+            "category": "Sandwich",
+            "portionType": "single",
+            "image": "/foodImages/chickfila/cfa-chickensandwich.webp"
+        },
+        {
+            "name": "Spicy Deluxe Sandwich",
+            "nutrition": {
+                "calories": 540,
+                "totalFat": 26,
+                "satFat": 8,
+                "transFat": 0,
+                "cholesterol": 85,
+                "sodium": 1880,
+                "carbs": 47,
+                "fiber": 2,
+                "sugars": 7,
+                "protein": 34
+            },
+            "category": "Sandwich",
+            "portionType": "single",
+            "image": "/foodImages/chickfila/cfa-spicydeluxesandwich.webp"
+        },
+        {
+            "name": "Spicy Chicken Sandwich",
+            "nutrition": {
+                "calories": 450,
+                "totalFat": 19,
+                "satFat": 4,
+                "transFat": 0,
+                "cholesterol": 65,
+                "sodium": 1730,
+                "carbs": 45,
+                "fiber": 1,
+                "sugars": 6,
+                "protein": 28
+            },
+            "category": "Sandwich",
+            "portionType": "single",
+            "image": "/foodImages/chickfila/cfa-spicychickensandwich.webp"
+        },
+        {
+            "name": "Chick-fil-A® Nuggets",
+            "nutrition": {
+                "calories": 250,
+                "totalFat": 11,
+                "satFat": 2.5,
+                "transFat": 0,
+                "cholesterol": 85,
+                "sodium": 1210,
+                "carbs": 11,
+                "fiber": 0,
+                "sugars": 1,
+                "protein": 27
+            },
+            "category": "Nuggets",
+            "portionType": "single",
+            "addonRefs": [
+                "sauces"
+            ],
+            "image": "/foodImages/chickfila/cfa-cfanuggets.webp"
+        },
+        {
+            "name": "Chick-fil-A® Deluxe Sandwich",
+            "nutrition": {
+                "calories": 490,
+                "totalFat": 22,
+                "satFat": 6,
+                "transFat": 0,
+                "cholesterol": 85,
+                "sodium": 1700,
+                "carbs": 43,
+                "fiber": 1,
+                "sugars": 7,
+                "protein": 32
+            },
+            "category": "Sandwich",
+            "portionType": "single",
+            "image": "/foodImages/chickfila/cfa-deluxesandwich.webp"
+        },
+        {
+            "name": "Chick-fil-A® Cool Wrap",
             "nutrition": {
                 "calories": 660,
                 "totalFat": 45,
@@ -18,60 +111,70 @@
             },
             "category": "Wrap",
             "portionType": "single",
-            "addonRefs": [ "dressings" ],
+            "addonRefs": [
+                "dressings"
+            ],
             "image": "/foodImages/chickfila/cfa-coolwrap.webp"
         },
         {
-            "name": "Pretzel Cheddar Club Sandwich",
+            "name": "Chick-fil-A Chick-n-Strips®",
             "nutrition": {
-                "calories": 695,
-                "protein": 39,
-                "carbs": 55,
-                "totalFat": 34
+                "calories": 310,
+                "totalFat": 14,
+                "satFat": 2.5,
+                "transFat": 0,
+                "cholesterol": 75,
+                "sodium": 870,
+                "carbs": 16,
+                "fiber": 0,
+                "sugars": 2,
+                "protein": 29
+            },
+            "category": "Nuggets",
+            "portionType": "single",
+            "addonRefs": [
+                "sauces"
+            ],
+            "image": "/foodImages/chickfila/cfa-chicknstrips.webp"
+        },
+        {
+            "name": "Grilled Chicken Sandwich",
+            "nutrition": {
+                "calories": 390,
+                "totalFat": 11,
+                "satFat": 2.5,
+                "transFat": 0,
+                "cholesterol": 75,
+                "sodium": 765,
+                "carbs": 45,
+                "fiber": 3,
+                "sugars": 11,
+                "protein": 28
             },
             "category": "Sandwich",
             "portionType": "single",
-            "image": "/foodImages/chickfila/cfa-pretzelcheddarclub.png"
+            "image": "/foodImages/chickfila/cfa-grilledchickensandwich.webp"
         },
         {
-            "name": "Grilled Chicken Club",
+            "name": "Grilled Chicken Club Sandwich",
             "nutrition": {
                 "calories": 520,
-                "protein": 37,
+                "totalFat": 22,
+                "satFat": 8,
+                "transFat": 0,
+                "cholesterol": 105,
+                "sodium": 1055,
                 "carbs": 45,
-                "totalFat": 22
+                "fiber": 3,
+                "sugars": 12,
+                "protein": 37
             },
             "category": "Sandwich",
             "portionType": "single",
             "image": "/foodImages/chickfila/cfa-grilledchickenclub.webp"
         },
         {
-            "name": "Cobb Salad",
-            "nutrition": {
-                "calories": 690,
-                "protein": 36,
-                "carbs": 22,
-                "totalFat": 50
-            },
-            "category": "Salad",
-            "portionType": "single",
-            "addonRefs": [ "dressings" ],
-            "image": "/foodImages/chickfila/cfa-cobbsalad.png"
-        },
-        {
-            "name": "Spicy Deluxe Sandwich",
-            "nutrition": {
-                "calories": 540,
-                "protein": 34,
-                "carbs": 47,
-                "totalFat": 26
-            },
-            "category": "Sandwich",
-            "portionType": "single",
-            "image": "/foodImages/chickfila/cfa-spicydeluxesandwich.webp"
-        },
-        {
-            "name": "Grilled Chicken Nuggets",
+            "name": "Grilled Nuggets",
             "nutrition": {
                 "calories": 130,
                 "protein": 25,
@@ -120,6 +223,69 @@
             "addonRefs": [
                 "sauces"
             ]
+        },
+        {
+            "name": "Cobb Salad",
+            "nutrition": {
+                "calories": 830,
+                "totalFat": 60,
+                "satFat": 13,
+                "transFat": 0,
+                "cholesterol": 230,
+                "sodium": 2220,
+                "carbs": 31,
+                "fiber": 5,
+                "sugars": 8,
+                "protein": 42
+            },
+            "category": "Salad",
+            "portionType": "single",
+            "addonRefs": [
+                "dressings"
+            ],
+            "image": "/foodImages/chickfila/cfa-cobbsalad.png"
+        },
+        {
+            "name": "Spicy Southwest Salad",
+            "nutrition": {
+                "calories": 680,
+                "totalFat": 49,
+                "satFat": 10,
+                "transFat": 0,
+                "cholesterol": 100,
+                "sodium": 1570,
+                "carbs": 27,
+                "fiber": 7,
+                "sugars": 7,
+                "protein": 33
+            },
+            "category": "Salad",
+            "portionType": "single",
+            "addonRefs": [
+                "dressings"
+            ],
+            "image": "/foodImages/chickfila/cfa-spicysouthwestsalad.webp"
+        },
+        {
+            "name": "Market Salad",
+            "nutrition": {
+                "calories": 550,
+                "totalFat": 31,
+                "satFat": 6,
+                "transFat": 0,
+                "cholesterol": 80,
+                "sodium": 1010,
+                "carbs": 42,
+                "fiber": 5,
+                "sugars": 26,
+                "protein": 28
+            },
+            "category": "Salad",
+            "portionType": "single",
+            "addonRefs": [
+                "dressings"
+            ],
+            "image": "/foodImages/chickfila/cfa-marketsalad.webp"
         }
     ],
     "addons": {
