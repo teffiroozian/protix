@@ -71,6 +71,7 @@ export default async function RestaurantPage({
           lowestCalorieItems={lowestCalorieItems}
           addons={addons}
           commonChanges={commonChanges}
+          autoScrollOnViewChange
         />
       </main>
     </div>
