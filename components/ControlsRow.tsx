@@ -162,6 +162,7 @@ export default function ControlsRow({
   searchQuery,
   onSearchChange,
   onBrandClick,
+  showBranding = true,
 }: {
   view: ViewOption;
   onChange: (view: ViewOption) => void;
@@ -179,6 +180,7 @@ export default function ControlsRow({
   searchQuery: string;
   onSearchChange: (value: string) => void;
   onBrandClick: () => void;
+  showBranding?: boolean;
 }) {
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [draftFilters, setDraftFilters] = useState<Filters>(filters);
@@ -418,70 +420,72 @@ export default function ControlsRow({
             flexWrap: "wrap",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0 }}>
-            <Link
-              href="/"
-              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-base font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:text-slate-900"
-              aria-label="Back to home"
-            >
-              ←
-            </Link>
-            {onBrandClick ? (
-              <button
-                type="button"
-                onClick={onBrandClick}
-                aria-label={`Scroll to top of ${restaurantName} page`}
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 10,
-                  minWidth: 0,
-                  border: "none",
-                  background: "transparent",
-                  padding: 0,
-                  cursor: "pointer",
-                }}
+          {showBranding ? (
+            <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0 }}>
+              <Link
+                href="/"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-base font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:text-slate-900"
+                aria-label="Back to home"
               >
-                <div
+                ←
+              </Link>
+              {onBrandClick ? (
+                <button
+                  type="button"
+                  onClick={onBrandClick}
+                  aria-label={`Scroll to top of ${restaurantName} page`}
                   style={{
-                    position: "relative",
-                    width: 32,
-                    height: 32,
-                    borderRadius: 8,
-                    overflow: "hidden",
-                    border: "1px solid rgba(0,0,0,0.15)",
-                    background: "white",
-                    flexShrink: 0,
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 10,
+                    minWidth: 0,
+                    border: "none",
+                    background: "transparent",
+                    padding: 0,
+                    cursor: "pointer",
                   }}
                 >
-                  <Image src={restaurantLogo} alt={`${restaurantName} logo`} fill className="object-contain" />
-                </div>
-                <div style={{ fontWeight: 700, fontSize: 16, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                  {restaurantName}
-                </div>
-              </button>
-            ) : (
-              <>
-                <div
-                  style={{
-                    position: "relative",
-                    width: 32,
-                    height: 32,
-                    borderRadius: 8,
-                    overflow: "hidden",
-                    border: "1px solid rgba(0,0,0,0.15)",
-                    background: "white",
-                    flexShrink: 0,
-                  }}
-                >
-                  <Image src={restaurantLogo} alt={`${restaurantName} logo`} fill className="object-contain" />
-                </div>
-                <div style={{ fontWeight: 700, fontSize: 16, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                  {restaurantName}
-                </div>
-              </>
-            )}
-          </div>
+                  <div
+                    style={{
+                      position: "relative",
+                      width: 32,
+                      height: 32,
+                      borderRadius: 8,
+                      overflow: "hidden",
+                      border: "1px solid rgba(0,0,0,0.15)",
+                      background: "white",
+                      flexShrink: 0,
+                    }}
+                  >
+                    <Image src={restaurantLogo} alt={`${restaurantName} logo`} fill className="object-contain" />
+                  </div>
+                  <div style={{ fontWeight: 700, fontSize: 16, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                    {restaurantName}
+                  </div>
+                </button>
+              ) : (
+                <>
+                  <div
+                    style={{
+                      position: "relative",
+                      width: 32,
+                      height: 32,
+                      borderRadius: 8,
+                      overflow: "hidden",
+                      border: "1px solid rgba(0,0,0,0.15)",
+                      background: "white",
+                      flexShrink: 0,
+                    }}
+                  >
+                    <Image src={restaurantLogo} alt={`${restaurantName} logo`} fill className="object-contain" />
+                  </div>
+                  <div style={{ fontWeight: 700, fontSize: 16, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                    {restaurantName}
+                  </div>
+                </>
+              )}
+            </div>
+          ) : null}
 
           <label
             style={{
