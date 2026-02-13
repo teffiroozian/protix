@@ -65,6 +65,10 @@ export default function StickyRestaurantBar({
 
   const hasActiveFilters = Boolean(filters.proteinMin || filters.caloriesMax);
 
+  const handleBrandClick = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   const clearProteinFilter = () => {
     onFiltersChange({ ...filters, proteinMin: undefined });
   };
@@ -101,6 +105,7 @@ export default function StickyRestaurantBar({
             onCategorySelect={onCategorySelect}
             searchQuery={searchQuery}
             onSearchChange={onSearchChange}
+            onBrandClick={handleBrandClick}
             showChips={false}
           />
         </div>

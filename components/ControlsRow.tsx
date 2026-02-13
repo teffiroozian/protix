@@ -161,6 +161,7 @@ export default function ControlsRow({
   wrapperId,
   searchQuery,
   onSearchChange,
+  onBrandClick,
 }: {
   view: ViewOption;
   onChange: (view: ViewOption) => void;
@@ -177,6 +178,7 @@ export default function ControlsRow({
   wrapperId?: string;
   searchQuery: string;
   onSearchChange: (value: string) => void;
+  onBrandClick: () => void;
 }) {
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [draftFilters, setDraftFilters] = useState<Filters>(filters);
@@ -424,23 +426,61 @@ export default function ControlsRow({
             >
               ←
             </Link>
-            <div
-              style={{
-                position: "relative",
-                width: 32,
-                height: 32,
-                borderRadius: 8,
-                overflow: "hidden",
-                border: "1px solid rgba(0,0,0,0.15)",
-                background: "white",
-                flexShrink: 0,
-              }}
-            >
-              <Image src={restaurantLogo} alt={`${restaurantName} logo`} fill className="object-contain" />
-            </div>
-            <div style={{ fontWeight: 700, fontSize: 16, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-              {restaurantName}
-            </div>
+            {onBrandClick ? (
+              <button
+                type="button"
+                onClick={onBrandClick}
+                aria-label={`Scroll to top of ${restaurantName} page`}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 10,
+                  minWidth: 0,
+                  border: "none",
+                  background: "transparent",
+                  padding: 0,
+                  cursor: "pointer",
+                }}
+              >
+                <div
+                  style={{
+                    position: "relative",
+                    width: 32,
+                    height: 32,
+                    borderRadius: 8,
+                    overflow: "hidden",
+                    border: "1px solid rgba(0,0,0,0.15)",
+                    background: "white",
+                    flexShrink: 0,
+                  }}
+                >
+                  <Image src={restaurantLogo} alt={`${restaurantName} logo`} fill className="object-contain" />
+                </div>
+                <div style={{ fontWeight: 700, fontSize: 16, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                  {restaurantName}
+                </div>
+              </button>
+            ) : (
+              <>
+                <div
+                  style={{
+                    position: "relative",
+                    width: 32,
+                    height: 32,
+                    borderRadius: 8,
+                    overflow: "hidden",
+                    border: "1px solid rgba(0,0,0,0.15)",
+                    background: "white",
+                    flexShrink: 0,
+                  }}
+                >
+                  <Image src={restaurantLogo} alt={`${restaurantName} logo`} fill className="object-contain" />
+                </div>
+                <div style={{ fontWeight: 700, fontSize: 16, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                  {restaurantName}
+                </div>
+              </>
+            )}
           </div>
 
           <label
