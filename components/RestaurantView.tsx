@@ -221,6 +221,7 @@ export default function RestaurantView({
         wrapperId="controls-row"
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
+        showBranding={false}
       />
 
       <div ref={viewTopRef} style={{ scrollMarginTop: 200 }} />
