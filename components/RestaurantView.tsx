@@ -23,6 +23,7 @@ const rankingSectionIdBySort: Record<SortOption, string> = {
 };
 
 export default function RestaurantView({
+  restaurantId,
   restaurantName,
   restaurantLogo,
   items,
@@ -33,6 +34,7 @@ export default function RestaurantView({
   commonChanges,
   autoScrollOnViewChange = false,
 }: {
+  restaurantId: string;
   restaurantName: string;
   restaurantLogo: string;
   items: MenuItem[];
@@ -227,9 +229,16 @@ export default function RestaurantView({
       <div ref={viewTopRef} style={{ scrollMarginTop: 200 }} />
 
       {view === "menu" ? (
-        <MenuSections items={filteredItems} sort={sort} addons={addons} commonChanges={commonChanges} />
+        <MenuSections
+          restaurantId={restaurantId}
+          items={filteredItems}
+          sort={sort}
+          addons={addons}
+          commonChanges={commonChanges}
+        />
       ) : (
         <TopPicksList
+          restaurantId={restaurantId}
           highestProtein={filteredHighestProtein}
           bestCalorieProteinRatio={filteredBestRatio}
           lowestCalorieItems={filteredLowestCalories}
