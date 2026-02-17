@@ -75,7 +75,61 @@
             "addonRefs": [
                 "sauces"
             ],
-            "image": "/foodImages/chickfila/cfa-cfanuggets.webp"
+            "image": "/foodImages/chickfila/cfa-cfanuggets.webp",
+            "defaultVariantId": "8pc",
+            "variants": [
+                {
+                    "id": "8pc",
+                    "label": "8 ct",
+                    "portionType": "single",
+                    "nutrition": {
+                        "calories": 250,
+                        "totalFat": 11,
+                        "satFat": 2.5,
+                        "transFat": 0,
+                        "cholesterol": 85,
+                        "sodium": 1210,
+                        "carbs": 11,
+                        "fiber": 0,
+                        "sugars": 1,
+                        "protein": 27
+                    }
+                },
+                {
+                    "id": "12pc",
+                    "label": "12 ct",
+                    "portionType": "single",
+                    "nutrition": {
+                        "calories": 380,
+                        "totalFat": 17,
+                        "satFat": 3.5,
+                        "transFat": 0,
+                        "cholesterol": 125,
+                        "sodium": 1820,
+                        "carbs": 16,
+                        "fiber": 0,
+                        "sugars": 1,
+                        "protein": 40
+                    }
+                },
+                {
+                    "id": "30pc",
+                    "label": "30 ct",
+                    "portionType": "shareable",
+                    "nutrition": {
+                        "calories": 950,
+                        "totalFat": 43,
+                        "satFat": 9,
+                        "transFat": 0,
+                        "cholesterol": 315,
+                        "sodium": 4550,
+                        "carbs": 41,
+                        "fiber": 0,
+                        "sugars": 4,
+                        "protein": 100
+                    }
+                }
+            ]
         },
         {
             "name": "Chick-fil-A® Deluxe Sandwich",
@@ -135,7 +189,78 @@
             "addonRefs": [
                 "sauces"
             ],
-            "image": "/foodImages/chickfila/cfa-chicknstrips.webp"
+            "image": "/foodImages/chickfila/cfa-chicknstrips.webp",
+            "defaultVariantId": "3pc",
+            "variants": [
+                {
+                    "id": "2pc",
+                    "label": "2 ct",
+                    "portionType": "single",
+                    "nutrition": {
+                        "calories": 200,
+                        "totalFat": 9,
+                        "satFat": 2,
+                        "transFat": 0,
+                        "cholesterol": 50,
+                        "sodium": 580,
+                        "carbs": 11,
+                        "fiber": 0,
+                        "sugars": 1,
+                        "protein": 19
+                    }
+                },
+                {
+                    "id": "3pc",
+                    "label": "3 ct",
+                    "portionType": "single",
+                    "nutrition": {
+                        "calories": 310,
+                        "totalFat": 14,
+                        "satFat": 2.5,
+                        "transFat": 0,
+                        "cholesterol": 75,
+                        "sodium": 870,
+                        "carbs": 16,
+                        "fiber": 0,
+                        "sugars": 2,
+                        "protein": 29
+                    }
+                },
+                {
+                    "id": "4pc",
+                    "label": "4 ct",
+                    "portionType": "single",
+                    "nutrition": {
+                        "calories": 410,
+                        "totalFat": 19,
+                        "satFat": 3.5,
+                        "transFat": 0,
+                        "cholesterol": 100,
+                        "sodium": 1150,
+                        "carbs": 22,
+                        "fiber": 0,
+                        "sugars": 2,
+                        "protein": 39
+                    }
+                },
+                {
+                    "id": "10pc",
+                    "label": "10 ct",
+                    "portionType": "shareable",
+                    "nutrition": {
+                        "calories": 1020,
+                        "totalFat": 46,
+                        "satFat": 9,
+                        "transFat": 0,
+                        "cholesterol": 250,
+                        "sodium": 2870,
+                        "carbs": 54,
+                        "fiber": 0,
+                        "sugars": 6,
+                        "protein": 96
+                    }
+                }
+            ]
         },
         {
             "name": "Grilled Chicken Sandwich",
@@ -184,7 +309,10 @@
             "category": "Nuggets",
             "portionType": "single",
             "image": "/foodImages/chickfila/cfa-grillednuggets.webp",
-            "defaultVariantId": "12pc",
+            "addonRefs": [
+                "sauces"
+            ],
+            "defaultVariantId": "8pc",
             "variants": [
                 {
                     "id": "8pc",
@@ -192,9 +320,15 @@
                     "portionType": "single",
                     "nutrition": {
                         "calories": 130,
-                        "protein": 25,
+                        "totalFat": 3,
+                        "satFat": 0.5,
+                        "transFat": 0,
+                        "cholesterol": 85,
+                        "sodium": 440,
                         "carbs": 1,
-                        "totalFat": 3
+                        "fiber": 0,
+                        "sugars": 1,
+                        "protein": 25
                     }
                 },
                 {
@@ -203,9 +337,15 @@
                     "portionType": "single",
                     "nutrition": {
                         "calories": 200,
-                        "protein": 38,
+                        "totalFat": 4.5,
+                        "satFat": 1,
+                        "transFat": 0,
+                        "cholesterol": 130,
+                        "sodium": 660,
                         "carbs": 2,
-                        "totalFat": 4
+                        "fiber": 0,
+                        "sugars": 1,
+                        "protein": 38
                     }
                 },
                 {
@@ -213,15 +353,18 @@
                     "label": "30 ct",
                     "portionType": "shareable",
                     "nutrition": {
-                        "calories": 500,
-                        "protein": 95,
-                        "carbs": 6,
-                        "totalFat": 10
+                        "calories": 510,
+                        "totalFat": 11,
+                        "satFat": 3,
+                        "transFat": 0,
+                        "cholesterol": 335,
+                        "sodium": 1710,
+                        "carbs": 4,
+                        "fiber": 1,
+                        "sugars": 3,
+                        "protein": 98
                     }
                 }
-            ],
-            "addonRefs": [
-                "sauces"
             ]
         },
         {
@@ -286,33 +429,479 @@
                 "dressings"
             ],
             "image": "/foodImages/chickfila/cfa-marketsalad.webp"
+        },
+        {
+            "name": "Kale Crunch Side",
+            "nutrition": {
+                "calories": 170,
+                "totalFat": 12,
+                "satFat": 1.5,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 250,
+                "carbs": 13,
+                "fiber": 4,
+                "sugars": 8,
+                "protein": 4
+            },
+            "category": "Side",
+            "portionType": "single",
+            "image": "/foodImages/chickfila/sides/kalecrunchside.webp"
+        },
+        {
+            "name": "Chick-fil-A Waffle Potato Fries",
+            "nutrition": {
+                "calories": 420,
+                "totalFat": 24,
+                "satFat": 4,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 240,
+                "carbs": 45,
+                "fiber": 5,
+                "sugars": 1,
+                "protein": 5
+            },
+            "category": "Side",
+            "portionType": "single",
+            "image": "/foodImages/chickfila/sides/wafflefries.webp",
+            "defaultVariantId": "medium",
+            "variants": [
+                {
+                    "id": "small",
+                    "label": "Small",
+                    "portionType": "single",
+                    "nutrition": {
+                        "calories": 320,
+                        "totalFat": 19,
+                        "satFat": 3,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 190,
+                        "carbs": 35,
+                        "fiber": 4,
+                        "sugars": 1,
+                        "protein": 4
+                    }
+                },
+                {
+                    "id": "medium",
+                    "label": "Medium",
+                    "portionType": "single",
+                    "nutrition": {
+                        "calories": 420,
+                        "totalFat": 24,
+                        "satFat": 4,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 240,
+                        "carbs": 45,
+                        "fiber": 5,
+                        "sugars": 1,
+                        "protein": 5
+                    }
+                },
+                {
+                    "id": "large",
+                    "label": "Large",
+                    "portionType": "single",
+                    "nutrition": {
+                        "calories": 600,
+                        "totalFat": 35,
+                        "satFat": 5,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 340,
+                        "carbs": 65,
+                        "fiber": 7,
+                        "sugars": 1,
+                        "protein": 7
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Berry Parfait",
+            "nutrition": {
+                "calories": 270,
+                "totalFat": 9,
+                "satFat": 3.5,
+                "transFat": 0,
+                "cholesterol": 20,
+                "sodium": 85,
+                "carbs": 35,
+                "fiber": 1,
+                "sugars": 26,
+                "protein": 13
+            },
+            "category": "Side",
+            "portionType": "single",
+            "image": "/foodImages/chickfila/sides/berryparfait.webp",
+            "defaultVariantId": "granola",
+            "variants": [
+                {
+                    "id": "cookie_crumbs",
+                    "label": "Cookie Crumbs",
+                    "portionType": "single",
+                    "nutrition": {
+                        "calories": 240,
+                        "totalFat": 8,
+                        "satFat": 3.5,
+                        "transFat": 0,
+                        "cholesterol": 20,
+                        "sodium": 85,
+                        "carbs": 31,
+                        "fiber": 1,
+                        "sugars": 25,
+                        "protein": 12
+                    }
+                },
+                {
+                    "id": "granola",
+                    "label": "Granola",
+                    "portionType": "single",
+                    "nutrition": {
+                        "calories": 270,
+                        "totalFat": 9,
+                        "satFat": 3.5,
+                        "transFat": 0,
+                        "cholesterol": 20,
+                        "sodium": 85,
+                        "carbs": 35,
+                        "fiber": 1,
+                        "sugars": 26,
+                        "protein": 13
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Fruit Cup",
+            "nutrition": {
+                "calories": 70,
+                "totalFat": 0,
+                "satFat": 0,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 0,
+                "carbs": 16,
+                "fiber": 2,
+                "sugars": 12,
+                "protein": 1
+            },
+            "category": "Side",
+            "portionType": "single",
+            "image": "/foodImages/chickfila/sides/fruitcup.webp"
+        },
+        {
+            "name": "Mac & Cheese",
+            "nutrition": {
+                "calories": 450,
+                "totalFat": 29,
+                "satFat": 16,
+                "transFat": 0,
+                "cholesterol": 70,
+                "sodium": 1190,
+                "carbs": 28,
+                "fiber": 3,
+                "sugars": 3,
+                "protein": 20
+            },
+            "category": "Side",
+            "portionType": "single",
+            "image": "/foodImages/chickfila/sides/macncheese.webp",
+            "defaultVariantId": "medium",
+            "variants": [
+                {
+                    "id": "small",
+                    "label": "Small",
+                    "portionType": "single",
+                    "nutrition": {
+                        "calories": 270,
+                        "totalFat": 17,
+                        "satFat": 10,
+                        "transFat": 0,
+                        "cholesterol": 40,
+                        "sodium": 710,
+                        "carbs": 17,
+                        "fiber": 2,
+                        "sugars": 2,
+                        "protein": 12
+                    }
+                },
+                {
+                    "id": "medium",
+                    "label": "Medium",
+                    "portionType": "single",
+                    "nutrition": {
+                        "calories": 450,
+                        "totalFat": 29,
+                        "satFat": 16,
+                        "transFat": 0,
+                        "cholesterol": 70,
+                        "sodium": 1190,
+                        "carbs": 28,
+                        "fiber": 3,
+                        "sugars": 3,
+                        "protein": 20
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Chicken Noodle Soup",
+            "nutrition": {
+                "calories": 190,
+                "totalFat": 4.5,
+                "satFat": 1,
+                "transFat": 0,
+                "cholesterol": 30,
+                "sodium": 1290,
+                "carbs": 27,
+                "fiber": 2,
+                "sugars": 2,
+                "protein": 11
+            },
+            "category": "Side",
+            "portionType": "single",
+            "image": "/foodImages/chickfila/sides/chickennoodlesoup.webp",
+            "defaultVariantId": "cup",
+            "variants": [
+                {
+                    "id": "cup",
+                    "label": "Cup",
+                    "portionType": "single",
+                    "nutrition": {
+                        "calories": 190,
+                        "totalFat": 4.5,
+                        "satFat": 1,
+                        "transFat": 0,
+                        "cholesterol": 30,
+                        "sodium": 1290,
+                        "carbs": 27,
+                        "fiber": 2,
+                        "sugars": 2,
+                        "protein": 11
+                    }
+                },
+                {
+                    "id": "bowl",
+                    "label": "Bowl",
+                    "portionType": "single",
+                    "nutrition": {
+                        "calories": 320,
+                        "totalFat": 8,
+                        "satFat": 2,
+                        "transFat": 0,
+                        "cholesterol": 60,
+                        "sodium": 2280,
+                        "carbs": 42,
+                        "fiber": 3,
+                        "sugars": 3,
+                        "protein": 20
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Side Salad",
+            "nutrition": {
+                "calories": 470,
+                "totalFat": 42,
+                "satFat": 8,
+                "transFat": 0,
+                "cholesterol": 35,
+                "sodium": 700,
+                "carbs": 14,
+                "fiber": 4,
+                "sugars": 5,
+                "protein": 6
+            },
+            "category": "Side",
+            "portionType": "single",
+            "addonRefs": [
+                "dressings"
+            ],
+            "image": "/foodImages/chickfila/sides/sidesalad.webp"
+        },
+        {
+            "name": "Chicken Tortilla Soup",
+            "nutrition": {
+                "calories": 350,
+                "totalFat": 11,
+                "satFat": 2.5,
+                "transFat": 0,
+                "cholesterol": 50,
+                "sodium": 1115,
+                "carbs": 39,
+                "fiber": 18,
+                "sugars": 4,
+                "protein": 25
+            },
+            "category": "Side",
+            "portionType": "single",
+            "image": "/foodImages/chickfila/sides/chickentortillasoup.webp"
+        },
+        {
+            "name": "Original Flavor Waffle Potato Chips",
+            "nutrition": {
+                "calories": 220,
+                "totalFat": 13,
+                "satFat": 3.5,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 250,
+                "carbs": 25,
+                "fiber": 2,
+                "sugars": 0,
+                "protein": 3
+            },
+            "category": "Side",
+            "portionType": "single",
+            "image": "/foodImages/chickfila/sides/wafflechips-original.webp"
+        },
+        {
+            "name": "Buddy Fruits Apple Sauce",
+            "nutrition": {
+                "calories": 45,
+                "totalFat": 0,
+                "satFat": 0,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 0,
+                "carbs": 12,
+                "fiber": 1,
+                "sugars": 8,
+                "protein": 0
+            },
+            "category": "Side",
+            "portionType": "single",
+            "image": "/foodImages/chickfila/sides/applesauce.webp"
+        },
+        {
+            "name": "Chick-fil-A Sauce Flavored Waffle Potato Chips",
+            "nutrition": {
+                "calories": 210,
+                "totalFat": 12,
+                "satFat": 3,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 330,
+                "carbs": 26,
+                "fiber": 2,
+                "sugars": 3,
+                "protein": 3
+            },
+            "category": "Side",
+            "portionType": "single",
+            "image": "/foodImages/chickfila/sides/wafflechips-cfasauce.webp"
         }
     ],
     "addons": {
         "sauces": [
             {
-                "name": "Zesty Buffalo Sauce",
-                "calories": 25,
-                "protein": 0,
-                "carbs": 1,
-                "fat": 2,
-                "image": "/foodImages/chickfila/addOns/sauce_buffalo.webp"
-            },
-            {
-                "name": "Honey Roasted BBQ Sauce",
-                "calories": 60,
-                "protein": 0,
-                "carbs": 8,
-                "fat": 3,
-                "image": "/foodImages/chickfila/addOns/sauce_honey_roasted_bbq.webp"
+                "name": "Barbeque Sauce",
+                "calories": 45,
+                "fat": 0,
+                "satFat": 0,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 200,
+                "carbs": 11,
+                "fiber": 0,
+                "sugars": 9,
+                "protein": 0
             },
             {
                 "name": "Chick-fil-A Sauce",
                 "calories": 140,
-                "protein": 0,
-                "carbs": 7,
                 "fat": 13,
-                "image": "/foodImages/chickfila/addOns/sauce_cfa_sauce.webp"
+                "satFat": 2,
+                "transFat": 0,
+                "cholesterol": 10,
+                "sodium": 170,
+                "carbs": 6,
+                "fiber": 0,
+                "sugars": 6,
+                "protein": 0
+            },
+            {
+                "name": "Garden Herb Ranch Sauce",
+                "calories": 100,
+                "fat": 11,
+                "satFat": 2,
+                "transFat": 0,
+                "cholesterol": 10,
+                "sodium": 170,
+                "carbs": 1,
+                "fiber": 0,
+                "sugars": 0,
+                "protein": 0
+            },
+            {
+                "name": "Honey Mustard Sauce",
+                "calories": 50,
+                "fat": 0,
+                "satFat": 0,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 160,
+                "carbs": 11,
+                "fiber": 0,
+                "sugars": 10,
+                "protein": 0
+            },
+            {
+                "name": "Polynesian Sauce",
+                "calories": 110,
+                "fat": 6,
+                "satFat": 1,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 210,
+                "carbs": 14,
+                "fiber": 0,
+                "sugars": 13,
+                "protein": 0
+            },
+            {
+                "name": "Sweet & Spicy Sriracha Sauce",
+                "calories": 45,
+                "fat": 0,
+                "satFat": 0,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 380,
+                "carbs": 11,
+                "fiber": 0,
+                "sugars": 10,
+                "protein": 0
+            },
+            {
+                "name": "Zesty Buffalo Sauce",
+                "calories": 25,
+                "fat": 2.5,
+                "satFat": 0,
+                "transFat": 0,
+                "cholesterol": 5,
+                "sodium": 570,
+                "carbs": 1,
+                "fiber": 0,
+                "sugars": 0,
+                "protein": 0
+            },
+            {
+                "name": "Honey Roasted BBQ Sauce",
+                "calories": 60,
+                "fat": 5,
+                "satFat": 1,
+                "transFat": 0,
+                "cholesterol": 5,
+                "sodium": 75,
+                "carbs": 3,
+                "fiber": 0,
+                "sugars": 2,
+                "protein": 0
             }
         ],
         "dressings": [
