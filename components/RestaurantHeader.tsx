@@ -41,6 +41,7 @@ export default function RestaurantHeader({
   restaurantSlug,
   tags = DEFAULT_TAGS,
 }: RestaurantHeaderProps) {
+  void tags;
   const gradientClass =
     HERO_GRADIENTS[restaurantSlug] ?? "from-slate-200 via-slate-100 to-white";
 

@@ -5,6 +5,7 @@ import type { CommonChange, MenuItem, RestaurantAddons } from "@/types/menu";
 import MenuItemCard from "./MenuItemCard";
 
 export default function RankingList({
+  restaurantId,
   items,
   step = 5,
   highlightTop = 3,
@@ -14,6 +15,7 @@ export default function RankingList({
   includeSidesDrinks = false,
   includeLargeShareables = false,
 }: {
+  restaurantId: string;
   items: MenuItem[];
   step?: number;
   highlightTop?: number;
@@ -49,6 +51,7 @@ export default function RankingList({
         {visibleItems.map((item, index) => (
           <MenuItemCard
             key={`${item.name}-${index}`}
+            restaurantId={restaurantId}
             item={item}
             showRatio={showRatio}
             rankIndex={index}

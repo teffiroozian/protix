@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useMemo, useEffect, useState } from "react";
+import { useCart } from "@/stores/cartStore";
 import ControlsRow, {
   FilterChips,
   type Filters,
@@ -81,6 +83,12 @@ export default function StickyRestaurantBar({
     onFiltersChange({});
   };
 
+  const { items } = useCart();
+  const cartCount = useMemo(
+    () => items.reduce((sum, item) => sum + item.quantity, 0),
+    [items]
+  );
+
   return (
     <div
       className={`fixed left-0 right-0 top-0 z-50 transition duration-300 ${
@@ -90,24 +98,33 @@ export default function StickyRestaurantBar({
       }`}
     >
       <div className="w-full border-b border-slate-200/70 bg-white/95 backdrop-blur">
-        <div className="mx-auto w-full max-w-5xl px-4 py-2 sm:px-6">
-          <ControlsRow
-            view={view}
-            onChange={onChange}
-            sort={sort}
-            onSortChange={onSortChange}
-            filters={filters}
-            onFiltersChange={onFiltersChange}
-            restaurantName={restaurantName}
-            restaurantLogo={restaurantLogo}
-            categoryOptions={categoryOptions}
-            activeCategory={activeCategory}
-            onCategorySelect={onCategorySelect}
-            searchQuery={searchQuery}
-            onSearchChange={onSearchChange}
-            onBrandClick={handleBrandClick}
-            showChips={false}
-          />
+        <div className="mx-auto flex w-full max-w-5xl items-center gap-3 px-4 py-2 sm:px-6">
+          <div className="min-w-0 flex-1">
+            <ControlsRow
+              view={view}
+              onChange={onChange}
+              sort={sort}
+              onSortChange={onSortChange}
+              filters={filters}
+              onFiltersChange={onFiltersChange}
+              restaurantName={restaurantName}
+              restaurantLogo={restaurantLogo}
+              categoryOptions={categoryOptions}
+              activeCategory={activeCategory}
+              onCategorySelect={onCategorySelect}
+              searchQuery={searchQuery}
+              onSearchChange={onSearchChange}
+              onBrandClick={handleBrandClick}
+              showChips={false}
+            />
+          </div>
+
+          <Link
+            href="/cart"
+            className="inline-flex shrink-0 items-center rounded-full border border-slate-700/20 bg-white px-3 py-1.5 text-sm font-medium text-slate-800 transition hover:bg-slate-50"
+          >
+            {cartCount > 0 ? `Cart (${cartCount})` : "Cart"}
+          </Link>
         </div>
       </div>
 

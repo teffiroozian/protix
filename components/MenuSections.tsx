@@ -98,11 +98,13 @@ export function getCategoryLabel(category: string) {
 }
 
 export default function MenuSections({
+  restaurantId,
   items,
   sort,
   addons,
   commonChanges,
 }: {
+  restaurantId: string;
   items: MenuItem[];
   sort: SortOption;
   addons?: RestaurantAddons;
@@ -133,7 +135,13 @@ export default function MenuSections({
           </h2>
           <ul style={{ marginTop: 12, padding: 0, display: "grid", gap: 12 }}>
             {sortedGrouped[section].map((item, index) => (
-              <MenuItemCard key={`${item.name}-${index}`} item={item} addons={addons} commonChanges={commonChanges} />
+              <MenuItemCard
+                key={`${item.name}-${index}`}
+                restaurantId={restaurantId}
+                item={item}
+                addons={addons}
+                commonChanges={commonChanges}
+              />
             ))}
           </ul>
         </section>

@@ -1,8 +1,9 @@
 "use client";
 
-import { useId, useMemo, useState } from "react";
+import { useEffect, useId, useMemo, useState } from "react";
 import type { AddonOption, AddonRef, CommonChange, MacroDelta, MenuItem, RestaurantAddons } from "@/types/menu";
 import styles from "./MenuItemCard.module.css";
+import { useCart } from "@/stores/cartStore";
 import ItemDetailsPanel from "./ItemDetailsPanel";
 import VariantSelector from "./VariantSelector";
 
@@ -44,6 +45,7 @@ const emptyAddon: AddonOption = {
 };
 
 export default function MenuItemCard({
+  restaurantId,
   item,
   rankIndex,
   showRatio = false,
@@ -51,6 +53,7 @@ export default function MenuItemCard({
   addons,
   commonChanges,
 }: {
+  restaurantId: string;
   item: MenuItem;
   rankIndex?: number;
   showRatio?: boolean;
@@ -72,6 +75,8 @@ export default function MenuItemCard({
   const [selectedVariantId, setSelectedVariantId] = useState(defaultVariantId);
   const [selectedAddons, setSelectedAddons] = useState<Partial<Record<AddonRef, AddonOption>>>({});
   const [selectedCommonChangeIds, setSelectedCommonChangeIds] = useState<string[]>([]);
+  const [addConfirmation, setAddConfirmation] = useState("");
+  const { addItem } = useCart();
   const selectedVariant = variants?.find((variant) => variant.id === selectedVariantId);
   const baseNutrition = selectedVariant?.nutrition ?? item.nutrition;
   const applicableCommonChanges = useMemo(
@@ -152,6 +157,62 @@ export default function MenuItemCard({
   const ratio = useMemo(() => {
     return Math.round(caloriesPerProtein({ calories, protein }));
   }, [calories, protein]);
+
+  const selectedAddonOptions = useMemo(
+    () => Object.values(selectedAddons).filter((addon): addon is AddonOption => Boolean(addon && addon.name !== "None")),
+    [selectedAddons]
+  );
+
+  const optionsLabel = useMemo(() => {
+    if (selectedAddonOptions.length === 0) return undefined;
+    return selectedAddonOptions.map((addon) => addon.name).join(" + ");
+  }, [selectedAddonOptions]);
+
+  const selectedVariantForCart = useMemo(() => {
+    if (!variants || variants.length === 0) return undefined;
+    const bySelected = variants.find((variant) => variant.id === selectedVariantId);
+    if (bySelected) return bySelected;
+    if (defaultVariantId) {
+      const byDefault = variants.find((variant) => variant.id === defaultVariantId);
+      if (byDefault) return byDefault;
+    }
+    return variants[0];
+  }, [defaultVariantId, selectedVariantId, variants]);
+
+  const handleAddToCart = () => {
+    const baseForCart = selectedVariantForCart?.nutrition ?? item.nutrition;
+
+    addItem({
+      id: crypto.randomUUID(),
+      restaurantId,
+      itemId: item.id ?? item.name,
+      name: item.name,
+      variantId: selectedVariantForCart?.id,
+      variantLabel: selectedVariantForCart?.label,
+      optionsLabel,
+      quantity: 1,
+      macrosPerItem: {
+        calories: baseForCart.calories + addonTotals.calories,
+        protein: baseForCart.protein + addonTotals.protein,
+        carbs: baseForCart.carbs + addonTotals.carbs,
+        fat: baseForCart.totalFat + addonTotals.fat,
+      },
+    });
+
+    setAddConfirmation("Added to cart");
+  };
+
+  useEffect(() => {
+    if (!addConfirmation) return;
+
+    const timeout = window.setTimeout(() => {
+      setAddConfirmation("");
+    }, 1600);
+
+    return () => {
+      window.clearTimeout(timeout);
+    };
+  }, [addConfirmation]);
 
   return (
     <li
@@ -288,7 +349,19 @@ export default function MenuItemCard({
             customizationTotals={customizationTotals}
             showCustomizationDeltas={hasActiveCustomization}
           />
+
         </div>
+      </div>
+
+      <div className={styles.cardFooter}>
+        {addConfirmation ? <span className={styles.addedText}>{addConfirmation}</span> : null}
+        <button
+          type="button"
+          className={styles.addToCartButton}
+          onClick={handleAddToCart}
+        >
+          Add to Cart
+        </button>
       </div>
     </li>
   );

@@ -6,6 +6,7 @@ import RankingList from "./RankingList";
 type SortOption = "highest-protein" | "best-ratio" | "lowest-calories";
 
 export default function TopPicksList({
+  restaurantId,
   highestProtein,
   bestCalorieProteinRatio,
   lowestCalorieItems,
@@ -14,6 +15,7 @@ export default function TopPicksList({
   includeSidesDrinks = false,
   includeLargeShareables = false,
 }: {
+  restaurantId: string;
   highestProtein: MenuItem[];
   bestCalorieProteinRatio: MenuItem[];
   lowestCalorieItems: MenuItem[];
@@ -37,6 +39,7 @@ export default function TopPicksList({
           </p>
 
           <RankingList
+            restaurantId={restaurantId}
             items={highestProtein}
             highlightTop={3}
             addons={addons}
@@ -61,6 +64,7 @@ export default function TopPicksList({
           </p>
 
           <RankingList
+            restaurantId={restaurantId}
             items={bestCalorieProteinRatio}
             highlightTop={3}
             showRatio
@@ -86,6 +90,7 @@ export default function TopPicksList({
           </p>
 
           <RankingList
+            restaurantId={restaurantId}
             items={lowestCalorieItems}
             highlightTop={3}
             addons={addons}
