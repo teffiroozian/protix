@@ -350,17 +350,18 @@ export default function MenuItemCard({
             showCustomizationDeltas={hasActiveCustomization}
           />
 
-          <div className={styles.cartActions}>
-            <button
-              type="button"
-              className={styles.addToCartButton}
-              onClick={handleAddToCart}
-            >
-              Add to Cart
-            </button>
-            {addConfirmation ? <span className={styles.addedText}>{addConfirmation}</span> : null}
-          </div>
         </div>
+      </div>
+
+      <div className={styles.cardFooter}>
+        {addConfirmation ? <span className={styles.addedText}>{addConfirmation}</span> : null}
+        <button
+          type="button"
+          className={styles.addToCartButton}
+          onClick={handleAddToCart}
+        >
+          Add to Cart
+        </button>
       </div>
     </li>
   );

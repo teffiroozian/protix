@@ -194,11 +194,12 @@
 }
 
 
-.cartActions {
-  margin-top: 12px;
+.cardFooter {
   display: flex;
+  justify-content: flex-end;
   align-items: center;
   gap: 10px;
+  padding: 0 12px 12px;
 }
 
 .addToCartButton {
