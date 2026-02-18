@@ -4,6 +4,7 @@ import RestaurantHeader from "@/components/RestaurantHeader";
 import RestaurantView from "@/components/RestaurantView";
 import RecentRestaurantTracker from "@/components/RecentRestaurantTracker";
 import ScrollToTopOnMount from "@/components/ScrollToTopOnMount";
+import { RestaurantSearchProvider } from "@/components/RestaurantSearchContext";
 import type { CommonChange, MenuItem, RestaurantAddons } from "@/types/menu";
 
 // calories per 1g protein (bigger number = more calories for each gram of protein)
@@ -54,32 +55,34 @@ export default async function RestaurantPage({
   const lowestCalorieItems = lowestCalories(items);
 
   return (
-    <div style={{ width: "100%" }}>
-      <div id="restaurant-hero" className="mt-6">
-        <RestaurantHeader
-          name={restaurant.name}
-          logo={restaurant.logo}
-          restaurantSlug={restaurant.id}
-        />
+    <RestaurantSearchProvider>
+      <div style={{ width: "100%" }}>
+        <div id="restaurant-hero" className="mt-6">
+          <RestaurantHeader
+            name={restaurant.name}
+            logo={restaurant.logo}
+            restaurantSlug={restaurant.id}
+          />
+        </div>
+
+        <RecentRestaurantTracker restaurantId={restaurant.id} />
+        <ScrollToTopOnMount />
+
+        <main style={{ maxWidth: 900, margin: "24px auto 48px", padding: 16 }}>
+          <RestaurantView
+            restaurantId={restaurant.id}
+            restaurantName={restaurant.name}
+            restaurantLogo={restaurant.logo}
+            items={items}
+            highestProtein={highestProtein}
+            bestCalorieProteinRatio={bestCalorieProteinRatio}
+            lowestCalorieItems={lowestCalorieItems}
+            addons={addons}
+            commonChanges={commonChanges}
+            autoScrollOnViewChange
+          />
+        </main>
       </div>
-
-      <RecentRestaurantTracker restaurantId={restaurant.id} />
-      <ScrollToTopOnMount />
-
-      <main style={{ maxWidth: 900, margin: "24px auto 48px", padding: 16 }}>
-        <RestaurantView
-          restaurantId={restaurant.id}
-          restaurantName={restaurant.name}
-          restaurantLogo={restaurant.logo}
-          items={items}
-          highestProtein={highestProtein}
-          bestCalorieProteinRatio={bestCalorieProteinRatio}
-          lowestCalorieItems={lowestCalorieItems}
-          addons={addons}
-          commonChanges={commonChanges}
-          autoScrollOnViewChange
-        />
-      </main>
-    </div>
+    </RestaurantSearchProvider>
   );
 }

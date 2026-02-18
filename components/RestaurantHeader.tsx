@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useCart } from "@/stores/cartStore";
+import { useRestaurantSearch } from "@/components/RestaurantSearchContext";
 const HERO_GRADIENTS: Record<string, string> = {
   chickfila: "from-red-200 to-orange-200",
   chipotle: "from-red-200 via-amber-100 to-orange-100",
@@ -45,9 +46,9 @@ export default function RestaurantHeader({
 }: RestaurantHeaderProps) {
   void tags;
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
   const searchInputRef = useRef<HTMLInputElement>(null);
   const { items } = useCart();
+  const { searchQuery, setSearchQuery } = useRestaurantSearch();
 
   const cartCount = useMemo(
     () => items.reduce((sum, item) => sum + item.quantity, 0),
@@ -65,7 +66,6 @@ export default function RestaurantHeader({
   };
 
   const closeSearch = () => {
-    setSearchQuery("");
     setIsSearchOpen(false);
   };
 
@@ -89,9 +89,9 @@ export default function RestaurantHeader({
 
             <div className="ml-auto flex items-center gap-2">
               <div
-                className={`flex items-center justify-end gap-2 transition-all duration-300 ${
-                  isSearchOpen ? "w-[18rem] opacity-100" : "w-0 opacity-0"
-                } overflow-hidden`}
+                className={`overflow-hidden transition-all duration-300 ${
+                  isSearchOpen ? "w-[16rem] opacity-100" : "w-0 opacity-0"
+                }`}
               >
                 <input
                   ref={searchInputRef}
@@ -101,6 +101,9 @@ export default function RestaurantHeader({
                   aria-label="Search menu items"
                   className="h-10 w-full rounded-full border border-slate-900/15 bg-white/95 px-4 text-sm text-slate-900 shadow-sm outline-none ring-0 placeholder:text-slate-500 focus:border-slate-900/30"
                 />
+              </div>
+
+              {isSearchOpen ? (
                 <button
                   type="button"
                   onClick={closeSearch}
@@ -109,20 +112,16 @@ export default function RestaurantHeader({
                 >
                   ✕
                 </button>
-              </div>
-
-              <button
-                type="button"
-                onClick={openSearch}
-                aria-label="Search menu items"
-                className={`inline-flex h-10 w-10 items-center justify-center rounded-full bg-slate-900 text-base text-white shadow-sm transition hover:bg-slate-800 ${
-                  isSearchOpen
-                    ? "pointer-events-none scale-95 opacity-0"
-                    : "scale-100 opacity-100"
-                }`}
-              >
-                🔍
-              </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={openSearch}
+                  aria-label="Search menu items"
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-slate-900 text-base text-white shadow-sm transition hover:bg-slate-800"
+                >
+                  🔍
+                </button>
+              )}
 
               <Link
                 href="/cart"

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useRestaurantSearch } from "@/components/RestaurantSearchContext";
 import type { CommonChange, MenuItem, RestaurantAddons } from "@/types/menu";
 import ControlsRow, {
   type Filters,
@@ -48,7 +49,7 @@ export default function RestaurantView({
   const [view, setView] = useState<ViewOption>("menu");
   const [sort, setSort] = useState<SortOption>("highest-protein");
   const [filters, setFilters] = useState<Filters>({});
-  const [searchQuery, setSearchQuery] = useState("");
+  const { searchQuery, setSearchQuery } = useRestaurantSearch();
   const viewTopRef = useRef<HTMLDivElement | null>(null);
   const hasMountedRef = useRef(false);
 
