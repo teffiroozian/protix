@@ -7,24 +7,6 @@ import ScrollToTopOnMount from "@/components/ScrollToTopOnMount";
 import { RestaurantSearchProvider } from "@/components/RestaurantSearchContext";
 import type { CommonChange, MenuItem, RestaurantAddons } from "@/types/menu";
 
-// calories per 1g protein (bigger number = more calories for each gram of protein)
-function caloriesPerProtein(item: MenuItem) {
-  if (!item.nutrition.protein) return Number.POSITIVE_INFINITY;
-  return item.nutrition.calories / item.nutrition.protein;
-}
-
-function topByProtein(items: MenuItem[]) {
-  return [...items].sort((a, b) => b.nutrition.protein - a.nutrition.protein);
-}
-
-function topByCalorieProteinRatio(items: MenuItem[]) {
-  return [...items].sort((a, b) => caloriesPerProtein(a) - caloriesPerProtein(b));
-}
-
-function lowestCalories(items: MenuItem[]) {
-  return [...items].sort((a, b) => a.nutrition.calories - b.nutrition.calories);
-}
-
 export default async function RestaurantPage({
   params,
 }: {
@@ -50,10 +32,6 @@ export default async function RestaurantPage({
   const addons = (menu.default.addons ?? {}) as RestaurantAddons;
   const commonChanges = (menu.default.commonChanges ?? []) as CommonChange[];
 
-  const highestProtein = topByProtein(items);
-  const bestCalorieProteinRatio = topByCalorieProteinRatio(items);
-  const lowestCalorieItems = lowestCalories(items);
-
   return (
     <RestaurantSearchProvider>
       <div style={{ width: "100%" }}>
@@ -74,9 +52,6 @@ export default async function RestaurantPage({
             restaurantName={restaurant.name}
             restaurantLogo={restaurant.logo}
             items={items}
-            highestProtein={highestProtein}
-            bestCalorieProteinRatio={bestCalorieProteinRatio}
-            lowestCalorieItems={lowestCalorieItems}
             addons={addons}
             commonChanges={commonChanges}
             autoScrollOnViewChange

@@ -103,13 +103,36 @@ export default function MenuSections({
   sort,
   addons,
   commonChanges,
+  groupByCategory = true,
 }: {
   restaurantId: string;
   items: MenuItem[];
   sort: SortOption;
   addons?: RestaurantAddons;
   commonChanges?: CommonChange[];
+  groupByCategory?: boolean;
 }) {
+
+  if (!groupByCategory) {
+    const sortedItems = sortItems(items, sort);
+
+    return (
+      <div style={{ marginTop: 32, display: "grid", gap: 12 }}>
+        <ul style={{ marginTop: 0, padding: 0, display: "grid", gap: 12 }}>
+          {sortedItems.map((item, index) => (
+            <MenuItemCard
+              key={`${item.name}-${index}`}
+              restaurantId={restaurantId}
+              item={item}
+              addons={addons}
+              commonChanges={commonChanges}
+            />
+          ))}
+        </ul>
+      </div>
+    );
+  }
+
   const grouped = items.reduce<Record<string, MenuItem[]>>((acc, item) => {
     const key = normalizeCategory(item.category || "Other");
     if (!acc[key]) acc[key] = [];

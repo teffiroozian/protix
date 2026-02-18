@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import { useRestaurantSearch } from "@/components/RestaurantSearchContext";
 import type { CommonChange, MenuItem, RestaurantAddons } from "@/types/menu";
 import ControlsRow, {
@@ -14,55 +14,29 @@ import {
   getOrderedMenuSections,
 } from "./MenuSections";
 import MenuSections from "./MenuSections";
-import TopPicksList from "./TopPicksList";
 import StickyRestaurantBar from "./StickyRestaurantBar";
-
-const rankingSectionIdBySort: Record<SortOption, string> = {
-  "highest-protein": "high-protein",
-  "best-ratio": "best-protein-ratio",
-  "lowest-calories": "lowest-calorie",
-};
 
 export default function RestaurantView({
   restaurantId,
   restaurantName,
   restaurantLogo,
   items,
-  highestProtein,
-  bestCalorieProteinRatio,
-  lowestCalorieItems,
   addons,
   commonChanges,
-  autoScrollOnViewChange = false,
 }: {
   restaurantId: string;
   restaurantName: string;
   restaurantLogo: string;
   items: MenuItem[];
-  highestProtein: MenuItem[];
-  bestCalorieProteinRatio: MenuItem[];
-  lowestCalorieItems: MenuItem[];
   addons?: RestaurantAddons;
   commonChanges?: CommonChange[];
   autoScrollOnViewChange?: boolean;
 }) {
-  const [view, setView] = useState<ViewOption>("menu");
+  const view: ViewOption = "menu";
+  const [entireMenu, setEntireMenu] = useState(false);
   const [sort, setSort] = useState<SortOption>("highest-protein");
   const [filters, setFilters] = useState<Filters>({});
   const { searchQuery, setSearchQuery } = useRestaurantSearch();
-  const viewTopRef = useRef<HTMLDivElement | null>(null);
-  const hasMountedRef = useRef(false);
-
-  useEffect(() => {
-    if (!autoScrollOnViewChange) return;
-
-    if (!hasMountedRef.current) {
-      hasMountedRef.current = true;
-      return;
-    }
-
-    viewTopRef.current?.scrollIntoView({ block: "start" });
-  }, [autoScrollOnViewChange, view]);
 
   const searchTerms = searchQuery
     .trim()
@@ -72,16 +46,6 @@ export default function RestaurantView({
 
   const filteredItems = useMemo(() => {
     return items.filter((item) => {
-      if (view === "top" && !filters.includeSidesDrinks) {
-        if (item.portionType === "drink" || item.portionType === "side") {
-          return false;
-        }
-      }
-
-      if (view === "top" && !filters.includeLargeShareables && item.portionType === "shareable") {
-        return false;
-      }
-
       if (filters.proteinMin && item.nutrition.protein < filters.proteinMin) {
         return false;
       }
@@ -107,7 +71,7 @@ export default function RestaurantView({
       const searchableText = [item.name.toLowerCase(), ...categoryVariants].join(" ");
       return searchTerms.every((term) => searchableText.includes(term));
     });
-  }, [items, filters, searchTerms, view]);
+  }, [items, filters, searchTerms]);
 
   const orderedSections = useMemo(
     () => getOrderedMenuSections(filteredItems),
@@ -130,49 +94,6 @@ export default function RestaurantView({
     [orderedSections]
   );
 
-  const filteredItemKeys = useMemo(
-    () =>
-      new Set(
-        filteredItems.map((item) =>
-          item.id
-            ? `id:${item.id}`
-            : `name:${item.name.toLowerCase()}|category:${(item.category || "").toLowerCase()}`
-        )
-      ),
-    [filteredItems]
-  );
-
-  const filteredHighestProtein = useMemo(
-    () =>
-      highestProtein.filter((item) => {
-        const key = item.id
-          ? `id:${item.id}`
-          : `name:${item.name.toLowerCase()}|category:${(item.category || "").toLowerCase()}`;
-        return filteredItemKeys.has(key);
-      }),
-    [highestProtein, filteredItemKeys]
-  );
-  const filteredBestRatio = useMemo(
-    () =>
-      bestCalorieProteinRatio.filter((item) => {
-        const key = item.id
-          ? `id:${item.id}`
-          : `name:${item.name.toLowerCase()}|category:${(item.category || "").toLowerCase()}`;
-        return filteredItemKeys.has(key);
-      }),
-    [bestCalorieProteinRatio, filteredItemKeys]
-  );
-  const filteredLowestCalories = useMemo(
-    () =>
-      lowestCalorieItems.filter((item) => {
-        const key = item.id
-          ? `id:${item.id}`
-          : `name:${item.name.toLowerCase()}|category:${(item.category || "").toLowerCase()}`;
-        return filteredItemKeys.has(key);
-      }),
-    [lowestCalorieItems, filteredItemKeys]
-  );
-
   const handleCategorySelect = (categoryId: string) => {
     setActiveCategory(categoryId);
     const section = document.getElementById(categorySectionId(categoryId));
@@ -183,13 +104,9 @@ export default function RestaurantView({
 
   const handleSortChange = (nextSort: SortOption) => {
     setSort(nextSort);
-
-    const sectionId = rankingSectionIdBySort[nextSort];
-    const section = document.getElementById(sectionId);
-    if (!section) return;
-
-    section.scrollIntoView({ behavior: "smooth", block: "start" });
   };
+
+  const noopChangeView = () => {};
 
   return (
     <div>
@@ -197,7 +114,7 @@ export default function RestaurantView({
         restaurantName={restaurantName}
         restaurantLogo={restaurantLogo}
         view={view}
-        onChange={setView}
+        onChange={noopChangeView}
         sort={sort}
         onSortChange={handleSortChange}
         filters={filters}
@@ -207,11 +124,13 @@ export default function RestaurantView({
         onCategorySelect={handleCategorySelect}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
+        entireMenu={entireMenu}
+        onEntireMenuChange={setEntireMenu}
       />
 
       <ControlsRow
         view={view}
-        onChange={setView}
+        onChange={noopChangeView}
         sort={sort}
         onSortChange={handleSortChange}
         filters={filters}
@@ -225,31 +144,19 @@ export default function RestaurantView({
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         showBranding={false}
+        showChips={false}
+        entireMenu={entireMenu}
+        onEntireMenuChange={setEntireMenu}
       />
 
-      <div ref={viewTopRef} style={{ scrollMarginTop: 200 }} />
-
-      {view === "menu" ? (
-        <MenuSections
-          restaurantId={restaurantId}
-          items={filteredItems}
-          sort={sort}
-          addons={addons}
-          commonChanges={commonChanges}
-        />
-      ) : (
-        <TopPicksList
-          restaurantId={restaurantId}
-          highestProtein={filteredHighestProtein}
-          bestCalorieProteinRatio={filteredBestRatio}
-          lowestCalorieItems={filteredLowestCalories}
-          sort={sort}
-          addons={addons}
-          commonChanges={commonChanges}
-          includeSidesDrinks={Boolean(filters.includeSidesDrinks)}
-          includeLargeShareables={Boolean(filters.includeLargeShareables)}
-        />
-      )}
+      <MenuSections
+        restaurantId={restaurantId}
+        items={filteredItems}
+        sort={sort}
+        addons={addons}
+        commonChanges={commonChanges}
+        groupByCategory={!entireMenu}
+      />
     </div>
   );
 }

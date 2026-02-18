@@ -24,6 +24,8 @@ type StickyRestaurantBarProps = {
   onCategorySelect?: (id: string) => void;
   searchQuery: string;
   onSearchChange: (value: string) => void;
+  entireMenu?: boolean;
+  onEntireMenuChange?: (checked: boolean) => void;
 };
 
 export default function StickyRestaurantBar({
@@ -40,6 +42,8 @@ export default function StickyRestaurantBar({
   onCategorySelect,
   searchQuery,
   onSearchChange,
+  entireMenu,
+  onEntireMenuChange,
 }: StickyRestaurantBarProps) {
   const [isVisible, setIsVisible] = useState(() => {
     if (typeof document === "undefined") return false;
@@ -116,6 +120,8 @@ export default function StickyRestaurantBar({
               onSearchChange={onSearchChange}
               onBrandClick={handleBrandClick}
               showChips={false}
+              entireMenu={entireMenu}
+              onEntireMenuChange={onEntireMenuChange}
             />
           </div>
 
