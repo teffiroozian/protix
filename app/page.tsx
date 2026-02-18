@@ -42,7 +42,13 @@ export default function Home() {
     [recentRestaurantIds]
   );
 
-  const popularRestaurants = useMemo(() => restaurants.slice(0, 10), []);
+  const popularRestaurants = useMemo(() => {
+    const recentIdSet = new Set(recentRestaurants.map((restaurant) => restaurant.id));
+
+    return restaurants
+      .filter((restaurant) => !recentIdSet.has(restaurant.id))
+      .slice(0, 10);
+  }, [recentRestaurants]);
 
   const filteredSuggestions = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -266,7 +272,7 @@ export default function Home() {
 
       <section className="mt-32 flex flex-col gap-8">
         <div>
-          <h2 className="text-3xl font-semibold text-neutral-900">Browse restaurants</h2>
+          <h2 className="text-3xl font-semibold text-neutral-900">Macro Friendly Restaurants</h2>
           <p className="mt-2 text-sm text-neutral-500">
             Explore the full list while using search suggestions above.
           </p>
