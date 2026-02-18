@@ -88,7 +88,7 @@ export default function Home() {
     setQuery(restaurant.name);
     setActiveIndex(-1);
     setIsFocused(false);
-    router.push(`/restaurant/${restaurant.id}`);
+    router.push(`/restaurant/${restaurant.id}`, { scroll: true });
   };
 
   const handleClear = () => {
@@ -308,6 +308,7 @@ export default function Home() {
               <Link
                 key={restaurant.id}
                 href={`/restaurant/${restaurant.id}`}
+                scroll
                 className="group"
               >
                 <article className="overflow-hidden rounded-2xl border border-black/10 bg-white/70 shadow-sm transition group-hover:-translate-y-0.5 group-hover:shadow-md">
@@ -354,7 +355,8 @@ export default function Home() {
                 {items.map((restaurant) => (
                   <Link
                     key={restaurant.id}
-                    href={`/restaurants/${restaurant.id}`}
+                    href={`/restaurant/${restaurant.id}`}
+                    scroll
                     className="flex w-full items-center gap-3 rounded-xl border border-black/10 bg-white px-3 py-2 shadow-sm transition hover:bg-neutral-50"
                   >
                     <span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-lg bg-neutral-50">
