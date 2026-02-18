@@ -42,14 +42,7 @@ export default function Home() {
     [recentRestaurantIds]
   );
 
-  const popularRestaurants = useMemo(() => {
-    const recentIdSet = new Set(recentRestaurants.map((restaurant) => restaurant.id));
-    const neededCount = 5 - recentRestaurants.length;
-
-    return restaurants
-      .filter((restaurant) => !recentIdSet.has(restaurant.id))
-      .slice(0, Math.max(neededCount, 0));
-  }, [recentRestaurants]);
+  const popularRestaurants = useMemo(() => restaurants.slice(0, 10), []);
 
   const filteredSuggestions = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
