@@ -6,43 +6,81 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import restaurants from "./data/index.json";
 
+const RECENT_RESTAURANTS_KEY = "recentlySearchedRestaurants";
+
 export default function Home() {
   const router = useRouter();
   const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(-1);
   const [isFocused, setIsFocused] = useState(false);
+  const [recentRestaurantIds] = useState<string[]>(() => {
+    if (typeof window === "undefined") {
+      return [];
+    }
 
-  const popularRestaurantQueries = useMemo(
-    () => ["chick-fil-a", "chipotle", "panera", "panda express", "habit burger"],
-    []
-  );
+    try {
+      const stored = window.localStorage.getItem(RECENT_RESTAURANTS_KEY);
+      const parsed = stored ? (JSON.parse(stored) as string[]) : [];
+      if (!Array.isArray(parsed)) {
+        return [];
+      }
 
-  const popularRestaurants = useMemo(
+      return parsed.filter(Boolean).slice(0, 3);
+    } catch {
+      return [];
+    }
+  });
+
+  const recentRestaurants = useMemo(
     () =>
-      popularRestaurantQueries
-        .map((query) =>
-          restaurants.find((restaurant) =>
-            restaurant.name.toLowerCase().includes(query)
-          )
-        )
+      recentRestaurantIds
+        .map((id) => restaurants.find((restaurant) => restaurant.id === id))
         .filter((restaurant): restaurant is (typeof restaurants)[number] =>
           Boolean(restaurant)
-        ),
-    [popularRestaurantQueries]
+        )
+        .slice(0, 3),
+    [recentRestaurantIds]
   );
 
-  const suggestions = useMemo(() => {
+  const popularRestaurants = useMemo(() => {
+    const recentIdSet = new Set(recentRestaurants.map((restaurant) => restaurant.id));
+
+    return restaurants
+      .filter((restaurant) => !recentIdSet.has(restaurant.id))
+      .slice(0, 10);
+  }, [recentRestaurants]);
+
+  const filteredSuggestions = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
     if (!normalizedQuery) {
-      return isFocused ? popularRestaurants.slice(0, 5) : [];
+      return [];
     }
 
     return restaurants
       .filter((restaurant) =>
         restaurant.name.toLowerCase().includes(normalizedQuery)
       )
-      .slice(0, 5);
-  }, [query, isFocused, popularRestaurants]);
+      .slice(0, 10);
+  }, [query]);
+
+  const groupedRestaurants = useMemo(() => {
+    const sorted = [...restaurants].sort((a, b) => a.name.localeCompare(b.name));
+    const grouped = new Map<string, (typeof restaurants)[number][]>();
+
+    sorted.forEach((restaurant) => {
+      const firstLetter = restaurant.name.charAt(0).toUpperCase();
+      const existing = grouped.get(firstLetter) ?? [];
+      existing.push(restaurant);
+      grouped.set(firstLetter, existing);
+    });
+
+    return Array.from(grouped.entries());
+  }, []);
+
+  const isEmptyFocusedState = isFocused && !query.trim();
+  const suggestions = isEmptyFocusedState
+    ? [...recentRestaurants, ...popularRestaurants]
+    : filteredSuggestions;
 
   const showSuggestions = isFocused && suggestions.length > 0;
 
@@ -50,7 +88,7 @@ export default function Home() {
     setQuery(restaurant.name);
     setActiveIndex(-1);
     setIsFocused(false);
-    router.push(`/restaurant/${restaurant.id}`);
+    router.push(`/restaurant/${restaurant.id}`, { scroll: true });
   };
 
   const handleClear = () => {
@@ -155,32 +193,99 @@ export default function Home() {
           )}
           {showSuggestions && (
             <div className="absolute left-0 right-0 top-full z-10 mt-2 overflow-hidden rounded-2xl border border-black/10 bg-white shadow-lg">
-              <ul role="listbox" className="max-h-72 overflow-y-auto py-2">
-                {suggestions.map((restaurant, index) => (
-                  <li
-                    key={restaurant.id}
-                    role="option"
-                    aria-selected={activeIndex === index}
-                    className={`flex cursor-pointer items-center gap-3 px-4 py-2 text-sm text-neutral-700 transition hover:bg-neutral-100 ${
-                      activeIndex === index ? "bg-neutral-100" : ""
-                    }`}
-                    onMouseDown={(event) => event.preventDefault()}
-                    onClick={() => handleSelect(restaurant)}
-                  >
-                    <span className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-lg bg-neutral-50">
-                      <Image
-                        src={restaurant.logo}
-                        alt=""
-                        width={24}
-                        height={24}
-                        className="object-contain"
-                      />
-                    </span>
-                    <span className="font-semibold text-neutral-900">
-                      {restaurant.name}
-                    </span>
-                  </li>
-                ))}
+              <ul role="listbox" className="max-h-60 overflow-y-auto py-2">
+                {isEmptyFocusedState ? (
+                  <>
+                    {recentRestaurants.length > 0 && (
+                      <li className="px-4 py-1 text-xs font-medium uppercase tracking-wide text-neutral-500">
+                        Recently Searched
+                      </li>
+                    )}
+                    {recentRestaurants.map((restaurant, index) => (
+                      <li
+                        key={restaurant.id}
+                        role="option"
+                        aria-selected={activeIndex === index}
+                        className={`flex cursor-pointer items-center gap-3 px-4 py-2 text-sm text-neutral-700 transition hover:bg-neutral-100 ${
+                          activeIndex === index ? "bg-neutral-100" : ""
+                        }`}
+                        onMouseDown={(event) => event.preventDefault()}
+                        onClick={() => handleSelect(restaurant)}
+                      >
+                        <span className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-lg bg-neutral-50">
+                          <Image
+                            src={restaurant.logo}
+                            alt=""
+                            width={24}
+                            height={24}
+                            className="object-contain"
+                          />
+                        </span>
+                        <span className="font-semibold text-neutral-900">
+                          {restaurant.name}
+                        </span>
+                      </li>
+                    ))}
+
+                    <li className="px-4 py-1 text-xs font-medium uppercase tracking-wide text-neutral-500">
+                      Popular Restaurant
+                    </li>
+                    {popularRestaurants.map((restaurant, index) => {
+                      const absoluteIndex = recentRestaurants.length + index;
+                      return (
+                        <li
+                          key={restaurant.id}
+                          role="option"
+                          aria-selected={activeIndex === absoluteIndex}
+                          className={`flex cursor-pointer items-center gap-3 px-4 py-2 text-sm text-neutral-700 transition hover:bg-neutral-100 ${
+                            activeIndex === absoluteIndex ? "bg-neutral-100" : ""
+                          }`}
+                          onMouseDown={(event) => event.preventDefault()}
+                          onClick={() => handleSelect(restaurant)}
+                        >
+                          <span className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-lg bg-neutral-50">
+                            <Image
+                              src={restaurant.logo}
+                              alt=""
+                              width={24}
+                              height={24}
+                              className="object-contain"
+                            />
+                          </span>
+                          <span className="font-semibold text-neutral-900">
+                            {restaurant.name}
+                          </span>
+                        </li>
+                      );
+                    })}
+                  </>
+                ) : (
+                  filteredSuggestions.map((restaurant, index) => (
+                    <li
+                      key={restaurant.id}
+                      role="option"
+                      aria-selected={activeIndex === index}
+                      className={`flex cursor-pointer items-center gap-3 px-4 py-2 text-sm text-neutral-700 transition hover:bg-neutral-100 ${
+                        activeIndex === index ? "bg-neutral-100" : ""
+                      }`}
+                      onMouseDown={(event) => event.preventDefault()}
+                      onClick={() => handleSelect(restaurant)}
+                    >
+                      <span className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-lg bg-neutral-50">
+                        <Image
+                          src={restaurant.logo}
+                          alt=""
+                          width={24}
+                          height={24}
+                          className="object-contain"
+                        />
+                      </span>
+                      <span className="font-semibold text-neutral-900">
+                        {restaurant.name}
+                      </span>
+                    </li>
+                  ))
+                )}
               </ul>
             </div>
           )}
@@ -190,46 +295,88 @@ export default function Home() {
       <section className="mt-32 flex flex-col gap-8">
         <div>
           <h2 className="text-3xl font-semibold text-neutral-900">
-            Browse restaurants
+            Macro Friendly Restaurants
           </h2>
           <p className="mt-2 text-sm text-neutral-500">
             Explore the full list while using search suggestions above.
           </p>
         </div>
         <section className="grid gap-4 sm:grid-cols-2">
-          {restaurants.map((restaurant) => (
-            <Link
-              key={restaurant.id}
-              href={`/restaurant/${restaurant.id}`}
-              className="group"
-            >
-              <article className="overflow-hidden rounded-2xl border border-black/10 bg-white/70 shadow-sm transition group-hover:-translate-y-0.5 group-hover:shadow-md">
-                <div className="relative h-44 w-full overflow-hidden">
-                  <Image
-                    src={restaurant.cover}
-                    alt={`${restaurant.name} cover`}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <div className="flex items-center gap-3 border-t border-black/5 bg-white/80 px-4 py-3">
-                  <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-xl">
+          {restaurants
+            .filter((restaurant) => restaurant.isMacroFriendly)
+            .map((restaurant) => (
+              <Link
+                key={restaurant.id}
+                href={`/restaurant/${restaurant.id}`}
+                scroll
+                className="group"
+              >
+                <article className="overflow-hidden rounded-2xl border border-black/10 bg-white/70 shadow-sm transition group-hover:-translate-y-0.5 group-hover:shadow-md">
+                  <div className="relative h-44 w-full overflow-hidden">
                     <Image
-                      src={restaurant.logo}
-                      alt={`${restaurant.name} logo`}
-                      width={36}
-                      height={36}
-                      className="object-contain"
+                      src={restaurant.cover}
+                      alt={`${restaurant.name} cover`}
+                      fill
+                      className="object-cover"
                     />
                   </div>
-                  <span className="text-base font-semibold text-neutral-900">
-                    {restaurant.name}
-                  </span>
-                </div>
-              </article>
-            </Link>
-          ))}
+                  <div className="flex items-center gap-3 border-t border-black/5 bg-white/80 px-4 py-3">
+                    <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-xl">
+                      <Image
+                        src={restaurant.logo}
+                        alt={`${restaurant.name} logo`}
+                        width={36}
+                        height={36}
+                        className="object-contain"
+                      />
+                    </div>
+                    <span className="text-base font-semibold text-neutral-900">
+                      {restaurant.name}
+                    </span>
+                  </div>
+                </article>
+              </Link>
+            ))}
         </section>
+      </section>
+
+      <section className="flex flex-col gap-4">
+        <div>
+          <h2 className="text-3xl font-semibold text-neutral-900">All Restaurants</h2>
+        </div>
+
+        <div className="space-y-6">
+          {groupedRestaurants.map(([letter, items]) => (
+            <section key={letter} className="space-y-2">
+              <h3 className="text-sm font-semibold uppercase tracking-wide text-neutral-500">
+                {letter}
+              </h3>
+              <div className="space-y-2">
+                {items.map((restaurant) => (
+                  <Link
+                    key={restaurant.id}
+                    href={`/restaurant/${restaurant.id}`}
+                    scroll
+                    className="flex w-full items-center gap-3 rounded-xl border border-black/10 bg-white px-3 py-2 shadow-sm transition hover:bg-neutral-50"
+                  >
+                    <span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-lg bg-neutral-50">
+                      <Image
+                        src={restaurant.logo}
+                        alt={`${restaurant.name} logo`}
+                        width={28}
+                        height={28}
+                        className="object-contain"
+                      />
+                    </span>
+                    <span className="text-sm font-semibold text-neutral-900">
+                      {restaurant.name}
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
       </section>
     </main>
   );

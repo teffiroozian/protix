@@ -2,6 +2,8 @@ import Link from "next/link";
 import restaurants from "../../data/index.json";
 import RestaurantHeader from "@/components/RestaurantHeader";
 import RestaurantView from "@/components/RestaurantView";
+import RecentRestaurantTracker from "@/components/RecentRestaurantTracker";
+import ScrollToTopOnMount from "@/components/ScrollToTopOnMount";
 import type { CommonChange, MenuItem, RestaurantAddons } from "@/types/menu";
 
 // calories per 1g protein (bigger number = more calories for each gram of protein)
@@ -60,6 +62,9 @@ export default async function RestaurantPage({
           restaurantSlug={restaurant.id}
         />
       </div>
+
+      <RecentRestaurantTracker restaurantId={restaurant.id} />
+      <ScrollToTopOnMount />
 
       <main style={{ maxWidth: 900, margin: "24px auto 48px", padding: 16 }}>
         <RestaurantView
