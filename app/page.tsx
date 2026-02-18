@@ -12,37 +12,18 @@ export default function Home() {
   const [activeIndex, setActiveIndex] = useState(-1);
   const [isFocused, setIsFocused] = useState(false);
 
-  const popularRestaurantQueries = useMemo(
-    () => ["chick-fil-a", "chipotle", "panera", "panda express", "habit burger"],
-    []
-  );
-
-  const popularRestaurants = useMemo(
-    () =>
-      popularRestaurantQueries
-        .map((query) =>
-          restaurants.find((restaurant) =>
-            restaurant.name.toLowerCase().includes(query)
-          )
-        )
-        .filter((restaurant): restaurant is (typeof restaurants)[number] =>
-          Boolean(restaurant)
-        ),
-    [popularRestaurantQueries]
-  );
-
   const suggestions = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
     if (!normalizedQuery) {
-      return isFocused ? popularRestaurants.slice(0, 5) : [];
+      return isFocused ? restaurants.slice(0, 10) : [];
     }
 
     return restaurants
       .filter((restaurant) =>
         restaurant.name.toLowerCase().includes(normalizedQuery)
       )
-      .slice(0, 5);
-  }, [query, isFocused, popularRestaurants]);
+      .slice(0, 10);
+  }, [query, isFocused]);
 
   const showSuggestions = isFocused && suggestions.length > 0;
 
@@ -155,7 +136,7 @@ export default function Home() {
           )}
           {showSuggestions && (
             <div className="absolute left-0 right-0 top-full z-10 mt-2 overflow-hidden rounded-2xl border border-black/10 bg-white shadow-lg">
-              <ul role="listbox" className="max-h-72 overflow-y-auto py-2">
+              <ul role="listbox" className="max-h-60 overflow-y-auto py-2">
                 {suggestions.map((restaurant, index) => (
                   <li
                     key={restaurant.id}
