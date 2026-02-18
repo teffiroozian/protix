@@ -29,7 +29,7 @@
         "logo": "/brands/mcdonalds/logo.png",
         "cover": "/brands/mcdonalds/mcdcover.png",
         "menuFile": "mcdonlads.json",
-        "isMacroFriendly": true
+        "isMacroFriendly": false
     },
     {
         "id": "starbucks",

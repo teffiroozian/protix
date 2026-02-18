@@ -278,7 +278,9 @@ export default function Home() {
           </p>
         </div>
         <section className="grid gap-4 sm:grid-cols-2">
-          {restaurants.map((restaurant) => (
+          {restaurants
+            .filter((restaurant) => restaurant.isMacroFriendly)
+            .map((restaurant) => (
             <Link key={restaurant.id} href={`/restaurant/${restaurant.id}`} className="group">
               <article className="overflow-hidden rounded-2xl border border-black/10 bg-white/70 shadow-sm transition group-hover:-translate-y-0.5 group-hover:shadow-md">
                 <div className="relative h-44 w-full overflow-hidden">
