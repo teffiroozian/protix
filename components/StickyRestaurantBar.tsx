@@ -86,10 +86,10 @@ export default function StickyRestaurantBar({
   }, []);
 
   useEffect(() => {
-    if (searchOpen) {
+    if (searchOpen && isVisible) {
       searchInputRef.current?.focus();
     }
-  }, [searchOpen]);
+  }, [searchOpen, isVisible]);
 
   const hasActiveFilters = Boolean(filters.proteinMin || filters.caloriesMax);
 

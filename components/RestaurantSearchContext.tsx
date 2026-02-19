@@ -18,6 +18,25 @@ export function RestaurantSearchProvider({ children }: { children: ReactNode }) 
 
   const openSearch = () => {
     setSearchOpen(true);
+
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const controlsRow = document.getElementById("controls-row");
+    if (!controlsRow) {
+      return;
+    }
+
+    const rect = controlsRow.getBoundingClientRect();
+    const isControlsRowInView = rect.top < window.innerHeight && rect.bottom > 0;
+
+    if (isControlsRowInView) {
+      window.scrollTo({
+        top: window.scrollY + rect.bottom + 8,
+        behavior: "smooth",
+      });
+    }
   };
 
   const closeSearch = () => {
