@@ -159,19 +159,37 @@ export default function Home() {
               }
             }}
             placeholder="Start typing a restaurant name"
-            className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 pr-12 text-base text-neutral-900 shadow-inner outline-none transition focus:border-black/30 focus:ring-4 focus:ring-black/5"
+            className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 pr-16 text-base text-neutral-900 shadow-inner outline-none transition focus:border-black/30 focus:ring-4 focus:ring-black/5"
           />
-          {query ? (
+          <span className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-neutral-400">
+            <svg
+              aria-hidden="true"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M11 19a8 8 0 1 1 0-16 8 8 0 0 1 0 16Zm10 2-4.35-4.35"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </span>
+          {query && (
             <button
               type="button"
               onClick={handleClear}
-              className="absolute inset-y-0 right-3 flex items-center rounded-full px-2 text-neutral-400 transition hover:text-neutral-600"
+              className="absolute inset-y-0 right-11 flex items-center rounded-full px-1 text-neutral-400 transition hover:text-neutral-600"
               aria-label="Clear search"
             >
               <svg
                 aria-hidden="true"
-                width="18"
-                height="18"
+                width="16"
+                height="16"
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -185,25 +203,6 @@ export default function Home() {
                 />
               </svg>
             </button>
-          ) : (
-            <span className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-neutral-400">
-              <svg
-                aria-hidden="true"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M11 19a8 8 0 1 1 0-16 8 8 0 0 1 0 16Zm10 2-4.35-4.35"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </span>
           )}
           {showSuggestions && (
             <div className="absolute left-0 right-0 top-full z-10 mt-2 overflow-hidden rounded-2xl border border-black/10 bg-white shadow-lg">
