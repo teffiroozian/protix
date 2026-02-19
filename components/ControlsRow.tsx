@@ -12,8 +12,7 @@ export type Filters = {
   includeLargeShareables?: boolean;
 };
 
-const PROTEIN_OPTIONS = [20, 30, 40];
-const CALORIE_OPTIONS = [500, 700, 900];
+const PROTEIN_OPTIONS = [20, 30, 40, 50];
 
 const SORT_OPTIONS: Array<{ label: string; value: SortOption }> = [
   { label: "Highest Protein", value: "highest-protein" },
@@ -75,6 +74,7 @@ export default function ControlsRow({
   showBranding = true,
   entireMenu = false,
   onEntireMenuChange,
+  calorieBounds,
 }: {
   view: ViewOption;
   onChange: (view: ViewOption) => void;
@@ -95,6 +95,10 @@ export default function ControlsRow({
   showBranding?: boolean;
   entireMenu?: boolean;
   onEntireMenuChange?: (checked: boolean) => void;
+  calorieBounds: {
+    min: number;
+    max: number;
+  };
 }) {
   void view;
   void onChange;
@@ -130,18 +134,28 @@ export default function ControlsRow({
     [sort]
   );
 
+  const defaultCaloriesMax = calorieBounds.max;
+
   const openFilters = () => {
-    setDraftFilters(filters);
+    setDraftFilters({
+      ...filters,
+      caloriesMax: filters.caloriesMax ?? defaultCaloriesMax,
+    });
     setIsFiltersOpen(true);
   };
 
   const applyFilters = () => {
-    onFiltersChange(draftFilters);
+    const nextFilters = { ...draftFilters };
+    if (nextFilters.caloriesMax === defaultCaloriesMax) {
+      nextFilters.caloriesMax = undefined;
+    }
+
+    onFiltersChange(nextFilters);
     setIsFiltersOpen(false);
   };
 
   const resetFilters = () => {
-    setDraftFilters({});
+    setDraftFilters({ caloriesMax: defaultCaloriesMax });
     onFiltersChange({});
   };
 
@@ -178,16 +192,24 @@ export default function ControlsRow({
             </div>
           </div>
           <div>
-            <div style={{ fontWeight: 600, marginBottom: 8 }}>Calories max</div>
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-              {CALORIE_OPTIONS.map((value) => {
-                const isActive = draftFilters.caloriesMax === value;
-                return (
-                  <button key={value} type="button" onClick={() => setDraftFilters((prev) => ({ ...prev, caloriesMax: value }))} style={{ padding: "6px 12px", borderRadius: 999, border: "1px solid rgba(0,0,0,0.2)", background: isActive ? "rgba(0,0,0,0.85)" : "white", color: isActive ? "white" : "rgba(0,0,0,0.8)", fontWeight: 600, cursor: "pointer" }}>
-                    Under {value}
-                  </button>
-                );
-              })}
+            <div style={{ fontWeight: 600, marginBottom: 8 }}>Calories max: {draftFilters.caloriesMax ?? defaultCaloriesMax}</div>
+            <div style={{ display: "grid", gap: 8 }}>
+              <input
+                type="range"
+                min={calorieBounds.min}
+                max={calorieBounds.max}
+                step={10}
+                value={draftFilters.caloriesMax ?? defaultCaloriesMax}
+                onChange={(event) => {
+                  const value = Number(event.target.value);
+                  setDraftFilters((prev) => ({ ...prev, caloriesMax: value }));
+                }}
+                style={{ width: "100%", cursor: "pointer" }}
+              />
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: "rgba(0,0,0,0.6)", fontWeight: 600 }}>
+                <span>{calorieBounds.min}</span>
+                <span>{calorieBounds.max}</span>
+              </div>
             </div>
           </div>
         </div>
