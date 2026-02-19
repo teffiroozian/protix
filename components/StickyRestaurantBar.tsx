@@ -96,6 +96,12 @@ export default function StickyRestaurantBar({
     onFiltersChange({ ...filters, caloriesMax: undefined });
   };
 
+  const closeSearch = () => {
+    onSearchChange("");
+    setSearchQuery("");
+    setIsSearchOpen(false);
+  };
+
   const resetFilters = () => {
     onFiltersChange({});
   };
@@ -145,7 +151,7 @@ export default function StickyRestaurantBar({
           </button>
 
           <div className="ml-auto flex items-center gap-2">
-            <div className={`overflow-hidden transition-all duration-300 ${isSearchOpen ? "w-44 opacity-100" : "w-0 opacity-0"}`}>
+            <div className={`overflow-hidden transition-all duration-300 ${isSearchOpen ? "w-[16rem] opacity-100" : "w-0 opacity-0"}`}>
               <input
                 ref={searchInputRef}
                 value={searchQuery}
@@ -162,7 +168,7 @@ export default function StickyRestaurantBar({
             {isSearchOpen ? (
               <button
                 type="button"
-                onClick={() => setIsSearchOpen(false)}
+                onClick={closeSearch}
                 className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-300/80 bg-white text-base text-slate-800"
                 aria-label="Close search"
               >

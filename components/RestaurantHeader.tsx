@@ -68,6 +68,7 @@ export default function RestaurantHeader({
   };
 
   const closeSearch = () => {
+    setSearchQuery("");
     setIsSearchOpen(false);
   };
 
