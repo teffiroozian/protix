@@ -123,7 +123,6 @@ export default function StickyRestaurantBar({
     <div
       className={`fixed left-0 right-0 top-0 z-50 shadow-[0_14px_35px_rgba(15,23,42,0.25)] transition duration-300 ${
         isVisible
-          || isSearchMode
           ? "translate-y-0 opacity-100"
           : "-translate-y-full opacity-0 pointer-events-none"
       }`}
