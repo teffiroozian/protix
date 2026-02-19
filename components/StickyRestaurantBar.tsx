@@ -2,8 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useEffect, useState } from "react";
+import { useMemo, useEffect, useRef, useState } from "react";
 import { useCart } from "@/stores/cartStore";
+import { useRestaurantUi } from "@/components/RestaurantUiContext";
+import { useRestaurantSearch } from "@/components/RestaurantSearchContext";
 import ControlsRow, {
   FilterChips,
   type Filters,
@@ -50,6 +52,10 @@ export default function StickyRestaurantBar({
     if (typeof document === "undefined") return false;
     return !document.getElementById("controls-row");
   });
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const { openCart } = useRestaurantUi();
+  const { setSearchQuery } = useRestaurantSearch();
 
   useEffect(() => {
     const controlsRow = document.getElementById("controls-row");
@@ -69,6 +75,12 @@ export default function StickyRestaurantBar({
 
     return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    if (isSearchOpen) {
+      searchInputRef.current?.focus();
+    }
+  }, [isSearchOpen]);
 
   const hasActiveFilters = Boolean(filters.proteinMin || filters.caloriesMax);
 
@@ -93,10 +105,6 @@ export default function StickyRestaurantBar({
     () => items.reduce((sum, item) => sum + item.quantity, 0),
     [items]
   );
-
-  const handleSearchClick = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
 
   return (
     <div
@@ -136,22 +144,50 @@ export default function StickyRestaurantBar({
             {restaurantName}
           </button>
 
-          <button
-            type="button"
-            onClick={handleSearchClick}
-            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-300/80 bg-white text-base text-slate-800 transition hover:bg-slate-50"
-            aria-label="Go to search"
-          >
-            🔍
-          </button>
+          <div className="ml-auto flex items-center gap-2">
+            <div className={`overflow-hidden transition-all duration-300 ${isSearchOpen ? "w-44 opacity-100" : "w-0 opacity-0"}`}>
+              <input
+                ref={searchInputRef}
+                value={searchQuery}
+                onChange={(event) => {
+                  onSearchChange(event.target.value);
+                  setSearchQuery(event.target.value);
+                }}
+                placeholder="Search menu items"
+                aria-label="Search menu items"
+                className="h-9 w-full rounded-full border border-slate-300/80 bg-white px-3 text-sm text-slate-900 outline-none"
+              />
+            </div>
 
-          <Link
-            href="/cart"
-            className="inline-flex h-9 min-w-9 shrink-0 items-center justify-center rounded-full border border-slate-300/80 bg-white px-2.5 text-base text-slate-800 transition hover:bg-slate-50"
-            aria-label={cartCount > 0 ? `Cart (${cartCount})` : "Cart"}
-          >
-            {cartCount > 0 ? `🛒 ${cartCount}` : "🛒"}
-          </Link>
+            {isSearchOpen ? (
+              <button
+                type="button"
+                onClick={() => setIsSearchOpen(false)}
+                className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-300/80 bg-white text-base text-slate-800"
+                aria-label="Close search"
+              >
+                ✕
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setIsSearchOpen(true)}
+                className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-300/80 bg-white text-base text-slate-800 transition hover:bg-slate-50"
+                aria-label="Search menu items"
+              >
+                🔍
+              </button>
+            )}
+
+            <button
+              type="button"
+              onClick={openCart}
+              className="inline-flex h-9 min-w-9 shrink-0 items-center justify-center rounded-full border border-slate-300/80 bg-white px-2.5 text-base text-slate-800 transition hover:bg-slate-50"
+              aria-label={cartCount > 0 ? `Cart (${cartCount})` : "Cart"}
+            >
+              {cartCount > 0 ? `🛒 ${cartCount}` : "🛒"}
+            </button>
+          </div>
         </div>
       </div>
 

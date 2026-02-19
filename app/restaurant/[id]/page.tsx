@@ -5,6 +5,8 @@ import RestaurantView from "@/components/RestaurantView";
 import RecentRestaurantTracker from "@/components/RecentRestaurantTracker";
 import ScrollToTopOnMount from "@/components/ScrollToTopOnMount";
 import { RestaurantSearchProvider } from "@/components/RestaurantSearchContext";
+import { RestaurantUiProvider } from "@/components/RestaurantUiContext";
+import CartPreviewDrawer from "@/components/CartPreviewDrawer";
 import type { CommonChange, MenuItem, RestaurantAddons } from "@/types/menu";
 
 export default async function RestaurantPage({
@@ -34,7 +36,8 @@ export default async function RestaurantPage({
 
   return (
     <RestaurantSearchProvider>
-      <div style={{ width: "100%" }}>
+      <RestaurantUiProvider>
+        <div style={{ width: "100%" }}>
         <div id="restaurant-hero" className="mt-6">
           <RestaurantHeader
             name={restaurant.name}
@@ -57,7 +60,9 @@ export default async function RestaurantPage({
             autoScrollOnViewChange
           />
         </main>
-      </div>
+        </div>
+        <CartPreviewDrawer />
+      </RestaurantUiProvider>
     </RestaurantSearchProvider>
   );
 }
