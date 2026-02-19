@@ -44,12 +44,26 @@ export default function RestaurantView({
     .split(/\s+/)
     .filter(Boolean);
 
+  const calorieRange = useMemo(() => {
+    const calories = items
+      .map((item) => item.nutrition?.calories)
+      .filter((value): value is number => Number.isFinite(value));
+
+    if (!calories.length) {
+      return { min: 0, max: 700 };
+    }
+
+    const min = Math.min(...calories);
+    const max = Math.max(...calories);
+    return { min, max };
+  }, [items]);
+
   const filteredItems = useMemo(() => {
     return items.filter((item) => {
-      if (filters.proteinMin && item.nutrition.protein < filters.proteinMin) {
+      if (filters.proteinMin && (item.nutrition?.protein ?? 0) < filters.proteinMin) {
         return false;
       }
-      if (filters.caloriesMax && item.nutrition.calories > filters.caloriesMax) {
+      if (filters.caloriesMax && (item.nutrition?.calories ?? Number.POSITIVE_INFINITY) > filters.caloriesMax) {
         return false;
       }
       if (!searchTerms.length) {
@@ -126,6 +140,7 @@ export default function RestaurantView({
         onSearchChange={setSearchQuery}
         entireMenu={entireMenu}
         onEntireMenuChange={setEntireMenu}
+        calorieRange={calorieRange}
       />
 
       <ControlsRow
@@ -147,16 +162,23 @@ export default function RestaurantView({
         showChips={false}
         entireMenu={entireMenu}
         onEntireMenuChange={setEntireMenu}
+        calorieRange={calorieRange}
       />
 
-      <MenuSections
-        restaurantId={restaurantId}
-        items={filteredItems}
-        sort={sort}
-        addons={addons}
-        commonChanges={commonChanges}
-        groupByCategory={!entireMenu}
-      />
+      {filteredItems.length === 0 && (filters.proteinMin || filters.caloriesMax) ? (
+        <div style={{ marginTop: 32, padding: "20px 16px", border: "1px solid rgba(0,0,0,0.12)", borderRadius: 16, color: "rgba(0,0,0,0.72)", background: "white" }}>
+          No items match these filters. Try lowering protein minimum or increasing calories.
+        </div>
+      ) : (
+        <MenuSections
+          restaurantId={restaurantId}
+          items={filteredItems}
+          sort={sort}
+          addons={addons}
+          commonChanges={commonChanges}
+          groupByCategory={!entireMenu}
+        />
+      )}
     </div>
   );
 }

@@ -12,8 +12,7 @@ export type Filters = {
   includeLargeShareables?: boolean;
 };
 
-const PROTEIN_OPTIONS = [20, 30, 40];
-const CALORIE_OPTIONS = [500, 700, 900];
+const PROTEIN_OPTIONS = [20, 30, 40, 50];
 
 const SORT_OPTIONS: Array<{ label: string; value: SortOption }> = [
   { label: "Highest Protein", value: "highest-protein" },
@@ -75,6 +74,7 @@ export default function ControlsRow({
   showBranding = true,
   entireMenu = false,
   onEntireMenuChange,
+  calorieRange,
 }: {
   view: ViewOption;
   onChange: (view: ViewOption) => void;
@@ -95,6 +95,7 @@ export default function ControlsRow({
   showBranding?: boolean;
   entireMenu?: boolean;
   onEntireMenuChange?: (checked: boolean) => void;
+  calorieRange: { min: number; max: number };
 }) {
   void view;
   void onChange;
@@ -130,18 +131,48 @@ export default function ControlsRow({
     [sort]
   );
 
+  const sliderMin = useMemo(
+    () => Math.floor(calorieRange.min / 50) * 50,
+    [calorieRange.min]
+  );
+  const sliderMax = useMemo(
+    () => Math.ceil(calorieRange.max / 50) * 50,
+    [calorieRange.max]
+  );
+  const defaultCaloriesMax =
+    sliderMin <= 700 && 700 <= sliderMax ? 700 : sliderMax;
+
+  const currentCaloriesMax = draftFilters.caloriesMax ?? defaultCaloriesMax;
+
+  const toDefaultFilters = () => ({
+    proteinMin: undefined,
+    caloriesMax: defaultCaloriesMax,
+  });
+
   const openFilters = () => {
-    setDraftFilters(filters);
+    setDraftFilters({
+      ...filters,
+      caloriesMax: filters.caloriesMax ?? defaultCaloriesMax,
+    });
     setIsFiltersOpen(true);
   };
 
   const applyFilters = () => {
-    onFiltersChange(draftFilters);
+    onFiltersChange({
+      ...draftFilters,
+      caloriesMax:
+        !draftFilters.caloriesMax || draftFilters.caloriesMax >= sliderMax
+          ? undefined
+          : draftFilters.caloriesMax,
+    });
     setIsFiltersOpen(false);
   };
 
-  const resetFilters = () => {
-    setDraftFilters({});
+  const resetDraftFilters = () => {
+    setDraftFilters(toDefaultFilters());
+  };
+
+  const resetAppliedFilters = () => {
     onFiltersChange({});
   };
 
@@ -161,9 +192,9 @@ export default function ControlsRow({
 
   const filtersDialog = isFiltersOpen ? (
     <div role="dialog" aria-modal="true" style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.35)", display: "flex", justifyContent: "center", alignItems: "flex-end", padding: 16, zIndex: 50 }} onClick={() => setIsFiltersOpen(false)}>
-      <div style={{ width: "100%", maxWidth: 520, background: "white", borderRadius: 20, padding: 20, boxShadow: "0 16px 40px rgba(0,0,0,0.2)" }} onClick={(event) => event.stopPropagation()}>
+      <div style={{ width: "100%", maxWidth: 520, height: "68vh", maxHeight: "68vh", background: "white", borderRadius: 20, padding: 20, boxShadow: "0 16px 40px rgba(0,0,0,0.2)", display: "flex", flexDirection: "column" }} onClick={(event) => event.stopPropagation()}>
         <h3 style={{ fontSize: 20, fontWeight: 700, marginBottom: 16 }}>Filters</h3>
-        <div style={{ display: "grid", gap: 16 }}>
+        <div style={{ display: "grid", gap: 20, flex: 1, alignContent: "start" }}>
           <div>
             <div style={{ fontWeight: 600, marginBottom: 8 }}>Protein minimum</div>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
@@ -178,21 +209,34 @@ export default function ControlsRow({
             </div>
           </div>
           <div>
-            <div style={{ fontWeight: 600, marginBottom: 8 }}>Calories max</div>
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-              {CALORIE_OPTIONS.map((value) => {
-                const isActive = draftFilters.caloriesMax === value;
-                return (
-                  <button key={value} type="button" onClick={() => setDraftFilters((prev) => ({ ...prev, caloriesMax: value }))} style={{ padding: "6px 12px", borderRadius: 999, border: "1px solid rgba(0,0,0,0.2)", background: isActive ? "rgba(0,0,0,0.85)" : "white", color: isActive ? "white" : "rgba(0,0,0,0.8)", fontWeight: 600, cursor: "pointer" }}>
-                    Under {value}
-                  </button>
-                );
-              })}
+            <div style={{ fontWeight: 600, marginBottom: 8 }}>
+              Calories max: {currentCaloriesMax}
+            </div>
+            <div style={{ display: "grid", gap: 8 }}>
+              <input
+                type="range"
+                min={sliderMin}
+                max={sliderMax}
+                step={10}
+                value={currentCaloriesMax}
+                onChange={(event) =>
+                  setDraftFilters((prev) => ({
+                    ...prev,
+                    caloriesMax: Number(event.target.value),
+                  }))
+                }
+                style={{ width: "100%", accentColor: "rgba(0,0,0,0.85)", cursor: "pointer" }}
+                aria-label="Calories maximum"
+              />
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: "rgba(0,0,0,0.6)" }}>
+                <span>{sliderMin}</span>
+                <span>{sliderMax}</span>
+              </div>
             </div>
           </div>
         </div>
-        <div style={{ marginTop: 20, display: "flex", gap: 12, justifyContent: "flex-end" }}>
-          <button type="button" onClick={resetFilters} style={{ padding: "8px 16px", borderRadius: 999, border: "1px solid rgba(0,0,0,0.2)", background: "white", color: "rgba(0,0,0,0.8)", fontWeight: 600, cursor: "pointer" }}>
+        <div style={{ marginTop: 20, display: "flex", gap: 12, justifyContent: "space-between" }}>
+          <button type="button" onClick={resetDraftFilters} style={{ padding: "8px 16px", borderRadius: 999, border: "1px solid rgba(0,0,0,0.2)", background: "white", color: "rgba(0,0,0,0.8)", fontWeight: 600, cursor: "pointer" }}>
             Reset
           </button>
           <button type="button" onClick={applyFilters} style={{ padding: "8px 16px", borderRadius: 999, border: "1px solid rgba(0,0,0,0.8)", background: "rgba(0,0,0,0.85)", color: "white", fontWeight: 700, cursor: "pointer" }}>
@@ -287,7 +331,7 @@ export default function ControlsRow({
         </div>
 
         {hasActiveFilters && showChips ? (
-          <FilterChips filters={filters} onClearProtein={clearProteinFilter} onClearCalories={clearCaloriesFilter} onClearAll={resetFilters} withMargin={false} />
+          <FilterChips filters={filters} onClearProtein={clearProteinFilter} onClearCalories={clearCaloriesFilter} onClearAll={resetAppliedFilters} withMargin={false} />
         ) : null}
       </div>
 
