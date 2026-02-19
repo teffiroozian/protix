@@ -125,7 +125,7 @@ export default function Home() {
       <section className="flex flex-col gap-3">
         <div className="relative">
           <input
-            type="search"
+            type="text"
             value={query}
             onChange={(event) => {
               setQuery(event.target.value);
