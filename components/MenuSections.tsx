@@ -3,6 +3,7 @@
 import type { CommonChange, MenuItem, RestaurantAddons } from "@/types/menu";
 import type { SortOption } from "./ControlsRow";
 import MenuItemCard from "./MenuItemCard";
+import { getEffectiveNutrition } from "./menuItemVariants";
 
 function normalizeCategory(category: string) {
   return category.trim().toLowerCase();
@@ -65,18 +66,19 @@ function titleCase(text: string) {
 }
 
 function caloriesPerProtein(item: MenuItem) {
-  if (!item.nutrition.protein) return Number.POSITIVE_INFINITY;
-  return item.nutrition.calories / item.nutrition.protein;
+  const nutrition = getEffectiveNutrition(item);
+  if (!nutrition.protein) return Number.POSITIVE_INFINITY;
+  return nutrition.calories / nutrition.protein;
 }
 
 export function sortItems(items: MenuItem[], sort: SortOption) {
   const sorted = [...items];
   if (sort === "highest-protein") {
-    sorted.sort((a, b) => b.nutrition.protein - a.nutrition.protein);
+    sorted.sort((a, b) => getEffectiveNutrition(b).protein - getEffectiveNutrition(a).protein);
   } else if (sort === "best-ratio") {
     sorted.sort((a, b) => caloriesPerProtein(a) - caloriesPerProtein(b));
   } else {
-    sorted.sort((a, b) => a.nutrition.calories - b.nutrition.calories);
+    sorted.sort((a, b) => getEffectiveNutrition(a).calories - getEffectiveNutrition(b).calories);
   }
   return sorted;
 }
@@ -126,6 +128,7 @@ export default function MenuSections({
               item={item}
               addons={addons}
               commonChanges={commonChanges}
+              rankingMode={!groupByCategory}
             />
           ))}
         </ul>

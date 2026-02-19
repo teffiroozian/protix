@@ -15,6 +15,7 @@ import {
 } from "./MenuSections";
 import MenuSections from "./MenuSections";
 import StickyRestaurantBar from "./StickyRestaurantBar";
+import { expandItemsForRanking, getEffectiveNutrition } from "./menuItemVariants";
 
 export default function RestaurantView({
   restaurantId,
@@ -58,12 +59,17 @@ export default function RestaurantView({
     return { min, max };
   }, [items]);
 
+  const visibleItems = useMemo(
+    () => (entireMenu ? expandItemsForRanking(items) : items),
+    [entireMenu, items]
+  );
+
   const filteredItems = useMemo(() => {
-    return items.filter((item) => {
-      if (filters.proteinMin && (item.nutrition?.protein ?? 0) < filters.proteinMin) {
+    return visibleItems.filter((item) => {
+      if (filters.proteinMin && getEffectiveNutrition(item).protein < filters.proteinMin) {
         return false;
       }
-      if (filters.caloriesMax && (item.nutrition?.calories ?? Number.POSITIVE_INFINITY) > filters.caloriesMax) {
+      if (filters.caloriesMax && getEffectiveNutrition(item).calories > filters.caloriesMax) {
         return false;
       }
       if (!searchTerms.length) {
@@ -85,7 +91,7 @@ export default function RestaurantView({
       const searchableText = [item.name.toLowerCase(), ...categoryVariants].join(" ");
       return searchTerms.every((term) => searchableText.includes(term));
     });
-  }, [items, filters, searchTerms]);
+  }, [visibleItems, filters, searchTerms]);
 
   const orderedSections = useMemo(
     () => getOrderedMenuSections(filteredItems),

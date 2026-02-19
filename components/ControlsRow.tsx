@@ -192,9 +192,9 @@ export default function ControlsRow({
 
   const filtersDialog = isFiltersOpen ? (
     <div role="dialog" aria-modal="true" style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.35)", display: "flex", justifyContent: "center", alignItems: "flex-end", padding: 16, zIndex: 50 }} onClick={() => setIsFiltersOpen(false)}>
-      <div style={{ width: "100%", maxWidth: 520, height: "68vh", maxHeight: "68vh", background: "white", borderRadius: 20, padding: 20, boxShadow: "0 16px 40px rgba(0,0,0,0.2)", display: "flex", flexDirection: "column" }} onClick={(event) => event.stopPropagation()}>
+      <div style={{ width: "100%", maxWidth: 520, background: "white", borderRadius: 20, padding: 20, boxShadow: "0 16px 40px rgba(0,0,0,0.2)" }} onClick={(event) => event.stopPropagation()}>
         <h3 style={{ fontSize: 20, fontWeight: 700, marginBottom: 16 }}>Filters</h3>
-        <div style={{ display: "grid", gap: 20, flex: 1, alignContent: "start" }}>
+        <div style={{ display: "grid", gap: 20 }}>
           <div>
             <div style={{ fontWeight: 600, marginBottom: 8 }}>Protein minimum</div>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>

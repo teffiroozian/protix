@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import type { CommonChange, MenuItem, RestaurantAddons } from "@/types/menu";
 import MenuItemCard from "./MenuItemCard";
+import { expandItemsForRanking } from "./menuItemVariants";
 
 export default function RankingList({
   restaurantId,
@@ -27,8 +28,8 @@ export default function RankingList({
 }) {
   const [count, setCount] = useState(step);
 
-    const rankableItems = useMemo(() => {
-    return items.filter((item) => {
+  const rankableItems = useMemo(() => {
+    return expandItemsForRanking(items).filter((item) => {
       if (item.portionType === "single") return true;
       if (includeLargeShareables && item.portionType === "shareable") return true;
       if (includeSidesDrinks && (item.portionType === "side" || item.portionType === "drink")) return true;
@@ -58,6 +59,7 @@ export default function RankingList({
             isTopRanked={index < highlightTop}
             addons={addons}
             commonChanges={commonChanges}
+            rankingMode
           />
         ))}
       </ul>

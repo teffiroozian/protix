@@ -69,5 +69,7 @@ export type MenuItem = {
   variants?: ItemVariant[];
   defaultVariantId?: string;
   addonRefs?: AddonRef[];
+  displayVariantId?: string; // UI-only: pin a nested variant for ranking/filtering views
+  displayVariantLabel?: string; // UI-only: static variant label in ranking/filtering views
 
 };

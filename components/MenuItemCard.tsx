@@ -6,6 +6,7 @@ import styles from "./MenuItemCard.module.css";
 import { useCart } from "@/stores/cartStore";
 import ItemDetailsPanel from "./ItemDetailsPanel";
 import VariantSelector from "./VariantSelector";
+import { getDefaultVariant } from "./menuItemVariants";
 
 function pad2(n: number) {
   return String(n).padStart(2, "0");
@@ -52,6 +53,7 @@ export default function MenuItemCard({
   isTopRanked,
   addons,
   commonChanges,
+  rankingMode = false,
 }: {
   restaurantId: string;
   item: MenuItem;
@@ -60,25 +62,25 @@ export default function MenuItemCard({
   isTopRanked?: boolean;
   addons?: RestaurantAddons;
   commonChanges?: CommonChange[];
+  rankingMode?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const id = useId();
   const variants = item.variants?.length ? item.variants : null;
-  const defaultVariantId = useMemo(() => {
-    if (!variants) return "";
-    if (item.defaultVariantId && variants.some((variant) => variant.id === item.defaultVariantId)) {
-      return item.defaultVariantId;
-    }
-    const flaggedDefault = variants.find((variant) => variant.isDefault);
-    return flaggedDefault?.id ?? variants[0]?.id ?? "";
-  }, [item.defaultVariantId, variants]);
+  const defaultVariant = useMemo(() => getDefaultVariant(item), [item]);
+  const defaultVariantId = defaultVariant?.id ?? "";
   const [selectedVariantId, setSelectedVariantId] = useState(defaultVariantId);
+
+  useEffect(() => {
+    setSelectedVariantId(defaultVariantId);
+  }, [defaultVariantId]);
   const [selectedAddons, setSelectedAddons] = useState<Partial<Record<AddonRef, AddonOption>>>({});
   const [selectedCommonChangeIds, setSelectedCommonChangeIds] = useState<string[]>([]);
   const [addConfirmation, setAddConfirmation] = useState("");
   const { addItem } = useCart();
   const selectedVariant = variants?.find((variant) => variant.id === selectedVariantId);
   const baseNutrition = selectedVariant?.nutrition ?? item.nutrition;
+  const staticVariantLabel = item.displayVariantLabel ?? selectedVariant?.label;
   const applicableCommonChanges = useMemo(
     () => getApplicableCommonChanges(item, commonChanges),
     [item, commonChanges]
@@ -251,7 +253,7 @@ export default function MenuItemCard({
                   <span className={styles.macroDelta}>{formatDelta(customizationTotals.calories)}</span>
                 ) : null}
               </div>
-              {variants ? (
+              {variants && !rankingMode ? (
                 <div
                   className={styles.variantSelect}
                   onClick={(event) => event.stopPropagation()}
@@ -265,6 +267,9 @@ export default function MenuItemCard({
                     ariaLabel={`${item.name} portion size`}
                   />
                 </div>
+              ) : null}
+              {variants && rankingMode && staticVariantLabel ? (
+                <div className={styles.variantStatic}>| {staticVariantLabel}</div>
               ) : null}
             </div>
           </div>
