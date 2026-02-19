@@ -221,10 +221,17 @@ export default function MenuItemCard({
         border: isTopRanked ? "1.5px solid rgba(0,0,0,0.8)" : "1px solid rgba(0,0,0,0.12)",
       }}
     >
-      <button
-        type="button"
+      <div
+        role="button"
+        tabIndex={0}
         className={styles.header}
         onClick={() => setOpen((v) => !v)}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            setOpen((v) => !v);
+          }
+        }}
         aria-expanded={open}
         aria-controls={`${id}-details`}
       >
@@ -297,6 +304,20 @@ export default function MenuItemCard({
               </div>
               <div className={styles.macroLabel}>FAT</div>
             </div>
+
+            <div className={styles.actionsWrap}>
+              {addConfirmation ? <span className={styles.addedText}>{addConfirmation}</span> : null}
+              <button
+                type="button"
+                className={styles.addToCartButton}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  handleAddToCart();
+                }}
+              >
+                Add to Cart
+              </button>
+            </div>
           </div>
         </div>
 
@@ -324,7 +345,7 @@ export default function MenuItemCard({
           ) : null}
           <div className={`${styles.iconButton} ${styles.expandIcon} ${open ? styles.expandIconOpen : ""}`}>+</div>
         </div>
-      </button>
+      </div>
 
       <div className={`${styles.details} ${open ? styles.detailsOpen : ""}`}>
         <div className={styles.detailsInner}>
@@ -351,17 +372,6 @@ export default function MenuItemCard({
           />
 
         </div>
-      </div>
-
-      <div className={styles.cardFooter}>
-        {addConfirmation ? <span className={styles.addedText}>{addConfirmation}</span> : null}
-        <button
-          type="button"
-          className={styles.addToCartButton}
-          onClick={handleAddToCart}
-        >
-          Add to Cart
-        </button>
       </div>
     </li>
   );
