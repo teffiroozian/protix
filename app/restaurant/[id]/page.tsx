@@ -4,25 +4,10 @@ import RestaurantHeader from "@/components/RestaurantHeader";
 import RestaurantView from "@/components/RestaurantView";
 import RecentRestaurantTracker from "@/components/RecentRestaurantTracker";
 import ScrollToTopOnMount from "@/components/ScrollToTopOnMount";
+import { RestaurantSearchProvider } from "@/components/RestaurantSearchContext";
+import { RestaurantUiProvider } from "@/components/RestaurantUiContext";
+import CartPreviewDrawer from "@/components/CartPreviewDrawer";
 import type { CommonChange, MenuItem, RestaurantAddons } from "@/types/menu";
-
-// calories per 1g protein (bigger number = more calories for each gram of protein)
-function caloriesPerProtein(item: MenuItem) {
-  if (!item.nutrition.protein) return Number.POSITIVE_INFINITY;
-  return item.nutrition.calories / item.nutrition.protein;
-}
-
-function topByProtein(items: MenuItem[]) {
-  return [...items].sort((a, b) => b.nutrition.protein - a.nutrition.protein);
-}
-
-function topByCalorieProteinRatio(items: MenuItem[]) {
-  return [...items].sort((a, b) => caloriesPerProtein(a) - caloriesPerProtein(b));
-}
-
-function lowestCalories(items: MenuItem[]) {
-  return [...items].sort((a, b) => a.nutrition.calories - b.nutrition.calories);
-}
 
 export default async function RestaurantPage({
   params,
@@ -49,37 +34,35 @@ export default async function RestaurantPage({
   const addons = (menu.default.addons ?? {}) as RestaurantAddons;
   const commonChanges = (menu.default.commonChanges ?? []) as CommonChange[];
 
-  const highestProtein = topByProtein(items);
-  const bestCalorieProteinRatio = topByCalorieProteinRatio(items);
-  const lowestCalorieItems = lowestCalories(items);
-
   return (
-    <div style={{ width: "100%" }}>
-      <div id="restaurant-hero" className="mt-6">
-        <RestaurantHeader
-          name={restaurant.name}
-          logo={restaurant.logo}
-          restaurantSlug={restaurant.id}
-        />
-      </div>
+    <RestaurantSearchProvider>
+      <RestaurantUiProvider>
+        <div style={{ width: "100%" }}>
+        <div id="restaurant-hero" className="mt-6">
+          <RestaurantHeader
+            name={restaurant.name}
+            logo={restaurant.logo}
+            restaurantSlug={restaurant.id}
+          />
+        </div>
 
-      <RecentRestaurantTracker restaurantId={restaurant.id} />
-      <ScrollToTopOnMount />
+        <RecentRestaurantTracker restaurantId={restaurant.id} />
+        <ScrollToTopOnMount />
 
-      <main style={{ maxWidth: 900, margin: "24px auto 48px", padding: 16 }}>
-        <RestaurantView
-          restaurantId={restaurant.id}
-          restaurantName={restaurant.name}
-          restaurantLogo={restaurant.logo}
-          items={items}
-          highestProtein={highestProtein}
-          bestCalorieProteinRatio={bestCalorieProteinRatio}
-          lowestCalorieItems={lowestCalorieItems}
-          addons={addons}
-          commonChanges={commonChanges}
-          autoScrollOnViewChange
-        />
-      </main>
-    </div>
+        <main style={{ maxWidth: 900, margin: "24px auto 48px", padding: 16 }}>
+          <RestaurantView
+            restaurantId={restaurant.id}
+            restaurantName={restaurant.name}
+            restaurantLogo={restaurant.logo}
+            items={items}
+            addons={addons}
+            commonChanges={commonChanges}
+            autoScrollOnViewChange
+          />
+        </main>
+        </div>
+        <CartPreviewDrawer />
+      </RestaurantUiProvider>
+    </RestaurantSearchProvider>
   );
 }

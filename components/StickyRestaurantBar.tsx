@@ -1,8 +1,11 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useEffect, useState } from "react";
+import { useMemo, useEffect, useRef, useState } from "react";
 import { useCart } from "@/stores/cartStore";
+import { useRestaurantUi } from "@/components/RestaurantUiContext";
+import { useRestaurantSearch } from "@/components/RestaurantSearchContext";
 import ControlsRow, {
   FilterChips,
   type Filters,
@@ -24,6 +27,8 @@ type StickyRestaurantBarProps = {
   onCategorySelect?: (id: string) => void;
   searchQuery: string;
   onSearchChange: (value: string) => void;
+  entireMenu?: boolean;
+  onEntireMenuChange?: (checked: boolean) => void;
 };
 
 export default function StickyRestaurantBar({
@@ -40,11 +45,17 @@ export default function StickyRestaurantBar({
   onCategorySelect,
   searchQuery,
   onSearchChange,
+  entireMenu,
+  onEntireMenuChange,
 }: StickyRestaurantBarProps) {
   const [isVisible, setIsVisible] = useState(() => {
     if (typeof document === "undefined") return false;
     return !document.getElementById("controls-row");
   });
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const { openCart } = useRestaurantUi();
+  const { setSearchQuery } = useRestaurantSearch();
 
   useEffect(() => {
     const controlsRow = document.getElementById("controls-row");
@@ -64,6 +75,12 @@ export default function StickyRestaurantBar({
 
     return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    if (isSearchOpen) {
+      searchInputRef.current?.focus();
+    }
+  }, [isSearchOpen]);
 
   const hasActiveFilters = Boolean(filters.proteinMin || filters.caloriesMax);
 
@@ -91,12 +108,89 @@ export default function StickyRestaurantBar({
 
   return (
     <div
-      className={`fixed left-0 right-0 top-0 z-50 transition duration-300 ${
+      className={`fixed left-0 right-0 top-0 z-50 shadow-[0_14px_35px_rgba(15,23,42,0.25)] transition duration-300 ${
         isVisible
           ? "translate-y-0 opacity-100"
           : "-translate-y-full opacity-0 pointer-events-none"
       }`}
     >
+      <div className="w-full border-b border-slate-200/70 bg-white/95 backdrop-blur">
+        <div className="mx-auto flex w-full max-w-5xl items-center gap-3 px-4 py-2 sm:px-6">
+          <Link
+            href="/"
+            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-300/80 bg-white text-base font-semibold text-slate-700 transition hover:text-slate-900"
+            aria-label="Back to home"
+          >
+            ←
+          </Link>
+
+          <button
+            type="button"
+            onClick={handleBrandClick}
+            className="inline-flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-slate-300/80 bg-white"
+            aria-label={`Scroll to top of ${restaurantName} page`}
+          >
+            <span className="relative h-7 w-7">
+              <Image src={restaurantLogo} alt={`${restaurantName} logo`} fill className="object-contain" />
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handleBrandClick}
+            className="min-w-0 flex-1 truncate text-left text-base font-semibold text-slate-900"
+            aria-label={`Scroll to top of ${restaurantName} page`}
+          >
+            {restaurantName}
+          </button>
+
+          <div className="ml-auto flex items-center gap-2">
+            <div className={`overflow-hidden transition-all duration-300 ${isSearchOpen ? "w-44 opacity-100" : "w-0 opacity-0"}`}>
+              <input
+                ref={searchInputRef}
+                value={searchQuery}
+                onChange={(event) => {
+                  onSearchChange(event.target.value);
+                  setSearchQuery(event.target.value);
+                }}
+                placeholder="Search menu items"
+                aria-label="Search menu items"
+                className="h-9 w-full rounded-full border border-slate-300/80 bg-white px-3 text-sm text-slate-900 outline-none"
+              />
+            </div>
+
+            {isSearchOpen ? (
+              <button
+                type="button"
+                onClick={() => setIsSearchOpen(false)}
+                className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-300/80 bg-white text-base text-slate-800"
+                aria-label="Close search"
+              >
+                ✕
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setIsSearchOpen(true)}
+                className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-300/80 bg-white text-base text-slate-800 transition hover:bg-slate-50"
+                aria-label="Search menu items"
+              >
+                🔍
+              </button>
+            )}
+
+            <button
+              type="button"
+              onClick={openCart}
+              className="inline-flex h-9 min-w-9 shrink-0 items-center justify-center rounded-full border border-slate-300/80 bg-white px-2.5 text-base text-slate-800 transition hover:bg-slate-50"
+              aria-label={cartCount > 0 ? `Cart (${cartCount})` : "Cart"}
+            >
+              {cartCount > 0 ? `🛒 ${cartCount}` : "🛒"}
+            </button>
+          </div>
+        </div>
+      </div>
+
       <div className="w-full border-b border-slate-200/70 bg-white/95 backdrop-blur">
         <div className="mx-auto flex w-full max-w-5xl items-center gap-3 px-4 py-2 sm:px-6">
           <div className="min-w-0 flex-1">
@@ -116,15 +210,10 @@ export default function StickyRestaurantBar({
               onSearchChange={onSearchChange}
               onBrandClick={handleBrandClick}
               showChips={false}
+              entireMenu={entireMenu}
+              onEntireMenuChange={onEntireMenuChange}
             />
           </div>
-
-          <Link
-            href="/cart"
-            className="inline-flex shrink-0 items-center rounded-full border border-slate-700/20 bg-white px-3 py-1.5 text-sm font-medium text-slate-800 transition hover:bg-slate-50"
-          >
-            {cartCount > 0 ? `Cart (${cartCount})` : "Cart"}
-          </Link>
         </div>
       </div>
 
