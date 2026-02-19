@@ -160,7 +160,6 @@ export default function RestaurantView({
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         showBranding={false}
-        showChips={false}
         entireMenu={entireMenu}
         onEntireMenuChange={setEntireMenu}
         calorieBounds={calorieBounds}
