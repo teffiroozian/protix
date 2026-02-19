@@ -97,6 +97,24 @@ export function getCategoryLabel(category: string) {
   return categoryHeading(category);
 }
 
+
+function EmptyFilteredState() {
+  return (
+    <div
+      style={{
+        marginTop: 32,
+        border: "1px solid rgba(0,0,0,0.12)",
+        borderRadius: 16,
+        padding: "18px 16px",
+        color: "rgba(0,0,0,0.72)",
+        fontWeight: 500,
+      }}
+    >
+      No items match these filters. Try lowering protein minimum or increasing calories.
+    </div>
+  );
+}
+
 export default function MenuSections({
   restaurantId,
   items,
@@ -115,6 +133,10 @@ export default function MenuSections({
 
   if (!groupByCategory) {
     const sortedItems = sortItems(items, sort);
+
+    if (!sortedItems.length) {
+      return <EmptyFilteredState />;
+    }
 
     return (
       <div style={{ marginTop: 32, display: "grid", gap: 12 }}>
@@ -144,6 +166,10 @@ export default function MenuSections({
   );
 
   const sections = getOrderedMenuSections(items);
+
+  if (!sections.length) {
+    return <EmptyFilteredState />;
+  }
 
   return (
     <div style={{ marginTop: 32, display: "grid", gap: 48 }}>

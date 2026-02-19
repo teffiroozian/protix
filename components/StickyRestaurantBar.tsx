@@ -29,6 +29,10 @@ type StickyRestaurantBarProps = {
   onSearchChange: (value: string) => void;
   entireMenu?: boolean;
   onEntireMenuChange?: (checked: boolean) => void;
+  calorieBounds: {
+    min: number;
+    max: number;
+  };
 };
 
 export default function StickyRestaurantBar({
@@ -47,6 +51,7 @@ export default function StickyRestaurantBar({
   onSearchChange,
   entireMenu,
   onEntireMenuChange,
+  calorieBounds,
 }: StickyRestaurantBarProps) {
   const [isVisible, setIsVisible] = useState(() => {
     if (typeof document === "undefined") return false;
@@ -212,6 +217,7 @@ export default function StickyRestaurantBar({
               showChips={false}
               entireMenu={entireMenu}
               onEntireMenuChange={onEntireMenuChange}
+              calorieBounds={calorieBounds}
             />
           </div>
         </div>

@@ -38,6 +38,21 @@ export default function RestaurantView({
   const [filters, setFilters] = useState<Filters>({});
   const { searchQuery, setSearchQuery } = useRestaurantSearch();
 
+  const calorieBounds = useMemo(() => {
+    if (!items.length) {
+      return { min: 0, max: 0 };
+    }
+
+    const calories = items.map((item) => item.nutrition.calories);
+    const minCal = Math.min(...calories);
+    const maxCal = Math.max(...calories);
+
+    return {
+      min: Math.floor(minCal / 50) * 50,
+      max: Math.ceil(maxCal / 50) * 50,
+    };
+  }, [items]);
+
   const searchTerms = searchQuery
     .trim()
     .toLowerCase()
@@ -126,6 +141,7 @@ export default function RestaurantView({
         onSearchChange={setSearchQuery}
         entireMenu={entireMenu}
         onEntireMenuChange={setEntireMenu}
+        calorieBounds={calorieBounds}
       />
 
       <ControlsRow
@@ -144,9 +160,9 @@ export default function RestaurantView({
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         showBranding={false}
-        showChips={false}
         entireMenu={entireMenu}
         onEntireMenuChange={setEntireMenu}
+        calorieBounds={calorieBounds}
       />
 
       <MenuSections
