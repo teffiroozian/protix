@@ -13,7 +13,7 @@ export default function Home() {
   const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(-1);
   const [isFocused, setIsFocused] = useState(false);
-  const [recentRestaurantIds] = useState<string[]>(() => {
+  const [recentRestaurantIds, setRecentRestaurantIds] = useState<string[]>(() => {
     if (typeof window === "undefined") {
       return [];
     }
@@ -96,6 +96,21 @@ export default function Home() {
     setActiveIndex(-1);
   };
 
+  const handleRemoveRecent = (restaurantId: string) => {
+    setRecentRestaurantIds((prev) => {
+      const next = prev.filter((id) => id !== restaurantId);
+
+      try {
+        window.localStorage.setItem(RECENT_RESTAURANTS_KEY, JSON.stringify(next));
+      } catch {
+        // Ignore localStorage write errors.
+      }
+
+      return next;
+    });
+    setActiveIndex(-1);
+  };
+
   return (
     <main className="mx-auto flex min-h-screen max-w-5xl flex-col gap-16 px-4 py-14 sm:px-6">
       <header className="flex flex-col gap-3">
@@ -110,7 +125,6 @@ export default function Home() {
       <section className="flex flex-col gap-3">
         <div className="relative">
           <input
-            autoFocus
             type="search"
             value={query}
             onChange={(event) => {
@@ -224,6 +238,33 @@ export default function Home() {
                         <span className="font-semibold text-neutral-900">
                           {restaurant.name}
                         </span>
+                        <button
+                          type="button"
+                          className="ml-auto rounded-full p-1 text-neutral-400 transition hover:bg-neutral-200 hover:text-neutral-700"
+                          onMouseDown={(event) => event.preventDefault()}
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            handleRemoveRecent(restaurant.id);
+                          }}
+                          aria-label={`Remove ${restaurant.name} from recent searches`}
+                        >
+                          <svg
+                            aria-hidden="true"
+                            width="14"
+                            height="14"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="m7 7 10 10M17 7 7 17"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        </button>
                       </li>
                     ))}
 
