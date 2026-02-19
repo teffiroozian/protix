@@ -309,7 +309,10 @@ export default function ControlsRow({
         </div>
 
         {hasActiveFilters && showChips ? (
-          <FilterChips filters={filters} onClearProtein={clearProteinFilter} onClearCalories={clearCaloriesFilter} onClearAll={resetFilters} withMargin={false} />
+          <>
+            <div style={{ height: 1, background: "rgba(148, 163, 184, 0.5)" }} />
+            <FilterChips filters={filters} onClearProtein={clearProteinFilter} onClearCalories={clearCaloriesFilter} onClearAll={resetFilters} withMargin={false} />
+          </>
         ) : null}
       </div>
 
