@@ -55,8 +55,10 @@ export default function RestaurantView({
     };
   }, [items]);
 
-  const searchTerms = searchQuery
-    .trim()
+  const normalizedSearchQuery = searchQuery.trim();
+  const isSearchActive = normalizedSearchQuery.length > 0;
+
+  const searchTerms = normalizedSearchQuery
     .toLowerCase()
     .split(/\s+/)
     .filter(Boolean);
@@ -121,7 +123,7 @@ export default function RestaurantView({
 
   useEffect(() => {
     const previousQuery = previousSearchQueryRef.current.trim();
-    const nextQuery = searchQuery.trim();
+    const nextQuery = normalizedSearchQuery;
 
     if (nextQuery && nextQuery !== previousQuery) {
       listTopRef.current?.scrollIntoView({
@@ -131,7 +133,7 @@ export default function RestaurantView({
     }
 
     previousSearchQueryRef.current = searchQuery;
-  }, [searchQuery]);
+  }, [normalizedSearchQuery, searchQuery]);
 
   const handleCategorySelect = (categoryId: string) => {
     setActiveCategory(categoryId);
@@ -168,7 +170,7 @@ export default function RestaurantView({
         calorieBounds={calorieBounds}
       />
 
-      <div className="mt-6">
+      <div className={isSearchActive ? "mt-8" : "mt-6"}>
         <ControlsRow
           view={view}
           onChange={noopChangeView}
@@ -193,7 +195,7 @@ export default function RestaurantView({
 
       <div ref={listTopRef} className="h-1" aria-hidden="true" />
 
-      <div className="mt-10">
+      <div className={isSearchActive ? "mt-12" : "mt-8"}>
         <MenuSections
           restaurantId={restaurantId}
           items={filteredItems}
