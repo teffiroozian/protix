@@ -245,11 +245,32 @@ export default function ControlsRow({
             {isSortOpen ? (
               <div role="menu" style={{ position: "absolute", right: 0, top: "calc(100% + 8px)", width: 220, borderRadius: 14, border: "1px solid rgba(0,0,0,0.15)", background: "white", boxShadow: "0 12px 28px rgba(0,0,0,0.12)", padding: 8, zIndex: 20 }}>
                 <div style={{ display: "grid", gap: 4 }}>
-                  {SORT_OPTIONS.map((option) => (
-                    <button key={option.value} type="button" onClick={() => { onSortChange(option.value); setIsSortOpen(false); }} style={{ textAlign: "left", border: "none", background: "transparent", padding: "8px 10px", borderRadius: 10, fontWeight: 600, cursor: "pointer" }}>
-                      {option.label}
-                    </button>
-                  ))}
+                  {SORT_OPTIONS.map((option) => {
+                    const isActive = option.value === sort;
+
+                    return (
+                      <button
+                        key={option.value}
+                        type="button"
+                        onClick={() => {
+                          onSortChange(option.value);
+                          setIsSortOpen(false);
+                        }}
+                        style={{
+                          textAlign: "left",
+                          border: "none",
+                          background: isActive ? "rgba(0,0,0,0.1)" : "transparent",
+                          color: "rgba(0,0,0,0.88)",
+                          padding: "8px 10px",
+                          borderRadius: 10,
+                          fontWeight: 600,
+                          cursor: "pointer",
+                        }}
+                      >
+                        {option.label}
+                      </button>
+                    );
+                  })}
                 </div>
                 <div style={{ height: 1, background: "rgba(0,0,0,0.12)", margin: "8px 0" }} />
                 <label style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 8px", fontSize: 14, fontWeight: 500 }}>

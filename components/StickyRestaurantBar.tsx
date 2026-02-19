@@ -45,6 +45,8 @@ export default function StickyRestaurantBar({
   entireMenu,
   onEntireMenuChange,
 }: StickyRestaurantBarProps) {
+  void restaurantLogo;
+
   const [isVisible, setIsVisible] = useState(() => {
     if (typeof document === "undefined") return false;
     return !document.getElementById("controls-row");
@@ -93,6 +95,10 @@ export default function StickyRestaurantBar({
     [items]
   );
 
+  const handleSearchClick = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <div
       className={`fixed left-0 right-0 top-0 z-50 transition duration-300 ${
@@ -101,6 +107,44 @@ export default function StickyRestaurantBar({
           : "-translate-y-full opacity-0 pointer-events-none"
       }`}
     >
+      <div className="w-full border-b border-slate-200/70 bg-white/95 backdrop-blur">
+        <div className="mx-auto flex w-full max-w-5xl items-center gap-3 px-4 py-2 sm:px-6">
+          <Link
+            href="/"
+            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-300/80 bg-white text-base font-semibold text-slate-700 transition hover:text-slate-900"
+            aria-label="Back to home"
+          >
+            ←
+          </Link>
+
+          <button
+            type="button"
+            onClick={handleBrandClick}
+            className="min-w-0 flex-1 truncate text-left text-base font-semibold text-slate-900"
+            aria-label={`Scroll to top of ${restaurantName} page`}
+          >
+            {restaurantName}
+          </button>
+
+          <button
+            type="button"
+            onClick={handleSearchClick}
+            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-300/80 bg-white text-base text-slate-800 transition hover:bg-slate-50"
+            aria-label="Go to search"
+          >
+            🔍
+          </button>
+
+          <Link
+            href="/cart"
+            className="inline-flex h-9 min-w-9 shrink-0 items-center justify-center rounded-full border border-slate-300/80 bg-white px-2.5 text-base text-slate-800 transition hover:bg-slate-50"
+            aria-label={cartCount > 0 ? `Cart (${cartCount})` : "Cart"}
+          >
+            {cartCount > 0 ? `🛒 ${cartCount}` : "🛒"}
+          </Link>
+        </div>
+      </div>
+
       <div className="w-full border-b border-slate-200/70 bg-white/95 backdrop-blur">
         <div className="mx-auto flex w-full max-w-5xl items-center gap-3 px-4 py-2 sm:px-6">
           <div className="min-w-0 flex-1">
@@ -124,13 +168,6 @@ export default function StickyRestaurantBar({
               onEntireMenuChange={onEntireMenuChange}
             />
           </div>
-
-          <Link
-            href="/cart"
-            className="inline-flex shrink-0 items-center rounded-full border border-slate-700/20 bg-white px-3 py-1.5 text-sm font-medium text-slate-800 transition hover:bg-slate-50"
-          >
-            {cartCount > 0 ? `Cart (${cartCount})` : "Cart"}
-          </Link>
         </div>
       </div>
 
