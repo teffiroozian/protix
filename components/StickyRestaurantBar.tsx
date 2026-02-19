@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useEffect, useState } from "react";
 import { useCart } from "@/stores/cartStore";
@@ -45,8 +46,6 @@ export default function StickyRestaurantBar({
   entireMenu,
   onEntireMenuChange,
 }: StickyRestaurantBarProps) {
-  void restaurantLogo;
-
   const [isVisible, setIsVisible] = useState(() => {
     if (typeof document === "undefined") return false;
     return !document.getElementById("controls-row");
@@ -101,7 +100,7 @@ export default function StickyRestaurantBar({
 
   return (
     <div
-      className={`fixed left-0 right-0 top-0 z-50 transition duration-300 ${
+      className={`fixed left-0 right-0 top-0 z-50 shadow-[0_14px_35px_rgba(15,23,42,0.25)] transition duration-300 ${
         isVisible
           ? "translate-y-0 opacity-100"
           : "-translate-y-full opacity-0 pointer-events-none"
@@ -116,6 +115,17 @@ export default function StickyRestaurantBar({
           >
             ←
           </Link>
+
+          <button
+            type="button"
+            onClick={handleBrandClick}
+            className="inline-flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-slate-300/80 bg-white"
+            aria-label={`Scroll to top of ${restaurantName} page`}
+          >
+            <span className="relative h-7 w-7">
+              <Image src={restaurantLogo} alt={`${restaurantName} logo`} fill className="object-contain" />
+            </span>
+          </button>
 
           <button
             type="button"
