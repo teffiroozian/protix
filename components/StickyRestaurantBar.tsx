@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useMemo, useEffect, useRef, useState } from "react";
 import { useCart } from "@/stores/cartStore";
 import { useRestaurantUi } from "@/components/RestaurantUiContext";
-import { useRestaurantSearch } from "@/components/RestaurantSearchContext";
 import ControlsRow, {
   FilterChips,
   type Filters,
@@ -25,8 +24,11 @@ type StickyRestaurantBarProps = {
   categoryOptions: Array<{ id: string; label: string }>;
   activeCategory?: string;
   onCategorySelect?: (id: string) => void;
+  searchOpen: boolean;
   searchQuery: string;
-  onSearchChange: (value: string) => void;
+  setSearchQuery: (value: string) => void;
+  onOpenSearch: () => void;
+  onCloseSearch: () => void;
   entireMenu?: boolean;
   onEntireMenuChange?: (checked: boolean) => void;
   calorieBounds: {
@@ -47,8 +49,11 @@ export default function StickyRestaurantBar({
   categoryOptions,
   activeCategory,
   onCategorySelect,
+  searchOpen,
   searchQuery,
-  onSearchChange,
+  setSearchQuery,
+  onOpenSearch,
+  onCloseSearch,
   entireMenu,
   onEntireMenuChange,
   calorieBounds,
@@ -57,10 +62,9 @@ export default function StickyRestaurantBar({
     if (typeof document === "undefined") return false;
     return !document.getElementById("controls-row");
   });
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const { openCart } = useRestaurantUi();
-  const { setSearchQuery } = useRestaurantSearch();
+  const isSearchMode = searchOpen || searchQuery.trim().length > 0;
 
   useEffect(() => {
     const controlsRow = document.getElementById("controls-row");
@@ -82,10 +86,10 @@ export default function StickyRestaurantBar({
   }, []);
 
   useEffect(() => {
-    if (isSearchOpen) {
+    if (searchOpen) {
       searchInputRef.current?.focus();
     }
-  }, [isSearchOpen]);
+  }, [searchOpen]);
 
   const hasActiveFilters = Boolean(filters.proteinMin || filters.caloriesMax);
 
@@ -102,9 +106,7 @@ export default function StickyRestaurantBar({
   };
 
   const closeSearch = () => {
-    onSearchChange("");
-    setSearchQuery("");
-    setIsSearchOpen(false);
+    onCloseSearch();
   };
 
   const resetFilters = () => {
@@ -121,6 +123,7 @@ export default function StickyRestaurantBar({
     <div
       className={`fixed left-0 right-0 top-0 z-50 shadow-[0_14px_35px_rgba(15,23,42,0.25)] transition duration-300 ${
         isVisible
+          || isSearchMode
           ? "translate-y-0 opacity-100"
           : "-translate-y-full opacity-0 pointer-events-none"
       }`}
@@ -156,15 +159,12 @@ export default function StickyRestaurantBar({
           </button>
 
           <div className="ml-auto flex items-center gap-2">
-            <div className={`overflow-hidden transition-all duration-300 ${isSearchOpen ? "w-[16rem] opacity-100" : "w-0 opacity-0"}`}>
+            <div className={`overflow-hidden transition-all duration-300 ${isSearchMode ? "w-[16rem] opacity-100" : "w-0 opacity-0"}`}>
               <div className="relative">
                 <input
                   ref={searchInputRef}
                   value={searchQuery}
-                  onChange={(event) => {
-                    onSearchChange(event.target.value);
-                    setSearchQuery(event.target.value);
-                  }}
+                  onChange={(event) => setSearchQuery(event.target.value)}
                   placeholder="Search menu items"
                   aria-label="Search menu items"
                   className="h-9 w-full rounded-full border border-slate-300/80 bg-white px-3 pr-9 text-sm text-slate-900 outline-none"
@@ -172,10 +172,7 @@ export default function StickyRestaurantBar({
                 {searchQuery ? (
                   <button
                     type="button"
-                    onClick={() => {
-                      onSearchChange("");
-                      setSearchQuery("");
-                    }}
+                    onClick={onCloseSearch}
                     className="absolute inset-y-0 right-2 my-auto inline-flex h-6 w-6 items-center justify-center rounded-full text-sm text-slate-500 transition hover:bg-slate-100 hover:text-slate-700"
                     aria-label="Clear search"
                   >
@@ -185,7 +182,7 @@ export default function StickyRestaurantBar({
               </div>
             </div>
 
-            {isSearchOpen ? (
+            {isSearchMode ? (
               <button
                 type="button"
                 onClick={closeSearch}
@@ -195,12 +192,12 @@ export default function StickyRestaurantBar({
                 ✕
               </button>
             ) : (
-              <button
-                type="button"
-                onClick={() => setIsSearchOpen(true)}
-                className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-300/80 bg-white text-base text-slate-800 transition hover:bg-slate-50"
-                aria-label="Search menu items"
-              >
+                <button
+                  type="button"
+                  onClick={onOpenSearch}
+                  className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-300/80 bg-white text-base text-slate-800 transition hover:bg-slate-50"
+                  aria-label="Search menu items"
+                >
                 🔍
               </button>
             )}
@@ -233,7 +230,7 @@ export default function StickyRestaurantBar({
               activeCategory={activeCategory}
               onCategorySelect={onCategorySelect}
               searchQuery={searchQuery}
-              onSearchChange={onSearchChange}
+              onSearchChange={setSearchQuery}
               onBrandClick={handleBrandClick}
               showChips={false}
               entireMenu={entireMenu}
