@@ -116,11 +116,13 @@ export default function StickyRestaurantBar({
     () => items.reduce((sum, item) => sum + item.quantity, 0),
     [items]
   );
+  const isSearchPinned = isSearchOpen || Boolean(searchQuery.trim());
+  const shouldShowSearchInput = isSearchOpen || Boolean(searchQuery.trim());
 
   return (
     <div
       className={`fixed left-0 right-0 top-0 z-50 shadow-[0_14px_35px_rgba(15,23,42,0.25)] transition duration-300 ${
-        isVisible
+        isVisible || isSearchPinned
           ? "translate-y-0 opacity-100"
           : "-translate-y-full opacity-0 pointer-events-none"
       }`}
@@ -156,7 +158,7 @@ export default function StickyRestaurantBar({
           </button>
 
           <div className="ml-auto flex items-center gap-2">
-            <div className={`overflow-hidden transition-all duration-300 ${isSearchOpen ? "w-[16rem] opacity-100" : "w-0 opacity-0"}`}>
+            <div className={`overflow-hidden transition-all duration-300 ${shouldShowSearchInput ? "w-[16rem] opacity-100" : "w-0 opacity-0"}`}>
               <div className="relative">
                 <input
                   ref={searchInputRef}
@@ -185,7 +187,7 @@ export default function StickyRestaurantBar({
               </div>
             </div>
 
-            {isSearchOpen ? (
+            {shouldShowSearchInput ? (
               <button
                 type="button"
                 onClick={closeSearch}
