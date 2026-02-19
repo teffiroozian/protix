@@ -96,14 +96,26 @@ export default function RestaurantHeader({
                   isSearchOpen ? "w-[16rem] opacity-100" : "w-0 opacity-0"
                 }`}
               >
-                <input
-                  ref={searchInputRef}
-                  value={searchQuery}
-                  onChange={(event) => setSearchQuery(event.target.value)}
-                  placeholder="Search menu items"
-                  aria-label="Search menu items"
-                  className="h-10 w-full rounded-full border border-slate-900/15 bg-white/95 px-4 text-sm text-slate-900 shadow-sm outline-none ring-0 placeholder:text-slate-500 focus:border-slate-900/30"
-                />
+                <div className="relative">
+                  <input
+                    ref={searchInputRef}
+                    value={searchQuery}
+                    onChange={(event) => setSearchQuery(event.target.value)}
+                    placeholder="Search menu items"
+                    aria-label="Search menu items"
+                    className="h-10 w-full rounded-full border border-slate-900/15 bg-white/95 px-4 pr-10 text-sm text-slate-900 shadow-sm outline-none ring-0 placeholder:text-slate-500 focus:border-slate-900/30"
+                  />
+                  {searchQuery ? (
+                    <button
+                      type="button"
+                      onClick={() => setSearchQuery("")}
+                      className="absolute inset-y-0 right-2 my-auto inline-flex h-6 w-6 items-center justify-center rounded-full text-sm text-slate-500 transition hover:bg-slate-100 hover:text-slate-700"
+                      aria-label="Clear search"
+                    >
+                      ✕
+                    </button>
+                  ) : null}
+                </div>
               </div>
 
               {isSearchOpen ? (
