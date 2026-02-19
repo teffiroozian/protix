@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRestaurantSearch } from "@/components/RestaurantSearchContext";
 import type { CommonChange, MenuItem, RestaurantAddons } from "@/types/menu";
 import ControlsRow, {
@@ -37,6 +37,8 @@ export default function RestaurantView({
   const [sort, setSort] = useState<SortOption>("highest-protein");
   const [filters, setFilters] = useState<Filters>({});
   const { searchQuery, setSearchQuery } = useRestaurantSearch();
+  const listTopRef = useRef<HTMLDivElement>(null);
+  const previousSearchQueryRef = useRef("");
 
   const calorieBounds = useMemo(() => {
     if (!items.length) {
@@ -64,7 +66,10 @@ export default function RestaurantView({
       if (filters.proteinMin && item.nutrition.protein < filters.proteinMin) {
         return false;
       }
-      if (filters.caloriesMax && item.nutrition.calories > filters.caloriesMax) {
+      if (
+        filters.caloriesMax &&
+        item.nutrition.calories > filters.caloriesMax
+      ) {
         return false;
       }
       if (!searchTerms.length) {
@@ -72,7 +77,9 @@ export default function RestaurantView({
       }
 
       const category = (item.category || "Other").toLowerCase();
-      const categoryLabel = getCategoryLabel(item.category || "Other").toLowerCase();
+      const categoryLabel = getCategoryLabel(
+        item.category || "Other",
+      ).toLowerCase();
 
       const categoryVariants = [category, categoryLabel].flatMap((value) => {
         const trimmed = value.trim();
@@ -83,17 +90,20 @@ export default function RestaurantView({
         return [trimmed, `${trimmed}s`];
       });
 
-      const searchableText = [item.name.toLowerCase(), ...categoryVariants].join(" ");
+      const searchableText = [
+        item.name.toLowerCase(),
+        ...categoryVariants,
+      ].join(" ");
       return searchTerms.every((term) => searchableText.includes(term));
     });
   }, [items, filters, searchTerms]);
 
   const orderedSections = useMemo(
     () => getOrderedMenuSections(filteredItems),
-    [filteredItems]
+    [filteredItems],
   );
   const [activeCategory, setActiveCategory] = useState<string>(
-    () => orderedSections[0] ?? ""
+    () => orderedSections[0] ?? "",
   );
 
   const resolvedActiveCategory = orderedSections.includes(activeCategory)
@@ -106,8 +116,22 @@ export default function RestaurantView({
         id: section,
         label: getCategoryLabel(section),
       })),
-    [orderedSections]
+    [orderedSections],
   );
+
+  useEffect(() => {
+    const previousQuery = previousSearchQueryRef.current.trim();
+    const nextQuery = searchQuery.trim();
+
+    if (nextQuery && nextQuery !== previousQuery) {
+      listTopRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+
+    previousSearchQueryRef.current = searchQuery;
+  }, [searchQuery]);
 
   const handleCategorySelect = (categoryId: string) => {
     setActiveCategory(categoryId);
@@ -144,35 +168,41 @@ export default function RestaurantView({
         calorieBounds={calorieBounds}
       />
 
-      <ControlsRow
-        view={view}
-        onChange={noopChangeView}
-        sort={sort}
-        onSortChange={handleSortChange}
-        filters={filters}
-        onFiltersChange={setFilters}
-        restaurantName={restaurantName}
-        restaurantLogo={restaurantLogo}
-        categoryOptions={categoryOptions}
-        activeCategory={resolvedActiveCategory}
-        onCategorySelect={handleCategorySelect}
-        wrapperId="controls-row"
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
-        showBranding={false}
-        entireMenu={entireMenu}
-        onEntireMenuChange={setEntireMenu}
-        calorieBounds={calorieBounds}
-      />
+      <div className="mt-6">
+        <ControlsRow
+          view={view}
+          onChange={noopChangeView}
+          sort={sort}
+          onSortChange={handleSortChange}
+          filters={filters}
+          onFiltersChange={setFilters}
+          restaurantName={restaurantName}
+          restaurantLogo={restaurantLogo}
+          categoryOptions={categoryOptions}
+          activeCategory={resolvedActiveCategory}
+          onCategorySelect={handleCategorySelect}
+          wrapperId="controls-row"
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          showBranding={false}
+          entireMenu={entireMenu}
+          onEntireMenuChange={setEntireMenu}
+          calorieBounds={calorieBounds}
+        />
+      </div>
 
-      <MenuSections
-        restaurantId={restaurantId}
-        items={filteredItems}
-        sort={sort}
-        addons={addons}
-        commonChanges={commonChanges}
-        groupByCategory={!entireMenu}
-      />
+      <div ref={listTopRef} className="h-1" aria-hidden="true" />
+
+      <div className="mt-10">
+        <MenuSections
+          restaurantId={restaurantId}
+          items={filteredItems}
+          sort={sort}
+          addons={addons}
+          commonChanges={commonChanges}
+          groupByCategory={!entireMenu}
+        />
+      </div>
     </div>
   );
 }
