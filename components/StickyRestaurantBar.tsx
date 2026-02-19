@@ -101,6 +101,12 @@ export default function StickyRestaurantBar({
     onFiltersChange({ ...filters, caloriesMax: undefined });
   };
 
+  const closeSearch = () => {
+    onSearchChange("");
+    setSearchQuery("");
+    setIsSearchOpen(false);
+  };
+
   const resetFilters = () => {
     onFiltersChange({});
   };
@@ -150,24 +156,39 @@ export default function StickyRestaurantBar({
           </button>
 
           <div className="ml-auto flex items-center gap-2">
-            <div className={`overflow-hidden transition-all duration-300 ${isSearchOpen ? "w-44 opacity-100" : "w-0 opacity-0"}`}>
-              <input
-                ref={searchInputRef}
-                value={searchQuery}
-                onChange={(event) => {
-                  onSearchChange(event.target.value);
-                  setSearchQuery(event.target.value);
-                }}
-                placeholder="Search menu items"
-                aria-label="Search menu items"
-                className="h-9 w-full rounded-full border border-slate-300/80 bg-white px-3 text-sm text-slate-900 outline-none"
-              />
+            <div className={`overflow-hidden transition-all duration-300 ${isSearchOpen ? "w-[16rem] opacity-100" : "w-0 opacity-0"}`}>
+              <div className="relative">
+                <input
+                  ref={searchInputRef}
+                  value={searchQuery}
+                  onChange={(event) => {
+                    onSearchChange(event.target.value);
+                    setSearchQuery(event.target.value);
+                  }}
+                  placeholder="Search menu items"
+                  aria-label="Search menu items"
+                  className="h-9 w-full rounded-full border border-slate-300/80 bg-white px-3 pr-9 text-sm text-slate-900 outline-none"
+                />
+                {searchQuery ? (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onSearchChange("");
+                      setSearchQuery("");
+                    }}
+                    className="absolute inset-y-0 right-2 my-auto inline-flex h-6 w-6 items-center justify-center rounded-full text-sm text-slate-500 transition hover:bg-slate-100 hover:text-slate-700"
+                    aria-label="Clear search"
+                  >
+                    ✕
+                  </button>
+                ) : null}
+              </div>
             </div>
 
             {isSearchOpen ? (
               <button
                 type="button"
-                onClick={() => setIsSearchOpen(false)}
+                onClick={closeSearch}
                 className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-300/80 bg-white text-base text-slate-800"
                 aria-label="Close search"
               >
