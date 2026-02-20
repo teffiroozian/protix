@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo } from "react";
 import { useCart } from "@/stores/cartStore";
 import { useRestaurantSearch } from "@/components/RestaurantSearchContext";
 import { useRestaurantUi } from "@/components/RestaurantUiContext";
@@ -46,31 +46,14 @@ export default function RestaurantHeader({
   tags = DEFAULT_TAGS,
 }: RestaurantHeaderProps) {
   void tags;
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const searchInputRef = useRef<HTMLInputElement>(null);
   const { items } = useCart();
-  const { searchQuery, setSearchQuery } = useRestaurantSearch();
+  const { openSearch } = useRestaurantSearch();
   const { openCart } = useRestaurantUi();
 
   const cartCount = useMemo(
     () => items.reduce((sum, item) => sum + item.quantity, 0),
     [items]
   );
-
-  useEffect(() => {
-    if (isSearchOpen) {
-      searchInputRef.current?.focus();
-    }
-  }, [isSearchOpen]);
-
-  const openSearch = () => {
-    setIsSearchOpen(true);
-  };
-
-  const closeSearch = () => {
-    setSearchQuery("");
-    setIsSearchOpen(false);
-  };
 
   const gradientClass =
     HERO_GRADIENTS[restaurantSlug] ?? "from-slate-200 via-slate-100 to-white";
@@ -91,52 +74,14 @@ export default function RestaurantHeader({
             </Link>
 
             <div className="ml-auto flex items-center gap-2">
-              <div
-                className={`overflow-hidden transition-all duration-300 ${
-                  isSearchOpen ? "w-[16rem] opacity-100" : "w-0 opacity-0"
-                }`}
-              >
-                <div className="relative">
-                  <input
-                    ref={searchInputRef}
-                    value={searchQuery}
-                    onChange={(event) => setSearchQuery(event.target.value)}
-                    placeholder="Search menu items"
-                    aria-label="Search menu items"
-                    className="h-10 w-full rounded-full border border-slate-900/15 bg-white/95 px-4 pr-10 text-sm text-slate-900 shadow-sm outline-none ring-0 placeholder:text-slate-500 focus:border-slate-900/30"
-                  />
-                  {searchQuery ? (
-                    <button
-                      type="button"
-                      onClick={() => setSearchQuery("")}
-                      className="absolute inset-y-0 right-2 my-auto inline-flex h-6 w-6 items-center justify-center rounded-full text-sm text-slate-500 transition hover:bg-slate-100 hover:text-slate-700"
-                      aria-label="Clear search"
-                    >
-                      ✕
-                    </button>
-                  ) : null}
-                </div>
-              </div>
-
-              {isSearchOpen ? (
-                <button
-                  type="button"
-                  onClick={closeSearch}
-                  aria-label="Close search"
-                  className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-900/15 bg-white text-base text-slate-900 shadow-sm transition hover:bg-slate-50"
-                >
-                  ✕
-                </button>
-              ) : (
                 <button
                   type="button"
                   onClick={openSearch}
                   aria-label="Search menu items"
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-slate-900 text-base text-white shadow-sm transition hover:bg-slate-800"
-                >
-                  🔍
-                </button>
-              )}
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-slate-900 text-base text-white shadow-sm transition hover:bg-slate-800"
+              >
+                🔍
+              </button>
 
               <button
                 type="button"

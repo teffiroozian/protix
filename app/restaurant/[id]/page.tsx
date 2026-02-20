@@ -38,28 +38,28 @@ export default async function RestaurantPage({
     <RestaurantSearchProvider>
       <RestaurantUiProvider>
         <div style={{ width: "100%" }}>
-        <div id="restaurant-hero" className="mt-6">
-          <RestaurantHeader
-            name={restaurant.name}
-            logo={restaurant.logo}
-            restaurantSlug={restaurant.id}
-          />
-        </div>
+          <div id="restaurant-hero" className="mt-6">
+            <RestaurantHeader
+              name={restaurant.name}
+              logo={restaurant.logo}
+              restaurantSlug={restaurant.id}
+            />
+          </div>
 
-        <RecentRestaurantTracker restaurantId={restaurant.id} />
-        <ScrollToTopOnMount />
+          <RecentRestaurantTracker restaurantId={restaurant.id} />
+          <ScrollToTopOnMount />
 
-        <main style={{ maxWidth: 900, margin: "24px auto 48px", padding: 16 }}>
-          <RestaurantView
-            restaurantId={restaurant.id}
-            restaurantName={restaurant.name}
-            restaurantLogo={restaurant.logo}
-            items={items}
-            addons={addons}
-            commonChanges={commonChanges}
-            autoScrollOnViewChange
-          />
-        </main>
+          <main style={{ maxWidth: 900, margin: "24px auto 48px", padding: 16 }}>
+            <RestaurantView
+              restaurantId={restaurant.id}
+              restaurantName={restaurant.name}
+              restaurantLogo={restaurant.logo}
+              items={items}
+              addons={addons}
+              commonChanges={commonChanges}
+              autoScrollOnViewChange
+            />
+          </main>
         </div>
         <CartPreviewDrawer />
       </RestaurantUiProvider>

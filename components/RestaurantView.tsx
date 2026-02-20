@@ -36,7 +36,8 @@ export default function RestaurantView({
   const [entireMenu, setEntireMenu] = useState(false);
   const [sort, setSort] = useState<SortOption>("highest-protein");
   const [filters, setFilters] = useState<Filters>({});
-  const { searchQuery, setSearchQuery } = useRestaurantSearch();
+  const { searchOpen, searchQuery, setSearchQuery, openSearch, closeSearch } =
+    useRestaurantSearch();
 
   const calorieBounds = useMemo(() => {
     if (!items.length) {
@@ -137,8 +138,11 @@ export default function RestaurantView({
         categoryOptions={categoryOptions}
         activeCategory={resolvedActiveCategory}
         onCategorySelect={handleCategorySelect}
+        searchOpen={searchOpen}
         searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
+        setSearchQuery={setSearchQuery}
+        onOpenSearch={openSearch}
+        onCloseSearch={closeSearch}
         entireMenu={entireMenu}
         onEntireMenuChange={setEntireMenu}
         calorieBounds={calorieBounds}
