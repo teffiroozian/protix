@@ -2,9 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useEffect, useRef, useState } from "react";
-import { useCart } from "@/stores/cartStore";
-import { useRestaurantUi } from "@/components/RestaurantUiContext";
+import { useEffect, useRef, useState } from "react";
+import CartIconDropdown from "@/components/CartIconDropdown";
 import ControlsRow, {
   FilterChips,
   type Filters,
@@ -63,7 +62,6 @@ export default function StickyRestaurantBar({
     return !document.getElementById("controls-row");
   });
   const searchInputRef = useRef<HTMLInputElement>(null);
-  const { openCart } = useRestaurantUi();
   const isSearchMode = searchOpen || searchQuery.trim().length > 0;
 
   useEffect(() => {
@@ -112,12 +110,6 @@ export default function StickyRestaurantBar({
   const resetFilters = () => {
     onFiltersChange({});
   };
-
-  const { items } = useCart();
-  const cartCount = useMemo(
-    () => items.reduce((sum, item) => sum + item.quantity, 0),
-    [items]
-  );
 
   return (
     <div
@@ -201,14 +193,10 @@ export default function StickyRestaurantBar({
               </button>
             )}
 
-            <button
-              type="button"
-              onClick={openCart}
-              className="inline-flex h-9 min-w-9 shrink-0 items-center justify-center rounded-full border border-slate-300/80 bg-white px-2.5 text-base text-slate-800 transition hover:bg-slate-50"
-              aria-label={cartCount > 0 ? `Cart (${cartCount})` : "Cart"}
-            >
-              {cartCount > 0 ? `🛒 ${cartCount}` : "🛒"}
-            </button>
+            <CartIconDropdown
+              buttonClassName="inline-flex h-9 min-w-9 shrink-0 items-center justify-center rounded-full border border-slate-300/80 bg-white px-2.5 text-base text-slate-800 transition hover:bg-slate-50"
+              countFormat="compact"
+            />
           </div>
         </div>
       </div>

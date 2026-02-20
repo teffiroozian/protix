@@ -216,9 +216,15 @@
   font-size: 16px;
   font-weight: 700;
   cursor: pointer;
+  transition: transform 180ms ease, background-color 180ms ease, border-color 180ms ease;
 }
 
-.addedText {
-  font-size: 13px;
-  color: rgba(0, 0, 0, 0.65);
+.addToCartButton:disabled {
+  cursor: not-allowed;
+}
+
+.addToCartButtonAdded {
+  background: #16a34a;
+  border-color: #15803d;
+  transform: translateY(-1px);
 }
