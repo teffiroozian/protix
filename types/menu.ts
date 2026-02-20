@@ -69,5 +69,6 @@ export type MenuItem = {
   variants?: ItemVariant[];
   defaultVariantId?: string;
   addonRefs?: AddonRef[];
+  ingredients?: string[];
 
 };
