@@ -281,6 +281,7 @@
             "image": "/foodImages/chickfila/cfa-grilledchickensandwich.webp"
         },
         {
+            "id": "cfa-grilled-chicken-club-sandwich",
             "name": "Grilled Chicken Club Sandwich",
             "nutrition": {
                 "calories": 520,
@@ -296,6 +297,13 @@
             },
             "category": "Sandwich",
             "portionType": "single",
+            "ingredients": [
+                "bun",
+                "chicken",
+                "tomato",
+                "bacon",
+                "cheese"
+            ],
             "image": "/foodImages/chickfila/cfa-grilledchickenclub.webp"
         },
         {

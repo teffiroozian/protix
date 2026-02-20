@@ -318,3 +318,28 @@
 .addonTileButtonActive {
   box-shadow: inset 0 0 0 3px #16a34a;
 }
+
+.ingredientsRow {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.ingredientsGrid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.ingredientChip {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 999px;
+  background: #f8f8f8;
+  padding: 6px 10px;
+  font-size: 14px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}

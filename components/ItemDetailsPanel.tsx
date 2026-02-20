@@ -1,4 +1,5 @@
 import { useState } from "react";
+import ingredientsCatalog from "@/data/ingredientsCatalog.json";
 import styles from "./ItemDetails.module.css";
 import type {
   AddonOption,
@@ -30,6 +31,27 @@ const addonSectionTitles: Record<AddonRef, string> = {
 };
 
 const rowScrollPx = 240;
+
+type IngredientEntry = {
+  label: string;
+  icon: string;
+};
+
+function resolveIngredients(ingredientIds?: string[]) {
+  if (!ingredientIds || ingredientIds.length === 0) return [];
+
+  return ingredientIds
+    .map((ingredientId) => {
+      const ingredient = (ingredientsCatalog as Record<string, IngredientEntry>)[ingredientId];
+      if (!ingredient) return null;
+      return {
+        id: ingredientId,
+        label: ingredient.label,
+        icon: ingredient.icon,
+      };
+    })
+    .filter((ingredient): ingredient is { id: string; label: string; icon: string } => ingredient !== null);
+}
 
 function scrollRow(rowId: string, direction: "left" | "right") {
   const row = document.getElementById(rowId);
@@ -100,6 +122,7 @@ export default function ItemDetailsPanel({
     );
 
   const activeCustomizationTotals = customizationTotals ?? { calories: 0, protein: 0, carbs: 0, fat: 0 };
+  const ingredients = resolveIngredients(item.ingredients);
 
   return (
     <div className={styles.wrapper}>
@@ -425,6 +448,23 @@ export default function ItemDetailsPanel({
             <div className={styles.detailsRow}>
               <div className={styles.detailsLabel}>Restaurant</div>
               <div className={styles.detailsValue}>{item.restaurant}</div>
+            </div>
+          </>
+        ) : null}
+
+        {ingredients.length > 0 ? (
+          <>
+            <div className={styles.detailsDivider} />
+            <div className={`${styles.detailsRow} ${styles.ingredientsRow}`}>
+              <div className={styles.detailsLabel}>Ingredients</div>
+              <div className={styles.ingredientsGrid}>
+                {ingredients.map((ingredient) => (
+                  <div key={ingredient.id} className={styles.ingredientChip}>
+                    <span aria-hidden="true">{ingredient.icon}</span>
+                    <span>{ingredient.label}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </>
         ) : null}

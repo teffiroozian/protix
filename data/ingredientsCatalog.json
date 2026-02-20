@@ -1,0 +1,9 @@
+{
+  "bun": { "label": "Bun", "icon": "🍞" },
+  "lettuce": { "label": "Lettuce", "icon": "🥬" },
+  "tomato": { "label": "Tomato", "icon": "🍅" },
+  "bacon": { "label": "Bacon", "icon": "🥓" },
+  "cheese": { "label": "Cheese", "icon": "🧀" },
+  "chicken": { "label": "Chicken", "icon": "🍗" },
+  "pickle": { "label": "Pickles", "icon": "🥒" }
+}
