@@ -127,7 +127,7 @@ export default function CartPreviewDrawer() {
                           <div className="inline-flex items-center rounded-full border border-slate-200 bg-slate-50 p-1">
                             <button
                               type="button"
-                              onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))}
+                              onClick={() => updateQuantity(item.id, item.quantity - 1)}
                               className="inline-flex size-7 items-center justify-center rounded-full text-sm font-semibold text-slate-700 transition hover:bg-white"
                               aria-label={`Decrease quantity of ${item.name}`}
                             >
