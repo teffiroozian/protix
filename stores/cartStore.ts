@@ -23,6 +23,8 @@ export type CartItem = {
 
 type CartState = {
   items: CartItem[];
+  lastAddedItem: CartItem | null;
+  lastAddedAt: number | null;
 };
 
 const emptyTotals: CartMacros = {
@@ -34,6 +36,8 @@ const emptyTotals: CartMacros = {
 
 let cartState: CartState = {
   items: [],
+  lastAddedItem: null,
+  lastAddedAt: null,
 };
 
 const listeners = new Set<() => void>();
@@ -85,6 +89,8 @@ const addItem = (item: CartItem) => {
       return {
         ...prev,
         items: [...prev.items, item],
+        lastAddedItem: item,
+        lastAddedAt: Date.now(),
       };
     }
 
@@ -96,9 +102,13 @@ const addItem = (item: CartItem) => {
       quantity: existingItem.quantity + item.quantity,
     };
 
+    const updatedItem = updatedItems[existingIndex];
+
     return {
       ...prev,
       items: updatedItems,
+      lastAddedItem: updatedItem,
+      lastAddedAt: Date.now(),
     };
   });
 };
@@ -144,6 +154,8 @@ export const useCart = () => {
   return {
     items: state.items,
     totals,
+    lastAddedItem: state.lastAddedItem,
+    lastAddedAt: state.lastAddedAt,
     addItem,
     removeItem,
     updateQuantity,

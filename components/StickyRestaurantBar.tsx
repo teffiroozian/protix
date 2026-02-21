@@ -2,9 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useEffect, useRef, useState } from "react";
-import { useCart } from "@/stores/cartStore";
-import { useRestaurantUi } from "@/components/RestaurantUiContext";
+import { useEffect, useRef, useState } from "react";
+import CartIconDropdown from "@/components/CartIconDropdown";
 import ControlsRow, {
   FilterChips,
   type Filters,
@@ -63,7 +62,6 @@ export default function StickyRestaurantBar({
     return !document.getElementById("controls-row");
   });
   const searchInputRef = useRef<HTMLInputElement>(null);
-  const { openCart } = useRestaurantUi();
   const isSearchMode = searchOpen || searchQuery.trim().length > 0;
 
   useEffect(() => {
@@ -113,12 +111,6 @@ export default function StickyRestaurantBar({
     onFiltersChange({});
   };
 
-  const { items } = useCart();
-  const cartCount = useMemo(
-    () => items.reduce((sum, item) => sum + item.quantity, 0),
-    [items]
-  );
-
   return (
     <div
       className={`fixed left-0 right-0 top-0 z-50 shadow-[0_14px_35px_rgba(15,23,42,0.25)] transition duration-300 ${
@@ -127,7 +119,7 @@ export default function StickyRestaurantBar({
           : "-translate-y-full opacity-0 pointer-events-none"
       }`}
     >
-      <div className="w-full border-b border-slate-200/70 bg-white/95 backdrop-blur">
+      <div className="relative z-[110] w-full border-b border-slate-200/70 bg-white/95 backdrop-blur">
         <div className="mx-auto flex w-full max-w-5xl items-center gap-3 px-4 py-2 sm:px-6">
           <Link
             href="/"
@@ -201,19 +193,15 @@ export default function StickyRestaurantBar({
               </button>
             )}
 
-            <button
-              type="button"
-              onClick={openCart}
-              className="inline-flex h-9 min-w-9 shrink-0 items-center justify-center rounded-full border border-slate-300/80 bg-white px-2.5 text-base text-slate-800 transition hover:bg-slate-50"
-              aria-label={cartCount > 0 ? `Cart (${cartCount})` : "Cart"}
-            >
-              {cartCount > 0 ? `🛒 ${cartCount}` : "🛒"}
-            </button>
+            <CartIconDropdown
+              buttonClassName="inline-flex h-9 min-w-9 shrink-0 items-center justify-center rounded-full border border-slate-300/80 bg-white px-2.5 text-base text-slate-800 transition hover:bg-slate-50"
+              countFormat="compact"
+            />
           </div>
         </div>
       </div>
 
-      <div className="w-full border-b border-slate-200/70 bg-white/95 backdrop-blur">
+      <div className="relative z-[100] w-full border-b border-slate-200/70 bg-white/95 backdrop-blur">
         <div className="mx-auto flex w-full max-w-5xl items-center gap-3 px-4 py-2 sm:px-6">
           <div className="min-w-0 flex-1">
             <ControlsRow

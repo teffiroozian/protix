@@ -2,10 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo } from "react";
-import { useCart } from "@/stores/cartStore";
 import { useRestaurantSearch } from "@/components/RestaurantSearchContext";
-import { useRestaurantUi } from "@/components/RestaurantUiContext";
+import CartIconDropdown from "@/components/CartIconDropdown";
 const HERO_GRADIENTS: Record<string, string> = {
   chickfila: "from-red-200 to-orange-200",
   chipotle: "from-red-200 via-amber-100 to-orange-100",
@@ -46,14 +44,7 @@ export default function RestaurantHeader({
   tags = DEFAULT_TAGS,
 }: RestaurantHeaderProps) {
   void tags;
-  const { items } = useCart();
   const { openSearch } = useRestaurantSearch();
-  const { openCart } = useRestaurantUi();
-
-  const cartCount = useMemo(
-    () => items.reduce((sum, item) => sum + item.quantity, 0),
-    [items]
-  );
 
   const gradientClass =
     HERO_GRADIENTS[restaurantSlug] ?? "from-slate-200 via-slate-100 to-white";
@@ -83,14 +74,10 @@ export default function RestaurantHeader({
                 🔍
               </button>
 
-              <button
-                type="button"
-                onClick={openCart}
-                className="inline-flex h-10 items-center rounded-full border border-slate-900/15 bg-white px-3 text-sm font-medium text-slate-900 shadow-sm transition hover:bg-slate-50"
-                aria-label={cartCount > 0 ? `Cart (${cartCount})` : "Cart"}
-              >
-                {cartCount > 0 ? `🛒 (${cartCount})` : "🛒"}
-              </button>
+              <CartIconDropdown
+                buttonClassName="inline-flex h-10 items-center rounded-full border border-slate-900/15 bg-white px-3 text-sm font-medium text-slate-900 shadow-sm transition hover:bg-slate-50"
+                countFormat="parenthesized"
+              />
             </div>
           </div>
 
