@@ -18,11 +18,10 @@ export default function CartIconDropdown({
 }: CartIconDropdownProps) {
   const { openCart } = useRestaurantUi();
   const { items, totals, lastAddedItem, lastAddedAt } = useCart();
-  const [manualOpen, setManualOpen] = useState(false);
   const [dismissedAddedAt, setDismissedAddedAt] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const openScrollYRef = useRef<number | null>(null);
-  const isOpen = manualOpen || (lastAddedAt !== null && lastAddedAt !== dismissedAddedAt);
+  const isOpen = lastAddedAt !== null && lastAddedAt !== dismissedAddedAt;
 
   const cartCount = useMemo(
     () => items.reduce((sum, item) => sum + item.quantity, 0),
@@ -34,7 +33,6 @@ export default function CartIconDropdown({
 
     const handlePointerDown = (event: MouseEvent) => {
       if (!containerRef.current?.contains(event.target as Node)) {
-        setManualOpen(false);
         if (lastAddedAt !== null) {
           setDismissedAddedAt(lastAddedAt);
         }
@@ -62,7 +60,6 @@ export default function CartIconDropdown({
       }
 
       if (Math.abs(window.scrollY - openScrollYRef.current) > SCROLL_CLOSE_THRESHOLD) {
-        setManualOpen(false);
         if (lastAddedAt !== null) {
           setDismissedAddedAt(lastAddedAt);
         }
@@ -93,15 +90,10 @@ export default function CartIconDropdown({
       <button
         type="button"
         onClick={() => {
-          if (isOpen) {
-            setManualOpen(false);
-            if (lastAddedAt !== null) {
-              setDismissedAddedAt(lastAddedAt);
-            }
-            return;
+          openCart();
+          if (lastAddedAt !== null) {
+            setDismissedAddedAt(lastAddedAt);
           }
-
-          setManualOpen(true);
         }}
         className={buttonClassName}
         aria-label={cartCount > 0 ? `Cart (${cartCount})` : "Cart"}
@@ -174,7 +166,6 @@ export default function CartIconDropdown({
               type="button"
               onClick={() => {
                 openCart();
-                setManualOpen(false);
                 if (lastAddedAt !== null) {
                   setDismissedAddedAt(lastAddedAt);
                 }
@@ -186,7 +177,6 @@ export default function CartIconDropdown({
             <Link
               href="/cart"
               onClick={() => {
-                setManualOpen(false);
                 if (lastAddedAt !== null) {
                   setDismissedAddedAt(lastAddedAt);
                 }
