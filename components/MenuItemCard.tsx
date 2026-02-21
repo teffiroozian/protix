@@ -75,7 +75,7 @@ export default function MenuItemCard({
   const [selectedVariantId, setSelectedVariantId] = useState(defaultVariantId);
   const [selectedAddons, setSelectedAddons] = useState<Partial<Record<AddonRef, AddonOption>>>({});
   const [selectedCommonChangeIds, setSelectedCommonChangeIds] = useState<string[]>([]);
-  const [addConfirmation, setAddConfirmation] = useState("");
+  const [isAddFeedbackVisible, setIsAddFeedbackVisible] = useState(false);
   const { addItem } = useCart();
   const selectedVariant = variants?.find((variant) => variant.id === selectedVariantId);
   const baseNutrition = selectedVariant?.nutrition ?? item.nutrition;
@@ -180,6 +180,8 @@ export default function MenuItemCard({
   }, [defaultVariantId, selectedVariantId, variants]);
 
   const handleAddToCart = () => {
+    if (isAddFeedbackVisible) return;
+
     const baseForCart = selectedVariantForCart?.nutrition ?? item.nutrition;
 
     addItem({
@@ -199,20 +201,20 @@ export default function MenuItemCard({
       },
     });
 
-    setAddConfirmation("Added to cart");
+    setIsAddFeedbackVisible(true);
   };
 
   useEffect(() => {
-    if (!addConfirmation) return;
+    if (!isAddFeedbackVisible) return;
 
     const timeout = window.setTimeout(() => {
-      setAddConfirmation("");
-    }, 1600);
+      setIsAddFeedbackVisible(false);
+    }, 1000);
 
     return () => {
       window.clearTimeout(timeout);
     };
-  }, [addConfirmation]);
+  }, [isAddFeedbackVisible]);
 
   return (
     <li
@@ -306,16 +308,16 @@ export default function MenuItemCard({
             </div>
 
             <div className={styles.actionsWrap}>
-              {addConfirmation ? <span className={styles.addedText}>{addConfirmation}</span> : null}
               <button
                 type="button"
-                className={styles.addToCartButton}
+                className={`${styles.addToCartButton} ${isAddFeedbackVisible ? styles.addToCartButtonAdded : ""}`}
+                disabled={isAddFeedbackVisible}
                 onClick={(event) => {
                   event.stopPropagation();
                   handleAddToCart();
                 }}
               >
-                Add to Cart
+                {isAddFeedbackVisible ? "Added ✓" : "Add to Cart"}
               </button>
             </div>
           </div>
