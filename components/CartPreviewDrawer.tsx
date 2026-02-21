@@ -26,13 +26,13 @@ export default function CartPreviewDrawer() {
   return (
     <>
       <div
-        className={`fixed inset-0 z-[70] bg-slate-900/30 transition ${
+        className={`fixed inset-0 z-[120] bg-slate-900/30 transition ${
           isCartOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
         }`}
         onClick={closeCart}
       />
       <aside
-        className={`fixed right-0 top-0 z-[80] h-full w-full max-w-md border-l border-slate-200 bg-white shadow-2xl transition-transform duration-300 ${
+        className={`fixed right-0 top-0 z-[125] h-full w-full max-w-md border-l border-slate-200 bg-white shadow-2xl transition-transform duration-300 ${
           isCartOpen ? "translate-x-0" : "translate-x-full"
         }`}
         aria-hidden={!isCartOpen}

@@ -10,7 +10,7 @@ type CartIconDropdownProps = {
   countFormat?: "compact" | "parenthesized";
 };
 
-const SCROLL_CLOSE_THRESHOLD = 60;
+const SCROLL_CLOSE_THRESHOLD = 90;
 
 export default function CartIconDropdown({
   buttonClassName,
@@ -22,6 +22,7 @@ export default function CartIconDropdown({
   const containerRef = useRef<HTMLDivElement>(null);
   const openScrollYRef = useRef<number | null>(null);
   const isOpen = lastAddedAt !== null && lastAddedAt !== dismissedAddedAt;
+
 
   const cartCount = useMemo(
     () => items.reduce((sum, item) => sum + item.quantity, 0),
@@ -86,7 +87,7 @@ export default function CartIconDropdown({
   const itemInitial = (lastAddedItem?.name?.trim().charAt(0) || "+").toUpperCase();
 
   return (
-    <div ref={containerRef} className="relative z-[160]">
+    <div ref={containerRef} className="relative">
       <button
         type="button"
         onClick={() => {
@@ -102,8 +103,14 @@ export default function CartIconDropdown({
         {countLabel}
       </button>
 
-      {isOpen ? (
-        <div className="absolute right-0 top-[calc(100%+0.55rem)] z-[170] w-[22rem] rounded-2xl border border-slate-200 bg-white p-4 text-slate-900 shadow-[0_18px_40px_rgba(15,23,42,0.18)]">
+      <div
+        aria-hidden={!isOpen}
+        className={`absolute right-0 top-[calc(100%+0.55rem)] z-[130] w-[22rem] rounded-2xl border border-slate-200 bg-white p-4 text-slate-900 shadow-[0_18px_40px_rgba(15,23,42,0.18)] transition-all duration-200 ${
+          isOpen
+            ? "translate-y-0 opacity-100"
+            : "pointer-events-none -translate-y-1 opacity-0"
+        }`}
+      >
           <div className="rounded-xl border border-emerald-100 bg-emerald-50/70 p-3">
             <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-emerald-700">
               Just added
@@ -187,7 +194,6 @@ export default function CartIconDropdown({
             </Link>
           </div>
         </div>
-      ) : null}
     </div>
   );
 }
