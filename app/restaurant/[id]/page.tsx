@@ -38,7 +38,7 @@ export default async function RestaurantPage({
     <RestaurantSearchProvider>
       <RestaurantUiProvider>
         <div style={{ width: "100%" }}>
-          <div id="restaurant-hero" className="mt-6">
+          <div id="restaurant-hero" className="pt-20">
             <RestaurantHeader
               name={restaurant.name}
               logo={restaurant.logo}

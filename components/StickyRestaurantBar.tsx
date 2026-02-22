@@ -57,7 +57,7 @@ export default function StickyRestaurantBar({
   onEntireMenuChange,
   calorieBounds,
 }: StickyRestaurantBarProps) {
-  const [isVisible, setIsVisible] = useState(() => {
+  const [showControlsInNav, setShowControlsInNav] = useState(() => {
     if (typeof document === "undefined") return false;
     return !document.getElementById("controls-row");
   });
@@ -73,7 +73,7 @@ export default function StickyRestaurantBar({
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setIsVisible(!entry.isIntersecting);
+        setShowControlsInNav(!entry.isIntersecting);
       },
       { threshold: 0 }
     );
@@ -84,10 +84,10 @@ export default function StickyRestaurantBar({
   }, []);
 
   useEffect(() => {
-    if (searchOpen && isVisible) {
+    if (searchOpen) {
       searchInputRef.current?.focus();
     }
-  }, [searchOpen, isVisible]);
+  }, [searchOpen]);
 
   const hasActiveFilters = Boolean(filters.proteinMin || filters.caloriesMax);
 
@@ -112,13 +112,7 @@ export default function StickyRestaurantBar({
   };
 
   return (
-    <div
-      className={`fixed left-0 right-0 top-0 z-50 shadow-[0_14px_35px_rgba(15,23,42,0.25)] transition duration-300 ${
-        isVisible
-          ? "translate-y-0 opacity-100"
-          : "-translate-y-full opacity-0 pointer-events-none"
-      }`}
-    >
+    <div className="fixed left-0 right-0 top-0 z-50 shadow-[0_14px_35px_rgba(15,23,42,0.25)]">
       <div className="relative z-[110] w-full border-b border-slate-200/70 bg-white/95 backdrop-blur">
         <div className="mx-auto flex w-full max-w-5xl items-center gap-3 px-4 py-2 sm:px-6">
           <Link
@@ -201,7 +195,13 @@ export default function StickyRestaurantBar({
         </div>
       </div>
 
-      <div className="relative z-[100] w-full border-b border-slate-200/70 bg-white/95 backdrop-blur">
+      <div
+        className={`relative z-[100] w-full border-b border-slate-200/70 bg-white/95 backdrop-blur transition-all duration-300 ${
+          showControlsInNav
+            ? "max-h-40 translate-y-0 opacity-100"
+            : "pointer-events-none max-h-0 -translate-y-2 opacity-0"
+        }`}
+      >
         <div className="mx-auto flex w-full max-w-5xl items-center gap-3 px-4 py-2 sm:px-6">
           <div className="min-w-0 flex-1">
             <ControlsRow
