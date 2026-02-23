@@ -1,9 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
-import { useRestaurantSearch } from "@/components/RestaurantSearchContext";
-import CartIconDropdown from "@/components/CartIconDropdown";
 const HERO_GRADIENTS: Record<string, string> = {
   chickfila: "from-red-200 to-orange-200",
   chipotle: "from-red-200 via-amber-100 to-orange-100",
@@ -44,8 +41,6 @@ export default function RestaurantHeader({
   tags = DEFAULT_TAGS,
 }: RestaurantHeaderProps) {
   void tags;
-  const { openSearch } = useRestaurantSearch();
-
   const gradientClass =
     HERO_GRADIENTS[restaurantSlug] ?? "from-slate-200 via-slate-100 to-white";
 
@@ -55,32 +50,6 @@ export default function RestaurantHeader({
         className={`rounded-3xl border-2 border-slate-800/20 bg-gradient-to-r ${gradientClass} shadow-sm`}
       >
         <div className="flex w-full max-w-5xl flex-col gap-6 px-6 pb-10 pt-8 sm:px-8">
-          <div className="flex items-start justify-between gap-4">
-            <Link
-              href="/"
-              className="inline-flex w-fit items-center gap-2 text-sm font-medium text-slate-700 transition hover:text-slate-900"
-            >
-              <span className="text-base">←</span>
-              Back to home
-            </Link>
-
-            <div className="ml-auto flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={openSearch}
-                  aria-label="Search menu items"
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-slate-900 text-base text-white shadow-sm transition hover:bg-slate-800"
-              >
-                🔍
-              </button>
-
-              <CartIconDropdown
-                buttonClassName="inline-flex h-10 items-center rounded-full border border-slate-900/15 bg-white px-3 text-sm font-medium text-slate-900 shadow-sm transition hover:bg-slate-50"
-                countFormat="parenthesized"
-              />
-            </div>
-          </div>
-
           <div className="flex items-center gap-4">
             <div className="relative h-14 w-14 overflow-hidden rounded-xl border border-white/70 bg-white shadow-sm">
               <Image
