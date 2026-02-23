@@ -112,6 +112,7 @@ export default function ControlsRow({
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [isSortOpen, setIsSortOpen] = useState(false);
   const [draftFilters, setDraftFilters] = useState<Filters>(filters);
+  const [hoveredSortOption, setHoveredSortOption] = useState<SortOption | null>(null);
   const navScrollRef = useRef<HTMLDivElement>(null);
   const sortMenuRef = useRef<HTMLDivElement>(null);
 
@@ -269,6 +270,7 @@ export default function ControlsRow({
                 <div style={{ display: "grid", gap: 4 }}>
                   {SORT_OPTIONS.map((option) => {
                     const isActive = option.value === sort;
+                    const isHovered = option.value === hoveredSortOption;
 
                     return (
                       <button
@@ -278,15 +280,22 @@ export default function ControlsRow({
                           onSortChange(option.value);
                           setIsSortOpen(false);
                         }}
+                        onMouseEnter={() => setHoveredSortOption(option.value)}
+                        onMouseLeave={() => setHoveredSortOption(null)}
                         style={{
                           textAlign: "left",
                           border: "none",
-                          background: isActive ? "rgba(0,0,0,0.1)" : "transparent",
+                          background: isActive
+                            ? "rgba(0,0,0,0.1)"
+                            : isHovered
+                              ? "rgba(15,23,42,0.06)"
+                              : "transparent",
                           color: "rgba(0,0,0,0.88)",
                           padding: "8px 10px",
                           borderRadius: 10,
                           fontWeight: 600,
                           cursor: "pointer",
+                          transition: "background 120ms ease",
                         }}
                       >
                         {option.label}
