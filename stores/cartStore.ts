@@ -28,6 +28,10 @@ type CartState = {
   lastAddedAt: number | null;
 };
 
+type CartItemUpdate = Partial<
+  Pick<CartItem, "variantId" | "variantLabel" | "optionsLabel" | "customizations" | "macrosPerItem">
+>;
+
 const emptyTotals: CartMacros = {
   calories: 0,
   protein: 0,
@@ -140,6 +144,20 @@ const updateQuantity = (id: string, quantity: number) => {
   }));
 };
 
+const updateItem = (id: string, update: CartItemUpdate) => {
+  setCartState((prev) => ({
+    ...prev,
+    items: prev.items.map((item) =>
+      item.id === id
+        ? {
+            ...item,
+            ...update,
+          }
+        : item,
+    ),
+  }));
+};
+
 const clearCart = () => {
   setCartState((prev) => ({
     ...prev,
@@ -160,6 +178,7 @@ export const useCart = () => {
     addItem,
     removeItem,
     updateQuantity,
+    updateItem,
     clearCart,
   };
 };

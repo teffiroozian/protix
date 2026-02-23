@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { MenuItem } from "@/types/menu";
+import type { AddonOption, AddonRef, MenuItem, RestaurantAddons } from "@/types/menu";
 import MenuItemCard from "@/components/MenuItemCard";
 import StickyMacroTotalsBar from "@/components/StickyMacroTotalsBar";
 import restaurants from "@/app/data/index.json";
@@ -28,6 +28,46 @@ const menuLookupByRestaurant: Record<string, MenuItem[]> = {
   subway: subwayMenu.items,
 };
 
+const addonLookupByRestaurant: Record<string, RestaurantAddons> = {
+  chickfila: chickfilaMenu.addons ?? {},
+  chipotle: chipotleMenu.addons ?? {},
+  habit: habitMenu.addons ?? {},
+  mcdonalds: mcdonaldsMenu.addons ?? {},
+  mod: modMenu.addons ?? {},
+  panda: pandaMenu.addons ?? {},
+  panera: paneraMenu.addons ?? {},
+  starbucks: starbucksMenu.addons ?? {},
+  subway: subwayMenu.addons ?? {},
+};
+
+function resolveSelectedAddons(
+  cartItem: { optionsLabel?: string; customizations?: string[] },
+  item: MenuItem,
+  availableAddons: RestaurantAddons,
+): Partial<Record<AddonRef, AddonOption>> {
+  const labels = new Set<string>();
+  if (cartItem.optionsLabel) {
+    cartItem.optionsLabel
+      .split(" + ")
+      .map((label) => label.trim())
+      .filter(Boolean)
+      .forEach((label) => labels.add(label));
+  }
+
+  (cartItem.customizations ?? []).forEach((label) => {
+    labels.add(label.replace(/^\+\s*/, "").trim());
+  });
+
+  return (item.addonRefs ?? []).reduce<Partial<Record<AddonRef, AddonOption>>>((acc, ref) => {
+    const section = availableAddons[ref] ?? [];
+    const matched = section.find((addon) => labels.has(addon.name));
+    if (matched) {
+      acc[ref] = matched;
+    }
+    return acc;
+  }, {});
+}
+
 function summarizeItem(item: { variantLabel?: string; optionsLabel?: string; customizations?: string[] }) {
   const segments = [item.variantLabel, item.optionsLabel, ...(item.customizations ?? [])]
     .filter(Boolean)
@@ -36,7 +76,7 @@ function summarizeItem(item: { variantLabel?: string; optionsLabel?: string; cus
 }
 
 export default function CartPage() {
-  const { items, totals, updateQuantity } = useCart();
+  const { items, totals, updateQuantity, updateItem } = useCart();
   const expandedTotalsRef = useRef<HTMLElement | null>(null);
   const [expandedTotalsInView, setExpandedTotalsInView] = useState(false);
 
@@ -103,6 +143,7 @@ export default function CartPage() {
             {items.map((cartItem) => {
               const sourceItem =
                 menuLookupByRestaurant[cartItem.restaurantId]?.find((item) => (item.id ?? item.name) === cartItem.itemId) ?? null;
+              const restaurantAddons = addonLookupByRestaurant[cartItem.restaurantId] ?? {};
 
               const menuItem: MenuItem = sourceItem ?? {
                 id: cartItem.itemId,
@@ -117,16 +158,30 @@ export default function CartPage() {
                 },
               };
 
+              const cartSelectedAddons = resolveSelectedAddons(cartItem, menuItem, restaurantAddons);
+
               return (
                 <MenuItemCard
                   key={cartItem.id}
                   restaurantId={cartItem.restaurantId}
                   item={menuItem}
                   mode="cart"
+                  addons={restaurantAddons}
                   cartQuantity={cartItem.quantity}
                   cartSummaryLine={summarizeItem(cartItem)}
+                  cartSelectedVariantId={cartItem.variantId}
+                  cartSelectedAddons={cartSelectedAddons}
                   onCartDecrement={() => updateQuantity(cartItem.id, cartItem.quantity - 1)}
                   onCartIncrement={() => updateQuantity(cartItem.id, cartItem.quantity + 1)}
+                  onCartConfigurationChange={(payload) => {
+                    updateItem(cartItem.id, {
+                      variantId: payload.variantId,
+                      variantLabel: payload.variantLabel,
+                      optionsLabel: payload.optionsLabel,
+                      customizations: payload.customizations,
+                      macrosPerItem: payload.macrosPerItem,
+                    });
+                  }}
                 />
               );
             })}

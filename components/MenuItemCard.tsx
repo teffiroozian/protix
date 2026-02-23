@@ -68,6 +68,9 @@ export default function MenuItemCard({
   onCartIncrement,
   onCartDecrement,
   cartSummaryLine,
+  cartSelectedVariantId,
+  cartSelectedAddons,
+  onCartConfigurationChange,
 }: {
   restaurantId: string;
   item: MenuItem;
@@ -81,6 +84,15 @@ export default function MenuItemCard({
   onCartIncrement?: () => void;
   onCartDecrement?: () => void;
   cartSummaryLine?: string;
+  cartSelectedVariantId?: string;
+  cartSelectedAddons?: Partial<Record<AddonRef, AddonOption>>;
+  onCartConfigurationChange?: (payload: {
+    variantId?: string;
+    variantLabel?: string;
+    optionsLabel?: string;
+    customizations?: string[];
+    macrosPerItem: MacroDelta;
+  }) => void;
 }) {
   const [open, setOpen] = useState(false);
   const id = useId();
@@ -93,8 +105,8 @@ export default function MenuItemCard({
     const flaggedDefault = variants.find((variant) => variant.isDefault);
     return flaggedDefault?.id ?? variants[0]?.id ?? "";
   }, [item.defaultVariantId, variants]);
-  const [selectedVariantId, setSelectedVariantId] = useState(defaultVariantId);
-  const [selectedAddons, setSelectedAddons] = useState<Partial<Record<AddonRef, AddonOption>>>({});
+  const [selectedVariantId, setSelectedVariantId] = useState(cartSelectedVariantId ?? defaultVariantId);
+  const [selectedAddons, setSelectedAddons] = useState<Partial<Record<AddonRef, AddonOption>>>(cartSelectedAddons ?? {});
   const [selectedCommonChangeIds, setSelectedCommonChangeIds] = useState<string[]>([]);
   const [isAddFeedbackVisible, setIsAddFeedbackVisible] = useState(false);
   const { addItem } = useCart();
@@ -175,6 +187,15 @@ export default function MenuItemCard({
 
   const rankText = typeof rankIndex === "number" ? pad2(rankIndex + 1) : null;
   const isCartMode = mode === "cart";
+  const availableCartAddonSections = useMemo(
+    () =>
+      (item.addonRefs ?? []).filter((ref) => {
+        const section = addons?.[ref];
+        return Boolean(section && section.length > 0);
+      }),
+    [addons, item.addonRefs]
+  );
+  const hasCartDropdown = isCartMode && availableCartAddonSections.length > 0;
 
   const ratio = useMemo(() => {
     return Math.round(caloriesPerProtein({ calories, protein }));
@@ -252,6 +273,36 @@ export default function MenuItemCard({
     };
   }, [isAddFeedbackVisible]);
 
+  useEffect(() => {
+    if (!isCartMode || !onCartConfigurationChange) return;
+
+    const baseForCart = selectedVariantForCart?.nutrition ?? item.nutrition;
+
+    onCartConfigurationChange({
+      variantId: selectedVariantForCart?.id,
+      variantLabel: selectedVariantForCart?.label,
+      optionsLabel,
+      customizations,
+      macrosPerItem: {
+        calories: baseForCart.calories + addonTotals.calories,
+        protein: baseForCart.protein + addonTotals.protein,
+        carbs: baseForCart.carbs + addonTotals.carbs,
+        fat: baseForCart.totalFat + addonTotals.fat,
+      },
+    });
+  }, [
+    addonTotals.calories,
+    addonTotals.carbs,
+    addonTotals.fat,
+    addonTotals.protein,
+    customizations,
+    isCartMode,
+    item.nutrition,
+    onCartConfigurationChange,
+    optionsLabel,
+    selectedVariantForCart,
+  ]);
+
   return (
     <li
       className={styles.card}
@@ -260,12 +311,12 @@ export default function MenuItemCard({
       }}
     >
       <div
-        role={isCartMode ? undefined : "button"}
-        tabIndex={isCartMode ? undefined : 0}
+        role={isCartMode && !hasCartDropdown ? undefined : "button"}
+        tabIndex={isCartMode && !hasCartDropdown ? undefined : 0}
         className={styles.header}
-        onClick={isCartMode ? undefined : () => setOpen((v) => !v)}
+        onClick={isCartMode && !hasCartDropdown ? undefined : () => setOpen((v) => !v)}
         onKeyDown={
-          isCartMode
+          isCartMode && !hasCartDropdown
             ? undefined
             : (event) => {
                 if (event.key === "Enter" || event.key === " ") {
@@ -274,8 +325,8 @@ export default function MenuItemCard({
                 }
               }
         }
-        aria-expanded={isCartMode ? undefined : open}
-        aria-controls={isCartMode ? undefined : `${id}-details`}
+        aria-expanded={isCartMode && !hasCartDropdown ? undefined : open}
+        aria-controls={isCartMode && !hasCartDropdown ? undefined : `${id}-details`}
       >
         <div className={styles.leftMedia}>
           {item.image ? (
@@ -394,8 +445,8 @@ export default function MenuItemCard({
           </div>
         </div>
 
-        {!isCartMode ? <div className={styles.iconActions}>
-          {hasMods ? (
+        {(!isCartMode || hasCartDropdown) ? <div className={styles.iconActions}>
+          {!isCartMode && hasMods ? (
             <div
               role="button"
               tabIndex={0}
@@ -445,6 +496,48 @@ export default function MenuItemCard({
               showCustomizationDeltas={hasActiveCustomization}
             />
 
+          </div>
+        </div>
+      ) : hasCartDropdown ? (
+        <div className={`${styles.details} ${open ? styles.detailsOpen : ""}`}>
+          <div className={styles.cartDetailsInner}>
+            {variants ? (
+              <div className={styles.cartControlRow}>
+                <span className={styles.cartControlLabel}>Variant</span>
+                <VariantSelector
+                  variants={variants}
+                  selectedId={selectedVariantId}
+                  onChange={setSelectedVariantId}
+                  ariaLabel={`${item.name} cart variant`}
+                />
+              </div>
+            ) : null}
+
+            {availableCartAddonSections.map((ref) => {
+              const section = addons?.[ref] ?? [];
+              const selectedName = selectedAddons[ref]?.name ?? "None";
+              return (
+                <div key={`${item.name}-${ref}`} className={styles.cartControlRow}>
+                  <span className={styles.cartControlLabel}>{ref === "sauces" ? "Sauce" : "Dressing"}</span>
+                  <select
+                    className={styles.cartAddonSelect}
+                    value={selectedName}
+                    onChange={(event) => {
+                      event.stopPropagation();
+                      const nextAddon = section.find((addon) => addon.name === event.target.value) ?? emptyAddon;
+                      setSelectedAddons((prev) => ({ ...prev, [ref]: nextAddon }));
+                    }}
+                  >
+                    <option value="None">None</option>
+                    {section.map((addon) => (
+                      <option key={`${ref}-${addon.name}`} value={addon.name}>
+                        {addon.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              );
+            })}
           </div>
         </div>
       ) : null}

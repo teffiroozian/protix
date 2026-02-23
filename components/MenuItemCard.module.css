@@ -266,3 +266,35 @@
   font-size: 16px;
   font-weight: 700;
 }
+
+.cartDetailsInner {
+  display: grid;
+  gap: 10px;
+  padding: 10px 12px 12px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(0, 0, 0, 0.015);
+}
+
+.cartControlRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cartControlLabel {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(0, 0, 0, 0.58);
+}
+
+.cartAddonSelect {
+  border: 1px solid rgba(0, 0, 0, 0.16);
+  border-radius: 10px;
+  padding: 6px 10px;
+  background: #fff;
+  font-size: 14px;
+  min-width: 180px;
+}
