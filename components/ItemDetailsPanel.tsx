@@ -88,6 +88,7 @@ export default function ItemDetailsPanel({
   onToggleCommonChange,
   customizationTotals,
   showCustomizationDeltas,
+  displayMode = "full",
 }: {
   item: MenuItem;
   nutrition: Nutrition;
@@ -102,6 +103,7 @@ export default function ItemDetailsPanel({
   onToggleCommonChange?: (id: string) => void;
   customizationTotals?: MacroDelta;
   showCustomizationDeltas?: boolean;
+  displayMode?: "full" | "addonsOnly";
 }) {
   const n = nutrition;
   const addonRefs = item.addonRefs ?? [];
@@ -223,7 +225,7 @@ export default function ItemDetailsPanel({
         </section>
       ) : null}
 
-      {commonChanges && commonChanges.length > 0 ? (
+      {displayMode === "full" && commonChanges && commonChanges.length > 0 ? (
         <section className={styles.addonsCard}>
           <div className={styles.addonsContent}>
             <div className={styles.addonGroup}>
@@ -324,7 +326,7 @@ export default function ItemDetailsPanel({
         </section>
       ) : null}
 
-      <section className={styles.labelCard}>
+      {displayMode === "full" ? <section className={styles.labelCard}>
         <div className={styles.amountPerServing}>Amount per serving</div>
 
         <div className={styles.caloriesRow}>
@@ -397,9 +399,9 @@ export default function ItemDetailsPanel({
           2,000 calories a day is used for general nutrition advice, but calorie needs
           vary. Values may vary by location, serving size, and customizations.
         </div>
-      </section>
+      </section> : null}
 
-      <section className={styles.detailsCard}>
+      {displayMode === "full" ? <section className={styles.detailsCard}>
         <div className={styles.detailsTitle}>Details</div>
 
         <div className={styles.detailsRow}>
@@ -468,7 +470,7 @@ export default function ItemDetailsPanel({
             </div>
           </>
         ) : null}
-      </section>
+      </section> : null}
     </div>
   );
 }

@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { MenuItem } from "@/types/menu";
+import type { CartMacros } from "@/stores/cartStore";
+import type { MenuItem, RestaurantAddons } from "@/types/menu";
 import MenuItemCard from "@/components/MenuItemCard";
 import StickyMacroTotalsBar from "@/components/StickyMacroTotalsBar";
 import restaurants from "@/app/data/index.json";
@@ -28,6 +29,18 @@ const menuLookupByRestaurant: Record<string, MenuItem[]> = {
   subway: subwayMenu.items,
 };
 
+const addonsLookupByRestaurant: Record<string, RestaurantAddons> = {
+  chickfila: chickfilaMenu.addons,
+  chipotle: chipotleMenu.addons,
+  habit: habitMenu.addons,
+  mcdonalds: mcdonaldsMenu.addons,
+  mod: modMenu.addons,
+  panda: pandaMenu.addons,
+  panera: paneraMenu.addons,
+  starbucks: starbucksMenu.addons,
+  subway: subwayMenu.addons,
+};
+
 function summarizeItem(item: { variantLabel?: string; optionsLabel?: string; customizations?: string[] }) {
   const segments = [item.variantLabel, item.optionsLabel, ...(item.customizations ?? [])]
     .filter(Boolean)
@@ -36,7 +49,7 @@ function summarizeItem(item: { variantLabel?: string; optionsLabel?: string; cus
 }
 
 export default function CartPage() {
-  const { items, totals, updateQuantity } = useCart();
+  const { items, totals, updateQuantity, updateItem } = useCart();
   const expandedTotalsRef = useRef<HTMLElement | null>(null);
   const [expandedTotalsInView, setExpandedTotalsInView] = useState(false);
 
@@ -122,11 +135,25 @@ export default function CartPage() {
                   key={cartItem.id}
                   restaurantId={cartItem.restaurantId}
                   item={menuItem}
+                  addons={addonsLookupByRestaurant[cartItem.restaurantId]}
                   mode="cart"
                   cartQuantity={cartItem.quantity}
+                  cartItemId={cartItem.id}
+                  initialCartVariantId={cartItem.variantId}
+                  initialCartOptionsLabel={cartItem.optionsLabel}
+                  initialCartCustomizations={cartItem.customizations}
                   cartSummaryLine={summarizeItem(cartItem)}
                   onCartDecrement={() => updateQuantity(cartItem.id, cartItem.quantity - 1)}
                   onCartIncrement={() => updateQuantity(cartItem.id, cartItem.quantity + 1)}
+                  onCartConfigurationChange={(next) => {
+                    updateItem(cartItem.id, {
+                      variantId: next.variantId,
+                      variantLabel: next.variantLabel,
+                      optionsLabel: next.optionsLabel,
+                      customizations: next.customizations,
+                      macrosPerItem: next.macrosPerItem as CartMacros,
+                    });
+                  }}
                 />
               );
             })}
