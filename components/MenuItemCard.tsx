@@ -20,6 +20,17 @@ function formatDelta(value: number) {
   return `${value >= 0 ? "+" : ""}${value}`;
 }
 
+function formatCommonChangeForCart(label: string) {
+  const [firstSegment] = label.split("→");
+  const normalized = firstSegment.trim();
+
+  if (!normalized) {
+    return label;
+  }
+
+  return normalized.charAt(0).toUpperCase() + normalized.slice(1);
+}
+
 
 function normalizeCategory(category: string) {
   return category.trim().toLowerCase();
@@ -163,10 +174,23 @@ export default function MenuItemCard({
     [selectedAddons]
   );
 
+  const selectedCommonChanges = useMemo(
+    () => applicableCommonChanges.filter((change) => selectedCommonChangeIds.includes(change.id)),
+    [applicableCommonChanges, selectedCommonChangeIds]
+  );
+
   const optionsLabel = useMemo(() => {
     if (selectedAddonOptions.length === 0) return undefined;
     return selectedAddonOptions.map((addon) => addon.name).join(" + ");
   }, [selectedAddonOptions]);
+
+  const customizations = useMemo(() => {
+    const addonLabels = selectedAddonOptions.map((addon) => `+ ${addon.name}`);
+    const modifierLabels = selectedCommonChanges.map((change) => formatCommonChangeForCart(change.label));
+    const labels = [...addonLabels, ...modifierLabels];
+
+    return labels.length > 0 ? labels : undefined;
+  }, [selectedAddonOptions, selectedCommonChanges]);
 
   const selectedVariantForCart = useMemo(() => {
     if (!variants || variants.length === 0) return undefined;
@@ -192,6 +216,7 @@ export default function MenuItemCard({
       variantId: selectedVariantForCart?.id,
       variantLabel: selectedVariantForCart?.label,
       optionsLabel,
+      customizations,
       quantity: 1,
       macrosPerItem: {
         calories: baseForCart.calories + addonTotals.calories,
