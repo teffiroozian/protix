@@ -63,6 +63,11 @@ export default function MenuItemCard({
   isTopRanked,
   addons,
   commonChanges,
+  mode = "menu",
+  cartQuantity = 1,
+  onCartIncrement,
+  onCartDecrement,
+  cartSummaryLine,
 }: {
   restaurantId: string;
   item: MenuItem;
@@ -71,6 +76,11 @@ export default function MenuItemCard({
   isTopRanked?: boolean;
   addons?: RestaurantAddons;
   commonChanges?: CommonChange[];
+  mode?: "menu" | "cart";
+  cartQuantity?: number;
+  onCartIncrement?: () => void;
+  onCartDecrement?: () => void;
+  cartSummaryLine?: string;
 }) {
   const [open, setOpen] = useState(false);
   const id = useId();
@@ -164,6 +174,7 @@ export default function MenuItemCard({
   const fat = nutrition.totalFat;
 
   const rankText = typeof rankIndex === "number" ? pad2(rankIndex + 1) : null;
+  const isCartMode = mode === "cart";
 
   const ratio = useMemo(() => {
     return Math.round(caloriesPerProtein({ calories, protein }));
@@ -249,18 +260,22 @@ export default function MenuItemCard({
       }}
     >
       <div
-        role="button"
-        tabIndex={0}
+        role={isCartMode ? undefined : "button"}
+        tabIndex={isCartMode ? undefined : 0}
         className={styles.header}
-        onClick={() => setOpen((v) => !v)}
-        onKeyDown={(event) => {
-          if (event.key === "Enter" || event.key === " ") {
-            event.preventDefault();
-            setOpen((v) => !v);
-          }
-        }}
-        aria-expanded={open}
-        aria-controls={`${id}-details`}
+        onClick={isCartMode ? undefined : () => setOpen((v) => !v)}
+        onKeyDown={
+          isCartMode
+            ? undefined
+            : (event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  setOpen((v) => !v);
+                }
+              }
+        }
+        aria-expanded={isCartMode ? undefined : open}
+        aria-controls={isCartMode ? undefined : `${id}-details`}
       >
         <div className={styles.leftMedia}>
           {item.image ? (
@@ -301,6 +316,9 @@ export default function MenuItemCard({
                 </div>
               ) : null}
             </div>
+            {isCartMode && cartSummaryLine ? (
+              <p className={styles.cartSummaryLine}>{cartSummaryLine}</p>
+            ) : null}
           </div>
 
           <div className={styles.macros}>
@@ -333,22 +351,50 @@ export default function MenuItemCard({
             </div>
 
             <div className={styles.actionsWrap}>
-              <button
-                type="button"
-                className={`${styles.addToCartButton} ${isAddFeedbackVisible ? styles.addToCartButtonAdded : ""}`}
-                disabled={isAddFeedbackVisible}
-                onClick={(event) => {
-                  event.stopPropagation();
-                  handleAddToCart();
-                }}
-              >
-                {isAddFeedbackVisible ? "Added ✓" : "Add to Cart"}
-              </button>
+              {isCartMode ? (
+                <div className={styles.qtyStepper}>
+                  <button
+                    type="button"
+                    className={styles.qtyStepButton}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      onCartDecrement?.();
+                    }}
+                    aria-label={`Decrease quantity of ${item.name}`}
+                  >
+                    -
+                  </button>
+                  <span className={styles.qtyValue}>{cartQuantity}</span>
+                  <button
+                    type="button"
+                    className={styles.qtyStepButton}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      onCartIncrement?.();
+                    }}
+                    aria-label={`Increase quantity of ${item.name}`}
+                  >
+                    +
+                  </button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  className={`${styles.addToCartButton} ${isAddFeedbackVisible ? styles.addToCartButtonAdded : ""}`}
+                  disabled={isAddFeedbackVisible}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    handleAddToCart();
+                  }}
+                >
+                  {isAddFeedbackVisible ? "Added ✓" : "Add to Cart"}
+                </button>
+              )}
             </div>
           </div>
         </div>
 
-        <div className={styles.iconActions}>
+        {!isCartMode ? <div className={styles.iconActions}>
           {hasMods ? (
             <div
               role="button"
@@ -371,35 +417,37 @@ export default function MenuItemCard({
             </div>
           ) : null}
           <div className={`${styles.iconButton} ${styles.expandIcon} ${open ? styles.expandIconOpen : ""}`}>+</div>
-        </div>
+        </div> : null}
       </div>
 
-      <div className={`${styles.details} ${open ? styles.detailsOpen : ""}`}>
-        <div className={styles.detailsInner}>
-          <ItemDetailsPanel
-            item={item}
-            nutrition={nutrition}
-            variants={variants}
-            selectedVariantId={selectedVariantId}
-            onSelectVariant={setSelectedVariantId}
-            addons={addons}
-            selectedAddons={selectedAddons}
-            onSelectAddon={(ref, addon) => setSelectedAddons((prev) => ({ ...prev, [ref]: addon ?? emptyAddon }))}
-            commonChanges={applicableCommonChanges}
-            selectedCommonChangeIds={selectedCommonChangeIds}
-            onToggleCommonChange={(changeId) =>
-              setSelectedCommonChangeIds((prev) =>
-                prev.includes(changeId)
-                  ? prev.filter((id) => id !== changeId)
-                  : [...prev, changeId]
-              )
-            }
-            customizationTotals={customizationTotals}
-            showCustomizationDeltas={hasActiveCustomization}
-          />
+      {!isCartMode ? (
+        <div className={`${styles.details} ${open ? styles.detailsOpen : ""}`}>
+          <div className={styles.detailsInner}>
+            <ItemDetailsPanel
+              item={item}
+              nutrition={nutrition}
+              variants={variants}
+              selectedVariantId={selectedVariantId}
+              onSelectVariant={setSelectedVariantId}
+              addons={addons}
+              selectedAddons={selectedAddons}
+              onSelectAddon={(ref, addon) => setSelectedAddons((prev) => ({ ...prev, [ref]: addon ?? emptyAddon }))}
+              commonChanges={applicableCommonChanges}
+              selectedCommonChangeIds={selectedCommonChangeIds}
+              onToggleCommonChange={(changeId) =>
+                setSelectedCommonChangeIds((prev) =>
+                  prev.includes(changeId)
+                    ? prev.filter((id) => id !== changeId)
+                    : [...prev, changeId]
+                )
+              }
+              customizationTotals={customizationTotals}
+              showCustomizationDeltas={hasActiveCustomization}
+            />
 
+          </div>
         </div>
-      </div>
+      ) : null}
     </li>
   );
 }

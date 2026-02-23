@@ -228,3 +228,41 @@
   border-color: #15803d;
   transform: translateY(-1px);
 }
+
+
+.cartSummaryLine {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.55);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.qtyStepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.16);
+  border-radius: 12px;
+  padding: 4px 8px;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.qtyStepButton {
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  border-radius: 8px;
+  width: 28px;
+  height: 28px;
+  background: #fff;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.qtyValue {
+  min-width: 24px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 700;
+}
