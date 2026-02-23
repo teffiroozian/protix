@@ -111,8 +111,8 @@ export default function CartPreviewDrawer() {
                       <div className="min-w-0 flex-1">
                         <p className="text-sm font-semibold text-slate-900">
                           {item.name}
-                          {item.optionsLabel ? (
-                            <span className="font-normal text-slate-500"> • {item.optionsLabel}</span>
+                          {item.variantLabel ? (
+                            <span className="font-normal text-slate-500"> • {item.variantLabel}</span>
                           ) : null}
                         </p>
 
@@ -122,6 +122,12 @@ export default function CartPreviewDrawer() {
                           <span>{formatMacro("g carbs", item.macrosPerItem.carbs)}</span>
                           <span>{formatMacro("g fat", item.macrosPerItem.fat)}</span>
                         </div>
+
+                        {item.customizations && item.customizations.length > 0 ? (
+                          <p className="mt-1 text-[11px] font-medium text-slate-500/80">
+                            {item.customizations.join(" • ")}
+                          </p>
+                        ) : null}
 
                         <div className="mt-3 flex justify-end">
                           <div className="inline-flex items-center rounded-full border border-slate-200 bg-slate-50 p-1">
