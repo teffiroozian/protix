@@ -112,6 +112,7 @@ export default function ControlsRow({
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [isSortOpen, setIsSortOpen] = useState(false);
   const [draftFilters, setDraftFilters] = useState<Filters>(filters);
+  const [hoveredSortOption, setHoveredSortOption] = useState<SortOption | null>(null);
   const navScrollRef = useRef<HTMLDivElement>(null);
   const sortMenuRef = useRef<HTMLDivElement>(null);
 
@@ -265,15 +266,18 @@ export default function ControlsRow({
             </button>
 
             {isSortOpen ? (
-              <div role="menu" style={{ position: "absolute", right: 0, top: "calc(100% + 8px)", width: 220, borderRadius: 14, border: "1px solid rgba(0,0,0,0.15)", background: "white", boxShadow: "0 12px 28px rgba(0,0,0,0.12)", padding: 8, zIndex: 20 }}>
+              <div role="menu" style={{ position: "absolute", right: 0, top: "calc(100% + 8px)", width: 220, borderRadius: 14, border: "1px solid rgba(0,0,0,0.1)", background: "white", boxShadow: "0 6px 14px rgba(15,23,42,0.08)", padding: 8, zIndex: 20 }}>
                 <div style={{ display: "grid", gap: 4 }}>
                   {SORT_OPTIONS.map((option) => {
                     const isActive = option.value === sort;
+                    const isHovered = hoveredSortOption === option.value;
 
                     return (
                       <button
                         key={option.value}
                         type="button"
+                        onMouseEnter={() => setHoveredSortOption(option.value)}
+                        onMouseLeave={() => setHoveredSortOption(null)}
                         onClick={() => {
                           onSortChange(option.value);
                           setIsSortOpen(false);
@@ -281,12 +285,17 @@ export default function ControlsRow({
                         style={{
                           textAlign: "left",
                           border: "none",
-                          background: isActive ? "rgba(0,0,0,0.1)" : "transparent",
+                          background: isActive
+                            ? "rgba(0,0,0,0.1)"
+                            : isHovered
+                              ? "rgba(148, 163, 184, 0.18)"
+                              : "transparent",
                           color: "rgba(0,0,0,0.88)",
                           padding: "8px 10px",
                           borderRadius: 10,
                           fontWeight: 600,
                           cursor: "pointer",
+                          transition: "background-color 160ms ease",
                         }}
                       >
                         {option.label}

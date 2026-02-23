@@ -196,11 +196,12 @@ export default function StickyRestaurantBar({
       </div>
 
       <div
-        className={`relative z-[100] w-full overflow-hidden border-b border-slate-200/70 bg-white/95 backdrop-blur transition-all duration-300 ${
-          isControlsDocked
-            ? "max-h-24 translate-y-0 opacity-100"
-            : "max-h-0 -translate-y-2 opacity-0"
+        className={`relative z-[100] w-full border-b border-slate-200/70 bg-white/95 backdrop-blur transition-all duration-300 ${
+          isControlsDocked ? "translate-y-0 opacity-100" : "-translate-y-2 opacity-0 pointer-events-none"
         }`}
+        style={{
+          clipPath: isControlsDocked ? "inset(0% 0% 0% 0%)" : "inset(0% 0% 100% 0%)",
+        }}
       >
         <div className="mx-auto flex w-full max-w-5xl items-center gap-3 px-4 py-2 sm:px-6">
           <div className="min-w-0 flex-1">
