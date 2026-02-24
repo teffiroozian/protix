@@ -138,25 +138,15 @@ export default function ItemDetailsPanel({
               const summaryDetail = formatSummaryDetail(selectedAddon?.name ?? "None", selectedAddon?.calories ?? 0);
               return (
                 <div key={section.ref} className={styles.addonGroup}>
-                  <div
+                  <button
+                    type="button"
                     className={styles.addonGroupHeader}
-                    role="button"
-                    tabIndex={0}
                     onClick={() =>
                       setSectionOpenState((prev) => ({
                         ...prev,
                         [sectionStateKey]: !(prev[sectionStateKey] ?? true),
                       }))
                     }
-                    onKeyDown={(event) => {
-                      if (event.key === "Enter" || event.key === " ") {
-                        event.preventDefault();
-                        setSectionOpenState((prev) => ({
-                          ...prev,
-                          [sectionStateKey]: !(prev[sectionStateKey] ?? true),
-                        }));
-                      }
-                    }}
                   >
                     <h3 className={styles.addonGroupTitle}>
                       {section.title}
@@ -187,7 +177,7 @@ export default function ItemDetailsPanel({
                         {isSectionOpen ? "˄" : "˅"}
                       </span>
                     </div>
-                  </div>
+                  </button>
                   {isSectionOpen ? (
                     <ul id={`addon-row-${section.ref}`} className={styles.addonList}>
                       {section.addons.map((addon) => (
@@ -211,8 +201,10 @@ export default function ItemDetailsPanel({
                             ) : (
                               <div className={styles.addonImage} />
                             )}
-                            <div className={styles.addonName}>{addon.name}</div>
-                            <div className={styles.addonCalories}>+{addon.calories} Cal</div>
+                            <div className={styles.addonText}>
+                              <div className={styles.addonName}>{addon.name}</div>
+                              <div className={styles.addonCalories}>+{addon.calories} Cal</div>
+                            </div>
                           </button>
                         </li>
                       ))}
@@ -247,25 +239,15 @@ export default function ItemDetailsPanel({
 
                 return (
                   <>
-                    <div
+                    <button
+                      type="button"
                       className={styles.addonGroupHeader}
-                      role="button"
-                      tabIndex={0}
                       onClick={() =>
                         setSectionOpenState((prev) => ({
                           ...prev,
                           [commonKey]: !(prev[commonKey] ?? true),
                         }))
                       }
-                      onKeyDown={(event) => {
-                        if (event.key === "Enter" || event.key === " ") {
-                          event.preventDefault();
-                          setSectionOpenState((prev) => ({
-                            ...prev,
-                            [commonKey]: !(prev[commonKey] ?? true),
-                          }));
-                        }
-                      }}
                     >
                       <h3 className={styles.addonGroupTitle}>
                         Common Changes
@@ -296,7 +278,7 @@ export default function ItemDetailsPanel({
                           {isCommonOpen ? "˄" : "˅"}
                         </span>
                       </div>
-                    </div>
+                    </button>
                     {isCommonOpen ? (
                       <ul id="common-changes-row" className={styles.addonList}>
                         {commonChanges.map((change) => {
@@ -310,8 +292,10 @@ export default function ItemDetailsPanel({
                                 onClick={() => onToggleCommonChange?.(change.id)}
                               >
                                 <div className={`${styles.addonImage} ${styles.addonImageNone}`}>↺</div>
-                                <div className={styles.addonName}>{change.label}</div>
-                                <div className={styles.addonCalories}>{calorieDeltaLabel}</div>
+                                <div className={styles.addonText}>
+                                  <div className={styles.addonName}>{change.label}</div>
+                                  <div className={styles.addonCalories}>{calorieDeltaLabel}</div>
+                                </div>
                               </button>
                             </li>
                           );

@@ -161,6 +161,37 @@ export default function MenuItemCard({
     [selectedAddons]
   );
 
+  const addonNutritionTotals = useMemo(
+    () =>
+      Object.values(selectedAddons).reduce(
+        (sum, addon) => ({
+          calories: sum.calories + (addon?.calories ?? 0),
+          protein: sum.protein + (addon?.protein ?? 0),
+          carbs: sum.carbs + (addon?.carbs ?? 0),
+          totalFat: sum.totalFat + (addon?.fat ?? 0),
+          satFat: sum.satFat + (addon?.satFat ?? 0),
+          transFat: sum.transFat + (addon?.transFat ?? 0),
+          cholesterol: sum.cholesterol + (addon?.cholesterol ?? 0),
+          sodium: sum.sodium + (addon?.sodium ?? 0),
+          fiber: sum.fiber + (addon?.fiber ?? 0),
+          sugars: sum.sugars + (addon?.sugars ?? 0),
+        }),
+        {
+          calories: 0,
+          protein: 0,
+          carbs: 0,
+          totalFat: 0,
+          satFat: 0,
+          transFat: 0,
+          cholesterol: 0,
+          sodium: 0,
+          fiber: 0,
+          sugars: 0,
+        }
+      ),
+    [selectedAddons]
+  );
+
   const commonChangeTotals = useMemo(
     () =>
       applicableCommonChanges.reduce<MacroDelta>(
@@ -202,12 +233,23 @@ export default function MenuItemCard({
     setSelectedCommonChangeIds([]);
   }
 
+  function addNutritionValue(baseValue?: number, deltaValue?: number) {
+    if (baseValue === undefined && deltaValue === undefined) return undefined;
+    return (baseValue ?? 0) + (deltaValue ?? 0);
+  }
+
   const nutrition = {
     ...baseNutrition,
-    calories: baseNutrition.calories + customizationTotals.calories,
-    protein: baseNutrition.protein + customizationTotals.protein,
-    carbs: baseNutrition.carbs + customizationTotals.carbs,
-    totalFat: baseNutrition.totalFat + customizationTotals.fat,
+    calories: baseNutrition.calories + addonNutritionTotals.calories + commonChangeTotals.calories,
+    protein: baseNutrition.protein + addonNutritionTotals.protein + commonChangeTotals.protein,
+    carbs: baseNutrition.carbs + addonNutritionTotals.carbs + commonChangeTotals.carbs,
+    totalFat: baseNutrition.totalFat + addonNutritionTotals.totalFat + commonChangeTotals.fat,
+    satFat: addNutritionValue(baseNutrition.satFat, addonNutritionTotals.satFat),
+    transFat: addNutritionValue(baseNutrition.transFat, addonNutritionTotals.transFat),
+    cholesterol: addNutritionValue(baseNutrition.cholesterol, addonNutritionTotals.cholesterol),
+    sodium: addNutritionValue(baseNutrition.sodium, addonNutritionTotals.sodium),
+    fiber: addNutritionValue(baseNutrition.fiber, addonNutritionTotals.fiber),
+    sugars: addNutritionValue(baseNutrition.sugars, addonNutritionTotals.sugars),
   };
 
   const calories = nutrition.calories;

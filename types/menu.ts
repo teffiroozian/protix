@@ -37,6 +37,12 @@ export type AddonOption = {
   protein: number;
   carbs: number;
   fat: number;
+  satFat?: number;
+  transFat?: number;
+  cholesterol?: number;
+  sodium?: number;
+  fiber?: number;
+  sugars?: number;
   image?: string;
 };
 
