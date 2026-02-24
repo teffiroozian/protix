@@ -1,8 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { CartMacros } from "@/stores/cartStore";
-import type { MenuItem, RestaurantAddons } from "@/types/menu";
+import type { MenuItem, Nutrition, RestaurantAddons } from "@/types/menu";
 import MenuItemCard from "@/components/MenuItemCard";
 import StickyMacroTotalsBar from "@/components/StickyMacroTotalsBar";
 import restaurants from "@/app/data/index.json";
@@ -42,6 +43,19 @@ const addonsLookupByRestaurant: Record<string, RestaurantAddons> = {
   subway: subwayMenu.addons,
 };
 
+type NutritionTotals = {
+  calories: number;
+  protein: number;
+  carbs: number;
+  totalFat: number;
+  satFat?: number;
+  transFat?: number;
+  cholesterol?: number;
+  sodium?: number;
+  fiber?: number;
+  sugars?: number;
+};
+
 function summarizeItem(item: { variantLabel?: string; optionsLabel?: string; customizations?: string[] }) {
   const addonNames = new Set((item.optionsLabel ?? "").split("+").map((segment) => segment.trim()).filter(Boolean));
   const dedupedCustomizations = (item.customizations ?? []).filter((label) => {
@@ -54,6 +68,39 @@ function summarizeItem(item: { variantLabel?: string; optionsLabel?: string; cus
     .join(" • ");
 
   return segments || "No customizations";
+}
+
+function formatValue(value?: number, suffix = "") {
+  return value === undefined ? "—" : `${value}${suffix}`;
+}
+
+function addOptional(total: number | undefined, next: number | undefined, quantity: number) {
+  if (next === undefined) return total;
+  return (total ?? 0) + (next * quantity);
+}
+
+function buildCartNutritionTotals(items: ReturnType<typeof useCart>["items"]): NutritionTotals {
+  return items.reduce<NutritionTotals>(
+    (sum, cartItem) => {
+      const sourceItem = menuLookupByRestaurant[cartItem.restaurantId]?.find((item) => (item.id ?? item.name) === cartItem.itemId);
+      const selectedVariant = sourceItem?.variants?.find((variant) => variant.id === cartItem.variantId);
+      const baseNutrition: Nutrition | undefined = selectedVariant?.nutrition ?? sourceItem?.nutrition;
+
+      sum.calories += cartItem.macrosPerItem.calories * cartItem.quantity;
+      sum.protein += cartItem.macrosPerItem.protein * cartItem.quantity;
+      sum.carbs += cartItem.macrosPerItem.carbs * cartItem.quantity;
+      sum.totalFat += cartItem.macrosPerItem.fat * cartItem.quantity;
+      sum.satFat = addOptional(sum.satFat, baseNutrition?.satFat, cartItem.quantity);
+      sum.transFat = addOptional(sum.transFat, baseNutrition?.transFat, cartItem.quantity);
+      sum.cholesterol = addOptional(sum.cholesterol, baseNutrition?.cholesterol, cartItem.quantity);
+      sum.sodium = addOptional(sum.sodium, baseNutrition?.sodium, cartItem.quantity);
+      sum.fiber = addOptional(sum.fiber, baseNutrition?.fiber, cartItem.quantity);
+      sum.sugars = addOptional(sum.sugars, baseNutrition?.sugars, cartItem.quantity);
+
+      return sum;
+    },
+    { calories: 0, protein: 0, carbs: 0, totalFat: 0 }
+  );
 }
 
 export default function CartPage() {
@@ -72,9 +119,11 @@ export default function CartPage() {
   );
 
   const headerRestaurant = restaurants.find((restaurant) => restaurant.id === cartRestaurantIds[0]);
-
+  const backToMenuHref = cartRestaurantIds[0] ? `/restaurant/${cartRestaurantIds[0]}` : "/";
   const headerTitle = cartRestaurantIds.length > 1 ? "Mixed Restaurants" : (headerRestaurant?.name ?? "Meal Finalization");
   const headerLogo = cartRestaurantIds.length > 1 ? undefined : headerRestaurant?.logo;
+
+  const nutritionTotals = useMemo(() => buildCartNutritionTotals(items), [items]);
 
   useEffect(() => {
     const node = expandedTotalsRef.current;
@@ -96,6 +145,15 @@ export default function CartPage() {
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-6 px-4 pb-72 pt-8 sm:px-6 sm:pt-10">
       <header className="rounded-3xl border border-black/10 bg-white px-5 py-5 shadow-sm sm:px-6">
+        <div className="mb-4">
+          <Link
+            href={backToMenuHref}
+            className="inline-flex items-center gap-2 rounded-lg border border-black/15 px-3 py-1.5 text-sm font-medium text-neutral-700 transition hover:bg-neutral-100"
+          >
+            ← Back to menu
+          </Link>
+        </div>
+
         <div className="flex items-center gap-4">
           <div className="h-14 w-14 overflow-hidden rounded-xl border border-black/10 bg-neutral-50 shadow-sm">
             {headerLogo ? (
@@ -150,7 +208,7 @@ export default function CartPage() {
                   initialCartVariantId={cartItem.variantId}
                   initialCartOptionsLabel={cartItem.optionsLabel}
                   initialCartCustomizations={cartItem.customizations}
-                  cartSummaryLine={summarizeItem(cartItem)}
+                  cartSummaryLine={cartItem.optionsLabel ? summarizeItem(cartItem) : undefined}
                   onCartDecrement={() => updateQuantity(cartItem.id, cartItem.quantity - 1)}
                   onCartIncrement={() => updateQuantity(cartItem.id, cartItem.quantity + 1)}
                   onCartConfigurationChange={(next) => {
@@ -188,80 +246,66 @@ export default function CartPage() {
 
         <div className="mt-6">
           <h2 className="text-xl font-semibold text-neutral-900">Nutrition Summary</h2>
-          <div className="mt-3 rounded-2xl border border-black/10 bg-neutral-50 px-4 py-3">
-            <div className="space-y-2">
-              <div className="flex items-center justify-between border-b border-black/10 pb-2 text-sm">
-                <span>Calories</span>
-                <span className="font-semibold">{totals.calories}</span>
-              </div>
-              <div className="flex items-center justify-between border-b border-black/10 pb-2 text-sm">
-                <span>Protein</span>
-                <span className="font-semibold">{totals.protein}g</span>
-              </div>
-              <div className="flex items-center justify-between border-b border-black/10 pb-2 text-sm">
-                <span>Carbs</span>
-                <span className="font-semibold">{totals.carbs}g</span>
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <span>Fat</span>
-                <span className="font-semibold">{totals.fat}g</span>
-              </div>
+
+          <section className={`${styles.labelCard} mt-4`}>
+            <div className={styles.amountPerServing}>Amount per serving</div>
+
+            <div className={styles.caloriesRow}>
+              <div className={styles.caloriesText}>Calories</div>
+              <div className={styles.caloriesValue}>{nutritionTotals.calories}</div>
             </div>
-          </div>
-        </div>
 
-        <section className={`${styles.labelCard} mt-4`}>
-          <div className={styles.amountPerServing}>Amount per serving</div>
+            <div className={styles.thickRule} />
 
-          <div className={styles.caloriesRow}>
-            <div className={styles.caloriesText}>Calories</div>
-            <div className={styles.caloriesValue}>{totals.calories}</div>
-          </div>
-
-          <div className={styles.thickRule} />
-
-          <div className={styles.row}>
-            <div className={styles.rowTitle}>Total Fat</div>
-            <div className={styles.rowValue}>{totals.fat}g</div>
-          </div>
-
-          <div className={styles.row}>
-            <div className={styles.rowTitle}>Carbohydrates</div>
-            <div className={styles.rowValue}>{totals.carbs}g</div>
-          </div>
-
-          <div className={styles.row}>
-            <div className={styles.rowTitle}>Protein</div>
-            <div className={styles.rowValue}>{totals.protein}g</div>
-          </div>
-
-          <div className={styles.footerText}>
-            Aggregated nutrition totals for all items currently in your cart.
-          </div>
-        </section>
-
-
-        <div className="mt-6 rounded-2xl border border-black/10 bg-white px-4 py-4">
-          <h2 className="text-xl font-semibold text-neutral-900">Total Macros</h2>
-          <p className="mt-2 text-sm text-neutral-600">Confirming your final totals before saving this meal.</p>
-          <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-            <div className="rounded-xl border border-black/10 px-3 py-2 text-center">
-              <p className="text-lg font-semibold">{totals.calories}</p>
-              <p className="text-xs uppercase tracking-wide text-neutral-500">Calories</p>
+            <div className={styles.row}>
+              <div className={styles.rowTitle}>Total Fat</div>
+              <div className={styles.rowValue}>{formatValue(nutritionTotals.totalFat, "g")}</div>
             </div>
-            <div className="rounded-xl border border-black/10 px-3 py-2 text-center">
-              <p className="text-lg font-semibold">{totals.protein}g</p>
-              <p className="text-xs uppercase tracking-wide text-neutral-500">Protein</p>
+
+            <div className={styles.subRow}>
+              <div className={styles.subTitle}>Sat Fat</div>
+              <div className={styles.subValue}>{formatValue(nutritionTotals.satFat, "g")}</div>
             </div>
-            <div className="rounded-xl border border-black/10 px-3 py-2 text-center">
-              <p className="text-lg font-semibold">{totals.carbs}g</p>
-              <p className="text-xs uppercase tracking-wide text-neutral-500">Carbs</p>
+
+            <div className={styles.subRow}>
+              <div className={styles.subTitle}>Trans Fat</div>
+              <div className={styles.subValue}>{formatValue(nutritionTotals.transFat, "g")}</div>
             </div>
-            <div className="rounded-xl border border-black/10 px-3 py-2 text-center">
-              <p className="text-lg font-semibold">{totals.fat}g</p>
-              <p className="text-xs uppercase tracking-wide text-neutral-500">Fat</p>
+
+            <div className={styles.row}>
+              <div className={styles.rowTitle}>Cholesterol</div>
+              <div className={styles.rowValue}>{formatValue(nutritionTotals.cholesterol, "mg")}</div>
             </div>
-          </div>
+
+            <div className={styles.row}>
+              <div className={styles.rowTitle}>Sodium</div>
+              <div className={styles.rowValue}>{formatValue(nutritionTotals.sodium, "mg")}</div>
+            </div>
+
+            <div className={styles.row}>
+              <div className={styles.rowTitle}>Carbohydrates</div>
+              <div className={styles.rowValue}>{formatValue(nutritionTotals.carbs, "g")}</div>
+            </div>
+
+            <div className={styles.subRow}>
+              <div className={styles.subTitle}>Fiber</div>
+              <div className={styles.subValue}>{formatValue(nutritionTotals.fiber, "g")}</div>
+            </div>
+
+            <div className={styles.subRow}>
+              <div className={styles.subTitle}>Sugars</div>
+              <div className={styles.subValue}>{formatValue(nutritionTotals.sugars, "g")}</div>
+            </div>
+
+            <div className={styles.row}>
+              <div className={styles.rowTitle}>Protein</div>
+              <div className={styles.rowValue}>{formatValue(nutritionTotals.protein, "g")}</div>
+            </div>
+
+            <div className={styles.footerText}>
+              Aggregated nutrition totals for all items currently in your cart.
+            </div>
+          </section>
         </div>
       </section>
 
