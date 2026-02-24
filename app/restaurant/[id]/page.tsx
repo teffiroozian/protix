@@ -20,7 +20,7 @@ export default async function RestaurantPage({
 
   if (!restaurant) {
     return (
-      <main style={{ maxWidth: 1100, margin: "48px auto", padding: 16 }}>
+      <main style={{ maxWidth: 900, margin: "48px auto", padding: 16 }}>
         <Link href="/" style={{ textDecoration: "none" }}>
           ← Back
         </Link>
@@ -49,7 +49,7 @@ export default async function RestaurantPage({
           <RecentRestaurantTracker restaurantId={restaurant.id} />
           <ScrollToTopOnMount />
 
-          <main style={{ maxWidth: 1100, margin: "24px auto 48px", padding: 16 }}>
+          <main style={{ maxWidth: 900, margin: "24px auto 48px", padding: 16 }}>
             <RestaurantView
               restaurantId={restaurant.id}
               restaurantName={restaurant.name}

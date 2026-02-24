@@ -329,6 +329,25 @@ export default function CartPage() {
                 <p className="text-xs uppercase tracking-wide text-neutral-500">Fat</p>
               </div>
             </div>
+
+                        <div className="my-4 h-px w-full bg-black/10" />
+
+            <div className="flex items-center justify-center gap-3">
+              <button
+                type="button"
+                onClick={() => window.alert("Save Meal coming soon")}
+                className="rounded-xl border border-black/15 bg-neutral-100 px-4 py-2 text-sm font-medium text-neutral-800 transition hover:bg-neutral-200"
+              >
+                Save Meal
+              </button>
+              <button
+                type="button"
+                onClick={() => router.push("/cart/snapshot")}
+                className="rounded-xl border border-black/90 bg-neutral-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-black"
+              >
+                Generate Snapshot
+              </button>
+            </div>
           </div>
         </div>
       </section>
