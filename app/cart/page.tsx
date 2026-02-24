@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { CartMacros } from "@/stores/cartStore";
 import type { MenuItem, Nutrition, RestaurantAddons } from "@/types/menu";
@@ -104,6 +105,7 @@ function buildCartNutritionTotals(items: ReturnType<typeof useCart>["items"]): N
 }
 
 export default function CartPage() {
+  const router = useRouter();
   const { items, totals, updateQuantity, updateItem } = useCart();
   const expandedTotalsRef = useRef<HTMLElement | null>(null);
   const [expandedTotalsInView, setExpandedTotalsInView] = useState(false);
@@ -335,7 +337,7 @@ export default function CartPage() {
         totals={totals}
         visible={showStickyBar}
         onSaveMeal={() => window.alert("Save Meal coming soon")}
-        onGenerateSnapshot={() => window.alert("Generate Snapshot coming soon")}
+        onGenerateSnapshot={() => router.push("/cart/snapshot")}
       />
     </main>
   );
