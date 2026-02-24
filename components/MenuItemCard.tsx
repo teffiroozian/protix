@@ -263,12 +263,9 @@ export default function MenuItemCard({
   }, [selectedAddonOptions]);
 
   const customizations = useMemo(() => {
-    const addonLabels = selectedAddonOptions.map((addon) => `+ ${addon.name}`);
     const modifierLabels = selectedCommonChanges.map((change) => formatCommonChangeForCart(change.label));
-    const labels = [...addonLabels, ...modifierLabels];
-
-    return labels.length > 0 ? labels : undefined;
-  }, [selectedAddonOptions, selectedCommonChanges]);
+    return modifierLabels.length > 0 ? modifierLabels : undefined;
+  }, [selectedCommonChanges]);
 
   const selectedVariantForCart = useMemo(() => {
     if (!variants || variants.length === 0) return undefined;
@@ -303,10 +300,7 @@ export default function MenuItemCard({
     );
 
     const nextOptionsLabel = activeAddons.length > 0 ? activeAddons.map((addon) => addon.name).join(" + ") : undefined;
-    const nextCustomizations = [
-      ...activeAddons.map((addon) => `+ ${addon.name}`),
-      ...retainedCustomizations,
-    ];
+    const nextCustomizations = [...retainedCustomizations];
 
     onCartConfigurationChange({
       variantId: activeVariant?.id,

@@ -16,6 +16,7 @@ import paneraMenu from "@/app/data/panera.json";
 import starbucksMenu from "@/app/data/starbucks.json";
 import subwayMenu from "@/app/data/subway.json";
 import { useCart } from "@/stores/cartStore";
+import styles from "@/components/ItemDetails.module.css";
 
 const menuLookupByRestaurant: Record<string, MenuItem[]> = {
   chickfila: chickfilaMenu.items,
@@ -42,9 +43,16 @@ const addonsLookupByRestaurant: Record<string, RestaurantAddons> = {
 };
 
 function summarizeItem(item: { variantLabel?: string; optionsLabel?: string; customizations?: string[] }) {
-  const segments = [item.variantLabel, item.optionsLabel, ...(item.customizations ?? [])]
+  const addonNames = new Set((item.optionsLabel ?? "").split("+").map((segment) => segment.trim()).filter(Boolean));
+  const dedupedCustomizations = (item.customizations ?? []).filter((label) => {
+    const normalized = label.replace(/^\+\s*/, "").trim();
+    return !addonNames.has(normalized);
+  });
+
+  const segments = [item.variantLabel, item.optionsLabel, ...dedupedCustomizations]
     .filter(Boolean)
     .join(" • ");
+
   return segments || "No customizations";
 }
 
@@ -86,7 +94,7 @@ export default function CartPage() {
   const showStickyBar = items.length > 0 && !expandedTotalsInView;
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-3xl flex-col gap-6 px-4 pb-72 pt-8 sm:px-6 sm:pt-10">
+    <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-6 px-4 pb-72 pt-8 sm:px-6 sm:pt-10">
       <header className="rounded-3xl border border-black/10 bg-white px-5 py-5 shadow-sm sm:px-6">
         <div className="flex items-center gap-4">
           <div className="h-14 w-14 overflow-hidden rounded-xl border border-black/10 bg-neutral-50 shadow-sm">
@@ -201,6 +209,37 @@ export default function CartPage() {
             </div>
           </div>
         </div>
+
+        <section className={`${styles.labelCard} mt-4`}>
+          <div className={styles.amountPerServing}>Amount per serving</div>
+
+          <div className={styles.caloriesRow}>
+            <div className={styles.caloriesText}>Calories</div>
+            <div className={styles.caloriesValue}>{totals.calories}</div>
+          </div>
+
+          <div className={styles.thickRule} />
+
+          <div className={styles.row}>
+            <div className={styles.rowTitle}>Total Fat</div>
+            <div className={styles.rowValue}>{totals.fat}g</div>
+          </div>
+
+          <div className={styles.row}>
+            <div className={styles.rowTitle}>Carbohydrates</div>
+            <div className={styles.rowValue}>{totals.carbs}g</div>
+          </div>
+
+          <div className={styles.row}>
+            <div className={styles.rowTitle}>Protein</div>
+            <div className={styles.rowValue}>{totals.protein}g</div>
+          </div>
+
+          <div className={styles.footerText}>
+            Aggregated nutrition totals for all items currently in your cart.
+          </div>
+        </section>
+
 
         <div className="mt-6 rounded-2xl border border-black/10 bg-white px-4 py-4">
           <h2 className="text-xl font-semibold text-neutral-900">Total Macros</h2>

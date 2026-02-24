@@ -22,11 +22,9 @@ export default function StickyMacroTotalsBar({
   onSaveMeal,
   onGenerateSnapshot,
 }: StickyMacroTotalsBarProps) {
-  if (!visible) return null;
-
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-4 z-40 px-4 sm:px-6">
-      <div className="pointer-events-auto mx-auto w-full max-w-3xl rounded-3xl border border-black/10 bg-white/95 p-4 shadow-[0_10px_35px_rgba(0,0,0,0.2)] backdrop-blur">
+    <div className={`fixed inset-x-0 bottom-4 z-40 px-4 transition-all duration-300 ease-out sm:px-6 ${visible ? "pointer-events-none translate-y-0 opacity-100" : "pointer-events-none translate-y-3 opacity-0"}`}>
+      <div className={`mx-auto w-full max-w-6xl rounded-3xl border border-black/10 bg-white/95 p-4 shadow-[0_10px_35px_rgba(0,0,0,0.2)] backdrop-blur transition-all duration-300 ${visible ? "pointer-events-auto" : "pointer-events-none"}`}>
         <p className="text-center text-xs font-semibold uppercase tracking-[0.25em] text-neutral-500">
           Total Macros
         </p>
