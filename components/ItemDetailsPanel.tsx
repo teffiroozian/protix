@@ -138,15 +138,25 @@ export default function ItemDetailsPanel({
               const summaryDetail = formatSummaryDetail(selectedAddon?.name ?? "None", selectedAddon?.calories ?? 0);
               return (
                 <div key={section.ref} className={styles.addonGroup}>
-                  <button
-                    type="button"
+                  <div
                     className={styles.addonGroupHeader}
+                    role="button"
+                    tabIndex={0}
                     onClick={() =>
                       setSectionOpenState((prev) => ({
                         ...prev,
                         [sectionStateKey]: !(prev[sectionStateKey] ?? true),
                       }))
                     }
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        setSectionOpenState((prev) => ({
+                          ...prev,
+                          [sectionStateKey]: !(prev[sectionStateKey] ?? true),
+                        }));
+                      }
+                    }}
                   >
                     <h3 className={styles.addonGroupTitle}>
                       {section.title}
@@ -159,7 +169,10 @@ export default function ItemDetailsPanel({
                             type="button"
                             className={styles.addonArrowButton}
                             aria-label={`Scroll ${section.title} left`}
-                            onClick={() => scrollRow(`addon-row-${section.ref}`, "left")}
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              scrollRow(`addon-row-${section.ref}`, "left");
+                            }}
                           >
                             ⬅
                           </button>
@@ -167,7 +180,10 @@ export default function ItemDetailsPanel({
                             type="button"
                             className={styles.addonArrowButton}
                             aria-label={`Scroll ${section.title} right`}
-                            onClick={() => scrollRow(`addon-row-${section.ref}`, "right")}
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              scrollRow(`addon-row-${section.ref}`, "right");
+                            }}
                           >
                             ➡
                           </button>
@@ -177,7 +193,7 @@ export default function ItemDetailsPanel({
                         {isSectionOpen ? "˄" : "˅"}
                       </span>
                     </div>
-                  </button>
+                  </div>
                   {isSectionOpen ? (
                     <ul id={`addon-row-${section.ref}`} className={styles.addonList}>
                       {section.addons.map((addon) => (
@@ -239,15 +255,25 @@ export default function ItemDetailsPanel({
 
                 return (
                   <>
-                    <button
-                      type="button"
+                    <div
                       className={styles.addonGroupHeader}
+                      role="button"
+                      tabIndex={0}
                       onClick={() =>
                         setSectionOpenState((prev) => ({
                           ...prev,
                           [commonKey]: !(prev[commonKey] ?? true),
                         }))
                       }
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter" || event.key === " ") {
+                          event.preventDefault();
+                          setSectionOpenState((prev) => ({
+                            ...prev,
+                            [commonKey]: !(prev[commonKey] ?? true),
+                          }));
+                        }
+                      }}
                     >
                       <h3 className={styles.addonGroupTitle}>
                         Common Changes
@@ -260,7 +286,10 @@ export default function ItemDetailsPanel({
                               type="button"
                               className={styles.addonArrowButton}
                               aria-label="Scroll Common Changes left"
-                              onClick={() => scrollRow("common-changes-row", "left")}
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                scrollRow("common-changes-row", "left");
+                              }}
                             >
                               ⬅
                             </button>
@@ -268,7 +297,10 @@ export default function ItemDetailsPanel({
                               type="button"
                               className={styles.addonArrowButton}
                               aria-label="Scroll Common Changes right"
-                              onClick={() => scrollRow("common-changes-row", "right")}
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                scrollRow("common-changes-row", "right");
+                              }}
                             >
                               ➡
                             </button>
@@ -278,7 +310,7 @@ export default function ItemDetailsPanel({
                           {isCommonOpen ? "˄" : "˅"}
                         </span>
                       </div>
-                    </button>
+                    </div>
                     {isCommonOpen ? (
                       <ul id="common-changes-row" className={styles.addonList}>
                         {commonChanges.map((change) => {
