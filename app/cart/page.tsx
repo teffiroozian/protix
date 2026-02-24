@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { CartMacros } from "@/stores/cartStore";
-import type { MenuItem, Nutrition, RestaurantAddons } from "@/types/menu";
+import type { AddonOption, MenuItem, Nutrition, RestaurantAddons } from "@/types/menu";
 import MenuItemCard from "@/components/MenuItemCard";
 import StickyMacroTotalsBar from "@/components/StickyMacroTotalsBar";
 import restaurants from "@/app/data/index.json";
@@ -80,23 +80,62 @@ function addOptional(total: number | undefined, next: number | undefined, quanti
   return (total ?? 0) + (next * quantity);
 }
 
+function getSelectedAddonNutrition(
+  optionsLabel: string | undefined,
+  sourceItem: MenuItem | undefined,
+  restaurantAddons: RestaurantAddons | undefined
+) {
+  const selectedAddonNames = new Set(
+    (optionsLabel ?? "")
+      .split("+")
+      .map((segment) => segment.trim())
+      .filter(Boolean)
+  );
+
+  if (selectedAddonNames.size === 0 || !sourceItem || !restaurantAddons) {
+    return [] as AddonOption[];
+  }
+
+  return (sourceItem.addonRefs ?? [])
+    .flatMap((ref) => restaurantAddons[ref] ?? [])
+    .filter((addon) => selectedAddonNames.has(addon.name));
+}
+
 function buildCartNutritionTotals(items: ReturnType<typeof useCart>["items"]): NutritionTotals {
   return items.reduce<NutritionTotals>(
     (sum, cartItem) => {
       const sourceItem = menuLookupByRestaurant[cartItem.restaurantId]?.find((item) => (item.id ?? item.name) === cartItem.itemId);
+      const restaurantAddons = addonsLookupByRestaurant[cartItem.restaurantId];
+      const selectedAddons = getSelectedAddonNutrition(cartItem.optionsLabel, sourceItem, restaurantAddons);
       const selectedVariant = sourceItem?.variants?.find((variant) => variant.id === cartItem.variantId);
       const baseNutrition: Nutrition | undefined = selectedVariant?.nutrition ?? sourceItem?.nutrition;
+
+      const addonNutrition = selectedAddons.reduce(
+        (addonSum, addon) => ({
+          satFat: addonSum.satFat + (addon.satFat ?? 0),
+          transFat: addonSum.transFat + (addon.transFat ?? 0),
+          cholesterol: addonSum.cholesterol + (addon.cholesterol ?? 0),
+          sodium: addonSum.sodium + (addon.sodium ?? 0),
+          fiber: addonSum.fiber + (addon.fiber ?? 0),
+          sugars: addonSum.sugars + (addon.sugars ?? 0),
+        }),
+        { satFat: 0, transFat: 0, cholesterol: 0, sodium: 0, fiber: 0, sugars: 0 }
+      );
 
       sum.calories += cartItem.macrosPerItem.calories * cartItem.quantity;
       sum.protein += cartItem.macrosPerItem.protein * cartItem.quantity;
       sum.carbs += cartItem.macrosPerItem.carbs * cartItem.quantity;
       sum.totalFat += cartItem.macrosPerItem.fat * cartItem.quantity;
-      sum.satFat = addOptional(sum.satFat, baseNutrition?.satFat, cartItem.quantity);
-      sum.transFat = addOptional(sum.transFat, baseNutrition?.transFat, cartItem.quantity);
-      sum.cholesterol = addOptional(sum.cholesterol, baseNutrition?.cholesterol, cartItem.quantity);
-      sum.sodium = addOptional(sum.sodium, baseNutrition?.sodium, cartItem.quantity);
-      sum.fiber = addOptional(sum.fiber, baseNutrition?.fiber, cartItem.quantity);
-      sum.sugars = addOptional(sum.sugars, baseNutrition?.sugars, cartItem.quantity);
+      sum.satFat = addOptional(sum.satFat, (baseNutrition?.satFat ?? 0) + addonNutrition.satFat, cartItem.quantity);
+      sum.transFat = addOptional(sum.transFat, (baseNutrition?.transFat ?? 0) + addonNutrition.transFat, cartItem.quantity);
+      sum.cholesterol = addOptional(
+        sum.cholesterol,
+        (baseNutrition?.cholesterol ?? 0) + addonNutrition.cholesterol,
+        cartItem.quantity
+      );
+      sum.sodium = addOptional(sum.sodium, (baseNutrition?.sodium ?? 0) + addonNutrition.sodium, cartItem.quantity);
+      sum.fiber = addOptional(sum.fiber, (baseNutrition?.fiber ?? 0) + addonNutrition.fiber, cartItem.quantity);
+      sum.sugars = addOptional(sum.sugars, (baseNutrition?.sugars ?? 0) + addonNutrition.sugars, cartItem.quantity);
 
       return sum;
     },
