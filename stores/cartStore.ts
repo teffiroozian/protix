@@ -140,6 +140,20 @@ const updateQuantity = (id: string, quantity: number) => {
   }));
 };
 
+const updateItem = (id: string, updates: Partial<Omit<CartItem, "id" | "restaurantId" | "itemId" | "name">>) => {
+  setCartState((prev) => ({
+    ...prev,
+    items: prev.items.map((item) =>
+      item.id === id
+        ? {
+            ...item,
+            ...updates,
+          }
+        : item,
+    ),
+  }));
+};
+
 const clearCart = () => {
   setCartState((prev) => ({
     ...prev,
@@ -160,6 +174,7 @@ export const useCart = () => {
     addItem,
     removeItem,
     updateQuantity,
+    updateItem,
     clearCart,
   };
 };

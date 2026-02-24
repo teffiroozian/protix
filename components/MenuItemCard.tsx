@@ -55,6 +55,36 @@ const emptyAddon: AddonOption = {
   image: "none",
 };
 
+type CartConfigurationPayload = {
+  variantId?: string;
+  variantLabel?: string;
+  optionsLabel?: string;
+  customizations?: string[];
+  macrosPerItem: {
+    calories: number;
+    protein: number;
+    carbs: number;
+    fat: number;
+  };
+};
+
+function getSelectedAddonsFromLabel(item: MenuItem, addons: RestaurantAddons | undefined, optionsLabel?: string) {
+  if (!optionsLabel) return {} as Partial<Record<AddonRef, AddonOption>>;
+
+  const selectedNames = optionsLabel.split("+").map((segment) => segment.trim()).filter(Boolean);
+  const selectedMap: Partial<Record<AddonRef, AddonOption>> = {};
+
+  for (const ref of item.addonRefs ?? []) {
+    const options = addons?.[ref] ?? [];
+    const matched = options.find((addon) => selectedNames.includes(addon.name));
+    if (matched) {
+      selectedMap[ref] = matched;
+    }
+  }
+
+  return selectedMap;
+}
+
 export default function MenuItemCard({
   restaurantId,
   item,
@@ -68,6 +98,11 @@ export default function MenuItemCard({
   onCartIncrement,
   onCartDecrement,
   cartSummaryLine,
+  cartItemId,
+  initialCartVariantId,
+  initialCartOptionsLabel,
+  initialCartCustomizations,
+  onCartConfigurationChange,
 }: {
   restaurantId: string;
   item: MenuItem;
@@ -81,6 +116,11 @@ export default function MenuItemCard({
   onCartIncrement?: () => void;
   onCartDecrement?: () => void;
   cartSummaryLine?: string;
+  cartItemId?: string;
+  initialCartVariantId?: string;
+  initialCartOptionsLabel?: string;
+  initialCartCustomizations?: string[];
+  onCartConfigurationChange?: (next: CartConfigurationPayload) => void;
 }) {
   const [open, setOpen] = useState(false);
   const id = useId();
@@ -93,8 +133,10 @@ export default function MenuItemCard({
     const flaggedDefault = variants.find((variant) => variant.isDefault);
     return flaggedDefault?.id ?? variants[0]?.id ?? "";
   }, [item.defaultVariantId, variants]);
-  const [selectedVariantId, setSelectedVariantId] = useState(defaultVariantId);
-  const [selectedAddons, setSelectedAddons] = useState<Partial<Record<AddonRef, AddonOption>>>({});
+  const [selectedVariantId, setSelectedVariantId] = useState(initialCartVariantId ?? defaultVariantId);
+  const [selectedAddons, setSelectedAddons] = useState<Partial<Record<AddonRef, AddonOption>>>(() =>
+    mode === "cart" ? getSelectedAddonsFromLabel(item, addons, initialCartOptionsLabel) : {}
+  );
   const [selectedCommonChangeIds, setSelectedCommonChangeIds] = useState<string[]>([]);
   const [isAddFeedbackVisible, setIsAddFeedbackVisible] = useState(false);
   const { addItem } = useCart();
@@ -190,18 +232,40 @@ export default function MenuItemCard({
     [applicableCommonChanges, selectedCommonChangeIds]
   );
 
+  const hasAddonSections = useMemo(
+    () =>
+      (item.addonRefs ?? []).some((ref) => {
+        const options = addons?.[ref];
+        return Boolean(options && options.length > 0);
+      }),
+    [addons, item.addonRefs]
+  );
+
+  const retainedCustomizations = useMemo(() => {
+    if (!initialCartCustomizations || initialCartCustomizations.length === 0) return [];
+
+    const addonNames = new Set<string>();
+    for (const ref of item.addonRefs ?? []) {
+      for (const addon of addons?.[ref] ?? []) {
+        addonNames.add(addon.name);
+      }
+    }
+
+    return initialCartCustomizations.filter((label) => {
+      const normalized = label.replace(/^\+\s*/, "").trim();
+      return !addonNames.has(normalized);
+    });
+  }, [addons, initialCartCustomizations, item.addonRefs]);
+
   const optionsLabel = useMemo(() => {
     if (selectedAddonOptions.length === 0) return undefined;
     return selectedAddonOptions.map((addon) => addon.name).join(" + ");
   }, [selectedAddonOptions]);
 
   const customizations = useMemo(() => {
-    const addonLabels = selectedAddonOptions.map((addon) => `+ ${addon.name}`);
     const modifierLabels = selectedCommonChanges.map((change) => formatCommonChangeForCart(change.label));
-    const labels = [...addonLabels, ...modifierLabels];
-
-    return labels.length > 0 ? labels : undefined;
-  }, [selectedAddonOptions, selectedCommonChanges]);
+    return modifierLabels.length > 0 ? modifierLabels : undefined;
+  }, [selectedCommonChanges]);
 
   const selectedVariantForCart = useMemo(() => {
     if (!variants || variants.length === 0) return undefined;
@@ -213,6 +277,44 @@ export default function MenuItemCard({
     }
     return variants[0];
   }, [defaultVariantId, selectedVariantId, variants]);
+
+  const emitCartConfiguration = (
+    nextVariantId: string,
+    nextAddons: Partial<Record<AddonRef, AddonOption>>
+  ) => {
+    if (!isCartMode || !onCartConfigurationChange || !cartItemId) return;
+
+    const activeVariant = variants?.find((variant) => variant.id === nextVariantId) ?? selectedVariantForCart;
+    const baseForCart = activeVariant?.nutrition ?? item.nutrition;
+    const activeAddons = Object.values(nextAddons).filter(
+      (addon): addon is AddonOption => Boolean(addon && addon.name !== "None")
+    );
+    const addonTotalsForCart = activeAddons.reduce(
+      (sum, addon) => ({
+        calories: sum.calories + addon.calories,
+        protein: sum.protein + addon.protein,
+        carbs: sum.carbs + addon.carbs,
+        fat: sum.fat + addon.fat,
+      }),
+      { calories: 0, protein: 0, carbs: 0, fat: 0 }
+    );
+
+    const nextOptionsLabel = activeAddons.length > 0 ? activeAddons.map((addon) => addon.name).join(" + ") : undefined;
+    const nextCustomizations = [...retainedCustomizations];
+
+    onCartConfigurationChange({
+      variantId: activeVariant?.id,
+      variantLabel: activeVariant?.label,
+      optionsLabel: nextOptionsLabel,
+      customizations: nextCustomizations.length > 0 ? nextCustomizations : undefined,
+      macrosPerItem: {
+        calories: baseForCart.calories + addonTotalsForCart.calories,
+        protein: baseForCart.protein + addonTotalsForCart.protein,
+        carbs: baseForCart.carbs + addonTotalsForCart.carbs,
+        fat: baseForCart.totalFat + addonTotalsForCart.fat,
+      },
+    });
+  };
 
   const handleAddToCart = () => {
     if (isAddFeedbackVisible) return;
@@ -260,22 +362,22 @@ export default function MenuItemCard({
       }}
     >
       <div
-        role={isCartMode ? undefined : "button"}
-        tabIndex={isCartMode ? undefined : 0}
+        role={!isCartMode || hasAddonSections ? "button" : undefined}
+        tabIndex={!isCartMode || hasAddonSections ? 0 : undefined}
         className={styles.header}
-        onClick={isCartMode ? undefined : () => setOpen((v) => !v)}
+        onClick={!isCartMode || hasAddonSections ? () => setOpen((v) => !v) : undefined}
         onKeyDown={
-          isCartMode
-            ? undefined
-            : (event) => {
+          !isCartMode || hasAddonSections
+            ? (event) => {
                 if (event.key === "Enter" || event.key === " ") {
                   event.preventDefault();
                   setOpen((v) => !v);
                 }
               }
+            : undefined
         }
-        aria-expanded={isCartMode ? undefined : open}
-        aria-controls={isCartMode ? undefined : `${id}-details`}
+        aria-expanded={!isCartMode || hasAddonSections ? open : undefined}
+        aria-controls={!isCartMode || hasAddonSections ? `${id}-details` : undefined}
       >
         <div className={styles.leftMedia}>
           {item.image ? (
@@ -310,7 +412,10 @@ export default function MenuItemCard({
                   <VariantSelector
                     variants={variants}
                     selectedId={selectedVariantId}
-                    onChange={setSelectedVariantId}
+                    onChange={(nextVariantId) => {
+                      setSelectedVariantId(nextVariantId);
+                      emitCartConfiguration(nextVariantId, selectedAddons);
+                    }}
                     ariaLabel={`${item.name} portion size`}
                   />
                 </div>
@@ -394,8 +499,8 @@ export default function MenuItemCard({
           </div>
         </div>
 
-        {!isCartMode ? <div className={styles.iconActions}>
-          {hasMods ? (
+        {(!isCartMode || hasAddonSections) ? <div className={styles.iconActions}>
+          {hasMods && !isCartMode ? (
             <div
               role="button"
               tabIndex={0}
@@ -416,33 +521,66 @@ export default function MenuItemCard({
               ↺
             </div>
           ) : null}
-          <div className={`${styles.iconButton} ${styles.expandIcon} ${open ? styles.expandIconOpen : ""}`}>+</div>
+          <div
+              role={isCartMode ? "button" : undefined}
+              tabIndex={isCartMode ? 0 : undefined}
+              aria-label={isCartMode ? `Toggle addon options for ${item.name}` : undefined}
+              className={`${styles.iconButton} ${styles.expandIcon} ${open ? styles.expandIconOpen : ""}`}
+              onClick={(event) => {
+                if (!isCartMode || !hasAddonSections) return;
+                event.stopPropagation();
+                setOpen((v) => !v);
+              }}
+              onKeyDown={(event) => {
+                if (!isCartMode || !hasAddonSections) return;
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  setOpen((v) => !v);
+                }
+              }}
+            >
+              +
+            </div>
         </div> : null}
       </div>
 
-      {!isCartMode ? (
-        <div className={`${styles.details} ${open ? styles.detailsOpen : ""}`}>
+      {(!isCartMode || hasAddonSections) ? (
+        <div id={`${id}-details`} className={`${styles.details} ${open ? styles.detailsOpen : ""}`}>
           <div className={styles.detailsInner}>
             <ItemDetailsPanel
               item={item}
               nutrition={nutrition}
               variants={variants}
               selectedVariantId={selectedVariantId}
-              onSelectVariant={setSelectedVariantId}
+              onSelectVariant={(nextVariantId) => {
+                setSelectedVariantId(nextVariantId);
+                emitCartConfiguration(nextVariantId, selectedAddons);
+              }}
               addons={addons}
               selectedAddons={selectedAddons}
-              onSelectAddon={(ref, addon) => setSelectedAddons((prev) => ({ ...prev, [ref]: addon ?? emptyAddon }))}
-              commonChanges={applicableCommonChanges}
-              selectedCommonChangeIds={selectedCommonChangeIds}
-              onToggleCommonChange={(changeId) =>
-                setSelectedCommonChangeIds((prev) =>
-                  prev.includes(changeId)
-                    ? prev.filter((id) => id !== changeId)
-                    : [...prev, changeId]
-                )
+              onSelectAddon={(ref, addon) => {
+                setSelectedAddons((prev) => {
+                  const next = { ...prev, [ref]: addon ?? emptyAddon };
+                  emitCartConfiguration(selectedVariantId, next);
+                  return next;
+                });
+              }}
+              commonChanges={isCartMode ? undefined : applicableCommonChanges}
+              selectedCommonChangeIds={isCartMode ? undefined : selectedCommonChangeIds}
+              onToggleCommonChange={
+                isCartMode
+                  ? undefined
+                  : (changeId) =>
+                      setSelectedCommonChangeIds((prev) =>
+                        prev.includes(changeId)
+                          ? prev.filter((id) => id !== changeId)
+                          : [...prev, changeId]
+                      )
               }
               customizationTotals={customizationTotals}
               showCustomizationDeltas={hasActiveCustomization}
+              displayMode={isCartMode ? "addonsOnly" : "full"}
             />
 
           </div>
