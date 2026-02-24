@@ -306,6 +306,28 @@ export default function CartPage() {
               Aggregated nutrition totals for all items currently in your cart.
             </div>
           </section>
+
+          <div className="mt-6 rounded-2xl border border-black/10 bg-white px-4 py-4">
+            <h3 className="text-lg font-semibold text-neutral-900">Macro Totals</h3>
+            <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
+              <div className="rounded-xl border border-black/10 px-3 py-2 text-center">
+                <p className="text-lg font-semibold">{totals.calories}</p>
+                <p className="text-xs uppercase tracking-wide text-neutral-500">Calories</p>
+              </div>
+              <div className="rounded-xl border border-black/10 px-3 py-2 text-center">
+                <p className="text-lg font-semibold">{totals.protein}g</p>
+                <p className="text-xs uppercase tracking-wide text-neutral-500">Protein</p>
+              </div>
+              <div className="rounded-xl border border-black/10 px-3 py-2 text-center">
+                <p className="text-lg font-semibold">{totals.carbs}g</p>
+                <p className="text-xs uppercase tracking-wide text-neutral-500">Carbs</p>
+              </div>
+              <div className="rounded-xl border border-black/10 px-3 py-2 text-center">
+                <p className="text-lg font-semibold">{totals.fat}g</p>
+                <p className="text-xs uppercase tracking-wide text-neutral-500">Fat</p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
