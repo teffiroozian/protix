@@ -190,17 +190,9 @@
   border: 0;
   background: transparent;
   text-align: left;
-  padding: 8px;
+  padding: 12px;
   border-radius: 10px;
-}
-
-.addonGroupHeader:hover {
-  background: rgba(0, 0, 0, 0.04);
-}
-
-.addonGroupHeader:focus-visible {
-  outline: 2px solid #16a34a;
-  outline-offset: 2px;
+  min-height: 52px;
 }
 
 .addonGroupTitle {
