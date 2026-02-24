@@ -315,7 +315,8 @@ export default function ItemDetailsPanel({
                       <ul id="common-changes-row" className={styles.addonList}>
                         {commonChanges.map((change) => {
                           const isActive = selectedCommonChangeIds?.includes(change.id) ?? false;
-                          const calorieDeltaLabel = `${change.delta.calories >= 0 ? "+" : ""}${change.delta.calories} Cal`;
+                          const calorieDeltaLabel = `${change.delta.calories >= 0 ? "+" : ""}${change.delta.calories}cal`;
+                          const proteinDeltaLabel = `${change.delta.protein >= 0 ? "+" : ""}${change.delta.protein}g protein`;
                           return (
                             <li key={change.id} className={styles.addonItem}>
                               <button
@@ -326,7 +327,7 @@ export default function ItemDetailsPanel({
                                 <div className={`${styles.addonImage} ${styles.addonImageNone}`}>↺</div>
                                 <div className={styles.addonText}>
                                   <div className={styles.addonName}>{change.label}</div>
-                                  <div className={styles.addonCalories}>{calorieDeltaLabel}</div>
+                                  <div className={styles.addonCalories}>{`${calorieDeltaLabel} • ${proteinDeltaLabel}`}</div>
                                 </div>
                               </button>
                             </li>

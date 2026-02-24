@@ -18,7 +18,7 @@ export default function CartIconDropdown({
 }: CartIconDropdownProps) {
   const { openCart } = useRestaurantUi();
   const { items, totals, lastAddedItem, lastAddedAt } = useCart();
-  const [dismissedAddedAt, setDismissedAddedAt] = useState<number | null>(null);
+  const [dismissedAddedAt, setDismissedAddedAt] = useState<number | null>(() => lastAddedAt);
   const containerRef = useRef<HTMLDivElement>(null);
   const openScrollYRef = useRef<number | null>(null);
   const isOpen = lastAddedAt !== null && lastAddedAt !== dismissedAddedAt;
