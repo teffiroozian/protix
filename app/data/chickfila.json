@@ -75,7 +75,7 @@
             "addonRefs": [
                 "sauces"
             ],
-            "image": "/restaurants/chickfila/menu/items/chicken/cripsy-nuggets.webp",
+            "image": "/restaurants/chickfila/menu/items/chicken/crispy-nuggets.webp",
             "defaultVariantId": "8pc",
             "variants": [
                 {
@@ -415,7 +415,7 @@
             "addonRefs": [
                 "dressings"
             ],
-            "image": "/restaurants/chickfila/menu/items/salads/spicy-southwest.webp"
+            "image": "/restaurants/chickfila/menu/items/salads/spicy-southwest-salad.webp"
         },
         {
             "name": "Market Salad",
@@ -436,7 +436,7 @@
             "addonRefs": [
                 "dressings"
             ],
-            "image": "/restaurants/chickfila/menu/items/salad/market-salad.webp"
+            "image": "/restaurants/chickfila/menu/items/salads/market-salad.webp"
         },
         {
             "name": "Kale Crunch Side",
@@ -454,7 +454,7 @@
             },
             "category": "Side",
             "portionType": "single",
-            "image": "/restaurants/chickfila/menu/items/side/crunch-kale-salad.webp"
+            "image": "/restaurants/chickfila/menu/items/sides/kale-crunch-side.webp"
         },
         {
             "name": "Chick-fil-A Waffle Potato Fries",
@@ -472,7 +472,7 @@
             },
             "category": "Side",
             "portionType": "single",
-            "image": "/restaurants/chickfila/menu/items/side/waffle-fries.webp",
+            "image": "/restaurants/chickfila/menu/items/sides/waffle-fries.webp",
             "defaultVariantId": "medium",
             "variants": [
                 {
@@ -544,7 +544,7 @@
             },
             "category": "Side",
             "portionType": "single",
-            "image": "/restaurants/chickfila/menu/items/side/berry-parfait.webp",
+            "image": "/restaurants/chickfila/menu/items/sides/berry-parfait.webp",
             "defaultVariantId": "granola",
             "variants": [
                 {
@@ -599,7 +599,7 @@
             },
             "category": "Side",
             "portionType": "single",
-            "image": "/restaurants/chickfila/menu/items/side/fruit-cup.webp"
+            "image": "/restaurants/chickfila/menu/items/sides/fruit-cup.webp"
         },
         {
             "name": "Mac & Cheese",
@@ -617,7 +617,7 @@
             },
             "category": "Side",
             "portionType": "single",
-            "image": "/restaurants/chickfila/menu/items/side/mac-n-cheese.webp",
+            "image": "/restaurants/chickfila/menu/items/sides/mac-n-cheese.webp",
             "defaultVariantId": "medium",
             "variants": [
                 {
@@ -672,7 +672,7 @@
             },
             "category": "Side",
             "portionType": "single",
-            "image": "/restaurants/chickfila/menu/items/side/chicken-noodle-soup.webp",
+            "image": "/restaurants/chickfila/menu/items/sides/chicken-noodle-soup.webp",
             "defaultVariantId": "cup",
             "variants": [
                 {
@@ -730,7 +730,7 @@
             "addonRefs": [
                 "dressings"
             ],
-            "image": "/restaurants/chickfila/menu/items/side/side-salad.webp"
+            "image": "/restaurants/chickfila/menu/items/sides/side-salad.webp"
         },
         {
             "name": "Chicken Tortilla Soup",
@@ -748,7 +748,7 @@
             },
             "category": "Side",
             "portionType": "single",
-            "image": "/restaurants/chickfila/menu/items/side/chicken-tortilla-soup.webp"
+            "image": "/restaurants/chickfila/menu/items/sides/chicken-tortilla-soup.webp"
         },
         {
             "name": "Original Flavor Waffle Potato Chips",
@@ -766,7 +766,7 @@
             },
             "category": "Side",
             "portionType": "single",
-            "image": "/foodImages/chickfila/sides/wafflechips-original.webp"
+            "image": "/restaurants/chickfila/menu/items/sides/waffle-chips-original.webp"
         },
         {
             "name": "Buddy Fruits Apple Sauce",
@@ -784,7 +784,7 @@
             },
             "category": "Side",
             "portionType": "single",
-            "image": "/foodImages/chickfila/sides/applesauce.webp"
+            "image": "/restaurants/chickfila/menu/items/sides/apple-sauce.webp"
         },
         {
             "name": "Chick-fil-A Sauce Flavored Waffle Potato Chips",
@@ -802,7 +802,7 @@
             },
             "category": "Side",
             "portionType": "single",
-            "image": "/foodImages/chickfila/sides/wafflechips-cfasauce.webp"
+            "image": "/restaurants/chickfila/menu/items/sides/waffle-chips-cfa-sauce.webp"
         },
         {
             "name": "Spicy Chicken Biscuit",
@@ -820,7 +820,7 @@
             },
             "category": "Breakfast",
             "portionType": "single",
-            "image": "/foodImages/chickfila/cfa-spicy-chicken-biscuit.webp"
+            "image": "/restaurants/chickfila/menu/items/breakfast/spicy-chicken-biscuit.webp"
         },
         {
             "name": "Chick-fil-A Chick-n-Minis",
@@ -838,7 +838,7 @@
             },
             "category": "Breakfast",
             "portionType": "single",
-            "image": "/foodImages/chickfila/cfa-chick-n-minis.webp",
+            "image": "/restaurants/chickfila/menu/items/breakfast/chicken-minis.webp",
             "defaultVariantId": "4ct",
             "variants": [
                 {
@@ -876,7 +876,7 @@
             },
             "category": "Breakfast",
             "portionType": "single",
-            "image": "/foodImages/chickfila/cfa-egg-white-grill.webp"
+            "image": "/restaurants/chickfila/menu/items/breakfast/egg-white-grill.webp"
         },
         {
             "name": "Hash Brown Scramble Burrito",
@@ -894,7 +894,7 @@
             },
             "category": "Breakfast",
             "portionType": "single",
-            "image": "/foodImages/chickfila/cfa-hashbrown-scramble-burrito.webp"
+            "image": "/restaurants/chickfila/menu/items/breakfast/hash-brown-scramble-burrito.webp"
         },
         {
             "name": "Hash Brown Scramble Bowl",
@@ -912,7 +912,7 @@
             },
             "category": "Breakfast",
             "portionType": "single",
-            "image": "/foodImages/chickfila/cfa-hashbrown-scramble-bowl.webp"
+            "image": "/restaurants/chickfila/menu/items/breakfast/hash-brown-scramble-bowl.webp"
         },
         {
             "name": "Chicken, Egg & Cheese Biscuit",
@@ -930,7 +930,7 @@
             },
             "category": "Breakfast",
             "portionType": "single",
-            "image": "/foodImages/chickfila/cfa-chicken-egg-cheese-biscuit.webp"
+            "image": "/restaurants/chickfila/menu/items/breakfast/chicken-egg-cheese-biscuit.webp"
         },
         {
             "name": "Bacon, Egg & Cheese Biscuit",
@@ -948,7 +948,7 @@
             },
             "category": "Breakfast",
             "portionType": "single",
-            "image": "/foodImages/chickfila/cfa-bacon-egg-cheese-biscuit.webp"
+            "image": "/restaurants/chickfila/menu/items/breakfast/bacon-egg-cheese-biscuit.webp"
         },
         {
             "name": "Sausage, Egg & Cheese Biscuit",
@@ -966,7 +966,7 @@
             },
             "category": "Breakfast",
             "portionType": "single",
-            "image": "/foodImages/chickfila/cfa-sausage-egg-cheese-biscuit.webp"
+            "image": "/restaurants/chickfila/menu/items/breakfast/sausage-egg-cheese-biscuit.webp"
         },
         {
             "name": "Chicken, Egg & Cheese Muffin",
@@ -984,7 +984,7 @@
             },
             "category": "Breakfast",
             "portionType": "single",
-            "image": "/foodImages/chickfila/cfa-chicken-egg-cheese-muffin.webp"
+            "image": "/restaurants/chickfila/menu/items/breakfast/chicken-egg-cheese-muffin.webp"
         },
         {
             "name": "Bacon, Egg & Cheese Muffin",
@@ -1002,7 +1002,7 @@
             },
             "category": "Breakfast",
             "portionType": "single",
-            "image": "/foodImages/chickfila/cfa-bacon-egg-cheese-muffin.webp"
+            "image": "/restaurants/chickfila/menu/items/breakfast/bacon-egg-cheese-muffin.webp"
         },
         {
             "name": "Sausage, Egg & Cheese Muffin",
@@ -1020,7 +1020,7 @@
             },
             "category": "Breakfast",
             "portionType": "single",
-            "image": "/foodImages/chickfila/cfa-sausage-egg-cheese-muffin.webp"
+            "image": "/restaurants/chickfila/menu/items/breakfast/sausage-egg-cheese-muffin.webp"
         },
         {
             "name": "Hash Browns",
@@ -1038,7 +1038,7 @@
             },
             "category": "Breakfast",
             "portionType": "single",
-            "image": "/foodImages/chickfila/cfa-hashbrowns.webp",
+            "image": "/restaurants/chickfila/menu/items/breakfast/hash-browns.webp",
             "defaultVariantId": "small",
             "variants": [
                 {
@@ -1093,7 +1093,7 @@
             },
             "category": "Breakfast",
             "portionType": "single",
-            "image": "/foodImages/chickfila/cfa-chicken-biscuit.webp"
+            "image": "/restaurants/chickfila/menu/items/breakfast/chicken-biscuit.webp"
         }
     ],
     "addons": {
