@@ -36,7 +36,7 @@
             },
             "category": "Sandwich",
             "portionType": "single",
-            "image": "/foodImages/chickfila/cfa-spicydeluxesandwich.webp"
+            "image": "/restaurants/chickfila/menu/items/sandwiches/spicy-deluxe-sandwich.webp"
         },
         {
             "name": "Spicy Chicken Sandwich",
@@ -54,7 +54,7 @@
             },
             "category": "Sandwich",
             "portionType": "single",
-            "image": "/foodImages/chickfila/cfa-spicychickensandwich.webp"
+            "image": "/restaurants/chickfila/menu/items/sandwiches/spicy-chicken-sandwich.webp"
         },
         {
             "name": "Chick-fil-A® Nuggets",
@@ -75,7 +75,7 @@
             "addonRefs": [
                 "sauces"
             ],
-            "image": "/foodImages/chickfila/cfa-cfanuggets.webp",
+            "image": "/restaurants/chickfila/menu/items/chicken/cripsy-nuggets.webp",
             "defaultVariantId": "8pc",
             "variants": [
                 {
@@ -147,7 +147,7 @@
             },
             "category": "Sandwich",
             "portionType": "single",
-            "image": "/foodImages/chickfila/cfa-deluxesandwich.webp"
+            "image": "/restaurants/chickfila/menu/items/sandwiches/deluxe-sandwich.webp"
         },
         {
             "name": "Chick-fil-A® Cool Wrap",
@@ -168,7 +168,7 @@
             "addonRefs": [
                 "dressings"
             ],
-            "image": "/foodImages/chickfila/cfa-coolwrap.webp"
+            "image": "/restaurants/chickfila/menu/items/wraps/cool-wrap.webp"
         },
         {
             "name": "Chick-fil-A Chick-n-Strips®",
@@ -189,7 +189,7 @@
             "addonRefs": [
                 "sauces"
             ],
-            "image": "/foodImages/chickfila/cfa-chicknstrips.webp",
+            "image": "/restaurants/chickfila/menu/items/chicken/chicken-strips.webp",
             "defaultVariantId": "3pc",
             "variants": [
                 {
@@ -278,7 +278,7 @@
             },
             "category": "Sandwich",
             "portionType": "single",
-            "image": "/foodImages/chickfila/cfa-grilledchickensandwich.webp"
+            "image": "/restaurants/chickfila/menu/items/sandwiches/grilled-chicken-sandwich.webp"
         },
         {
             "id": "cfa-grilled-chicken-club-sandwich",
@@ -304,7 +304,7 @@
                 "bacon",
                 "cheese"
             ],
-            "image": "/foodImages/chickfila/cfa-grilledchickenclub.webp"
+            "image": "/restaurants/chickfila/menu/items/sandwiches/grilled-chicken-club.webp"
         },
         {
             "name": "Grilled Nuggets",
@@ -316,7 +316,7 @@
             },
             "category": "Nuggets",
             "portionType": "single",
-            "image": "/foodImages/chickfila/cfa-grillednuggets.webp",
+            "image": "/restaurants/chickfila/menu/items/chicken/grilled-nuggets.webp",
             "addonRefs": [
                 "sauces"
             ],
@@ -394,7 +394,7 @@
             "addonRefs": [
                 "dressings"
             ],
-            "image": "/foodImages/chickfila/cfa-cobbsalad.png"
+            "image": "/restaurants/chickfila/menu/items/salads/cobb-salad.webp"
         },
         {
             "name": "Spicy Southwest Salad",
@@ -415,7 +415,7 @@
             "addonRefs": [
                 "dressings"
             ],
-            "image": "/foodImages/chickfila/cfa-spicysouthwestsalad.webp"
+            "image": "/restaurants/chickfila/menu/items/salads/spicy-southwest.webp"
         },
         {
             "name": "Market Salad",
@@ -436,7 +436,7 @@
             "addonRefs": [
                 "dressings"
             ],
-            "image": "/foodImages/chickfila/cfa-marketsalad.webp"
+            "image": "/restaurants/chickfila/menu/items/salad/market-salad.webp"
         },
         {
             "name": "Kale Crunch Side",
@@ -454,7 +454,7 @@
             },
             "category": "Side",
             "portionType": "single",
-            "image": "/foodImages/chickfila/sides/kalecrunchside.webp"
+            "image": "/restaurants/chickfila/menu/items/side/crunch-kale-salad.webp"
         },
         {
             "name": "Chick-fil-A Waffle Potato Fries",
@@ -472,7 +472,7 @@
             },
             "category": "Side",
             "portionType": "single",
-            "image": "/foodImages/chickfila/sides/wafflefries.webp",
+            "image": "/restaurants/chickfila/menu/items/side/waffle-fries.webp",
             "defaultVariantId": "medium",
             "variants": [
                 {
@@ -544,7 +544,7 @@
             },
             "category": "Side",
             "portionType": "single",
-            "image": "/foodImages/chickfila/sides/berryparfait.webp",
+            "image": "/restaurants/chickfila/menu/items/side/berry-parfait.webp",
             "defaultVariantId": "granola",
             "variants": [
                 {
@@ -599,7 +599,7 @@
             },
             "category": "Side",
             "portionType": "single",
-            "image": "/foodImages/chickfila/sides/fruitcup.webp"
+            "image": "/restaurants/chickfila/menu/items/side/fruit-cup.webp"
         },
         {
             "name": "Mac & Cheese",
@@ -617,7 +617,7 @@
             },
             "category": "Side",
             "portionType": "single",
-            "image": "/foodImages/chickfila/sides/macncheese.webp",
+            "image": "/restaurants/chickfila/menu/items/side/mac-n-cheese.webp",
             "defaultVariantId": "medium",
             "variants": [
                 {
@@ -672,7 +672,7 @@
             },
             "category": "Side",
             "portionType": "single",
-            "image": "/foodImages/chickfila/sides/chickennoodlesoup.webp",
+            "image": "/restaurants/chickfila/menu/items/side/chicken-noodle-soup.webp",
             "defaultVariantId": "cup",
             "variants": [
                 {
@@ -730,7 +730,7 @@
             "addonRefs": [
                 "dressings"
             ],
-            "image": "/foodImages/chickfila/sides/sidesalad.webp"
+            "image": "/restaurants/chickfila/menu/items/side/side-salad.webp"
         },
         {
             "name": "Chicken Tortilla Soup",
@@ -748,7 +748,7 @@
             },
             "category": "Side",
             "portionType": "single",
-            "image": "/foodImages/chickfila/sides/chickentortillasoup.webp"
+            "image": "/restaurants/chickfila/menu/items/side/chicken-tortilla-soup.webp"
         },
         {
             "name": "Original Flavor Waffle Potato Chips",
