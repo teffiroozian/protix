@@ -3,7 +3,7 @@
 import type { CommonChange, MenuItem, RestaurantAddons } from "@/types/menu";
 import type { SortOption } from "./ControlsRow";
 import MenuItemCard from "./MenuItemCard";
-import { getVariantsForSection } from "./menuSectionVariants";
+import { getVariantsForSection, isKidsSection } from "./menuSectionVariants";
 
 function normalizeCategory(category: string) {
   return category.trim().toLowerCase();
@@ -88,7 +88,7 @@ export function sortItems(items: MenuItem[], sort: SortOption) {
 
 export function getOrderedMenuSections(items: MenuItem[]) {
   const sectionSet = new Set(
-    items.map((item) => normalizeCategory(item.category || "Other"))
+    items.map((item) => getSectionForItem(item))
   );
 
   return [...sectionSet].sort((a, b) => {
@@ -100,6 +100,21 @@ export function getOrderedMenuSections(items: MenuItem[]) {
 
 export function getCategoryLabel(category: string) {
   return categoryHeading(category);
+}
+
+function getSectionForItem(item: MenuItem) {
+  const category = normalizeCategory(item.category || "Other");
+
+  if (isKidsSection(category)) return "kids";
+
+  if (item.variants?.length) {
+    const kidsVariants = getVariantsForSection(item, "kids");
+    if (kidsVariants && kidsVariants.length > 0) {
+      return "kids";
+    }
+  }
+
+  return category;
 }
 
 
@@ -161,7 +176,7 @@ export default function MenuSections({
   }
 
   const grouped = items.reduce<Record<string, MenuItem[]>>((acc, item) => {
-    const key = normalizeCategory(item.category || "Other");
+    const key = getSectionForItem(item);
     if (!acc[key]) acc[key] = [];
     acc[key].push(item);
     return acc;
