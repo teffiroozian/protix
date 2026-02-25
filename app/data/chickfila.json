@@ -57,7 +57,7 @@
             "image": "/restaurants/chickfila/menu/items/sandwiches/spicy-chicken-sandwich.webp"
         },
         {
-            "name": "Chick-fil-A® Nuggets",
+            "name": "Chick-fil-A\u00ae Nuggets",
             "nutrition": {
                 "calories": 250,
                 "totalFat": 11,
@@ -132,7 +132,7 @@
             ]
         },
         {
-            "name": "Chick-fil-A® Deluxe Sandwich",
+            "name": "Chick-fil-A\u00ae Deluxe Sandwich",
             "nutrition": {
                 "calories": 490,
                 "totalFat": 22,
@@ -150,7 +150,7 @@
             "image": "/restaurants/chickfila/menu/items/sandwiches/deluxe-sandwich.webp"
         },
         {
-            "name": "Chick-fil-A® Cool Wrap",
+            "name": "Chick-fil-A\u00ae Cool Wrap",
             "nutrition": {
                 "calories": 660,
                 "totalFat": 45,
@@ -171,7 +171,7 @@
             "image": "/restaurants/chickfila/menu/items/wraps/cool-wrap.webp"
         },
         {
-            "name": "Chick-fil-A Chick-n-Strips®",
+            "name": "Chick-fil-A Chick-n-Strips\u00ae",
             "nutrition": {
                 "calories": 310,
                 "totalFat": 14,
@@ -1109,7 +1109,8 @@
                 "carbs": 11,
                 "fiber": 0,
                 "sugars": 9,
-                "protein": 0
+                "protein": 0,
+                "image": "/restaurants/chickfila/menu/addons/dipping-sauces/bbq.webp"
             },
             {
                 "name": "Chick-fil-A Sauce",
@@ -1122,7 +1123,8 @@
                 "carbs": 6,
                 "fiber": 0,
                 "sugars": 6,
-                "protein": 0
+                "protein": 0,
+                "image": "/restaurants/chickfila/menu/addons/dipping-sauces/chick-fil-a.webp"
             },
             {
                 "name": "Garden Herb Ranch Sauce",
@@ -1135,7 +1137,8 @@
                 "carbs": 1,
                 "fiber": 0,
                 "sugars": 0,
-                "protein": 0
+                "protein": 0,
+                "image": "/restaurants/chickfila/menu/addons/dipping-sauces/garden-herb-ranch.webp"
             },
             {
                 "name": "Honey Mustard Sauce",
@@ -1148,7 +1151,8 @@
                 "carbs": 11,
                 "fiber": 0,
                 "sugars": 10,
-                "protein": 0
+                "protein": 0,
+                "image": "/restaurants/chickfila/menu/addons/dipping-sauces/honey-mustard.webp"
             },
             {
                 "name": "Polynesian Sauce",
@@ -1161,7 +1165,8 @@
                 "carbs": 14,
                 "fiber": 0,
                 "sugars": 13,
-                "protein": 0
+                "protein": 0,
+                "image": "/restaurants/chickfila/menu/addons/dipping-sauces/polynesian.webp"
             },
             {
                 "name": "Sweet & Spicy Sriracha Sauce",
@@ -1174,7 +1179,8 @@
                 "carbs": 11,
                 "fiber": 0,
                 "sugars": 10,
-                "protein": 0
+                "protein": 0,
+                "image": "/restaurants/chickfila/menu/addons/dipping-sauces/sweet-spicy-sriracha.webp"
             },
             {
                 "name": "Zesty Buffalo Sauce",
@@ -1187,7 +1193,8 @@
                 "carbs": 1,
                 "fiber": 0,
                 "sugars": 0,
-                "protein": 0
+                "protein": 0,
+                "image": "/restaurants/chickfila/menu/addons/dipping-sauces/zesty-buffalo.webp"
             },
             {
                 "name": "Honey Roasted BBQ Sauce",
@@ -1200,7 +1207,8 @@
                 "carbs": 3,
                 "fiber": 0,
                 "sugars": 2,
-                "protein": 0
+                "protein": 0,
+                "image": "/restaurants/chickfila/menu/addons/dipping-sauces/honey_roasted_bbq.webp"
             }
         ],
         "dressings": [
@@ -1215,7 +1223,8 @@
                 "carbs": 3,
                 "fiber": 1,
                 "sugars": 2,
-                "protein": 1
+                "protein": 1,
+                "image": "/restaurants/chickfila/menu/addons/dressings/avocado_lime_ranch.webp"
             },
             {
                 "name": "Creamy Salsa Dressing",
@@ -1228,7 +1237,8 @@
                 "carbs": 2,
                 "fiber": 0,
                 "sugars": 1,
-                "protein": 1
+                "protein": 1,
+                "image": "/restaurants/chickfila/menu/addons/dressings/creamy-salsa.webp"
             },
             {
                 "name": "Fat-Free Honey Mustard Dressing",
@@ -1241,7 +1251,8 @@
                 "carbs": 22,
                 "fiber": 1,
                 "sugars": 18,
-                "protein": 0
+                "protein": 0,
+                "image": "/restaurants/chickfila/menu/addons/dressings/fat-free-honey-mustard.webp"
             },
             {
                 "name": "Garden Herb Ranch Dressing",
@@ -1254,7 +1265,8 @@
                 "carbs": 2,
                 "fiber": 0,
                 "sugars": 1,
-                "protein": 1
+                "protein": 1,
+                "image": "/restaurants/chickfila/menu/addons/dressings/garden_herb_ranch.webp"
             },
             {
                 "name": "Light Balsamic Vinaigrette Dressing",
@@ -1267,7 +1279,8 @@
                 "carbs": 10,
                 "fiber": 0,
                 "sugars": 9,
-                "protein": 0
+                "protein": 0,
+                "image": "/restaurants/chickfila/menu/addons/dressings/light-balsamic-vinaigrette.webp"
             },
             {
                 "name": "Light Italian Dressing",
@@ -1280,7 +1293,8 @@
                 "carbs": 3,
                 "fiber": 0,
                 "sugars": 2,
-                "protein": 0
+                "protein": 0,
+                "image": "/restaurants/chickfila/menu/addons/dressings/light_italian.webp"
             },
             {
                 "name": "Zesty Apple Cider Vinaigrette Dressing",
@@ -1293,7 +1307,8 @@
                 "carbs": 16,
                 "fiber": 0,
                 "sugars": 14,
-                "protein": 0
+                "protein": 0,
+                "image": "/restaurants/chickfila/menu/addons/dressings/zesty-apple-cider-vinaigrette.webp"
             }
         ]
     },
