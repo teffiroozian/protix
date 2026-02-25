@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useRestaurantSearch } from "@/components/RestaurantSearchContext";
-import type { CommonChange, MenuItem, RestaurantAddons } from "@/types/menu";
+import type { AddonRef, CommonChange, MenuItem, RestaurantAddons } from "@/types/menu";
 import ControlsRow, {
   type Filters,
   type SortOption,
@@ -39,12 +39,46 @@ export default function RestaurantView({
   const { searchOpen, searchQuery, setSearchQuery, openSearch, closeSearch } =
     useRestaurantSearch();
 
+  const addonItems = useMemo<MenuItem[]>(() => {
+    if (!addons) return [];
+
+    const categoryByAddonRef: Record<AddonRef, string> = {
+      sauces: "Dipping Sauces",
+      dressings: "Dressings",
+    };
+
+    return (Object.entries(addons) as [AddonRef, NonNullable<RestaurantAddons[AddonRef]>][])
+      .flatMap(([addonRef, options]) =>
+        options.map((option) => ({
+          id: `${restaurantId}-${addonRef}-${option.name}`.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+          name: option.name,
+          nutrition: {
+            calories: option.calories,
+            protein: option.protein,
+            carbs: option.carbs,
+            totalFat: option.fat,
+            satFat: option.satFat,
+            transFat: option.transFat,
+            cholesterol: option.cholesterol,
+            sodium: option.sodium,
+            fiber: option.fiber,
+            sugars: option.sugars,
+          },
+          category: categoryByAddonRef[addonRef],
+          portionType: "addon",
+          image: option.image,
+        }))
+      );
+  }, [addons, restaurantId]);
+
+  const allItems = useMemo(() => [...items, ...addonItems], [items, addonItems]);
+
   const calorieBounds = useMemo(() => {
-    if (!items.length) {
+    if (!allItems.length) {
       return { min: 0, max: 0 };
     }
 
-    const calories = items.map((item) => item.nutrition.calories);
+    const calories = allItems.map((item) => item.nutrition.calories);
     const minCal = Math.min(...calories);
     const maxCal = Math.max(...calories);
 
@@ -52,7 +86,7 @@ export default function RestaurantView({
       min: Math.floor(minCal / 50) * 50,
       max: Math.ceil(maxCal / 50) * 50,
     };
-  }, [items]);
+  }, [allItems]);
 
   const searchTerms = searchQuery
     .trim()
@@ -61,7 +95,7 @@ export default function RestaurantView({
     .filter(Boolean);
 
   const filteredItems = useMemo(() => {
-    return items.filter((item) => {
+    return allItems.filter((item) => {
       if (filters.proteinMin && item.nutrition.protein < filters.proteinMin) {
         return false;
       }
@@ -87,7 +121,7 @@ export default function RestaurantView({
       const searchableText = [item.name.toLowerCase(), ...categoryVariants].join(" ");
       return searchTerms.every((term) => searchableText.includes(term));
     });
-  }, [items, filters, searchTerms]);
+  }, [allItems, filters, searchTerms]);
 
   const orderedSections = useMemo(
     () => getOrderedMenuSections(filteredItems),
