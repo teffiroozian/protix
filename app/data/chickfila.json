@@ -18,7 +18,7 @@
             },
             "category": "Sandwich",
             "portionType": "single",
-            "image": "/foodImages/chickfila/cfa-chickensandwich.webp"
+            "image": "/restaurants/chickfila/menu/items/sandwiches/chicken-sandwich.webp"
         },
         {
             "name": "Spicy Deluxe Sandwich",
