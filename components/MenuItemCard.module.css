@@ -94,6 +94,15 @@
   align-items: center;
 }
 
+.variantLabel {
+  border-radius: 999px;
+  padding: 2px 16px;
+  background: #121212;
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
 .macros {
   margin-top: auto;
   display: flex;
