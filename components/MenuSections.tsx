@@ -3,6 +3,7 @@
 import type { CommonChange, MenuItem, RestaurantAddons } from "@/types/menu";
 import type { SortOption } from "./ControlsRow";
 import MenuItemCard from "./MenuItemCard";
+import { getVariantsForSection } from "./menuSectionVariants";
 
 function normalizeCategory(category: string) {
   return category.trim().toLowerCase();
@@ -187,15 +188,22 @@ export default function MenuSections({
             {categoryHeading(section)}
           </h2>
           <ul style={{ marginTop: 12, padding: 0, display: "grid", gap: 12 }}>
-            {sortedGrouped[section].map((item, index) => (
-              <MenuItemCard
-                key={`${item.name}-${index}`}
-                restaurantId={restaurantId}
-                item={item}
-                addons={addons}
-                commonChanges={commonChanges}
-              />
-            ))}
+            {sortedGrouped[section]
+              .filter((item) => {
+                if (!item.variants?.length) return true;
+                const sectionVariants = getVariantsForSection(item, section);
+                return Boolean(sectionVariants && sectionVariants.length > 0);
+              })
+              .map((item, index) => (
+                <MenuItemCard
+                  key={`${item.name}-${index}`}
+                  restaurantId={restaurantId}
+                  item={item}
+                  addons={addons}
+                  commonChanges={commonChanges}
+                  section={section}
+                />
+              ))}
           </ul>
         </section>
       ))}

@@ -6,6 +6,11 @@ import styles from "./MenuItemCard.module.css";
 import { useCart } from "@/stores/cartStore";
 import ItemDetailsPanel from "./ItemDetailsPanel";
 import VariantSelector from "./VariantSelector";
+import {
+  getDefaultVariantIdForSection,
+  getVariantsForSection,
+  isKidsSection,
+} from "./menuSectionVariants";
 
 function pad2(n: number) {
   return String(n).padStart(2, "0");
@@ -103,6 +108,7 @@ export default function MenuItemCard({
   initialCartOptionsLabel,
   initialCartCustomizations,
   onCartConfigurationChange,
+  section,
 }: {
   restaurantId: string;
   item: MenuItem;
@@ -121,26 +127,34 @@ export default function MenuItemCard({
   initialCartOptionsLabel?: string;
   initialCartCustomizations?: string[];
   onCartConfigurationChange?: (next: CartConfigurationPayload) => void;
+  section?: string;
 }) {
   const [open, setOpen] = useState(false);
   const id = useId();
-  const variants = item.variants?.length ? item.variants : null;
-  const defaultVariantId = useMemo(() => {
-    if (!variants) return "";
-    if (item.defaultVariantId && variants.some((variant) => variant.id === item.defaultVariantId)) {
-      return item.defaultVariantId;
-    }
-    const flaggedDefault = variants.find((variant) => variant.isDefault);
-    return flaggedDefault?.id ?? variants[0]?.id ?? "";
-  }, [item.defaultVariantId, variants]);
+  const variants = useMemo(() => getVariantsForSection(item, section), [item, section]);
+  const defaultVariantId = useMemo(
+    () => getDefaultVariantIdForSection(item, section),
+    [item, section]
+  );
   const [selectedVariantId, setSelectedVariantId] = useState(initialCartVariantId ?? defaultVariantId);
+  const hideVariantSelector =
+    isKidsSection(section) && Boolean(variants && variants.length === 1);
   const [selectedAddons, setSelectedAddons] = useState<Partial<Record<AddonRef, AddonOption>>>(() =>
     mode === "cart" ? getSelectedAddonsFromLabel(item, addons, initialCartOptionsLabel) : {}
   );
   const [selectedCommonChangeIds, setSelectedCommonChangeIds] = useState<string[]>([]);
   const [isAddFeedbackVisible, setIsAddFeedbackVisible] = useState(false);
   const { addItem } = useCart();
-  const selectedVariant = variants?.find((variant) => variant.id === selectedVariantId);
+  const selectedVariant = useMemo(() => {
+    if (!variants || variants.length === 0) return undefined;
+    const bySelected = variants.find((variant) => variant.id === selectedVariantId);
+    if (bySelected) return bySelected;
+    if (defaultVariantId) {
+      const byDefault = variants.find((variant) => variant.id === defaultVariantId);
+      if (byDefault) return byDefault;
+    }
+    return variants[0];
+  }, [defaultVariantId, selectedVariantId, variants]);
   const baseNutrition = selectedVariant?.nutrition ?? item.nutrition;
   const applicableCommonChanges = useMemo(
     () => getApplicableCommonChanges(item, commonChanges),
@@ -444,7 +458,7 @@ export default function MenuItemCard({
                   <span className={styles.macroDelta}>{formatDelta(customizationTotals.calories)}</span>
                 ) : null}
               </div>
-              {variants ? (
+              {variants && !hideVariantSelector ? (
                 <div
                   className={styles.variantSelect}
                   onClick={(event) => event.stopPropagation()}
@@ -593,7 +607,7 @@ export default function MenuItemCard({
             <ItemDetailsPanel
               item={item}
               nutrition={nutrition}
-              variants={variants}
+              variants={hideVariantSelector ? null : variants}
               selectedVariantId={selectedVariantId}
               onSelectVariant={(nextVariantId) => {
                 setSelectedVariantId(nextVariantId);

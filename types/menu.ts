@@ -27,6 +27,7 @@ export type ItemVariant = {
   nutrition: Nutrition;
   portionType?: PortionType;   // Optional override: variant can differ from base item
   isDefault?: boolean;
+  tags?: string[];
 };
 
 export type AddonRef = "sauces" | "dressings";
