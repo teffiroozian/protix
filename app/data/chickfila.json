@@ -82,7 +82,7 @@
                     "id": "5pc",
                     "label": "5 ct",
                     "portionType": "kids",
-                    "tags": ["kids"],
+                    "categories": ["Nuggets", "Kids"],
                     "nutrition": {
                         "calories": 160,
                         "totalFat": 7,
@@ -214,7 +214,7 @@
                     "id": "2pc",
                     "label": "2 ct",
                     "portionType": "kids",
-                    "tags": ["kids"],
+                    "categories": ["Nuggets", "Kids"],
                     "nutrition": {
                         "calories": 200,
                         "totalFat": 9,
@@ -345,7 +345,7 @@
                     "id": "5pc",
                     "label": "5 ct",
                     "portionType": "kids",
-                    "tags": ["kids"],
+                    "categories": ["Nuggets", "Kids"],
                     "nutrition": {
                         "calories": 80,
                         "totalFat": 2,
