@@ -125,6 +125,7 @@ export default function MenuItemCard({
   const [open, setOpen] = useState(false);
   const id = useId();
   const variants = item.variants?.length ? item.variants : null;
+  const hasVariantDropdown = Boolean(variants && variants.length > 1);
   const defaultVariantId = useMemo(() => {
     if (!variants) return "";
     if (item.defaultVariantId && variants.some((variant) => variant.id === item.defaultVariantId)) {
@@ -447,19 +448,23 @@ export default function MenuItemCard({
               {variants ? (
                 <div
                   className={styles.variantSelect}
-                  onClick={(event) => event.stopPropagation()}
-                  onKeyDown={(event) => event.stopPropagation()}
+                  onClick={hasVariantDropdown ? (event) => event.stopPropagation() : undefined}
+                  onKeyDown={hasVariantDropdown ? (event) => event.stopPropagation() : undefined}
                 >
                   <div className={styles.divider} />
-                  <VariantSelector
-                    variants={variants}
-                    selectedId={selectedVariantId}
-                    onChange={(nextVariantId) => {
-                      setSelectedVariantId(nextVariantId);
-                      emitCartConfiguration(nextVariantId, selectedAddons);
-                    }}
-                    ariaLabel={`${item.name} portion size`}
-                  />
+                  {hasVariantDropdown ? (
+                    <VariantSelector
+                      variants={variants}
+                      selectedId={selectedVariantId}
+                      onChange={(nextVariantId) => {
+                        setSelectedVariantId(nextVariantId);
+                        emitCartConfiguration(nextVariantId, selectedAddons);
+                      }}
+                      ariaLabel={`${item.name} portion size`}
+                    />
+                  ) : (
+                    <span className={styles.variantLabel}>{selectedVariantForCart?.label ?? variants[0]?.label}</span>
+                  )}
                 </div>
               ) : null}
             </div>
