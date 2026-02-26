@@ -38,11 +38,13 @@ function normalizeCategory(category: string) {
 
 function getApplicableCommonChanges(item: MenuItem, commonChanges?: CommonChange[]) {
   if (!commonChanges || commonChanges.length === 0) return [];
-  const itemCategory = normalizeCategory(item.category || "");
+  const itemCategories = new Set(
+    (item.categories ?? []).map((category) => normalizeCategory(category))
+  );
   return commonChanges.filter((change) => {
     const categories = change.appliesTo?.categories;
     if (!categories || categories.length === 0) return false;
-    return categories.some((category) => normalizeCategory(category) === itemCategory);
+    return categories.some((category) => itemCategories.has(normalizeCategory(category)));
   });
 }
 

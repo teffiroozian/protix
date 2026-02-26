@@ -64,7 +64,7 @@ export default function RestaurantView({
             fiber: option.fiber,
             sugars: option.sugars,
           },
-          category: categoryByAddonRef[addonRef],
+          categories: [categoryByAddonRef[addonRef]],
           portionType: "addon",
           image: option.image,
         }))
@@ -106,10 +106,13 @@ export default function RestaurantView({
         return true;
       }
 
-      const category = (item.category || "Other").toLowerCase();
-      const categoryLabel = getCategoryLabel(item.category || "Other").toLowerCase();
+      const itemCategories = item.categories?.length ? item.categories : ["Other"];
 
-      const categoryVariants = [category, categoryLabel].flatMap((value) => {
+      const categoryVariants = itemCategories.flatMap((rawCategory) => {
+        const category = rawCategory.toLowerCase();
+        const categoryLabel = getCategoryLabel(rawCategory).toLowerCase();
+        return [category, categoryLabel];
+      }).flatMap((value) => {
         const trimmed = value.trim();
         if (!trimmed) return [];
         if (trimmed.endsWith("s")) {

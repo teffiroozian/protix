@@ -16,7 +16,7 @@
                 "sugars": 6,
                 "protein": 29
             },
-            "category": "Sandwich",
+            "categories": ["Sandwich"],
             "portionType": "single",
             "image": "/restaurants/chickfila/menu/items/sandwiches/chicken-sandwich.webp"
         },
@@ -34,7 +34,7 @@
                 "sugars": 7,
                 "protein": 34
             },
-            "category": "Sandwich",
+            "categories": ["Sandwich"],
             "portionType": "single",
             "image": "/restaurants/chickfila/menu/items/sandwiches/spicy-deluxe-sandwich.webp"
         },
@@ -52,7 +52,7 @@
                 "sugars": 6,
                 "protein": 28
             },
-            "category": "Sandwich",
+            "categories": ["Sandwich"],
             "portionType": "single",
             "image": "/restaurants/chickfila/menu/items/sandwiches/spicy-chicken-sandwich.webp"
         },
@@ -70,7 +70,7 @@
                 "sugars": 1,
                 "protein": 27
             },
-            "category": "Nuggets",
+            "categories": ["Nuggets"],
             "portionType": "single",
             "addonRefs": [
                 "sauces"
@@ -163,7 +163,7 @@
                 "sugars": 7,
                 "protein": 32
             },
-            "category": "Sandwich",
+            "categories": ["Sandwich"],
             "portionType": "single",
             "image": "/restaurants/chickfila/menu/items/sandwiches/deluxe-sandwich.webp"
         },
@@ -181,7 +181,7 @@
                 "sugars": 5,
                 "protein": 43
             },
-            "category": "Wrap",
+            "categories": ["Wrap"],
             "portionType": "single",
             "addonRefs": [
                 "dressings"
@@ -202,7 +202,7 @@
                 "sugars": 2,
                 "protein": 29
             },
-            "category": "Nuggets",
+            "categories": ["Nuggets"],
             "portionType": "single",
             "addonRefs": [
                 "sauces"
@@ -295,7 +295,7 @@
                 "sugars": 11,
                 "protein": 28
             },
-            "category": "Sandwich",
+            "categories": ["Sandwich"],
             "portionType": "single",
             "image": "/restaurants/chickfila/menu/items/sandwiches/grilled-chicken-sandwich.webp"
         },
@@ -314,7 +314,7 @@
                 "sugars": 12,
                 "protein": 37
             },
-            "category": "Sandwich",
+            "categories": ["Sandwich"],
             "portionType": "single",
             "ingredients": [
                 "bun",
@@ -333,7 +333,7 @@
                 "carbs": 1,
                 "totalFat": 3
             },
-            "category": "Nuggets",
+            "categories": ["Nuggets"],
             "portionType": "single",
             "image": "/restaurants/chickfila/menu/items/chicken/grilled-nuggets.webp",
             "addonRefs": [
@@ -426,7 +426,7 @@
                 "sugars": 8,
                 "protein": 42
             },
-            "category": "Salad",
+            "categories": ["Salad"],
             "portionType": "single",
             "addonRefs": [
                 "dressings"
@@ -447,7 +447,7 @@
                 "sugars": 7,
                 "protein": 33
             },
-            "category": "Salad",
+            "categories": ["Salad"],
             "portionType": "single",
             "addonRefs": [
                 "dressings"
@@ -468,7 +468,7 @@
                 "sugars": 26,
                 "protein": 28
             },
-            "category": "Salad",
+            "categories": ["Salad"],
             "portionType": "single",
             "addonRefs": [
                 "dressings"
@@ -489,7 +489,7 @@
                 "sugars": 8,
                 "protein": 4
             },
-            "category": "Side",
+            "categories": ["Side"],
             "portionType": "single",
             "image": "/restaurants/chickfila/menu/items/sides/kale-crunch-side.webp"
         },
@@ -507,7 +507,7 @@
                 "sugars": 1,
                 "protein": 5
             },
-            "category": "Side",
+            "categories": ["Side"],
             "portionType": "single",
             "image": "/restaurants/chickfila/menu/items/sides/waffle-fries.webp",
             "defaultVariantId": "medium",
@@ -579,7 +579,7 @@
                 "sugars": 26,
                 "protein": 13
             },
-            "category": "Side",
+            "categories": ["Side"],
             "portionType": "single",
             "image": "/restaurants/chickfila/menu/items/sides/berry-parfait.webp",
             "defaultVariantId": "granola",
@@ -634,7 +634,7 @@
                 "sugars": 12,
                 "protein": 1
             },
-            "category": "Side",
+            "categories": ["Side"],
             "portionType": "single",
             "image": "/restaurants/chickfila/menu/items/sides/fruit-cup.webp"
         },
@@ -652,7 +652,7 @@
                 "sugars": 3,
                 "protein": 20
             },
-            "category": "Side",
+            "categories": ["Side"],
             "portionType": "single",
             "image": "/restaurants/chickfila/menu/items/sides/mac-n-cheese.webp",
             "defaultVariantId": "medium",
@@ -707,7 +707,7 @@
                 "sugars": 2,
                 "protein": 11
             },
-            "category": "Side",
+            "categories": ["Side"],
             "portionType": "single",
             "image": "/restaurants/chickfila/menu/items/sides/chicken-noodle-soup.webp",
             "defaultVariantId": "cup",
@@ -762,7 +762,7 @@
                 "sugars": 5,
                 "protein": 6
             },
-            "category": "Side",
+            "categories": ["Side"],
             "portionType": "single",
             "addonRefs": [
                 "dressings"
@@ -783,7 +783,7 @@
                 "sugars": 4,
                 "protein": 25
             },
-            "category": "Side",
+            "categories": ["Side"],
             "portionType": "single",
             "image": "/restaurants/chickfila/menu/items/sides/chicken-tortilla-soup.webp"
         },
@@ -801,7 +801,7 @@
                 "sugars": 0,
                 "protein": 3
             },
-            "category": "Side",
+            "categories": ["Side"],
             "portionType": "single",
             "image": "/restaurants/chickfila/menu/items/sides/waffle-chips-original.webp"
         },
@@ -819,7 +819,7 @@
                 "sugars": 8,
                 "protein": 0
             },
-            "category": "Side",
+            "categories": ["Side"],
             "portionType": "single",
             "image": "/restaurants/chickfila/menu/items/sides/apple-sauce.webp"
         },
@@ -837,7 +837,7 @@
                 "sugars": 3,
                 "protein": 3
             },
-            "category": "Side",
+            "categories": ["Side"],
             "portionType": "single",
             "image": "/restaurants/chickfila/menu/items/sides/waffle-chips-cfa-sauce.webp"
         },
@@ -855,7 +855,7 @@
                 "sugars": 5,
                 "protein": 19
             },
-            "category": "Breakfast",
+            "categories": ["Breakfast"],
             "portionType": "single",
             "image": "/restaurants/chickfila/menu/items/breakfast/spicy-chicken-biscuit.webp"
         },
@@ -873,7 +873,7 @@
                 "sugars": 8,
                 "protein": 20
             },
-            "category": "Breakfast",
+            "categories": ["Breakfast"],
             "portionType": "single",
             "image": "/restaurants/chickfila/menu/items/breakfast/chicken-minis.webp",
             "defaultVariantId": "4ct",
@@ -911,7 +911,7 @@
                 "sugars": 2,
                 "protein": 27
             },
-            "category": "Breakfast",
+            "categories": ["Breakfast"],
             "portionType": "single",
             "image": "/restaurants/chickfila/menu/items/breakfast/egg-white-grill.webp"
         },
@@ -929,7 +929,7 @@
                 "sugars": 2,
                 "protein": 34
             },
-            "category": "Breakfast",
+            "categories": ["Breakfast"],
             "portionType": "single",
             "image": "/restaurants/chickfila/menu/items/breakfast/hash-brown-scramble-burrito.webp"
         },
@@ -947,7 +947,7 @@
                 "sugars": 2,
                 "protein": 29
             },
-            "category": "Breakfast",
+            "categories": ["Breakfast"],
             "portionType": "single",
             "image": "/restaurants/chickfila/menu/items/breakfast/hash-brown-scramble-bowl.webp"
         },
@@ -965,7 +965,7 @@
                 "sugars": 7,
                 "protein": 27
             },
-            "category": "Breakfast",
+            "categories": ["Breakfast"],
             "portionType": "single",
             "image": "/restaurants/chickfila/menu/items/breakfast/chicken-egg-cheese-biscuit.webp"
         },
@@ -983,7 +983,7 @@
                 "sugars": 4,
                 "protein": 15
             },
-            "category": "Breakfast",
+            "categories": ["Breakfast"],
             "portionType": "single",
             "image": "/restaurants/chickfila/menu/items/breakfast/bacon-egg-cheese-biscuit.webp"
         },
@@ -1001,7 +1001,7 @@
                 "sugars": 4,
                 "protein": 22
             },
-            "category": "Breakfast",
+            "categories": ["Breakfast"],
             "portionType": "single",
             "image": "/restaurants/chickfila/menu/items/breakfast/sausage-egg-cheese-biscuit.webp"
         },
@@ -1019,7 +1019,7 @@
                 "sugars": 4,
                 "protein": 27
             },
-            "category": "Breakfast",
+            "categories": ["Breakfast"],
             "portionType": "single",
             "image": "/restaurants/chickfila/menu/items/breakfast/chicken-egg-cheese-muffin.webp"
         },
@@ -1037,7 +1037,7 @@
                 "sugars": 2,
                 "protein": 16
             },
-            "category": "Breakfast",
+            "categories": ["Breakfast"],
             "portionType": "single",
             "image": "/restaurants/chickfila/menu/items/breakfast/bacon-egg-cheese-muffin.webp"
         },
@@ -1055,7 +1055,7 @@
                 "sugars": 1,
                 "protein": 23
             },
-            "category": "Breakfast",
+            "categories": ["Breakfast"],
             "portionType": "single",
             "image": "/restaurants/chickfila/menu/items/breakfast/sausage-egg-cheese-muffin.webp"
         },
@@ -1073,7 +1073,7 @@
                 "sugars": 0,
                 "protein": 3
             },
-            "category": "Breakfast",
+            "categories": ["Breakfast"],
             "portionType": "single",
             "image": "/restaurants/chickfila/menu/items/breakfast/hash-browns.webp",
             "defaultVariantId": "small",
@@ -1128,7 +1128,7 @@
                 "sugars": 6,
                 "protein": 19
             },
-            "category": "Breakfast",
+            "categories": ["Breakfast"],
             "portionType": "single",
             "image": "/restaurants/chickfila/menu/items/breakfast/chicken-biscuit.webp"
         }

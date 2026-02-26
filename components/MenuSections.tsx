@@ -8,6 +8,29 @@ function normalizeCategory(category: string) {
   return category.trim().toLowerCase();
 }
 
+function getItemCategories(item: MenuItem) {
+  const categories = item.categories?.length ? item.categories : ["Other"];
+  return categories.map((category) => normalizeCategory(category));
+}
+
+function getVisibleVariants(item: MenuItem, section: string) {
+  if (!item.variants || item.variants.length === 0) {
+    return item.variants;
+  }
+
+  const itemCategories = new Set(getItemCategories(item));
+
+  return item.variants.filter((variant) => {
+    if (variant.categories && variant.categories.length > 0) {
+      return variant.categories.some(
+        (category) => normalizeCategory(category) === section
+      );
+    }
+
+    return itemCategories.has(section);
+  });
+}
+
 export function categorySectionId(category: string) {
   return `menu-section-${normalizeCategory(category).replace(/[^a-z0-9]+/g, "-")}`;
 }
@@ -86,9 +109,16 @@ export function sortItems(items: MenuItem[], sort: SortOption) {
 }
 
 export function getOrderedMenuSections(items: MenuItem[]) {
-  const sectionSet = new Set(
-    items.map((item) => normalizeCategory(item.category || "Other"))
-  );
+  const sectionSet = new Set<string>();
+
+  items.forEach((item) => {
+    getItemCategories(item).forEach((category) => sectionSet.add(category));
+    item.variants?.forEach((variant) => {
+      variant.categories?.forEach((category) => {
+        sectionSet.add(normalizeCategory(category));
+      });
+    });
+  });
 
   return [...sectionSet].sort((a, b) => {
     const priorityDiff = categoryPriority(a) - categoryPriority(b);
@@ -160,9 +190,35 @@ export default function MenuSections({
   }
 
   const grouped = items.reduce<Record<string, MenuItem[]>>((acc, item) => {
-    const key = normalizeCategory(item.category || "Other");
-    if (!acc[key]) acc[key] = [];
-    acc[key].push(item);
+    const itemCategories = new Set(getItemCategories(item));
+    const categoryKeys = new Set([...itemCategories]);
+    item.variants?.forEach((variant) => {
+      variant.categories?.forEach((category) => {
+        categoryKeys.add(normalizeCategory(category));
+      });
+    });
+
+    categoryKeys.forEach((key) => {
+      if (!acc[key]) acc[key] = [];
+
+      if (!item.variants || item.variants.length === 0) {
+        if (itemCategories.has(key)) {
+          acc[key].push(item);
+        }
+        return;
+      }
+
+      const visibleVariants = getVisibleVariants(item, key);
+      if (!visibleVariants || visibleVariants.length === 0) {
+        return;
+      }
+
+      acc[key].push({
+        ...item,
+        variants: visibleVariants,
+      });
+    });
+
     return acc;
   }, {});
   const sortedGrouped = Object.fromEntries(
@@ -187,7 +243,7 @@ export default function MenuSections({
             {categoryHeading(section)}
           </h2>
           <ul style={{ marginTop: 12, padding: 0, display: "grid", gap: 12 }}>
-            {sortedGrouped[section].map((item, index) => (
+            {(sortedGrouped[section] ?? []).map((item, index) => (
               <MenuItemCard
                 key={`${item.name}-${index}`}
                 restaurantId={restaurantId}

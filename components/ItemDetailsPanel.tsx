@@ -423,7 +423,7 @@ export default function ItemDetailsPanel({
 
         <div className={styles.detailsRow}>
           <div className={styles.detailsLabel}>Category</div>
-          <div className={styles.pill}>{item.category ?? "—"}</div>
+          <div className={styles.pill}>{item.categories?.join(", ") ?? "—"}</div>
         </div>
 
         <div className={styles.detailsDivider} />
