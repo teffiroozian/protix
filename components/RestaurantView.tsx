@@ -264,7 +264,16 @@ export default function RestaurantView({
         }}
       >
         <aside style={{ position: "sticky", top: 90, paddingTop: 32 }}>
-          <nav aria-label="Menu categories" style={{ display: "grid", gap: 8 }}>
+          <nav
+            aria-label="Menu categories"
+            style={{
+              display: "grid",
+              gap: 8,
+              maxHeight: "calc(100vh - 122px)",
+              overflowY: "auto",
+              paddingRight: 6,
+            }}
+          >
             {categoryOptions.map((option) => {
               const isActive = option.id === resolvedActiveCategory;
 
