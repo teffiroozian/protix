@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRestaurantSearch } from "@/components/RestaurantSearchContext";
 import type { AddonRef, CommonChange, MenuItem, RestaurantAddons } from "@/types/menu";
 import ControlsRow, {
@@ -15,6 +15,23 @@ import {
 } from "./MenuSections";
 import MenuSections from "./MenuSections";
 import StickyRestaurantBar from "./StickyRestaurantBar";
+
+
+const CATEGORY_ICONS: Record<string, string> = {
+  sandwiches: "🥪",
+  chicken: "🍗",
+  salads: "🥗",
+  drinks: "🥤",
+  breakfast: "🍳",
+  sides: "🍟",
+  desserts: "🍰",
+  wraps: "🌯",
+  burgers: "🍔",
+  entrees: "🍽️",
+  "bowls & plates": "🥣",
+  dressings: "🥣",
+  "dipping sauces": "🫙",
+};
 
 export default function RestaurantView({
   restaurantId,
@@ -155,6 +172,54 @@ export default function RestaurantView({
     section.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
+
+  useEffect(() => {
+    if (entireMenu || orderedSections.length === 0) {
+      return;
+    }
+
+    const sectionElements = orderedSections
+      .map((sectionId) => ({
+        id: sectionId,
+        element: document.getElementById(categorySectionId(sectionId)),
+      }))
+      .filter(
+        (
+          section
+        ): section is {
+          id: string;
+          element: HTMLElement;
+        } => Boolean(section.element)
+      );
+
+    if (sectionElements.length === 0) {
+      return;
+    }
+
+    const updateActiveCategoryOnScroll = () => {
+      const activationOffset = 160;
+      const reachedSections = sectionElements.filter(
+        (section) => section.element.getBoundingClientRect().top <= activationOffset
+      );
+
+      const nextActive =
+        reachedSections[reachedSections.length - 1]?.id ?? sectionElements[0]?.id;
+
+      if (nextActive && nextActive !== activeCategory) {
+        setActiveCategory(nextActive);
+      }
+    };
+
+    updateActiveCategoryOnScroll();
+    window.addEventListener("scroll", updateActiveCategoryOnScroll, { passive: true });
+    window.addEventListener("resize", updateActiveCategoryOnScroll);
+
+    return () => {
+      window.removeEventListener("scroll", updateActiveCategoryOnScroll);
+      window.removeEventListener("resize", updateActiveCategoryOnScroll);
+    };
+  }, [activeCategory, entireMenu, orderedSections]);
+
   const handleSortChange = (nextSort: SortOption) => {
     setSort(nextSort);
   };
@@ -206,14 +271,64 @@ export default function RestaurantView({
         calorieBounds={calorieBounds}
       />
 
-      <MenuSections
-        restaurantId={restaurantId}
-        items={filteredItems}
-        sort={sort}
-        addons={addons}
-        commonChanges={commonChanges}
-        groupByCategory={!entireMenu}
-      />
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "240px minmax(0, 1fr)",
+          gap: 24,
+          alignItems: "start",
+          marginTop: 16,
+        }}
+      >
+        <aside className="sticky top-[90px] pt-8">
+          <div className="max-h-[calc(100vh-122px)] overflow-y-auto pr-2">
+            <h3 className="mb-5 text-2xl font-bold text-slate-900">Categories</h3>
+
+            <nav aria-label="Menu categories" className="grid gap-3">
+              {categoryOptions.map((option) => {
+                const isActive = option.id === resolvedActiveCategory;
+                const icon = CATEGORY_ICONS[option.label.toLowerCase()] ?? "◻️";
+
+                return (
+                  <div key={option.id} className="relative pl-3">
+                    {isActive ? (
+                      <span className="absolute left-0 top-1/2 h-7 w-1 -translate-y-1/2 rounded-full bg-blue-600" aria-hidden="true" />
+                    ) : null}
+
+                    <button
+                      type="button"
+                      onClick={() => handleCategorySelect(option.id)}
+                      className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-left text-base font-semibold transition-colors ${
+                        isActive
+                          ? "bg-blue-600 text-white"
+                          : "text-slate-700 hover:bg-slate-100"
+                      }`}
+                    >
+                      <span className="text-lg leading-none" aria-hidden="true">
+                        {icon}
+                      </span>
+                      <span>{option.label}</span>
+                    </button>
+                  </div>
+                );
+              })}
+            </nav>
+          </div>
+        </aside>
+
+        <div style={{ minWidth: 0 }}>
+          <div style={{ maxWidth: 900, margin: "0 auto" }}>
+            <MenuSections
+              restaurantId={restaurantId}
+              items={filteredItems}
+              sort={sort}
+              addons={addons}
+              commonChanges={commonChanges}
+              groupByCategory={!entireMenu}
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

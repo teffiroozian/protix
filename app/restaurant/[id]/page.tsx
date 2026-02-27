@@ -49,7 +49,7 @@ export default async function RestaurantPage({
           <RecentRestaurantTracker restaurantId={restaurant.id} />
           <ScrollToTopOnMount />
 
-          <main style={{ maxWidth: 900, margin: "24px auto 48px", padding: 16 }}>
+          <main className="mx-auto mt-6 w-full max-w-6xl px-6 pb-12">
             <RestaurantView
               restaurantId={restaurant.id}
               restaurantName={restaurant.name}
