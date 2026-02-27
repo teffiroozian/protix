@@ -1479,506 +1479,173 @@
             "image": "/restaurants/chickfila/menu/treats/chocolate-fudge-brownie.webp"
         },
         {
-  "name": "Freshly Brewed Iced Tea Sweetened",
-  "nutrition": {
-    "calories": 120,
-    "totalFat": 0,
-    "satFat": 0,
-    "transFat": 0,
-    "cholesterol": 0,
-    "sodium": 0,
-    "carbs": 31,
-    "fiber": 0,
-    "sugars": 30,
-    "protein": 0
-  },
-  "categories": ["Drinks"],
-  "portionType": "single",
-  "image": "/restaurants/chickfila/menu/drinks/iced-tea.webp",
-  "defaultVariantId": "medium",
-  "variants": [
-    {
-      "id": "small",
-      "label": "Small",
-      "portionType": "single",
-      "categories": ["Drinks"],
-      "nutrition": {
-        "calories": 90,
-        "totalFat": 0,
-        "satFat": 0,
-        "transFat": 0,
-        "cholesterol": 0,
-        "sodium": 0,
-        "carbs": 22,
-        "fiber": 0,
-        "sugars": 22,
-        "protein": 0
-      }
-    },
-    {
-      "id": "medium",
-      "label": "Medium",
-      "portionType": "single",
-      "categories": ["Drinks"],
-      "nutrition": {
-        "calories": 120,
-        "totalFat": 0,
-        "satFat": 0,
-        "transFat": 0,
-        "cholesterol": 0,
-        "sodium": 0,
-        "carbs": 31,
-        "fiber": 0,
-        "sugars": 30,
-        "protein": 0
-      }
-    },
-    {
-      "id": "large",
-      "label": "Large",
-      "portionType": "single",
-      "categories": ["Drinks"],
-      "nutrition": {
-        "calories": 170,
-        "totalFat": 0,
-        "satFat": 0,
-        "transFat": 0,
-        "cholesterol": 0,
-        "sodium": 0,
-        "carbs": 44,
-        "fiber": 0,
-        "sugars": 44,
-        "protein": 0
-      }
-    }
-  ]
-},
-{
-  "name": "Freshly Brewed Iced Tea Unsweetened",
-  "nutrition": {
-    "calories": 0,
-    "totalFat": 0,
-    "satFat": 0,
-    "transFat": 0,
-    "cholesterol": 0,
-    "sodium": 0,
-    "carbs": 0,
-    "fiber": 0,
-    "sugars": 0,
-    "protein": 0
-  },
-  "categories": ["Drinks"],
-  "portionType": "single",
-  "image": "/restaurants/chickfila/menu/drinks/iced-tea.webp",
-  "defaultVariantId": "medium",
-  "variants": [
-    {
-      "id": "small",
-      "label": "Small",
-      "portionType": "single",
-      "categories": ["Drinks"],
-      "nutrition": {
-        "calories": 0,
-        "totalFat": 0,
-        "satFat": 0,
-        "transFat": 0,
-        "cholesterol": 0,
-        "sodium": 0,
-        "carbs": 0,
-        "fiber": 0,
-        "sugars": 0,
-        "protein": 0
-      }
-    },
-    {
-      "id": "medium",
-      "label": "Medium",
-      "portionType": "single",
-      "categories": ["Drinks"],
-      "nutrition": {
-        "calories": 0,
-        "totalFat": 0,
-        "satFat": 0,
-        "transFat": 0,
-        "cholesterol": 0,
-        "sodium": 0,
-        "carbs": 0,
-        "fiber": 0,
-        "sugars": 0,
-        "protein": 0
-      }
-    },
-    {
-      "id": "large",
-      "label": "Large",
-      "portionType": "single",
-      "categories": ["Drinks"],
-      "nutrition": {
-        "calories": 0,
-        "totalFat": 0,
-        "satFat": 0,
-        "transFat": 0,
-        "cholesterol": 0,
-        "sodium": 0,
-        "carbs": 0,
-        "fiber": 0,
-        "sugars": 0,
-        "protein": 0
-      }
-    }
-  ]
-},
-{
-  "name": "Chick-fil-A Lemonade",
-  "nutrition": {
-    "calories": 260,
-    "totalFat": 0,
-    "satFat": 0,
-    "transFat": 0,
-    "cholesterol": 0,
-    "sodium": 0,
-    "carbs": 66,
-    "fiber": 0,
-    "sugars": 60,
-    "protein": 0
-  },
-  "categories": ["Drinks"],
-  "portionType": "single",
-  "image": "/restaurants/chickfila/menu/drinks/lemonade.webp",
-  "defaultVariantId": "medium",
-  "variants": [
-    {
-      "id": "small",
-      "label": "Small",
-      "portionType": "single",
-      "categories": ["Drinks"],
-      "nutrition": {
-        "calories": 190,
-        "totalFat": 0,
-        "satFat": 0,
-        "transFat": 0,
-        "cholesterol": 0,
-        "sodium": 0,
-        "carbs": 49,
-        "fiber": 0,
-        "sugars": 45,
-        "protein": 0
-      }
-    },
-    {
-      "id": "medium",
-      "label": "Medium",
-      "portionType": "single",
-      "categories": ["Drinks"],
-      "nutrition": {
-        "calories": 260,
-        "totalFat": 0,
-        "satFat": 0,
-        "transFat": 0,
-        "cholesterol": 0,
-        "sodium": 0,
-        "carbs": 66,
-        "fiber": 0,
-        "sugars": 60,
-        "protein": 0
-      }
-    },
-    {
-      "id": "large",
-      "label": "Large",
-      "portionType": "single",
-      "categories": ["Drinks"],
-      "nutrition": {
-        "calories": 380,
-        "totalFat": 0,
-        "satFat": 0,
-        "transFat": 0,
-        "cholesterol": 0,
-        "sodium": 0,
-        "carbs": 98,
-        "fiber": 1,
-        "sugars": 90,
-        "protein": 1
-      }
-    }
-  ]
-},
-{
-  "name": "Chick-fil-A Diet Lemonade",
-  "nutrition": {
-    "calories": 60,
-    "totalFat": 0,
-    "satFat": 0,
-    "transFat": 0,
-    "cholesterol": 0,
-    "sodium": 10,
-    "carbs": 15,
-    "fiber": 0,
-    "sugars": 11,
-    "protein": 0
-  },
-  "categories": ["Drinks"],
-  "portionType": "single",
-  "image": "/restaurants/chickfila/menu/drinks/lemonade.webp",
-  "defaultVariantId": "medium",
-  "variants": [
-    {
-      "id": "small",
-      "label": "Small",
-      "portionType": "single",
-      "categories": ["Drinks"],
-      "nutrition": {
-        "calories": 40,
-        "totalFat": 0,
-        "satFat": 0,
-        "transFat": 0,
-        "cholesterol": 0,
-        "sodium": 10,
-        "carbs": 12,
-        "fiber": 0,
-        "sugars": 8,
-        "protein": 0
-      }
-    },
-    {
-      "id": "medium",
-      "label": "Medium",
-      "portionType": "single",
-      "categories": ["Drinks"],
-      "nutrition": {
-        "calories": 60,
-        "totalFat": 0,
-        "satFat": 0,
-        "transFat": 0,
-        "cholesterol": 0,
-        "sodium": 10,
-        "carbs": 15,
-        "fiber": 0,
-        "sugars": 11,
-        "protein": 0
-      }
-    },
-    {
-      "id": "large",
-      "label": "Large",
-      "portionType": "single",
-      "categories": ["Drinks"],
-      "nutrition": {
-        "calories": 80,
-        "totalFat": 0,
-        "satFat": 0,
-        "transFat": 0,
-        "cholesterol": 0,
-        "sodium": 15,
-        "carbs": 23,
-        "fiber": 0,
-        "sugars": 17,
-        "protein": 0
-      }
-    }
-  ]
-},
-{
-    "name": "Sunjoy® (1/2 Sweet Tea, 1/2 Lemonade)",
-    "nutrition": {
-        "calories": 240,
-        "totalFat": 0,
-        "satFat": 0,
-        "transFat": 0,
-        "cholesterol": 0,
-        "sodium": 0,
-        "carbs": 60,
-        "fiber": 0,
-        "sugars": 57,
-        "protein": 0
-    },
-    "categories": ["Drinks"],
-    "portionType": "drink",
-    "image": "/restaurants/chickfila/menu/drinks/sunjoy.webp",
-    "defaultVariantId": "medium",
-    "variants": [
-        {
-            "id": "small",
-            "label": "Small",
-            "portionType": "drink",
+            "name": "Freshly Brewed Iced Tea Sweetened",
             "nutrition": {
-                "calories": 180,
+                "calories": 120,
                 "totalFat": 0,
                 "satFat": 0,
                 "transFat": 0,
                 "cholesterol": 0,
                 "sodium": 0,
-                "carbs": 45,
-                "fiber": 0,
-                "sugars": 43,
-                "protein": 0
-            }
-        },
-        {
-            "id": "medium",
-            "label": "Medium",
-            "portionType": "drink",
-            "nutrition": {
-                "calories": 240,
-                "totalFat": 0,
-                "satFat": 0,
-                "transFat": 0,
-                "cholesterol": 0,
-                "sodium": 0,
-                "carbs": 60,
-                "fiber": 0,
-                "sugars": 57,
-                "protein": 0
-            }
-        },
-        {
-            "id": "large",
-            "label": "Large",
-            "portionType": "drink",
-            "nutrition": {
-                "calories": 350,
-                "totalFat": 0,
-                "satFat": 0,
-                "transFat": 0,
-                "cholesterol": 0,
-                "sodium": 0,
-                "carbs": 91,
-                "fiber": 0,
-                "sugars": 85,
-                "protein": 0
-            }
-        }
-    ]
-},
-{
-    "name": "Sunjoy® (1/2 Sweet Tea, 1/2 Diet Lemonade)",
-    "nutrition": {
-        "calories": 110,
-        "totalFat": 0,
-        "satFat": 0,
-        "transFat": 0,
-        "cholesterol": 0,
-        "sodium": 5,
-        "carbs": 29,
-        "fiber": 0,
-        "sugars": 26,
-        "protein": 0
-    },
-    "categories": ["Drinks"],
-    "portionType": "drink",
-    "image": "/restaurants/chickfila/menu/drinks/sunjoy.webp",
-    "defaultVariantId": "medium",
-    "variants": [
-        {
-            "id": "small",
-            "label": "Small",
-            "portionType": "drink",
-            "nutrition": {
-                "calories": 80,
-                "totalFat": 0,
-                "satFat": 0,
-                "transFat": 0,
-                "cholesterol": 0,
-                "sodium": 5,
-                "carbs": 20,
-                "fiber": 0,
-                "sugars": 18,
-                "protein": 0
-            }
-        },
-        {
-            "id": "medium",
-            "label": "Medium",
-            "portionType": "drink",
-            "nutrition": {
-                "calories": 110,
-                "totalFat": 0,
-                "satFat": 0,
-                "transFat": 0,
-                "cholesterol": 0,
-                "sodium": 5,
-                "carbs": 29,
-                "fiber": 0,
-                "sugars": 26,
-                "protein": 0
-            }
-        },
-        {
-            "id": "large",
-            "label": "Large",
-            "portionType": "drink",
-            "nutrition": {
-                "calories": 150,
-                "totalFat": 0,
-                "satFat": 0,
-                "transFat": 0,
-                "cholesterol": 0,
-                "sodium": 10,
-                "carbs": 40,
-                "fiber": 0,
-                "sugars": 36,
-                "protein": 0
-            }
-        }
-    ]
-},
-{
-    "name": "Sunjoy® (1/2 Unsweet Tea, 1/2 Lemonade)",
-    "nutrition": {
-        "calories": 160,
-        "totalFat": 0,
-        "satFat": 0,
-        "transFat": 0,
-        "cholesterol": 0,
-        "sodium": 0,
-        "carbs": 41,
-        "fiber": 0,
-        "sugars": 38,
-        "protein": 0
-    },
-    "categories": ["Drinks"],
-    "portionType": "drink",
-    "image": "/restaurants/chickfila/menu/drinks/sunjoy.webp",
-    "defaultVariantId": "medium",
-    "variants": [
-        {
-            "id": "small",
-            "label": "Small",
-            "portionType": "drink",
-            "nutrition": {
-                "calories": 130,
-                "totalFat": 0,
-                "satFat": 0,
-                "transFat": 0,
-                "cholesterol": 0,
-                "sodium": 0,
-                "carbs": 33,
+                "carbs": 31,
                 "fiber": 0,
                 "sugars": 30,
                 "protein": 0
-            }
+            },
+            "categories": [
+                "Drinks"
+            ],
+            "portionType": "single",
+            "image": "/restaurants/chickfila/menu/drinks/iced-tea.webp",
+            "defaultVariantId": "medium",
+            "variants": [
+                {
+                    "id": "small",
+                    "label": "Small",
+                    "portionType": "single",
+                    "categories": [
+                        "Drinks"
+                    ],
+                    "nutrition": {
+                        "calories": 90,
+                        "totalFat": 0,
+                        "satFat": 0,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 0,
+                        "carbs": 22,
+                        "fiber": 0,
+                        "sugars": 22,
+                        "protein": 0
+                    }
+                },
+                {
+                    "id": "medium",
+                    "label": "Medium",
+                    "portionType": "single",
+                    "categories": [
+                        "Drinks"
+                    ],
+                    "nutrition": {
+                        "calories": 120,
+                        "totalFat": 0,
+                        "satFat": 0,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 0,
+                        "carbs": 31,
+                        "fiber": 0,
+                        "sugars": 30,
+                        "protein": 0
+                    }
+                },
+                {
+                    "id": "large",
+                    "label": "Large",
+                    "portionType": "single",
+                    "categories": [
+                        "Drinks"
+                    ],
+                    "nutrition": {
+                        "calories": 170,
+                        "totalFat": 0,
+                        "satFat": 0,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 0,
+                        "carbs": 44,
+                        "fiber": 0,
+                        "sugars": 44,
+                        "protein": 0
+                    }
+                }
+            ]
         },
         {
-            "id": "medium",
-            "label": "Medium",
-            "portionType": "drink",
+            "name": "Freshly Brewed Iced Tea Unsweetened",
             "nutrition": {
-                "calories": 160,
+                "calories": 0,
                 "totalFat": 0,
                 "satFat": 0,
                 "transFat": 0,
                 "cholesterol": 0,
                 "sodium": 0,
-                "carbs": 41,
+                "carbs": 0,
                 "fiber": 0,
-                "sugars": 38,
+                "sugars": 0,
                 "protein": 0
-            }
+            },
+            "categories": [
+                "Drinks"
+            ],
+            "portionType": "single",
+            "image": "/restaurants/chickfila/menu/drinks/iced-tea.webp",
+            "defaultVariantId": "medium",
+            "variants": [
+                {
+                    "id": "small",
+                    "label": "Small",
+                    "portionType": "single",
+                    "categories": [
+                        "Drinks"
+                    ],
+                    "nutrition": {
+                        "calories": 0,
+                        "totalFat": 0,
+                        "satFat": 0,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 0,
+                        "carbs": 0,
+                        "fiber": 0,
+                        "sugars": 0,
+                        "protein": 0
+                    }
+                },
+                {
+                    "id": "medium",
+                    "label": "Medium",
+                    "portionType": "single",
+                    "categories": [
+                        "Drinks"
+                    ],
+                    "nutrition": {
+                        "calories": 0,
+                        "totalFat": 0,
+                        "satFat": 0,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 0,
+                        "carbs": 0,
+                        "fiber": 0,
+                        "sugars": 0,
+                        "protein": 0
+                    }
+                },
+                {
+                    "id": "large",
+                    "label": "Large",
+                    "portionType": "single",
+                    "categories": [
+                        "Drinks"
+                    ],
+                    "nutrition": {
+                        "calories": 0,
+                        "totalFat": 0,
+                        "satFat": 0,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 0,
+                        "carbs": 0,
+                        "fiber": 0,
+                        "sugars": 0,
+                        "protein": 0
+                    }
+                }
+            ]
         },
         {
-            "id": "large",
-            "label": "Large",
-            "portionType": "drink",
+            "name": "Chick-fil-A Lemonade",
             "nutrition": {
                 "calories": 260,
                 "totalFat": 0,
@@ -1990,67 +1657,78 @@
                 "fiber": 0,
                 "sugars": 60,
                 "protein": 0
-            }
-        }
-    ]
-},
-{
-    "name": "Sunjoy® (1/2 Unsweet Tea, 1/2 Diet Lemonade)",
-    "nutrition": {
-        "calories": 35,
-        "totalFat": 0,
-        "satFat": 0,
-        "transFat": 0,
-        "cholesterol": 0,
-        "sodium": 5,
-        "carbs": 10,
-        "fiber": 0,
-        "sugars": 7,
-        "protein": 0
-    },
-    "categories": ["Drinks"],
-    "portionType": "drink",
-    "image": "/restaurants/chickfila/menu/drinks/sunjoy.webp",
-    "defaultVariantId": "medium",
-    "variants": [
-        {
-            "id": "small",
-            "label": "Small",
-            "portionType": "drink",
-            "nutrition": {
-                "calories": 30,
-                "totalFat": 0,
-                "satFat": 0,
-                "transFat": 0,
-                "cholesterol": 0,
-                "sodium": 5,
-                "carbs": 8,
-                "fiber": 0,
-                "sugars": 6,
-                "protein": 0
-            }
+            },
+            "categories": [
+                "Drinks"
+            ],
+            "portionType": "single",
+            "image": "/restaurants/chickfila/menu/drinks/lemonade.webp",
+            "defaultVariantId": "medium",
+            "variants": [
+                {
+                    "id": "small",
+                    "label": "Small",
+                    "portionType": "single",
+                    "categories": [
+                        "Drinks"
+                    ],
+                    "nutrition": {
+                        "calories": 190,
+                        "totalFat": 0,
+                        "satFat": 0,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 0,
+                        "carbs": 49,
+                        "fiber": 0,
+                        "sugars": 45,
+                        "protein": 0
+                    }
+                },
+                {
+                    "id": "medium",
+                    "label": "Medium",
+                    "portionType": "single",
+                    "categories": [
+                        "Drinks"
+                    ],
+                    "nutrition": {
+                        "calories": 260,
+                        "totalFat": 0,
+                        "satFat": 0,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 0,
+                        "carbs": 66,
+                        "fiber": 0,
+                        "sugars": 60,
+                        "protein": 0
+                    }
+                },
+                {
+                    "id": "large",
+                    "label": "Large",
+                    "portionType": "single",
+                    "categories": [
+                        "Drinks"
+                    ],
+                    "nutrition": {
+                        "calories": 380,
+                        "totalFat": 0,
+                        "satFat": 0,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 0,
+                        "carbs": 98,
+                        "fiber": 1,
+                        "sugars": 90,
+                        "protein": 1
+                    }
+                }
+            ]
         },
         {
-            "id": "medium",
-            "label": "Medium",
-            "portionType": "drink",
-            "nutrition": {
-                "calories": 35,
-                "totalFat": 0,
-                "satFat": 0,
-                "transFat": 0,
-                "cholesterol": 0,
-                "sodium": 5,
-                "carbs": 10,
-                "fiber": 0,
-                "sugars": 7,
-                "protein": 0
-            }
-        },
-        {
-            "id": "large",
-            "label": "Large",
-            "portionType": "drink",
+            "name": "Chick-fil-A Diet Lemonade",
             "nutrition": {
                 "calories": 60,
                 "totalFat": 0,
@@ -2062,33 +1740,374 @@
                 "fiber": 0,
                 "sugars": 11,
                 "protein": 0
-            }
-        }
-    ]
-},
-{
-    "name": "Iced Coffee",
-    "nutrition": {
-        "calories": 200,
-        "totalFat": 4,
-        "satFat": 3,
-        "transFat": 0,
-        "cholesterol": 15,
-        "sodium": 115,
-        "carbs": 34,
-        "fiber": 0,
-        "sugars": 34,
-        "protein": 7
-    },
-    "categories": ["Drinks"],
-    "portionType": "drink",
-    "image": "/restaurants/chickfila/menu/drinks/iced-coffee.webp",
-    "defaultVariantId": "original",
-    "variants": [
+            },
+            "categories": [
+                "Drinks"
+            ],
+            "portionType": "single",
+            "image": "/restaurants/chickfila/menu/drinks/lemonade.webp",
+            "defaultVariantId": "medium",
+            "variants": [
+                {
+                    "id": "small",
+                    "label": "Small",
+                    "portionType": "single",
+                    "categories": [
+                        "Drinks"
+                    ],
+                    "nutrition": {
+                        "calories": 40,
+                        "totalFat": 0,
+                        "satFat": 0,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 10,
+                        "carbs": 12,
+                        "fiber": 0,
+                        "sugars": 8,
+                        "protein": 0
+                    }
+                },
+                {
+                    "id": "medium",
+                    "label": "Medium",
+                    "portionType": "single",
+                    "categories": [
+                        "Drinks"
+                    ],
+                    "nutrition": {
+                        "calories": 60,
+                        "totalFat": 0,
+                        "satFat": 0,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 10,
+                        "carbs": 15,
+                        "fiber": 0,
+                        "sugars": 11,
+                        "protein": 0
+                    }
+                },
+                {
+                    "id": "large",
+                    "label": "Large",
+                    "portionType": "single",
+                    "categories": [
+                        "Drinks"
+                    ],
+                    "nutrition": {
+                        "calories": 80,
+                        "totalFat": 0,
+                        "satFat": 0,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 15,
+                        "carbs": 23,
+                        "fiber": 0,
+                        "sugars": 17,
+                        "protein": 0
+                    }
+                }
+            ]
+        },
         {
-            "id": "original",
-            "label": "Iced Coffee",
+            "name": "Sunjoy® (1/2 Sweet Tea, 1/2 Lemonade)",
+            "nutrition": {
+                "calories": 240,
+                "totalFat": 0,
+                "satFat": 0,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 0,
+                "carbs": 60,
+                "fiber": 0,
+                "sugars": 57,
+                "protein": 0
+            },
+            "categories": [
+                "Drinks"
+            ],
             "portionType": "drink",
+            "image": "/restaurants/chickfila/menu/drinks/sunjoy.webp",
+            "defaultVariantId": "medium",
+            "variants": [
+                {
+                    "id": "small",
+                    "label": "Small",
+                    "portionType": "drink",
+                    "nutrition": {
+                        "calories": 180,
+                        "totalFat": 0,
+                        "satFat": 0,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 0,
+                        "carbs": 45,
+                        "fiber": 0,
+                        "sugars": 43,
+                        "protein": 0
+                    }
+                },
+                {
+                    "id": "medium",
+                    "label": "Medium",
+                    "portionType": "drink",
+                    "nutrition": {
+                        "calories": 240,
+                        "totalFat": 0,
+                        "satFat": 0,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 0,
+                        "carbs": 60,
+                        "fiber": 0,
+                        "sugars": 57,
+                        "protein": 0
+                    }
+                },
+                {
+                    "id": "large",
+                    "label": "Large",
+                    "portionType": "drink",
+                    "nutrition": {
+                        "calories": 350,
+                        "totalFat": 0,
+                        "satFat": 0,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 0,
+                        "carbs": 91,
+                        "fiber": 0,
+                        "sugars": 85,
+                        "protein": 0
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Sunjoy® (1/2 Sweet Tea, 1/2 Diet Lemonade)",
+            "nutrition": {
+                "calories": 110,
+                "totalFat": 0,
+                "satFat": 0,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 5,
+                "carbs": 29,
+                "fiber": 0,
+                "sugars": 26,
+                "protein": 0
+            },
+            "categories": [
+                "Drinks"
+            ],
+            "portionType": "drink",
+            "image": "/restaurants/chickfila/menu/drinks/sunjoy.webp",
+            "defaultVariantId": "medium",
+            "variants": [
+                {
+                    "id": "small",
+                    "label": "Small",
+                    "portionType": "drink",
+                    "nutrition": {
+                        "calories": 80,
+                        "totalFat": 0,
+                        "satFat": 0,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 5,
+                        "carbs": 20,
+                        "fiber": 0,
+                        "sugars": 18,
+                        "protein": 0
+                    }
+                },
+                {
+                    "id": "medium",
+                    "label": "Medium",
+                    "portionType": "drink",
+                    "nutrition": {
+                        "calories": 110,
+                        "totalFat": 0,
+                        "satFat": 0,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 5,
+                        "carbs": 29,
+                        "fiber": 0,
+                        "sugars": 26,
+                        "protein": 0
+                    }
+                },
+                {
+                    "id": "large",
+                    "label": "Large",
+                    "portionType": "drink",
+                    "nutrition": {
+                        "calories": 150,
+                        "totalFat": 0,
+                        "satFat": 0,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 10,
+                        "carbs": 40,
+                        "fiber": 0,
+                        "sugars": 36,
+                        "protein": 0
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Sunjoy® (1/2 Unsweet Tea, 1/2 Lemonade)",
+            "nutrition": {
+                "calories": 160,
+                "totalFat": 0,
+                "satFat": 0,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 0,
+                "carbs": 41,
+                "fiber": 0,
+                "sugars": 38,
+                "protein": 0
+            },
+            "categories": [
+                "Drinks"
+            ],
+            "portionType": "drink",
+            "image": "/restaurants/chickfila/menu/drinks/sunjoy.webp",
+            "defaultVariantId": "medium",
+            "variants": [
+                {
+                    "id": "small",
+                    "label": "Small",
+                    "portionType": "drink",
+                    "nutrition": {
+                        "calories": 130,
+                        "totalFat": 0,
+                        "satFat": 0,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 0,
+                        "carbs": 33,
+                        "fiber": 0,
+                        "sugars": 30,
+                        "protein": 0
+                    }
+                },
+                {
+                    "id": "medium",
+                    "label": "Medium",
+                    "portionType": "drink",
+                    "nutrition": {
+                        "calories": 160,
+                        "totalFat": 0,
+                        "satFat": 0,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 0,
+                        "carbs": 41,
+                        "fiber": 0,
+                        "sugars": 38,
+                        "protein": 0
+                    }
+                },
+                {
+                    "id": "large",
+                    "label": "Large",
+                    "portionType": "drink",
+                    "nutrition": {
+                        "calories": 260,
+                        "totalFat": 0,
+                        "satFat": 0,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 0,
+                        "carbs": 66,
+                        "fiber": 0,
+                        "sugars": 60,
+                        "protein": 0
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Sunjoy® (1/2 Unsweet Tea, 1/2 Diet Lemonade)",
+            "nutrition": {
+                "calories": 35,
+                "totalFat": 0,
+                "satFat": 0,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 5,
+                "carbs": 10,
+                "fiber": 0,
+                "sugars": 7,
+                "protein": 0
+            },
+            "categories": [
+                "Drinks"
+            ],
+            "portionType": "drink",
+            "image": "/restaurants/chickfila/menu/drinks/sunjoy.webp",
+            "defaultVariantId": "medium",
+            "variants": [
+                {
+                    "id": "small",
+                    "label": "Small",
+                    "portionType": "drink",
+                    "nutrition": {
+                        "calories": 30,
+                        "totalFat": 0,
+                        "satFat": 0,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 5,
+                        "carbs": 8,
+                        "fiber": 0,
+                        "sugars": 6,
+                        "protein": 0
+                    }
+                },
+                {
+                    "id": "medium",
+                    "label": "Medium",
+                    "portionType": "drink",
+                    "nutrition": {
+                        "calories": 35,
+                        "totalFat": 0,
+                        "satFat": 0,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 5,
+                        "carbs": 10,
+                        "fiber": 0,
+                        "sugars": 7,
+                        "protein": 0
+                    }
+                },
+                {
+                    "id": "large",
+                    "label": "Large",
+                    "portionType": "drink",
+                    "nutrition": {
+                        "calories": 60,
+                        "totalFat": 0,
+                        "satFat": 0,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 10,
+                        "carbs": 15,
+                        "fiber": 0,
+                        "sugars": 11,
+                        "protein": 0
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Iced Coffee",
             "nutrition": {
                 "calories": 200,
                 "totalFat": 4,
@@ -2100,67 +2119,52 @@
                 "fiber": 0,
                 "sugars": 34,
                 "protein": 7
-            }
+            },
+            "categories": [
+                "Drinks"
+            ],
+            "portionType": "drink",
+            "image": "/restaurants/chickfila/menu/drinks/iced-coffee.webp",
+            "defaultVariantId": "original",
+            "variants": [
+                {
+                    "id": "original",
+                    "label": "Iced Coffee",
+                    "portionType": "drink",
+                    "nutrition": {
+                        "calories": 200,
+                        "totalFat": 4,
+                        "satFat": 3,
+                        "transFat": 0,
+                        "cholesterol": 15,
+                        "sodium": 115,
+                        "carbs": 34,
+                        "fiber": 0,
+                        "sugars": 34,
+                        "protein": 7
+                    }
+                },
+                {
+                    "id": "vanilla",
+                    "label": "Vanilla Iced Coffee",
+                    "portionType": "drink",
+                    "nutrition": {
+                        "calories": 200,
+                        "totalFat": 4,
+                        "satFat": 3,
+                        "transFat": 0,
+                        "cholesterol": 15,
+                        "sodium": 115,
+                        "carbs": 35,
+                        "fiber": 0,
+                        "sugars": 33,
+                        "protein": 7
+                    }
+                }
+            ]
         },
         {
-            "id": "vanilla",
-            "label": "Vanilla Iced Coffee",
-            "portionType": "drink",
-            "nutrition": {
-                "calories": 200,
-                "totalFat": 4,
-                "satFat": 3,
-                "transFat": 0,
-                "cholesterol": 15,
-                "sodium": 115,
-                "carbs": 35,
-                "fiber": 0,
-                "sugars": 33,
-                "protein": 7
-            }
-        }
-    ]
-},
-{
-    "name": "Coca-Cola®",
-    "nutrition": {
-        "calories": 170,
-        "totalFat": 0,
-        "satFat": 0,
-        "transFat": 0,
-        "cholesterol": 0,
-        "sodium": 45,
-        "carbs": 46,
-        "fiber": 0,
-        "sugars": 46,
-        "protein": 0
-    },
-    "categories": ["Drinks"],
-    "portionType": "drink",
-    "image": "/restaurants/chickfila/menu/drinks/coca-cola.webp",
-    "defaultVariantId": "medium",
-    "variants": [
-        {
-            "id": "small",
-            "label": "Small",
-            "portionType": "drink",
-            "nutrition": {
-                "calories": 130,
-                "totalFat": 0,
-                "satFat": 0,
-                "transFat": 0,
-                "cholesterol": 0,
-                "sodium": 35,
-                "carbs": 35,
-                "fiber": 0,
-                "sugars": 35,
-                "protein": 0
-            }
-        },
-        {
-            "id": "medium",
-            "label": "Medium",
-            "portionType": "drink",
+            "name": "Coca-Cola®",
             "nutrition": {
                 "calories": 170,
                 "totalFat": 0,
@@ -2172,210 +2176,352 @@
                 "fiber": 0,
                 "sugars": 46,
                 "protein": 0
-            }
+            },
+            "categories": [
+                "Drinks"
+            ],
+            "portionType": "drink",
+            "image": "/restaurants/chickfila/menu/drinks/coca-cola.webp",
+            "defaultVariantId": "medium",
+            "variants": [
+                {
+                    "id": "small",
+                    "label": "Small",
+                    "portionType": "drink",
+                    "nutrition": {
+                        "calories": 130,
+                        "totalFat": 0,
+                        "satFat": 0,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 35,
+                        "carbs": 35,
+                        "fiber": 0,
+                        "sugars": 35,
+                        "protein": 0
+                    }
+                },
+                {
+                    "id": "medium",
+                    "label": "Medium",
+                    "portionType": "drink",
+                    "nutrition": {
+                        "calories": 170,
+                        "totalFat": 0,
+                        "satFat": 0,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 45,
+                        "carbs": 46,
+                        "fiber": 0,
+                        "sugars": 46,
+                        "protein": 0
+                    }
+                },
+                {
+                    "id": "large",
+                    "label": "Large",
+                    "portionType": "drink",
+                    "nutrition": {
+                        "calories": 250,
+                        "totalFat": 0,
+                        "satFat": 0,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 65,
+                        "carbs": 68,
+                        "fiber": 0,
+                        "sugars": 68,
+                        "protein": 0
+                    }
+                }
+            ]
         },
         {
-            "id": "large",
-            "label": "Large",
-            "portionType": "drink",
+            "name": "DASANI® Bottled Water",
             "nutrition": {
-                "calories": 250,
+                "calories": 0,
                 "totalFat": 0,
                 "satFat": 0,
                 "transFat": 0,
                 "cholesterol": 0,
-                "sodium": 65,
-                "carbs": 68,
+                "sodium": 0,
+                "carbs": 0,
                 "fiber": 0,
-                "sugars": 68,
+                "sugars": 0,
                 "protein": 0
-            }
+            },
+            "categories": [
+                "Drinks"
+            ],
+            "portionType": "single",
+            "image": "/restaurants/chickfila/menu/drinks/dasani-water.webp"
+        },
+        {
+            "name": "Honest Kids® Apple Juice",
+            "nutrition": {
+                "calories": 35,
+                "totalFat": 0,
+                "satFat": 0,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 15,
+                "carbs": 9,
+                "fiber": 0,
+                "sugars": 8,
+                "protein": 0
+            },
+            "categories": [
+                "Drinks"
+            ],
+            "portionType": "single",
+            "image": "/restaurants/chickfila/menu/drinks/apple-juice.webp"
+        },
+        {
+            "name": "Simply Orange®",
+            "nutrition": {
+                "calories": 160,
+                "totalFat": 0,
+                "satFat": 0,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 10,
+                "carbs": 34,
+                "fiber": 0,
+                "sugars": 30,
+                "protein": 2
+            },
+            "categories": [
+                "Drinks"
+            ],
+            "portionType": "single",
+            "image": "/restaurants/chickfila/menu/drinks/orange-juice.webp"
+        },
+        {
+            "name": "1% Chocolate Milk",
+            "nutrition": {
+                "calories": 140,
+                "totalFat": 2,
+                "satFat": 1.5,
+                "transFat": 0,
+                "cholesterol": 10,
+                "sodium": 160,
+                "carbs": 23,
+                "fiber": 0,
+                "sugars": 21,
+                "protein": 7
+            },
+            "categories": [
+                "Drinks"
+            ],
+            "portionType": "single",
+            "image": "/restaurants/chickfila/menu/drinks/1-chocolate-milk.webp"
+        },
+        {
+            "name": "1% Milk",
+            "nutrition": {
+                "calories": 90,
+                "totalFat": 2,
+                "satFat": 1.5,
+                "transFat": 0,
+                "cholesterol": 10,
+                "sodium": 105,
+                "carbs": 10,
+                "fiber": 0,
+                "sugars": 10,
+                "protein": 7
+            },
+            "categories": [
+                "Drinks"
+            ],
+            "portionType": "single",
+            "image": "/restaurants/chickfila/menu/drinks/1-milk.webp"
+        },
+        {
+            "name": "Dr Pepper®",
+            "nutrition": {
+                "calories": 170,
+                "totalFat": 0,
+                "satFat": 0,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 50,
+                "carbs": 44,
+                "fiber": 0,
+                "sugars": 44,
+                "protein": 0
+            },
+            "categories": [
+                "Drinks"
+            ],
+            "portionType": "single",
+            "image": "/restaurants/chickfila/menu/drinks/dr-pepper.webp",
+            "defaultVariantId": "medium",
+            "variants": [
+                {
+                    "id": "small",
+                    "label": "Small",
+                    "portionType": "single",
+                    "categories": [
+                        "Drinks"
+                    ],
+                    "nutrition": {
+                        "calories": 130,
+                        "totalFat": 0,
+                        "satFat": 0,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 40,
+                        "carbs": 34,
+                        "fiber": 0,
+                        "sugars": 34,
+                        "protein": 0
+                    }
+                },
+                {
+                    "id": "medium",
+                    "label": "Medium",
+                    "portionType": "single",
+                    "categories": [
+                        "Drinks"
+                    ],
+                    "nutrition": {
+                        "calories": 170,
+                        "totalFat": 0,
+                        "satFat": 0,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 50,
+                        "carbs": 44,
+                        "fiber": 0,
+                        "sugars": 44,
+                        "protein": 0
+                    }
+                },
+                {
+                    "id": "large",
+                    "label": "Large",
+                    "portionType": "single",
+                    "categories": [
+                        "Drinks"
+                    ],
+                    "nutrition": {
+                        "calories": 250,
+                        "totalFat": 0,
+                        "satFat": 0,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 75,
+                        "carbs": 64,
+                        "fiber": 0,
+                        "sugars": 64,
+                        "protein": 0
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Coffee",
+            "nutrition": {
+                "calories": 0,
+                "totalFat": 0,
+                "satFat": 0,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 10,
+                "carbs": 0,
+                "fiber": 0,
+                "sugars": 0,
+                "protein": 0
+            },
+            "categories": [
+                "Drinks"
+            ],
+            "portionType": "single",
+            "image": "/restaurants/chickfila/menu/drinks/coffee.webp"
         }
-    ]
-},
-{
-  "name": "DASANI® Bottled Water",
-  "nutrition": {
-    "calories": 0,
-    "totalFat": 0,
-    "satFat": 0,
-    "transFat": 0,
-    "cholesterol": 0,
-    "sodium": 0,
-    "carbs": 0,
-    "fiber": 0,
-    "sugars": 0,
-    "protein": 0
-  },
-  "categories": ["Drinks"],
-  "portionType": "single",
-  "image": "/restaurants/chickfila/menu/drinks/dasani-water.webp"
-},
-{
-  "name": "Honest Kids® Apple Juice",
-  "nutrition": {
-    "calories": 35,
-    "totalFat": 0,
-    "satFat": 0,
-    "transFat": 0,
-    "cholesterol": 0,
-    "sodium": 15,
-    "carbs": 9,
-    "fiber": 0,
-    "sugars": 8,
-    "protein": 0
-  },
-  "categories": ["Drinks"],
-  "portionType": "single",
-  "image": "/restaurants/chickfila/menu/drinks/apple-juice.webp"
-},
-{
-  "name": "Simply Orange®",
-  "nutrition": {
-    "calories": 160,
-    "totalFat": 0,
-    "satFat": 0,
-    "transFat": 0,
-    "cholesterol": 0,
-    "sodium": 10,
-    "carbs": 34,
-    "fiber": 0,
-    "sugars": 30,
-    "protein": 2
-  },
-  "categories": ["Drinks"],
-  "portionType": "single",
-  "image": "/restaurants/chickfila/menu/drinks/orange-juice.webp"
-},
-{
-  "name": "1% Chocolate Milk",
-  "nutrition": {
-    "calories": 140,
-    "totalFat": 2,
-    "satFat": 1.5,
-    "transFat": 0,
-    "cholesterol": 10,
-    "sodium": 160,
-    "carbs": 23,
-    "fiber": 0,
-    "sugars": 21,
-    "protein": 7
-  },
-  "categories": ["Drinks"],
-  "portionType": "single",
-  "image": "/restaurants/chickfila/menu/drinks/1-chocolate-milk.webp"
-},
-{
-  "name": "1% Milk",
-  "nutrition": {
-    "calories": 90,
-    "totalFat": 2,
-    "satFat": 1.5,
-    "transFat": 0,
-    "cholesterol": 10,
-    "sodium": 105,
-    "carbs": 10,
-    "fiber": 0,
-    "sugars": 10,
-    "protein": 7
-  },
-  "categories": ["Drinks"],
-  "portionType": "single",
-  "image": "/restaurants/chickfila/menu/drinks/1-milk.webp"
-},
-{
-  "name": "Dr Pepper®",
-  "nutrition": {
-    "calories": 170,
-    "totalFat": 0,
-    "satFat": 0,
-    "transFat": 0,
-    "cholesterol": 0,
-    "sodium": 50,
-    "carbs": 44,
-    "fiber": 0,
-    "sugars": 44,
-    "protein": 0
-  },
-  "categories": ["Drinks"],
-  "portionType": "single",
-  "image": "/restaurants/chickfila/menu/drinks/dr-pepper.webp",
-  "defaultVariantId": "medium",
-  "variants": [
-    {
-      "id": "small",
-      "label": "Small",
-      "portionType": "single",
-      "categories": ["Drinks"],
-      "nutrition": {
-        "calories": 130,
-        "totalFat": 0,
-        "satFat": 0,
-        "transFat": 0,
-        "cholesterol": 0,
-        "sodium": 40,
-        "carbs": 34,
-        "fiber": 0,
-        "sugars": 34,
-        "protein": 0
-      }
-    },
-    {
-      "id": "medium",
-      "label": "Medium",
-      "portionType": "single",
-      "categories": ["Drinks"],
-      "nutrition": {
-        "calories": 170,
-        "totalFat": 0,
-        "satFat": 0,
-        "transFat": 0,
-        "cholesterol": 0,
-        "sodium": 50,
-        "carbs": 44,
-        "fiber": 0,
-        "sugars": 44,
-        "protein": 0
-      }
-    },
-    {
-      "id": "large",
-      "label": "Large",
-      "portionType": "single",
-      "categories": ["Drinks"],
-      "nutrition": {
-        "calories": 250,
-        "totalFat": 0,
-        "satFat": 0,
-        "transFat": 0,
-        "cholesterol": 0,
-        "sodium": 75,
-        "carbs": 64,
-        "fiber": 0,
-        "sugars": 64,
-        "protein": 0
-      }
-    }
-  ]
-},
-{
-  "name": "Coffee",
-  "nutrition": {
-    "calories": 0,
-    "totalFat": 0,
-    "satFat": 0,
-    "transFat": 0,
-    "cholesterol": 0,
-    "sodium": 10,
-    "carbs": 0,
-    "fiber": 0,
-    "sugars": 0,
-    "protein": 0
-  },
-  "categories": ["Drinks"],
-  "portionType": "single",
-  "image": "/restaurants/chickfila/menu/drinks/coffee.webp"
-}
+    ],
+    "ingredients": [
+        {
+            "name": "Gluten Free Bun",
+            "nutrition": {
+                "calories": 180,
+                "totalFat": 3.5,
+                "satFat": 0,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 400,
+                "carbs": 37,
+                "fiber": 2,
+                "sugars": 7,
+                "protein": 3
+            },
+            "categories": [
+                "Ingredients",
+                "Buns"
+            ],
+            "image": "/restaurants/chickfila/menu/items/ingredients/buns/gluten-free-bun.webp"
+        },
+        {
+            "name": "Buttery White Bun",
+            "nutrition": {
+                "calories": 180,
+                "totalFat": 6,
+                "satFat": 1,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 240,
+                "carbs": 29,
+                "fiber": 1,
+                "sugars": 4,
+                "protein": 5
+            },
+            "categories": [
+                "Ingredients",
+                "Buns"
+            ],
+            "image": "/restaurants/chickfila/menu/items/ingredients/buns/buttery-white-bun.webp"
+        },
+        {
+            "name": "Multigrain Brioche Bun",
+            "nutrition": {
+                "calories": 210,
+                "totalFat": 4.5,
+                "satFat": 1,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 310,
+                "carbs": 38,
+                "fiber": 3,
+                "sugars": 7,
+                "protein": 7
+            },
+            "categories": [
+                "Ingredients",
+                "Buns"
+            ],
+            "image": "/restaurants/chickfila/menu/items/ingredients/buns/multigrain-brioche-bun.webp"
+        },
+        {
+            "name": "White Bun (Unbuttered)",
+            "nutrition": {
+                "calories": 150,
+                "totalFat": 1,
+                "satFat": 0,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 240,
+                "carbs": 28,
+                "fiber": 1,
+                "sugars": 4,
+                "protein": 5
+            },
+            "categories": [
+                "Ingredients",
+                "Buns"
+            ],
+            "image": "/restaurants/chickfila/menu/items/ingredients/buns/white-bun-unbuttered.webp"
+        }
     ],
     "addons": {
         "sauces": [
