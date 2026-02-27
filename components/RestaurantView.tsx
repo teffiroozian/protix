@@ -270,6 +270,8 @@ export default function RestaurantView({
       return;
     }
 
+    window.scrollTo({ top: 220, behavior: "auto" });
+
     const nextParams = new URLSearchParams(searchParams.toString());
     nextParams.set("view", nextView);
     router.replace(`${pathname}?${nextParams.toString()}`, { scroll: false });
@@ -360,11 +362,10 @@ export default function RestaurantView({
                     <button
                       type="button"
                       onClick={() => handleCategorySelect(option.id)}
-                      className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-left text-base font-semibold transition-colors ${
-                        isActive
+                      className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-left text-base font-semibold transition-colors ${isActive
                           ? "bg-blue-600 text-white"
                           : "text-slate-700 hover:bg-slate-100"
-                      }`}
+                        }`}
                     >
                       <span className="text-lg leading-none" aria-hidden="true">
                         {icon}
