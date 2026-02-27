@@ -3,7 +3,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useRestaurantSearch } from "@/components/RestaurantSearchContext";
-import type { AddonRef, CommonChange, MenuItem, RestaurantAddons } from "@/types/menu";
+import type {
+  AddonRef,
+  CommonChange,
+  IngredientItem,
+  MenuItem,
+  RestaurantAddons,
+} from "@/types/menu";
 import ControlsRow, {
   type Filters,
   type SortOption,
@@ -39,28 +45,24 @@ export default function RestaurantView({
   restaurantName,
   restaurantLogo,
   items,
+  ingredients = [],
   addons,
   commonChanges,
+  initialViewMode = "menu",
 }: {
   restaurantId: string;
   restaurantName: string;
   restaurantLogo: string;
   items: MenuItem[];
+  ingredients?: IngredientItem[];
   addons?: RestaurantAddons;
   commonChanges?: CommonChange[];
+  initialViewMode?: ViewOption;
   autoScrollOnViewChange?: boolean;
 }) {
   const router = useRouter();
   const pathname = usePathname();
-  const [viewMode, setViewMode] = useState<ViewOption>(() => {
-    if (typeof window === "undefined") {
-      return "menu";
-    }
-
-    return new URLSearchParams(window.location.search).get("view") === "ingredients"
-      ? "ingredients"
-      : "menu";
-  });
+  const [viewMode, setViewMode] = useState<ViewOption>(initialViewMode);
   const [entireMenu, setEntireMenu] = useState(false);
   const [sort, setSort] = useState<SortOption>("highest-protein");
   const [filters, setFilters] = useState<Filters>({});
@@ -99,14 +101,46 @@ export default function RestaurantView({
       );
   }, [addons, restaurantId]);
 
+  const ingredientMenuItems = useMemo<MenuItem[]>(() => {
+    const resolveIngredientCategory = (ingredient: IngredientItem) => {
+      if (ingredient.category) {
+        return ingredient.category;
+      }
+
+      if (ingredient.categories?.length) {
+        return (
+          ingredient.categories.find(
+            (category) => category.toLowerCase() !== "ingredients"
+          ) ?? ingredient.categories[0]
+        );
+      }
+
+      return "Other";
+    };
+
+    return ingredients.map((ingredient, index) => ({
+      id:
+        ingredient.id ??
+        `${restaurantId}-ingredient-${ingredient.name}-${index}`
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-"),
+      name: ingredient.name,
+      nutrition: ingredient.nutrition,
+      image: ingredient.image,
+      categories: [resolveIngredientCategory(ingredient)],
+      portionType: "addon",
+    }));
+  }, [ingredients, restaurantId]);
+
   const allItems = useMemo(() => [...items, ...addonItems], [items, addonItems]);
+  const sourceItems = viewMode === "ingredients" ? ingredientMenuItems : allItems;
 
   const calorieBounds = useMemo(() => {
-    if (!allItems.length) {
+    if (!sourceItems.length) {
       return { min: 0, max: 0 };
     }
 
-    const calories = allItems.map((item) => item.nutrition.calories);
+    const calories = sourceItems.map((item) => item.nutrition.calories);
     const minCal = Math.min(...calories);
     const maxCal = Math.max(...calories);
 
@@ -114,7 +148,7 @@ export default function RestaurantView({
       min: Math.floor(minCal / 50) * 50,
       max: Math.ceil(maxCal / 50) * 50,
     };
-  }, [allItems]);
+  }, [sourceItems]);
 
   const searchTerms = searchQuery
     .trim()
@@ -123,7 +157,7 @@ export default function RestaurantView({
     .filter(Boolean);
 
   const filteredItems = useMemo(() => {
-    return allItems.filter((item) => {
+    return sourceItems.filter((item) => {
       if (filters.proteinMin && item.nutrition.protein < filters.proteinMin) {
         return false;
       }
@@ -152,7 +186,7 @@ export default function RestaurantView({
       const searchableText = [item.name.toLowerCase(), ...categoryVariants].join(" ");
       return searchTerms.every((term) => searchableText.includes(term));
     });
-  }, [allItems, filters, searchTerms]);
+  }, [sourceItems, filters, searchTerms]);
 
   const orderedSections = useMemo(
     () => getOrderedMenuSections(filteredItems),
@@ -303,9 +337,18 @@ export default function RestaurantView({
       >
         <aside className="sticky top-[90px] pt-8">
           <div className="max-h-[calc(100vh-122px)] overflow-y-auto pr-2">
-            <h3 className="mb-5 text-2xl font-bold text-slate-900">Categories</h3>
+            <h3 className="mb-5 text-2xl font-bold text-slate-900">
+              {viewMode === "ingredients" ? "Ingredients" : "Categories"}
+            </h3>
 
-            <nav aria-label="Menu categories" className="grid gap-3">
+            <nav
+              aria-label={
+                viewMode === "ingredients"
+                  ? "Ingredient categories"
+                  : "Menu categories"
+              }
+              className="grid gap-3"
+            >
               {categoryOptions.map((option) => {
                 const isActive = option.id === resolvedActiveCategory;
                 const icon = CATEGORY_ICONS[option.label.toLowerCase()] ?? "◻️";
