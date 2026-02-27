@@ -162,59 +162,45 @@ export default function RestaurantView({
     }
 
     const sectionElements = orderedSections
-      .map((sectionId) => document.getElementById(categorySectionId(sectionId)))
-      .filter((element): element is HTMLElement => Boolean(element));
+      .map((sectionId) => ({
+        id: sectionId,
+        element: document.getElementById(categorySectionId(sectionId)),
+      }))
+      .filter(
+        (
+          section
+        ): section is {
+          id: string;
+          element: HTMLElement;
+        } => Boolean(section.element)
+      );
 
     if (sectionElements.length === 0) {
       return;
     }
 
-    const observer = new IntersectionObserver(
-      () => {
-        const viewportHeight = window.innerHeight;
-        const candidates = sectionElements
-          .map((element) => {
-            const rect = element.getBoundingClientRect();
-            const visibleHeight = Math.max(
-              0,
-              Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0)
-            );
-            const ratio = rect.height > 0 ? visibleHeight / rect.height : 0;
+    const updateActiveCategoryOnScroll = () => {
+      const activationOffset = 160;
+      const reachedSections = sectionElements.filter(
+        (section) => section.element.getBoundingClientRect().top <= activationOffset
+      );
 
-            return {
-              id: element.id.replace("menu-section-", ""),
-              ratio,
-              topDistance: Math.abs(rect.top),
-            };
-          })
-          .filter((candidate) => candidate.ratio > 0);
+      const nextActive =
+        reachedSections[reachedSections.length - 1]?.id ?? sectionElements[0]?.id;
 
-        if (candidates.length === 0) {
-          return;
-        }
-
-        candidates.sort((a, b) => {
-          if (b.ratio !== a.ratio) {
-            return b.ratio - a.ratio;
-          }
-
-          return a.topDistance - b.topDistance;
-        });
-
-        const nextActive = candidates[0]?.id;
-        if (nextActive && nextActive !== activeCategory) {
-          setActiveCategory(nextActive);
-        }
-      },
-      {
-        threshold: [0, 0.1, 0.25, 0.5, 0.75, 1],
-        rootMargin: "-120px 0px -35% 0px",
+      if (nextActive && nextActive !== activeCategory) {
+        setActiveCategory(nextActive);
       }
-    );
+    };
 
-    sectionElements.forEach((element) => observer.observe(element));
+    updateActiveCategoryOnScroll();
+    window.addEventListener("scroll", updateActiveCategoryOnScroll, { passive: true });
+    window.addEventListener("resize", updateActiveCategoryOnScroll);
 
-    return () => observer.disconnect();
+    return () => {
+      window.removeEventListener("scroll", updateActiveCategoryOnScroll);
+      window.removeEventListener("resize", updateActiveCategoryOnScroll);
+    };
   }, [activeCategory, entireMenu, orderedSections]);
 
   const handleSortChange = (nextSort: SortOption) => {
