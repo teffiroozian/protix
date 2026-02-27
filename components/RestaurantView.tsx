@@ -16,6 +16,23 @@ import {
 import MenuSections from "./MenuSections";
 import StickyRestaurantBar from "./StickyRestaurantBar";
 
+
+const CATEGORY_ICONS: Record<string, string> = {
+  sandwiches: "🥪",
+  chicken: "🍗",
+  salads: "🥗",
+  drinks: "🥤",
+  breakfast: "🍳",
+  sides: "🍟",
+  desserts: "🍰",
+  wraps: "🌯",
+  burgers: "🍔",
+  entrees: "🍽️",
+  "bowls & plates": "🥣",
+  dressings: "🥣",
+  "dipping sauces": "🫙",
+};
+
 export default function RestaurantView({
   restaurantId,
   restaurantName,
@@ -263,42 +280,40 @@ export default function RestaurantView({
           marginTop: 16,
         }}
       >
-        <aside style={{ position: "sticky", top: 90, paddingTop: 32 }}>
-          <nav
-            aria-label="Menu categories"
-            style={{
-              display: "grid",
-              gap: 8,
-              maxHeight: "calc(100vh - 122px)",
-              overflowY: "auto",
-              paddingRight: 6,
-            }}
-          >
-            {categoryOptions.map((option) => {
-              const isActive = option.id === resolvedActiveCategory;
+        <aside className="sticky top-[90px] pt-8">
+          <div className="max-h-[calc(100vh-122px)] overflow-y-auto pr-2">
+            <h3 className="mb-5 text-2xl font-bold text-slate-900">Categories</h3>
 
-              return (
-                <button
-                  key={option.id}
-                  type="button"
-                  onClick={() => handleCategorySelect(option.id)}
-                  style={{
-                    width: "100%",
-                    textAlign: "left",
-                    padding: "8px 12px",
-                    borderRadius: 10,
-                    border: "1px solid rgba(0,0,0,0.16)",
-                    background: isActive ? "rgba(0,0,0,0.85)" : "white",
-                    color: isActive ? "white" : "rgba(0,0,0,0.85)",
-                    fontWeight: 600,
-                    cursor: "pointer",
-                  }}
-                >
-                  {option.label}
-                </button>
-              );
-            })}
-          </nav>
+            <nav aria-label="Menu categories" className="grid gap-3">
+              {categoryOptions.map((option) => {
+                const isActive = option.id === resolvedActiveCategory;
+                const icon = CATEGORY_ICONS[option.label.toLowerCase()] ?? "◻️";
+
+                return (
+                  <div key={option.id} className="relative pl-3">
+                    {isActive ? (
+                      <span className="absolute left-0 top-1/2 h-7 w-1 -translate-y-1/2 rounded-full bg-blue-600" aria-hidden="true" />
+                    ) : null}
+
+                    <button
+                      type="button"
+                      onClick={() => handleCategorySelect(option.id)}
+                      className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-left text-base font-semibold transition-colors ${
+                        isActive
+                          ? "bg-blue-600 text-white"
+                          : "text-slate-700 hover:bg-slate-100"
+                      }`}
+                    >
+                      <span className="text-lg leading-none" aria-hidden="true">
+                        {icon}
+                      </span>
+                      <span>{option.label}</span>
+                    </button>
+                  </div>
+                );
+              })}
+            </nav>
+          </div>
         </aside>
 
         <div style={{ minWidth: 0 }}>
