@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRestaurantSearch } from "@/components/RestaurantSearchContext";
 import type { AddonRef, CommonChange, MenuItem, RestaurantAddons } from "@/types/menu";
 import ControlsRow, {
@@ -155,6 +155,68 @@ export default function RestaurantView({
     section.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
+
+  useEffect(() => {
+    if (entireMenu || orderedSections.length === 0) {
+      return;
+    }
+
+    const sectionElements = orderedSections
+      .map((sectionId) => document.getElementById(categorySectionId(sectionId)))
+      .filter((element): element is HTMLElement => Boolean(element));
+
+    if (sectionElements.length === 0) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      () => {
+        const viewportHeight = window.innerHeight;
+        const candidates = sectionElements
+          .map((element) => {
+            const rect = element.getBoundingClientRect();
+            const visibleHeight = Math.max(
+              0,
+              Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0)
+            );
+            const ratio = rect.height > 0 ? visibleHeight / rect.height : 0;
+
+            return {
+              id: element.id.replace("menu-section-", ""),
+              ratio,
+              topDistance: Math.abs(rect.top),
+            };
+          })
+          .filter((candidate) => candidate.ratio > 0);
+
+        if (candidates.length === 0) {
+          return;
+        }
+
+        candidates.sort((a, b) => {
+          if (b.ratio !== a.ratio) {
+            return b.ratio - a.ratio;
+          }
+
+          return a.topDistance - b.topDistance;
+        });
+
+        const nextActive = candidates[0]?.id;
+        if (nextActive && nextActive !== activeCategory) {
+          setActiveCategory(nextActive);
+        }
+      },
+      {
+        threshold: [0, 0.1, 0.25, 0.5, 0.75, 1],
+        rootMargin: "-120px 0px -35% 0px",
+      }
+    );
+
+    sectionElements.forEach((element) => observer.observe(element));
+
+    return () => observer.disconnect();
+  }, [activeCategory, entireMenu, orderedSections]);
+
   const handleSortChange = (nextSort: SortOption) => {
     setSort(nextSort);
   };
@@ -215,7 +277,7 @@ export default function RestaurantView({
           marginTop: 16,
         }}
       >
-        <aside style={{ position: "sticky", top: 90, paddingTop: 2 }}>
+        <aside style={{ position: "sticky", top: 90, paddingTop: 32 }}>
           <nav aria-label="Menu categories" style={{ display: "grid", gap: 8 }}>
             {categoryOptions.map((option) => {
               const isActive = option.id === resolvedActiveCategory;
