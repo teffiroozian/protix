@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { useRestaurantSearch } from "@/components/RestaurantSearchContext";
 import type { AddonRef, CommonChange, MenuItem, RestaurantAddons } from "@/types/menu";
 import ControlsRow, {
@@ -49,7 +50,17 @@ export default function RestaurantView({
   commonChanges?: CommonChange[];
   autoScrollOnViewChange?: boolean;
 }) {
-  const view: ViewOption = "menu";
+  const router = useRouter();
+  const pathname = usePathname();
+  const [viewMode, setViewMode] = useState<ViewOption>(() => {
+    if (typeof window === "undefined") {
+      return "menu";
+    }
+
+    return new URLSearchParams(window.location.search).get("view") === "ingredients"
+      ? "ingredients"
+      : "menu";
+  });
   const [entireMenu, setEntireMenu] = useState(false);
   const [sort, setSort] = useState<SortOption>("highest-protein");
   const [filters, setFilters] = useState<Filters>({});
@@ -220,19 +231,29 @@ export default function RestaurantView({
     };
   }, [activeCategory, entireMenu, orderedSections]);
 
+  const handleViewChange = (nextView: ViewOption) => {
+    if (nextView === viewMode) {
+      return;
+    }
+
+    setViewMode(nextView);
+
+    const nextParams = new URLSearchParams(window.location.search);
+    nextParams.set("view", nextView);
+    router.replace(`${pathname}?${nextParams.toString()}`, { scroll: false });
+  };
+
   const handleSortChange = (nextSort: SortOption) => {
     setSort(nextSort);
   };
-
-  const noopChangeView = () => {};
 
   return (
     <div>
       <StickyRestaurantBar
         restaurantName={restaurantName}
         restaurantLogo={restaurantLogo}
-        view={view}
-        onChange={noopChangeView}
+        view={viewMode}
+        onChange={handleViewChange}
         sort={sort}
         onSortChange={handleSortChange}
         filters={filters}
@@ -251,8 +272,8 @@ export default function RestaurantView({
       />
 
       <ControlsRow
-        view={view}
-        onChange={noopChangeView}
+        view={viewMode}
+        onChange={handleViewChange}
         sort={sort}
         onSortChange={handleSortChange}
         filters={filters}

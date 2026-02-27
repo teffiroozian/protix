@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
-export type ViewOption = "menu" | "top";
+export type ViewOption = "menu" | "ingredients";
 export type SortOption = "highest-protein" | "best-ratio" | "lowest-calories";
 export type Filters = {
   proteinMin?: number;
@@ -100,8 +100,6 @@ export default function ControlsRow({
     max: number;
   };
 }) {
-  void view;
-  void onChange;
   void restaurantName;
   void restaurantLogo;
   void categoryOptions;
@@ -228,6 +226,39 @@ export default function ControlsRow({
     <>
       <div id={wrapperId} style={{ display: "grid", gap: 8 }}>
         <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: 10, minWidth: 0 }}>
+          <div
+            role="group"
+            aria-label="View"
+            style={{ display: "inline-flex", borderRadius: 999, border: "1px solid rgba(0,0,0,0.2)", padding: 2, background: "white" }}
+          >
+            {([
+              { label: "Menu", value: "menu" },
+              { label: "Ingredients", value: "ingredients" },
+            ] as const).map((option) => {
+              const isActive = view === option.value;
+
+              return (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() => onChange(option.value)}
+                  aria-pressed={isActive}
+                  style={{
+                    padding: "6px 12px",
+                    borderRadius: 999,
+                    border: "none",
+                    background: isActive ? "rgba(15,23,42,0.9)" : "transparent",
+                    color: isActive ? "white" : "rgba(0,0,0,0.75)",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {option.label}
+                </button>
+              );
+            })}
+          </div>
 
           <div ref={sortMenuRef} style={{ position: "relative", flexShrink: 0 }}>
             <button
