@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useRestaurantSearch } from "@/components/RestaurantSearchContext";
 import type {
@@ -66,6 +66,7 @@ export default function RestaurantView({
   const [entireMenu, setEntireMenu] = useState(false);
   const [sort, setSort] = useState<SortOption>("highest-protein");
   const [filters, setFilters] = useState<Filters>({});
+  const previousViewModeRef = useRef<ViewOption>(viewMode);
   const { searchOpen, searchQuery, setSearchQuery, openSearch, closeSearch } =
     useRestaurantSearch();
 
@@ -265,12 +266,17 @@ export default function RestaurantView({
     };
   }, [activeCategory, entireMenu, orderedSections]);
 
+  useEffect(() => {
+    if (previousViewModeRef.current !== viewMode) {
+      window.scrollTo({ top: 0, behavior: "auto" });
+      previousViewModeRef.current = viewMode;
+    }
+  }, [viewMode]);
+
   const handleViewChange = (nextView: ViewOption) => {
     if (nextView === viewMode) {
       return;
     }
-
-    window.scrollTo({ top: 0, behavior: "auto" });
 
     const nextParams = new URLSearchParams(searchParams.toString());
     nextParams.set("view", nextView);
