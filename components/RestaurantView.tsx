@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useRestaurantSearch } from "@/components/RestaurantSearchContext";
 import type {
   AddonRef,
@@ -48,7 +48,6 @@ export default function RestaurantView({
   ingredients = [],
   addons,
   commonChanges,
-  initialViewMode = "menu",
 }: {
   restaurantId: string;
   restaurantName: string;
@@ -57,12 +56,13 @@ export default function RestaurantView({
   ingredients?: IngredientItem[];
   addons?: RestaurantAddons;
   commonChanges?: CommonChange[];
-  initialViewMode?: ViewOption;
   autoScrollOnViewChange?: boolean;
 }) {
   const router = useRouter();
   const pathname = usePathname();
-  const [viewMode, setViewMode] = useState<ViewOption>(initialViewMode);
+  const searchParams = useSearchParams();
+  const viewMode: ViewOption =
+    searchParams.get("view") === "ingredients" ? "ingredients" : "menu";
   const [entireMenu, setEntireMenu] = useState(false);
   const [sort, setSort] = useState<SortOption>("highest-protein");
   const [filters, setFilters] = useState<Filters>({});
@@ -270,9 +270,7 @@ export default function RestaurantView({
       return;
     }
 
-    setViewMode(nextView);
-
-    const nextParams = new URLSearchParams(window.location.search);
+    const nextParams = new URLSearchParams(searchParams.toString());
     nextParams.set("view", nextView);
     router.replace(`${pathname}?${nextParams.toString()}`, { scroll: false });
   };

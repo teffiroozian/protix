@@ -11,13 +11,10 @@ import type { CommonChange, IngredientItem, MenuItem, RestaurantAddons } from "@
 
 export default async function RestaurantPage({
   params,
-  searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ view?: string }>;
 }) {
   const { id } = await params;
-  const { view } = await searchParams;
 
   const restaurant = restaurants.find((r) => r.id === id);
 
@@ -38,8 +35,6 @@ export default async function RestaurantPage({
   const addons = (menu.default.addons ?? {}) as RestaurantAddons;
   const commonChanges = (menu.default.commonChanges ?? []) as CommonChange[];
 
-  const initialViewMode: "menu" | "ingredients" =
-    view === "ingredients" ? "ingredients" : "menu";
 
   return (
     <RestaurantSearchProvider>
@@ -65,7 +60,6 @@ export default async function RestaurantPage({
               ingredients={ingredients}
               addons={addons}
               commonChanges={commonChanges}
-              initialViewMode={initialViewMode}
               autoScrollOnViewChange
             />
           </main>
