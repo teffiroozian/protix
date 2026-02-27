@@ -206,14 +206,57 @@ export default function RestaurantView({
         calorieBounds={calorieBounds}
       />
 
-      <MenuSections
-        restaurantId={restaurantId}
-        items={filteredItems}
-        sort={sort}
-        addons={addons}
-        commonChanges={commonChanges}
-        groupByCategory={!entireMenu}
-      />
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "240px minmax(0, 1fr)",
+          gap: 24,
+          alignItems: "start",
+          marginTop: 16,
+        }}
+      >
+        <aside style={{ position: "sticky", top: 90, paddingTop: 2 }}>
+          <nav aria-label="Menu categories" style={{ display: "grid", gap: 8 }}>
+            {categoryOptions.map((option) => {
+              const isActive = option.id === resolvedActiveCategory;
+
+              return (
+                <button
+                  key={option.id}
+                  type="button"
+                  onClick={() => handleCategorySelect(option.id)}
+                  style={{
+                    width: "100%",
+                    textAlign: "left",
+                    padding: "8px 12px",
+                    borderRadius: 10,
+                    border: "1px solid rgba(0,0,0,0.16)",
+                    background: isActive ? "rgba(0,0,0,0.85)" : "white",
+                    color: isActive ? "white" : "rgba(0,0,0,0.85)",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                  }}
+                >
+                  {option.label}
+                </button>
+              );
+            })}
+          </nav>
+        </aside>
+
+        <div style={{ minWidth: 0 }}>
+          <div style={{ maxWidth: 900, margin: "0 auto" }}>
+            <MenuSections
+              restaurantId={restaurantId}
+              items={filteredItems}
+              sort={sort}
+              addons={addons}
+              commonChanges={commonChanges}
+              groupByCategory={!entireMenu}
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

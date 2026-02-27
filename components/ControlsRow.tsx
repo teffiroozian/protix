@@ -104,6 +104,9 @@ export default function ControlsRow({
   void onChange;
   void restaurantName;
   void restaurantLogo;
+  void categoryOptions;
+  void activeCategory;
+  void onCategorySelect;
   void searchQuery;
   void onSearchChange;
   void onBrandClick;
@@ -113,7 +116,6 @@ export default function ControlsRow({
   const [isSortOpen, setIsSortOpen] = useState(false);
   const [draftFilters, setDraftFilters] = useState<Filters>(filters);
   const [hoveredSortOption, setHoveredSortOption] = useState<SortOption | null>(null);
-  const navScrollRef = useRef<HTMLDivElement>(null);
   const sortMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -166,12 +168,6 @@ export default function ControlsRow({
 
   const clearCaloriesFilter = () => {
     onFiltersChange({ ...filters, caloriesMax: undefined });
-  };
-
-  const scrollNav = (direction: "left" | "right") => {
-    const nav = navScrollRef.current;
-    if (!nav) return;
-    nav.scrollBy({ left: direction === "left" ? -220 : 220, behavior: "smooth" });
   };
 
   const filtersDialog = isFiltersOpen ? (
@@ -231,28 +227,7 @@ export default function ControlsRow({
   return (
     <>
       <div id={wrapperId} style={{ display: "grid", gap: 8 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0 }}>
-          <button type="button" onClick={() => scrollNav("left")} aria-label="Scroll tabs left" style={{ width: 32, height: 32, borderRadius: 999, border: "1px solid rgba(0,0,0,0.2)", background: "white", cursor: "pointer", flexShrink: 0 }}>‹</button>
-
-          <div ref={navScrollRef} style={{ display: "flex", gap: 8, overflowX: "auto", scrollbarWidth: "none", msOverflowStyle: "none", flex: 1, minWidth: 0 }}>
-            {categoryOptions.map((option) => {
-              const isActive = option.id === activeCategory;
-              return (
-                <button
-                  key={option.id}
-                  type="button"
-                  onClick={() => onCategorySelect?.(option.id)}
-                  style={{ padding: "6px 12px", borderRadius: 999, border: "1px solid rgba(0,0,0,0.2)", background: isActive ? "rgba(0,0,0,0.85)" : "white", color: isActive ? "white" : "rgba(0,0,0,0.8)", fontWeight: 600, cursor: "pointer", whiteSpace: "nowrap", flexShrink: 0 }}
-                >
-                  {option.label}
-                </button>
-              );
-            })}
-          </div>
-
-          <button type="button" onClick={() => scrollNav("right")} aria-label="Scroll tabs right" style={{ width: 32, height: 32, borderRadius: 999, border: "1px solid rgba(0,0,0,0.2)", background: "white", cursor: "pointer", flexShrink: 0 }}>›</button>
-
-          <div style={{ width: 1, height: 28, background: "rgba(0,0,0,0.18)", flexShrink: 0 }} />
+        <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: 10, minWidth: 0 }}>
 
           <div ref={sortMenuRef} style={{ position: "relative", flexShrink: 0 }}>
             <button
