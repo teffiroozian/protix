@@ -79,3 +79,12 @@ export type MenuItem = {
   ingredients?: string[];
 
 };
+
+export type IngredientItem = {
+  id?: string;
+  name: string;
+  nutrition: Nutrition;
+  image?: string;
+  category?: string;
+  categories?: string[];
+};

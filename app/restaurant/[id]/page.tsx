@@ -7,7 +7,7 @@ import ScrollToTopOnMount from "@/components/ScrollToTopOnMount";
 import { RestaurantSearchProvider } from "@/components/RestaurantSearchContext";
 import { RestaurantUiProvider } from "@/components/RestaurantUiContext";
 import CartPreviewDrawer from "@/components/CartPreviewDrawer";
-import type { CommonChange, MenuItem, RestaurantAddons } from "@/types/menu";
+import type { CommonChange, IngredientItem, MenuItem, RestaurantAddons } from "@/types/menu";
 
 export default async function RestaurantPage({
   params,
@@ -31,8 +31,10 @@ export default async function RestaurantPage({
 
   const menu = await import(`../../data/${restaurant.menuFile}`);
   const items = menu.default.items as MenuItem[];
+  const ingredients = (menu.default.ingredients ?? []) as IngredientItem[];
   const addons = (menu.default.addons ?? {}) as RestaurantAddons;
   const commonChanges = (menu.default.commonChanges ?? []) as CommonChange[];
+
 
   return (
     <RestaurantSearchProvider>
@@ -55,6 +57,7 @@ export default async function RestaurantPage({
               restaurantName={restaurant.name}
               restaurantLogo={restaurant.logo}
               items={items}
+              ingredients={ingredients}
               addons={addons}
               commonChanges={commonChanges}
               autoScrollOnViewChange
