@@ -108,6 +108,27 @@ export function sortItems(items: MenuItem[], sort: SortOption) {
   return sorted;
 }
 
+const ALWAYS_LOWEST_CALORIE_SECTIONS = new Set([
+  "sauce",
+  "sauces",
+  "dipping sauce",
+  "dipping sauces",
+  "dressing",
+  "dressings",
+  "drink",
+  "drinks",
+  "treat",
+  "treats",
+]);
+
+function getSectionSort(section: string, sort: SortOption): SortOption {
+  if (ALWAYS_LOWEST_CALORIE_SECTIONS.has(normalizeCategory(section))) {
+    return "lowest-calories";
+  }
+
+  return sort;
+}
+
 export function getOrderedMenuSections(items: MenuItem[]) {
   const sectionSet = new Set<string>();
 
@@ -222,7 +243,10 @@ export default function MenuSections({
     return acc;
   }, {});
   const sortedGrouped = Object.fromEntries(
-    Object.entries(grouped).map(([key, value]) => [key, sortItems(value, sort)])
+    Object.entries(grouped).map(([key, value]) => [
+      key,
+      sortItems(value, getSectionSort(key, sort)),
+    ])
   );
 
   const sections = getOrderedMenuSections(items);
