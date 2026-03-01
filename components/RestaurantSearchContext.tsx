@@ -46,9 +46,6 @@ export function RestaurantSearchProvider({ children }: { children: ReactNode }) 
 
   const handleSetSearchQuery = (value: string) => {
     setSearchQuery(value);
-    if (!value.trim()) {
-      setSearchOpen(false);
-    }
   };
 
   const value = useMemo(

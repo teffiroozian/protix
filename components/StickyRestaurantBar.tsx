@@ -152,18 +152,8 @@ export default function StickyRestaurantBar({
                   onChange={(event) => setSearchQuery(event.target.value)}
                   placeholder="Search menu items"
                   aria-label="Search menu items"
-                  className="h-9 w-full rounded-full border border-slate-300/80 bg-white px-3 pr-9 text-sm text-slate-900 outline-none"
+                  className="h-9 w-full rounded-full border border-slate-300/80 bg-white px-3 text-sm text-slate-900 outline-none"
                 />
-                {searchQuery ? (
-                  <button
-                    type="button"
-                    onClick={onCloseSearch}
-                    className="absolute inset-y-0 right-2 my-auto inline-flex h-6 w-6 items-center justify-center rounded-full text-sm text-slate-500 transition hover:bg-slate-100 hover:text-slate-700"
-                    aria-label="Clear search"
-                  >
-                    ✕
-                  </button>
-                ) : null}
               </div>
             </div>
 
