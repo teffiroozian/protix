@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useId, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import type { AddonOption, AddonRef, CommonChange, MacroDelta, MenuItem, RestaurantAddons } from "@/types/menu";
 import styles from "./MenuItemCard.module.css";
 import { useCart } from "@/stores/cartStore";
 import ItemDetailsPanel from "./ItemDetailsPanel";
 import VariantSelector from "./VariantSelector";
+import { toItemSlug } from "@/utils/itemRoute";
 
 function pad2(n: number) {
   return String(n).padStart(2, "0");
@@ -124,6 +126,7 @@ export default function MenuItemCard({
   initialCartCustomizations?: string[];
   onCartConfigurationChange?: (next: CartConfigurationPayload) => void;
 }) {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const id = useId();
   const variants = item.variants?.length ? item.variants : null;
@@ -437,19 +440,29 @@ export default function MenuItemCard({
         role={!isCartMode || hasAddonSections ? "button" : undefined}
         tabIndex={!isCartMode || hasAddonSections ? 0 : undefined}
         className={styles.header}
-        onClick={!isCartMode || hasAddonSections ? () => setOpen((v) => !v) : undefined}
+        onClick={
+          isCartMode
+            ? hasAddonSections
+              ? () => setOpen((v) => !v)
+              : undefined
+            : () => router.push(`/restaurant/${restaurantId}/items/${toItemSlug(item.id ?? item.name)}`, { scroll: false })
+        }
         onKeyDown={
           !isCartMode || hasAddonSections
             ? (event) => {
                 if (event.key === "Enter" || event.key === " ") {
                   event.preventDefault();
-                  setOpen((v) => !v);
+                  if (isCartMode) {
+                    setOpen((v) => !v);
+                    return;
+                  }
+                  router.push(`/restaurant/${restaurantId}/items/${toItemSlug(item.id ?? item.name)}`, { scroll: false });
                 }
               }
             : undefined
         }
-        aria-expanded={!isCartMode || hasAddonSections ? open : undefined}
-        aria-controls={!isCartMode || hasAddonSections ? `${id}-details` : undefined}
+        aria-expanded={isCartMode && hasAddonSections ? open : undefined}
+        aria-controls={isCartMode && hasAddonSections ? `${id}-details` : undefined}
       >
         <div className={styles.leftMedia}>
           {item.image ? (
@@ -635,7 +648,7 @@ export default function MenuItemCard({
         </div> : null}
       </div>
 
-      {(!isCartMode || hasAddonSections) ? (
+      {(isCartMode && hasAddonSections) ? (
         <div id={`${id}-details`} className={`${styles.details} ${open ? styles.detailsOpen : ""}`}>
           <div className={styles.detailsInner}>
             <ItemDetailsPanel
