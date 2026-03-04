@@ -504,23 +504,12 @@ export default function MenuItemCard({
         role={!isCartMode || hasAddonSections ? "button" : undefined}
         tabIndex={!isCartMode || hasAddonSections ? 0 : undefined}
         className={styles.header}
-        onClick={!isCartMode || hasAddonSections ? () => {
-          if (!isCartMode && itemHref) {
-            router.push(itemHref, { scroll: false });
-            return;
-          }
-
-          setOpen((v) => !v);
-        } : undefined}
+        onClick={!isCartMode || hasAddonSections ? () => setOpen((v) => !v) : undefined}
         onKeyDown={
           !isCartMode || hasAddonSections
             ? (event) => {
                 if (event.key === "Enter" || event.key === " ") {
                   event.preventDefault();
-                  if (!isCartMode && itemHref) {
-                    router.push(itemHref, { scroll: false });
-                    return;
-                  }
                   setOpen((v) => !v);
                 }
               }
@@ -725,7 +714,7 @@ export default function MenuItemCard({
         </div> : null}
       </div>
 
-      {(isCartMode && hasAddonSections) ? (
+      {(!isCartMode || hasAddonSections) ? (
         <div id={`${id}-details`} className={`${styles.details} ${open ? styles.detailsOpen : ""}`}>
           <div className={styles.detailsInner}>
             <ItemDetailsPanel
