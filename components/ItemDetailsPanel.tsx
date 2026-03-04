@@ -55,10 +55,6 @@ function sortByCalories(addons: AddonOption[]) {
   return [...addons].sort((a, b) => a.calories - b.calories);
 }
 
-function withNoneOption(addons: AddonOption[]) {
-  return [{ name: "None", calories: 0, protein: 0, carbs: 0, fat: 0, image: "none" }, ...addons];
-}
-
 function formatSummaryDetail(name: string, calories: number) {
   return `• ${name} (${calories >= 0 ? "+" : ""}${calories}cal)`;
 }
@@ -113,7 +109,7 @@ export default function ItemDetailsPanel({
       return {
         ref,
         title: addonSectionTitles[ref],
-        addons: ref === "sauces" ? withNoneOption(sortByCalories(list)) : sortByCalories(list),
+        addons: sortByCalories(list),
       };
     })
     .filter((section): section is { ref: AddonRef; title: string; addons: AddonOption[] } =>
