@@ -371,7 +371,7 @@ export default function ItemRouteModal({
               )
             }
             customizationTotals={customizationTotals}
-            showCustomizationDeltas
+            showCustomizationDeltas={hasActiveCustomization}
           />
         </div>
 
