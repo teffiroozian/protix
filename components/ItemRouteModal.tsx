@@ -248,13 +248,38 @@ export default function ItemRouteModal({
               <span className={styles.macroLabel}>FAT</span>
             </div>
           </div>
+
+          {variants && variants.length > 1 ? (
+            <>
+              <div className={styles.heroDivider} />
+              <div className={styles.portionWrap}>
+                <div className={styles.portionTitle}>PORTION SIZE</div>
+                <div className={styles.portionOptions}>
+                  {variants.map((variant) => {
+                    const isActive = variant.id === selectedVariantId;
+                    return (
+                      <button
+                        key={variant.id}
+                        type="button"
+                        className={`${styles.portionButton} ${isActive ? styles.portionButtonActive : ""}`}
+                        onClick={() => setSelectedVariantId(variant.id)}
+                      >
+                        {variant.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+              <div className={styles.heroDivider} />
+            </>
+          ) : null}
         </div>
 
         <div className={styles.body}>
           <ItemDetailsPanel
             item={item}
             nutrition={nutrition}
-            variants={variants}
+            variants={null}
             selectedVariantId={selectedVariantId}
             onSelectVariant={setSelectedVariantId}
             addons={addons}
