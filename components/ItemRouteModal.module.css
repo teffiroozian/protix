@@ -1,0 +1,86 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background: rgba(15, 23, 42, 0.66);
+}
+
+.modal {
+  position: relative;
+  width: min(1024px, calc(100% - 32px));
+  height: calc(100% - 32px);
+  margin: 16px auto;
+  border-radius: 16px;
+  background: #fff;
+  overflow: auto;
+  padding: 24px 24px 96px;
+}
+
+.close {
+  position: sticky;
+  top: 0;
+  margin-left: auto;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: rgba(255, 255, 255, 0.95);
+  font-size: 24px;
+}
+
+.hero {
+  display: grid;
+  gap: 12px;
+}
+
+.title {
+  font-size: 38px;
+  font-weight: 800;
+}
+
+.image {
+  width: 100%;
+  max-height: 340px;
+  object-fit: cover;
+  border-radius: 14px;
+}
+
+.macroSummary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.72);
+}
+
+.body {
+  margin-top: 18px;
+}
+
+.stickyBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 12px 16px;
+  display: flex;
+  justify-content: center;
+}
+
+.addButton {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.9);
+  color: #fff;
+  border-radius: 12px;
+  padding: 10px 24px;
+  font-size: 16px;
+  font-weight: 700;
+}
