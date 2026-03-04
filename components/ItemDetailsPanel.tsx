@@ -72,6 +72,10 @@ export default function ItemDetailsPanel({
   addons,
   selectedAddons,
   onSelectAddon,
+  sauceSelectionCounts,
+  onIncrementSauce,
+  onDecrementSauce,
+  onToggleSauce,
   commonChanges,
   selectedCommonChangeIds,
   onToggleCommonChange,
@@ -87,6 +91,10 @@ export default function ItemDetailsPanel({
   addons?: RestaurantAddons;
   selectedAddons?: Partial<Record<AddonRef, AddonOption>>;
   onSelectAddon?: (ref: AddonRef, addon: AddonOption) => void;
+  sauceSelectionCounts?: Partial<Record<string, number>>;
+  onIncrementSauce?: (addon: AddonOption) => void;
+  onDecrementSauce?: (addon: AddonOption) => void;
+  onToggleSauce?: (addon: AddonOption) => void;
   commonChanges?: CommonChange[];
   selectedCommonChangeIds?: string[];
   onToggleCommonChange?: (id: string) => void;
@@ -124,7 +132,18 @@ export default function ItemDetailsPanel({
               const sectionStateKey = `addon-${section.ref}`;
               const isSectionOpen = sectionOpenState[sectionStateKey] ?? true;
               const selectedAddon = selectedAddons?.[section.ref] ?? section.addons[0];
-              const summaryDetail = formatSummaryDetail(selectedAddon?.name ?? "None", selectedAddon?.calories ?? 0);
+              const sauceSelections =
+                section.ref === "sauces"
+                  ? section.addons.filter((addon) => addon.name !== "None" && (sauceSelectionCounts?.[addon.name] ?? 0) > 0)
+                  : [];
+              const sauceSummaryCalories = sauceSelections.reduce(
+                (sum, addon) => sum + addon.calories * (sauceSelectionCounts?.[addon.name] ?? 0),
+                0
+              );
+              const summaryDetail =
+                section.ref === "sauces"
+                  ? formatSummaryDetail(sauceSelections[0]?.name ?? "None", sauceSummaryCalories)
+                  : formatSummaryDetail(selectedAddon?.name ?? "None", selectedAddon?.calories ?? 0);
               return (
                 <div key={section.ref} className={styles.addonGroup}>
                   <div
@@ -159,16 +178,25 @@ export default function ItemDetailsPanel({
                   </div>
                   {isSectionOpen ? (
                     <ul className={styles.addonList}>
-                      {section.addons.map((addon) => (
+                      {section.addons.map((addon) => {
+                        const sauceCount = section.ref === "sauces" ? (sauceSelectionCounts?.[addon.name] ?? 0) : 0;
+                        const isSelected =
+                          section.ref === "sauces"
+                            ? sauceCount > 0
+                            : (selectedAddons?.[section.ref]?.name ?? "None") === addon.name;
+
+                        return (
                         <li key={`${section.ref}-${addon.name}`} className={styles.addonItem}>
                           <button
                             type="button"
-                            className={`${styles.addonTileButton} ${
-                              (selectedAddons?.[section.ref]?.name ?? "None") === addon.name
-                                ? styles.addonTileButtonActive
-                                : ""
-                            }`}
-                            onClick={() => onSelectAddon?.(section.ref, addon)}
+                            className={`${styles.addonTileButton} ${isSelected ? styles.addonTileButtonActive : ""}`}
+                            onClick={() => {
+                              if (section.ref === "sauces") {
+                                onToggleSauce?.(addon);
+                                return;
+                              }
+                              onSelectAddon?.(section.ref, addon);
+                            }}
                           >
                             {addon.image === "none" ? (
                               <div className={`${styles.addonImage} ${styles.addonImageNone}`}>✕</div>
@@ -184,9 +212,69 @@ export default function ItemDetailsPanel({
                               <div className={styles.addonName}>{addon.name}</div>
                               <div className={styles.addonCalories}>+{addon.calories} Cal</div>
                             </div>
+                            {section.ref === "sauces" && addon.name !== "None" ? (
+                              <div
+                                className={styles.addonCounter}
+                                onClick={(event) => event.stopPropagation()}
+                                onMouseDown={(event) => event.stopPropagation()}
+                              >
+                                {sauceCount > 0 ? (
+                                  <>
+                                    <span
+                                      role="button"
+                                      tabIndex={0}
+                                      className={styles.counterButton}
+                                      aria-label={`Remove one ${addon.name}`}
+                                      onClick={() => onDecrementSauce?.(addon)}
+                                      onKeyDown={(event) => {
+                                        if (event.key === "Enter" || event.key === " ") {
+                                          event.preventDefault();
+                                          onDecrementSauce?.(addon);
+                                        }
+                                      }}
+                                    >
+                                      -
+                                    </span>
+                                    <span className={styles.counterValue}>{sauceCount}</span>
+                                    <span
+                                      role="button"
+                                      tabIndex={0}
+                                      className={styles.counterButton}
+                                      aria-label={`Add one more ${addon.name}`}
+                                      onClick={() => onIncrementSauce?.(addon)}
+                                      onKeyDown={(event) => {
+                                        if (event.key === "Enter" || event.key === " ") {
+                                          event.preventDefault();
+                                          onIncrementSauce?.(addon);
+                                        }
+                                      }}
+                                    >
+                                      +
+                                    </span>
+                                  </>
+                                ) : (
+                                  <span
+                                    role="button"
+                                    tabIndex={0}
+                                    className={styles.counterButton}
+                                    aria-label={`Add ${addon.name}`}
+                                    onClick={() => onIncrementSauce?.(addon)}
+                                    onKeyDown={(event) => {
+                                      if (event.key === "Enter" || event.key === " ") {
+                                        event.preventDefault();
+                                        onIncrementSauce?.(addon);
+                                      }
+                                    }}
+                                  >
+                                    +
+                                  </span>
+                                )}
+                              </div>
+                            ) : null}
                           </button>
                         </li>
-                      ))}
+                        );
+                      })}
                     </ul>
                   ) : null}
                 </div>
