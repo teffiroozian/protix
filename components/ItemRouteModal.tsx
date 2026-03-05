@@ -104,7 +104,7 @@ function resolveModalIngredients(
     return {
       id: ingredientId,
       label,
-      icon: catalogEntry?.icon ?? "🥣",
+      icon: catalogEntry?.icon ?? match?.image ?? addonMatch?.image ?? "🥣",
       calories: match?.nutrition.calories ?? addonMatch?.calories,
     };
   });
