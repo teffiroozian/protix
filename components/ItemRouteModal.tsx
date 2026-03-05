@@ -49,8 +49,19 @@ function getApplicableCommonChanges(item: MenuItem, commonChanges?: CommonChange
   });
 }
 
-function resolveModalIngredients(item: MenuItem, ingredients: IngredientItem[] = []) {
+function resolveModalIngredients(
+  item: MenuItem,
+  ingredients: IngredientItem[] = [],
+  addons?: RestaurantAddons
+) {
   const ingredientLookup = ingredientsCatalog as Record<string, { label: string; icon: string }>;
+  const addonLookup = new Map<string, AddonOption>();
+
+  Object.values(addons ?? {}).forEach((addonGroup) => {
+    addonGroup?.forEach((addon) => {
+      addonLookup.set(addon.name.toLowerCase(), addon);
+    });
+  });
 
   return (item.ingredients ?? []).map((ingredientId) => {
     const catalogEntry = ingredientLookup[ingredientId];
@@ -61,12 +72,13 @@ function resolveModalIngredients(item: MenuItem, ingredients: IngredientItem[] =
 
     const label = catalogEntry?.label ?? fallbackLabel;
     const match = ingredients.find((entry) => entry.name.toLowerCase().includes(label.toLowerCase()));
+    const addonMatch = addonLookup.get(label.toLowerCase());
 
     return {
       id: ingredientId,
       label,
       icon: catalogEntry?.icon ?? "🥣",
-      calories: match?.nutrition.calories,
+      calories: match?.nutrition.calories ?? addonMatch?.calories,
     };
   });
 }
@@ -102,7 +114,10 @@ export default function ItemRouteModal({
   const [selectedCommonChangeIds, setSelectedCommonChangeIds] = useState<string[]>([]);
   const [isAddFeedbackVisible, setIsAddFeedbackVisible] = useState(false);
   const { addItem } = useCart();
-  const modalIngredients = useMemo(() => resolveModalIngredients(item, ingredients), [item, ingredients]);
+  const modalIngredients = useMemo(
+    () => resolveModalIngredients(item, ingredients, addons),
+    [item, ingredients, addons]
+  );
 
   const selectedVariant = variants?.find((variant) => variant.id === selectedVariantId);
   const baseNutrition = selectedVariant?.nutrition ?? item.nutrition;
