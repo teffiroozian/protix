@@ -37,12 +37,15 @@ function toNumber(value: unknown, fallback = 0) {
 function normalizeAddonOption(addon: RawAddonOption): AddonOption {
   const nutrition = addon.nutrition ?? {};
 
+  const totalFat = toNumber(addon.totalFat ?? addon.fat ?? nutrition.totalFat ?? nutrition.fat);
+
   return {
     name: addon.name ?? addon.id ?? "Unnamed Add-on",
     calories: toNumber(addon.calories ?? nutrition.calories),
     protein: toNumber(addon.protein ?? nutrition.protein),
     carbs: toNumber(addon.carbs ?? nutrition.carbs),
-    fat: toNumber(addon.fat ?? addon.totalFat ?? nutrition.fat ?? nutrition.totalFat),
+    fat: totalFat,
+    totalFat,
     satFat: toNumber(addon.satFat ?? nutrition.satFat),
     transFat: toNumber(addon.transFat ?? nutrition.transFat),
     cholesterol: toNumber(addon.cholesterol ?? nutrition.cholesterol),

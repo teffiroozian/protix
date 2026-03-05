@@ -36,6 +36,15 @@ function formatDelta(value: number) {
   return `${value >= 0 ? "+" : ""}${value}`;
 }
 
+
+function addonFat(addon?: AddonOption) {
+  return addon?.totalFat ?? addon?.fat ?? 0;
+}
+
+function deltaFat(change: CommonChange) {
+  return change.delta.totalFat ?? change.delta.fat ?? 0;
+}
+
 function getApplicableCommonChanges(item: MenuItem, commonChanges?: CommonChange[]) {
   if (!commonChanges || commonChanges.length === 0) return [];
   const itemCategories = new Set(
@@ -140,7 +149,7 @@ export default function ItemRouteModal({
           calories: sum.calories + (addon?.calories ?? 0),
           protein: sum.protein + (addon?.protein ?? 0),
           carbs: sum.carbs + (addon?.carbs ?? 0),
-          fat: sum.fat + (addon?.fat ?? 0),
+          fat: sum.fat + addonFat(addon),
         }),
         { calories: 0, protein: 0, carbs: 0, fat: 0 }
       ),
@@ -156,7 +165,7 @@ export default function ItemRouteModal({
             calories: sum.calories + change.delta.calories,
             protein: sum.protein + change.delta.protein,
             carbs: sum.carbs + change.delta.carbs,
-            fat: sum.fat + change.delta.fat,
+            fat: sum.fat + deltaFat(change),
           };
         },
         { calories: 0, protein: 0, carbs: 0, fat: 0 }
