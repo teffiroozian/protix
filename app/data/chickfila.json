@@ -2908,7 +2908,7 @@
             {
                 "name": "Barbeque Sauce",
                 "calories": 45,
-                "fat": 0,
+                "totalFat": 0,
                 "satFat": 0,
                 "transFat": 0,
                 "cholesterol": 0,
@@ -2922,7 +2922,7 @@
             {
                 "name": "Chick-fil-A Sauce",
                 "calories": 140,
-                "fat": 13,
+                "totalFat": 13,
                 "satFat": 2,
                 "transFat": 0,
                 "cholesterol": 10,
@@ -2936,7 +2936,7 @@
             {
                 "name": "Garden Herb Ranch Sauce",
                 "calories": 100,
-                "fat": 11,
+                "totalFat": 11,
                 "satFat": 2,
                 "transFat": 0,
                 "cholesterol": 10,
@@ -2950,7 +2950,7 @@
             {
                 "name": "Honey Mustard Sauce",
                 "calories": 50,
-                "fat": 0,
+                "totalFat": 0,
                 "satFat": 0,
                 "transFat": 0,
                 "cholesterol": 0,
@@ -2964,7 +2964,7 @@
             {
                 "name": "Polynesian Sauce",
                 "calories": 110,
-                "fat": 6,
+                "totalFat": 6,
                 "satFat": 1,
                 "transFat": 0,
                 "cholesterol": 0,
@@ -2978,7 +2978,7 @@
             {
                 "name": "Sweet & Spicy Sriracha Sauce",
                 "calories": 45,
-                "fat": 0,
+                "totalFat": 0,
                 "satFat": 0,
                 "transFat": 0,
                 "cholesterol": 0,
@@ -2992,7 +2992,7 @@
             {
                 "name": "Zesty Buffalo Sauce",
                 "calories": 25,
-                "fat": 2.5,
+                "totalFat": 2.5,
                 "satFat": 0,
                 "transFat": 0,
                 "cholesterol": 5,
@@ -3006,7 +3006,7 @@
             {
                 "name": "Honey Roasted BBQ Sauce",
                 "calories": 60,
-                "fat": 5,
+                "totalFat": 5,
                 "satFat": 1,
                 "transFat": 0,
                 "cholesterol": 5,
@@ -3022,7 +3022,7 @@
             {
                 "name": "Avocado Lime Ranch Dressing",
                 "calories": 310,
-                "fat": 32,
+                "totalFat": 32,
                 "satFat": 5,
                 "transFat": 0,
                 "cholesterol": 25,
@@ -3036,7 +3036,7 @@
             {
                 "name": "Creamy Salsa Dressing",
                 "calories": 290,
-                "fat": 31,
+                "totalFat": 31,
                 "satFat": 5,
                 "transFat": 0,
                 "cholesterol": 25,
@@ -3050,7 +3050,7 @@
             {
                 "name": "Fat-Free Honey Mustard Dressing",
                 "calories": 90,
-                "fat": 0,
+                "totalFat": 0,
                 "satFat": 0,
                 "transFat": 0,
                 "cholesterol": 0,
@@ -3064,7 +3064,7 @@
             {
                 "name": "Garden Herb Ranch Dressing",
                 "calories": 280,
-                "fat": 29,
+                "totalFat": 29,
                 "satFat": 5,
                 "transFat": 0,
                 "cholesterol": 25,
@@ -3078,7 +3078,7 @@
             {
                 "name": "Light Balsamic Vinaigrette Dressing",
                 "calories": 80,
-                "fat": 4,
+                "totalFat": 4,
                 "satFat": 0.5,
                 "transFat": 0,
                 "cholesterol": 0,
@@ -3092,7 +3092,7 @@
             {
                 "name": "Light Italian Dressing",
                 "calories": 25,
-                "fat": 1,
+                "totalFat": 1,
                 "satFat": 0,
                 "transFat": 0,
                 "cholesterol": 0,
@@ -3106,7 +3106,7 @@
             {
                 "name": "Zesty Apple Cider Vinaigrette Dressing",
                 "calories": 230,
-                "fat": 19,
+                "totalFat": 19,
                 "satFat": 3,
                 "transFat": 0,
                 "cholesterol": 0,
@@ -3169,7 +3169,7 @@
                 "calories": -120,
                 "protein": 5,
                 "carbs": -8,
-                "fat": -9
+                "totalFat": -9
             }
         }
     ]

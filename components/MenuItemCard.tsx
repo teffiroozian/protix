@@ -37,6 +37,14 @@ function normalizeCategory(category: string) {
   return category.trim().toLowerCase();
 }
 
+function addonFat(addon?: AddonOption) {
+  return addon?.totalFat ?? addon?.fat ?? 0;
+}
+
+function deltaFat(change: CommonChange) {
+  return change.delta.totalFat ?? change.delta.fat ?? 0;
+}
+
 function getApplicableCommonChanges(item: MenuItem, commonChanges?: CommonChange[]) {
   if (!commonChanges || commonChanges.length === 0) return [];
   const itemCategories = new Set(
@@ -206,7 +214,7 @@ export default function MenuItemCard({
           calories: sum.calories + (addon?.calories ?? 0),
           protein: sum.protein + (addon?.protein ?? 0),
           carbs: sum.carbs + (addon?.carbs ?? 0),
-          fat: sum.fat + (addon?.fat ?? 0),
+          fat: sum.fat + addonFat(addon),
         }),
         { calories: 0, protein: 0, carbs: 0, fat: 0 }
       ),
@@ -220,7 +228,7 @@ export default function MenuItemCard({
           calories: sum.calories + (addon?.calories ?? 0),
           protein: sum.protein + (addon?.protein ?? 0),
           carbs: sum.carbs + (addon?.carbs ?? 0),
-          totalFat: sum.totalFat + (addon?.fat ?? 0),
+          totalFat: sum.totalFat + addonFat(addon),
           satFat: sum.satFat + (addon?.satFat ?? 0),
           transFat: sum.transFat + (addon?.transFat ?? 0),
           cholesterol: sum.cholesterol + (addon?.cholesterol ?? 0),
@@ -253,7 +261,7 @@ export default function MenuItemCard({
             calories: sum.calories + change.delta.calories,
             protein: sum.protein + change.delta.protein,
             carbs: sum.carbs + change.delta.carbs,
-            fat: sum.fat + change.delta.fat,
+            fat: sum.fat + deltaFat(change),
           };
         },
         { calories: 0, protein: 0, carbs: 0, fat: 0 }
@@ -421,7 +429,7 @@ export default function MenuItemCard({
         calories: sum.calories + addon.calories,
         protein: sum.protein + addon.protein,
         carbs: sum.carbs + addon.carbs,
-        fat: sum.fat + addon.fat,
+        fat: sum.fat + addonFat(addon),
       }),
       { calories: 0, protein: 0, carbs: 0, fat: 0 }
     );

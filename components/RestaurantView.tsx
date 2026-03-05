@@ -98,7 +98,7 @@ export default function RestaurantView({
             calories: option.calories,
             protein: option.protein,
             carbs: option.carbs,
-            totalFat: option.fat,
+            totalFat: option.totalFat ?? option.fat,
             satFat: option.satFat,
             transFat: option.transFat,
             cholesterol: option.cholesterol,

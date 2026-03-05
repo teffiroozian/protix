@@ -38,6 +38,7 @@ export type AddonOption = {
   protein: number;
   carbs: number;
   fat: number;
+  totalFat?: number;
   satFat?: number;
   transFat?: number;
   cholesterol?: number;
@@ -54,6 +55,7 @@ export type MacroDelta = {
   protein: number;
   carbs: number;
   fat: number;
+  totalFat?: number;
 };
 
 export type CommonChange = {
