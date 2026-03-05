@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import ItemDetailsPanel from "@/components/ItemDetailsPanel";
 import type {
@@ -47,6 +48,10 @@ function formatMacro(value?: number) {
 
 function formatCalories(value?: number) {
   return value === undefined || Number.isNaN(value) ? "—" : String(value);
+}
+
+function isIconImage(icon: string) {
+  return icon.startsWith("/") || icon.startsWith("http://") || icon.startsWith("https://");
 }
 
 
@@ -348,7 +353,11 @@ export default function ItemRouteModal({
                 {modalIngredients.map((ingredient) => (
                   <article key={ingredient.id} className={styles.ingredientCard}>
                     <div className={styles.ingredientIcon} aria-hidden="true">
-                      {ingredient.icon}
+                      {isIconImage(ingredient.icon) ? (
+                        <Image src={ingredient.icon} alt="" width={24} height={24} />
+                      ) : (
+                        ingredient.icon
+                      )}
                     </div>
                     <div className={styles.ingredientName}>{ingredient.label}</div>
                     <div className={styles.ingredientCalories}>
