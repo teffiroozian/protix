@@ -89,12 +89,15 @@ function normalizeIngredientToken(value: string) {
 function resolveModalIngredients(
   item: MenuItem,
   ingredients: IngredientItem[] = [],
-  addons?: RestaurantAddons
+  addons?: RestaurantAddons,
+  menuItems: MenuItem[] = []
 ) {
   const ingredientLookup = ingredientsCatalog as Record<string, { label: string; icon: string }>;
   const ingredientByIdLookup = new Map<string, IngredientItem>();
   const ingredientByNameLookup = new Map<string, IngredientItem>();
   const addonLookup = new Map<string, AddonOption>();
+  const menuItemByIdLookup = new Map<string, MenuItem>();
+  const menuItemByNameLookup = new Map<string, MenuItem>();
 
   ingredients.forEach((entry) => {
     if (entry.id) {
@@ -109,6 +112,13 @@ function resolveModalIngredients(
     });
   });
 
+  menuItems.forEach((menuItem) => {
+    if (menuItem.id) {
+      menuItemByIdLookup.set(menuItem.id.toLowerCase(), menuItem);
+    }
+    menuItemByNameLookup.set(normalizeIngredientToken(menuItem.name), menuItem);
+  });
+
   return (item.ingredients ?? []).map((ingredientId) => {
     const catalogEntry = ingredientLookup[ingredientId];
     const fallbackLabel = ingredientId
@@ -120,14 +130,18 @@ function resolveModalIngredients(
       ingredientByIdLookup.get(ingredientId.toLowerCase()) ??
       ingredientByNameLookup.get(normalizeIngredientToken(ingredientId)) ??
       ingredientByNameLookup.get(normalizeIngredientToken(fallbackLabel));
+    const menuItemMatch =
+      menuItemByIdLookup.get(ingredientId.toLowerCase()) ??
+      menuItemByNameLookup.get(normalizeIngredientToken(ingredientId)) ??
+      menuItemByNameLookup.get(normalizeIngredientToken(fallbackLabel));
     const label = catalogEntry?.label ?? match?.name ?? fallbackLabel;
     const addonMatch = addonLookup.get(label.toLowerCase());
 
     return {
       id: ingredientId,
-      label,
-      icon: catalogEntry?.icon ?? match?.image ?? addonMatch?.image ?? "🥣",
-      calories: match?.nutrition.calories ?? addonMatch?.calories,
+      label: menuItemMatch?.name ?? label,
+      icon: catalogEntry?.icon ?? match?.image ?? menuItemMatch?.image ?? addonMatch?.image ?? "🥣",
+      calories: menuItemMatch?.nutrition.calories ?? match?.nutrition.calories ?? addonMatch?.calories,
     };
   });
 }
@@ -139,6 +153,7 @@ export default function ItemRouteModal({
   addons,
   commonChanges,
   ingredients,
+  menuItems,
 }: {
   restaurantId: string;
   restaurantPath: string;
@@ -146,6 +161,7 @@ export default function ItemRouteModal({
   addons?: RestaurantAddons;
   commonChanges?: CommonChange[];
   ingredients?: IngredientItem[];
+  menuItems?: MenuItem[];
 }) {
   const router = useRouter();
   const variants = item.variants?.length ? item.variants : null;
@@ -164,8 +180,8 @@ export default function ItemRouteModal({
   const [isAddFeedbackVisible, setIsAddFeedbackVisible] = useState(false);
   const { addItem } = useCart();
   const modalIngredients = useMemo(
-    () => resolveModalIngredients(item, ingredients, addons),
-    [item, ingredients, addons]
+    () => resolveModalIngredients(item, ingredients, addons, menuItems),
+    [item, ingredients, addons, menuItems]
   );
 
   const selectedVariant = variants?.find((variant) => variant.id === selectedVariantId);
