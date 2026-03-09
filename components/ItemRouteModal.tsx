@@ -92,6 +92,12 @@ function resolveModalIngredients(
   addons?: RestaurantAddons,
   menuItems: MenuItem[] = []
 ) {
+  const ingredientIds =
+    item.ingredients && item.ingredients.length > 0
+      ? item.ingredients
+      : item.portionType === "single"
+        ? [item.id ?? item.name]
+        : [];
   const ingredientLookup = ingredientsCatalog as Record<string, { label: string; icon: string }>;
   const ingredientByIdLookup = new Map<string, IngredientItem>();
   const ingredientByNameLookup = new Map<string, IngredientItem>();
@@ -119,7 +125,7 @@ function resolveModalIngredients(
     menuItemByNameLookup.set(normalizeIngredientToken(menuItem.name), menuItem);
   });
 
-  return (item.ingredients ?? []).map((ingredientId) => {
+  return ingredientIds.map((ingredientId) => {
     const catalogEntry = ingredientLookup[ingredientId];
     const fallbackLabel = ingredientId
       .split(/[-_]/)
