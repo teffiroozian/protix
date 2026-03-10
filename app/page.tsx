@@ -64,18 +64,25 @@ export default function Home() {
   }, [query]);
 
   const groupedRestaurants = useMemo(() => {
-    const sorted = [...restaurants].sort((a, b) => a.name.localeCompare(b.name));
+    const normalizeName = (name: string) => name.replace(/^the\s+/i, "");
+
+    const sorted = [...restaurants].sort((a, b) =>
+      normalizeName(a.name).localeCompare(normalizeName(b.name))
+    );
+
     const grouped = new Map<string, (typeof restaurants)[number][]>();
 
     sorted.forEach((restaurant) => {
-      const firstLetter = restaurant.name.charAt(0).toUpperCase();
+      const cleanedName = normalizeName(restaurant.name);
+      const firstLetter = cleanedName.charAt(0).toUpperCase();
+
       const existing = grouped.get(firstLetter) ?? [];
       existing.push(restaurant);
       grouped.set(firstLetter, existing);
     });
 
-    return Array.from(grouped.entries());
-  }, []);
+    return Array.from(grouped.entries()).sort(([a], [b]) => a.localeCompare(b));
+  }, [restaurants]);
 
   const isEmptyFocusedState = isFocused && !query.trim();
   const suggestions = isEmptyFocusedState
@@ -112,14 +119,11 @@ export default function Home() {
   };
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-5xl flex-col gap-16 px-4 py-14 sm:px-6">
-      <header className="flex flex-col gap-3">
-        <h1 className="text-4xl font-semibold tracking-tight text-neutral-900 sm:text-5xl">
-          High Protein Fast Food Finder
+    <main className="mx-auto flex max-w-5xl flex-col gap-12 px-4 py-24 sm:px-6">
+      <header className="mx-auto flex max-w-3xl flex-col items-center gap-6 text-center">
+        <h1 className="text-4xl font-semibold tracking-tight leading-tight text-neutral-900">
+          High-Protein Fast Food Orders
         </h1>
-        <p className="text-base text-neutral-600 sm:text-lg">
-          Pick a restaurant to see the best high-protein options.
-        </p>
       </header>
 
       <section className="flex flex-col gap-3">
@@ -159,7 +163,7 @@ export default function Home() {
               }
             }}
             placeholder="Start typing a restaurant name"
-            className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 pr-16 text-base text-neutral-900 shadow-inner outline-none transition focus:border-black/30 focus:ring-4 focus:ring-black/5"
+            className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 pr-16 text-base text-neutral-900 shadow-[0_0_12px_rgba(0,0,0,0.15)] outline-none transition focus:border-black/30 focus:ring-4 focus:ring-black/5"
           />
           <span className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-neutral-400">
             <svg
@@ -183,13 +187,13 @@ export default function Home() {
             <button
               type="button"
               onClick={handleClear}
-              className="absolute inset-y-0 right-11 flex items-center rounded-full px-1 text-neutral-400 transition hover:text-neutral-600"
+              className="cursor-pointer absolute inset-y-0 right-11 flex items-center rounded-full px-1 text-neutral-400 transition hover:text-neutral-600"
               aria-label="Clear search"
             >
               <svg
                 aria-hidden="true"
-                width="16"
-                height="16"
+                width="20"
+                height="20"
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -231,7 +235,7 @@ export default function Home() {
                             alt=""
                             width={24}
                             height={24}
-                            className="object-contain"
+                            className="object-contain rounded-md"
                           />
                         </span>
                         <span className="font-semibold text-neutral-900">
@@ -239,7 +243,7 @@ export default function Home() {
                         </span>
                         <button
                           type="button"
-                          className="ml-auto rounded-full p-1 text-neutral-400 transition hover:bg-neutral-200 hover:text-neutral-700"
+                          className="ml-auto rounded-md p-1 text-neutral-400 cursor-pointer transition hover:bg-neutral-200 hover:text-neutral-700"
                           onMouseDown={(event) => event.preventDefault()}
                           onClick={(event) => {
                             event.stopPropagation();
@@ -249,8 +253,8 @@ export default function Home() {
                         >
                           <svg
                             aria-hidden="true"
-                            width="14"
-                            height="14"
+                            width="20"
+                            height="20"
                             viewBox="0 0 24 24"
                             fill="none"
                             xmlns="http://www.w3.org/2000/svg"
@@ -267,7 +271,7 @@ export default function Home() {
                       </li>
                     ))}
 
-                    <li className="px-4 py-1 text-xs font-medium uppercase tracking-wide text-neutral-500">
+                    <li className="px-4 pt-2 text-xs font-medium uppercase tracking-wide text-neutral-500">
                       Popular Restaurant
                     </li>
                     {popularRestaurants.map((restaurant, index) => {
@@ -289,7 +293,7 @@ export default function Home() {
                               alt=""
                               width={24}
                               height={24}
-                              className="object-contain"
+                              className="object-contain rounded-md"
                             />
                           </span>
                           <span className="font-semibold text-neutral-900">
@@ -337,9 +341,6 @@ export default function Home() {
           <h2 className="text-3xl font-semibold text-neutral-900">
             Macro Friendly Restaurants
           </h2>
-          <p className="mt-2 text-sm text-neutral-500">
-            Explore the full list while using search suggestions above.
-          </p>
         </div>
         <section className="grid gap-4 sm:grid-cols-2">
           {restaurants
@@ -360,7 +361,7 @@ export default function Home() {
                       className="object-cover"
                     />
                   </div>
-                  <div className="flex items-center gap-3 border-t border-black/5 bg-white/80 px-4 py-3">
+                  <div className="flex items-center gap-3 border-t border-black/5 bg-white/80 px-4 py-3"> 
                     <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-xl">
                       <Image
                         src={restaurant.logo}
@@ -380,7 +381,7 @@ export default function Home() {
         </section>
       </section>
 
-      <section className="flex flex-col gap-4">
+      <section className="mt-32 flex flex-col gap-4">
         <div>
           <h2 className="text-3xl font-semibold text-neutral-900">All Restaurants</h2>
         </div>
@@ -391,13 +392,13 @@ export default function Home() {
               <h3 className="text-sm font-semibold uppercase tracking-wide text-neutral-500">
                 {letter}
               </h3>
-              <div className="space-y-2">
+              <div className="space-y-2 ">
                 {items.map((restaurant) => (
                   <Link
                     key={restaurant.id}
                     href={`/restaurant/${restaurant.id}`}
                     scroll
-                    className="flex w-full items-center gap-3 rounded-xl border border-black/10 bg-white px-3 py-2 shadow-sm transition hover:bg-neutral-50"
+                    className="flex w-full items-center gap-3 rounded-xl border border-black/10 bg-white px-3 py-2 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
                   >
                     <span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-lg bg-neutral-50">
                       <Image
@@ -405,7 +406,7 @@ export default function Home() {
                         alt={`${restaurant.name} logo`}
                         width={28}
                         height={28}
-                        className="object-contain"
+                        className="object-contain rounded-md"
                       />
                     </span>
                     <span className="text-sm font-semibold text-neutral-900">
