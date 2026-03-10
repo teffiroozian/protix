@@ -107,7 +107,7 @@ export default function StickyRestaurantBar({
 
   return (
     <div className="fixed left-0 right-0 top-0 z-50" data-sticky-nav="true">
-      <div className="relative z-[110] mx-2 mt-1 w-auto rounded-md border border-slate-200/70 bg-white/95 backdrop-blur">
+      <div className="relative z-[99] mx-auto flex max-w-6xl items-center mx-2 mt-1 rounded-2xl border border-slate-200/70 bg-white/95 shadow-[0_6px_16px_rgba(15,23,42,0.12)] backdrop-blur">
         <div className="mx-auto flex w-full max-w-5xl items-center gap-3 px-4 py-2 sm:px-6">
           <Link
             href="/"
@@ -120,21 +120,21 @@ export default function StickyRestaurantBar({
           <button
             type="button"
             onClick={handleBrandClick}
-            className="inline-flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-slate-300/80 bg-white"
+            className="flex items-center gap-3 cursor-pointer"
             aria-label={`Scroll to top of ${restaurantName} page`}
           >
-            <span className="relative h-7 w-7">
-              <Image src={restaurantLogo} alt={`${restaurantName} logo`} fill className="object-contain" />
+            <span className="relative h-9 w-9 shrink-0 overflow-hidden rounded-lg border border-slate-300/80 bg-white">
+              <Image
+                src={restaurantLogo}
+                alt={`${restaurantName} logo`}
+                fill
+                className="object-contain rounded-md"
+              />
             </span>
-          </button>
 
-          <button
-            type="button"
-            onClick={handleBrandClick}
-            className="min-w-0 flex-1 truncate text-left text-base font-semibold text-slate-900"
-            aria-label={`Scroll to top of ${restaurantName} page`}
-          >
-            {restaurantName}
+            <span className="min-w-0 truncate text-left text-base font-semibold text-slate-900">
+              {restaurantName}
+            </span>
           </button>
 
           <div className="ml-auto flex items-center gap-2">
@@ -180,7 +180,7 @@ export default function StickyRestaurantBar({
       </div>
 
       <div
-        className={`relative z-[100] mx-2 mt-1 w-auto rounded-md border border-slate-200/70 bg-white/95 backdrop-blur transition-all duration-300 ${
+        className={`relative z-[100] mx-auto flex w-full max-w-6xl items-center rounded-2xl border border-slate-200/70 bg-white/95 backdrop-blur transition-all duration-300 ${
           isControlsFloating
             ? "translate-y-0 opacity-100 shadow-[0_6px_16px_rgba(15,23,42,0.12)]"
             : "-translate-y-2 opacity-0 pointer-events-none shadow-none"
