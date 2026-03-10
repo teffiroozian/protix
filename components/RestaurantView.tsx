@@ -234,10 +234,6 @@ export default function RestaurantView({
 
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "auto" });
-  }, [viewMode]);
-
-  useEffect(() => {
     if (entireMenu || orderedSections.length === 0) {
       return;
     }
@@ -291,7 +287,7 @@ export default function RestaurantView({
 
     const nextParams = new URLSearchParams(searchParams.toString());
     nextParams.set("view", nextView);
-    router.replace(`${pathname}?${nextParams.toString()}`, { scroll: false });
+    router.replace(`${pathname}?${nextParams.toString()}`, { scroll: true });
   };
 
   const handleSortChange = (nextSort: SortOption) => {
