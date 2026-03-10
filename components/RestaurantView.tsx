@@ -306,6 +306,7 @@ export default function RestaurantView({
       return;
     }
 
+    window.scrollTo({ top: 0, behavior: "auto" });
     shouldScrollToContentRef.current = true;
 
     const nextParams = new URLSearchParams(searchParams.toString());
