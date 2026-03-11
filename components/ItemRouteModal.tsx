@@ -354,10 +354,10 @@ export default function ItemRouteModal({
           ×
         </button>
 
-        <div className="grid justify-items-center gap-4">
-          <h1 className="text-center text-[38px] font-extrabold">{item.name}</h1>
+        <div className="grid justify-items-center gap-8">
+          <h1 className="text-center text-[32px] font-extrabold">{item.name}</h1>
           {selectedItemImage ? (
-            <img className="max-h-[300px] w-[min(560px,100%)] rounded-[14px] object-contain" src={selectedItemImage} alt={item.name} />
+            <img className="max-h-[300px] w-[300px] bg-[#efefef] shadow-[0_0_5px_rgba(0,0,0,0.25)] rounded-[14px] object-contain" src={selectedItemImage} alt={item.name} />
           ) : null}
           <div className="flex flex-wrap justify-center gap-14">
             <div className="flex flex-col items-center">
@@ -426,9 +426,9 @@ export default function ItemRouteModal({
           ) : null}
         </div>
 
-        <div className="mt-[18px] grid gap-3.5">
+        <div className="mt-[18px] grid gap-3">
           {modalIngredients.length > 0 ? (
-            <section className="rounded-[14px] border border-black/12 bg-white p-3.5">
+            <section className="rounded-[14px] border border-black/12 bg-[#e0e0e0] p-3.5">
               <h3 className="mb-3 text-lg font-bold">Ingredients</h3>
               <div className="grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] gap-2.5">
                 {modalIngredients.map((ingredient) => (
