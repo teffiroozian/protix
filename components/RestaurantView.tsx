@@ -7,14 +7,16 @@ import {
   Beef,
   CakeSlice,
   Circle,
-  Coffee,
-  Croissant,
+  EggFried,
+  Sandwich,
   Drumstick,
+  SquareUser,
+  LeafyGreen,
   GlassWater,
-  Leaf,
+  Salad,
   Soup,
   Utensils,
-  WrapText,
+  Shell,
 } from "lucide-react";
 import { useRestaurantSearch } from "@/components/RestaurantSearchContext";
 import type {
@@ -39,14 +41,15 @@ import StickyRestaurantBar from "./StickyRestaurantBar";
 
 
 const CATEGORY_ICONS: Record<string, LucideIcon> = {
-  sandwiches: Croissant,
+  sandwiches: Sandwich,
   chicken: Drumstick,
-  salads: Leaf,
+  salads: Salad,
   drinks: GlassWater,
-  breakfast: Coffee,
-  sides: Utensils,
+  breakfast: EggFried,
+  kids:SquareUser,
+  sides: LeafyGreen,
   desserts: CakeSlice,
-  wraps: WrapText,
+  wraps: Shell,
   burgers: Beef,
   entrees: Utensils,
   "bowls & plates": Soup,
@@ -359,12 +362,12 @@ export default function RestaurantView({
                     <button
                       type="button"
                       onClick={() => handleCategorySelect(option.id)}
-                      className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-left text-base font-semibold transition-colors duration-50 ease-in ${isActive
+                      className={`inline-flex items-center gap-3 rounded-full px-4 py-2 text-left text-base font-semibold transition-colors duration-50 ease-in ${isActive
                           ? "shadow-[0px_0_8px_rgba(0,0,0,0.25)] bg-white text-black"
                           : "text-slate-700 hover:bg-slate-200"
                         }`}
                     >
-                      <Icon className="h-4 w-4" aria-hidden="true" />
+                      <Icon className="h-4 w-4" strokeWidth={2.5} aria-hidden="true" />
                       <span>{option.label}</span>
                     </button>
                   </div>

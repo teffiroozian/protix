@@ -11,7 +11,7 @@ export type Filters = {
   includeSidesDrinks?: boolean;
   includeLargeShareables?: boolean;
 };
-import { SlidersHorizontal } from "lucide-react";
+import { SlidersHorizontal, ChevronDown } from "lucide-react";
 
 const PROTEIN_OPTIONS = [20, 30, 40, 50];
 
@@ -230,9 +230,10 @@ export default function ControlsRow({
               onClick={() => setIsSortOpen((prev) => !prev)}
               aria-haspopup="menu"
               aria-expanded={isSortOpen}
-              className="cursor-pointer whitespace-nowrap rounded-full border border-black/20 bg-white px-[14px] py-[6px] font-semibold text-black/85"
+              className="cursor-pointer inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-black/20 bg-white px-[14px] py-[6px] font-semibold text-black/85"
             >
-              {sortLabel} ▾
+              {sortLabel}
+              <ChevronDown className="h-4 w-4" strokeWidth={2.5} />
             </button>
 
             {isSortOpen ? (

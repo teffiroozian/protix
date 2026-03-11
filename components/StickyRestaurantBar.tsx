@@ -148,7 +148,6 @@ export default function StickyRestaurantBar({
                 <Search className="h-4 w-4" strokeWidth={2.5}/>
               </button>
             )}
-
             <CartIconDropdown
               buttonClassName="inline-flex h-9 min-w-9 shrink-0 items-center justify-center rounded-full border border-slate-300/80 bg-white px-2.5 text-base text-slate-800 transition hover:bg-slate-50"
               countFormat="compact"
