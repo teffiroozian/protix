@@ -4,19 +4,23 @@ import { useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { LucideIcon } from "lucide-react";
 import {
+  Apple,
   Beef,
   CakeSlice,
   Circle,
+  Cookie,
   EggFried,
-  Sandwich,
   Drumstick,
-  SquareUser,
-  LeafyGreen,
+  Fish,
   GlassWater,
+  LeafyGreen,
+  Sandwich,
   Salad,
-  Soup,
-  Utensils,
   Shell,
+  Soup,
+  SquareUser,
+  Utensils,
+  Wheat,
 } from "lucide-react";
 import { useRestaurantSearch } from "@/components/RestaurantSearchContext";
 import type {
@@ -46,7 +50,7 @@ const CATEGORY_ICONS: Record<string, LucideIcon> = {
   salads: Salad,
   drinks: GlassWater,
   breakfast: EggFried,
-  kids:SquareUser,
+  kids: SquareUser,
   sides: LeafyGreen,
   desserts: CakeSlice,
   wraps: Shell,
@@ -55,7 +59,43 @@ const CATEGORY_ICONS: Record<string, LucideIcon> = {
   "bowls & plates": Soup,
   dressings: Soup,
   "dipping sauces": Soup,
+  proteins: Drumstick,
+  buns: Wheat,
+  "sandwich toppings": Sandwich,
+  "salad toppings": Salad,
+  "wrap toppings": Shell,
+  "soup toppings": Soup,
+  "salad extras": LeafyGreen,
+  "salad condiments": Salad,
+  "parfait toppings": Apple,
+  "treat toppings": Cookie,
+  seafood: Fish,
 };
+
+function getCategoryIcon(categoryLabel: string) {
+  const normalizedCategory = categoryLabel.toLowerCase();
+  const directMatch = CATEGORY_ICONS[normalizedCategory];
+
+  if (directMatch) {
+    return directMatch;
+  }
+
+  if (normalizedCategory.includes("salad")) return Salad;
+  if (normalizedCategory.includes("sandwich")) return Sandwich;
+  if (normalizedCategory.includes("wrap")) return Shell;
+  if (normalizedCategory.includes("soup")) return Soup;
+  if (normalizedCategory.includes("sauce") || normalizedCategory.includes("dressing")) {
+    return Soup;
+  }
+  if (normalizedCategory.includes("protein") || normalizedCategory.includes("chicken")) {
+    return Drumstick;
+  }
+  if (normalizedCategory.includes("breakfast") || normalizedCategory.includes("egg")) {
+    return EggFried;
+  }
+
+  return Circle;
+}
 
 export default function RestaurantView({
   restaurantId,
@@ -351,7 +391,7 @@ export default function RestaurantView({
             >
               {categoryOptions.map((option) => {
                 const isActive = option.id === resolvedActiveCategory;
-                const Icon = CATEGORY_ICONS[option.label.toLowerCase()] ?? Circle;
+                const Icon = getCategoryIcon(option.label);
 
                 return (
                   <div key={option.id} className="relative pl-3">
