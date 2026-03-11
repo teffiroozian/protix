@@ -10,11 +10,14 @@ import {
   EggFried,
   Sandwich,
   Drumstick,
+  IceCreamCone,
   SquareUser,
   LeafyGreen,
   GlassWater,
   Salad,
+  Droplet,
   Soup,
+  ToggleLeft,
   Utensils,
   Shell,
 } from "lucide-react";
@@ -43,6 +46,7 @@ import StickyRestaurantBar from "./StickyRestaurantBar";
 const CATEGORY_ICONS: Record<string, LucideIcon> = {
   sandwiches: Sandwich,
   chicken: Drumstick,
+  condiments: Utensils,
   salads: Salad,
   drinks: GlassWater,
   breakfast: EggFried,
@@ -53,8 +57,9 @@ const CATEGORY_ICONS: Record<string, LucideIcon> = {
   burgers: Beef,
   entrees: Utensils,
   "bowls & plates": Soup,
-  dressings: Soup,
-  "dipping sauces": Soup,
+  dressings: Droplet,
+  "dipping sauces": ToggleLeft,
+  treats: IceCreamCone,
 };
 
 export default function RestaurantView({
