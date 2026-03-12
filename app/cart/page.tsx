@@ -19,7 +19,7 @@ import starbucksMenu from "@/app/data/starbucks.json";
 import subwayMenu from "@/app/data/subway.json";
 import { useCart } from "@/stores/cartStore";
 import { normalizeAddons } from "@/lib/addons";
-import styles from "@/components/ItemDetails.module.css";
+
 
 const menuLookupByRestaurant: Record<string, MenuItem[]> = {
   chickfila: chickfilaMenu.items,
@@ -305,62 +305,62 @@ export default function CartPage() {
         <div className="mt-6">
           <h2 className="text-xl font-semibold text-neutral-900">Nutrition Summary</h2>
 
-          <section className={`${styles.labelCard} mt-4`}>
-            <div className={styles.amountPerServing}>Amount per serving</div>
+          <section className={`rounded-[18px] border border-[rgba(0,0,0,0.15)] bg-white p-[18px] mt-4`}>
+            <div className="text-xs font-medium text-[rgba(0,0,0,0.55)]">Amount per serving</div>
 
-            <div className={styles.caloriesRow}>
-              <div className={styles.caloriesText}>Calories</div>
-              <div className={styles.caloriesValue}>{nutritionTotals.calories}</div>
+            <div className="mt-1 flex items-end justify-between">
+              <div className="text-2xl font-bold">Calories</div>
+              <div className="text-2xl font-bold">{nutritionTotals.calories}</div>
             </div>
 
-            <div className={styles.thickRule} />
+            <div className="my-[12px] mb-2 h-[5px] rounded-[999px] bg-[rgba(0,0,0,0.75)]" />
 
-            <div className={styles.row}>
-              <div className={styles.rowTitle}>Total Fat</div>
-              <div className={styles.rowValue}>{formatValue(nutritionTotals.totalFat, "g")}</div>
+            <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px]">
+              <div className="text-[18px] font-semibold">Total Fat</div>
+              <div className="text-[18px] font-semibold">{formatValue(nutritionTotals.totalFat, "g")}</div>
             </div>
 
-            <div className={styles.subRow}>
-              <div className={styles.subTitle}>Sat Fat</div>
-              <div className={styles.subValue}>{formatValue(nutritionTotals.satFat, "g")}</div>
+            <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px] pl-5">
+              <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">Sat Fat</div>
+              <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">{formatValue(nutritionTotals.satFat, "g")}</div>
             </div>
 
-            <div className={styles.subRow}>
-              <div className={styles.subTitle}>Trans Fat</div>
-              <div className={styles.subValue}>{formatValue(nutritionTotals.transFat, "g")}</div>
+            <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px] pl-5">
+              <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">Trans Fat</div>
+              <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">{formatValue(nutritionTotals.transFat, "g")}</div>
             </div>
 
-            <div className={styles.row}>
-              <div className={styles.rowTitle}>Cholesterol</div>
-              <div className={styles.rowValue}>{formatValue(nutritionTotals.cholesterol, "mg")}</div>
+            <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px]">
+              <div className="text-[18px] font-semibold">Cholesterol</div>
+              <div className="text-[18px] font-semibold">{formatValue(nutritionTotals.cholesterol, "mg")}</div>
             </div>
 
-            <div className={styles.row}>
-              <div className={styles.rowTitle}>Sodium</div>
-              <div className={styles.rowValue}>{formatValue(nutritionTotals.sodium, "mg")}</div>
+            <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px]">
+              <div className="text-[18px] font-semibold">Sodium</div>
+              <div className="text-[18px] font-semibold">{formatValue(nutritionTotals.sodium, "mg")}</div>
             </div>
 
-            <div className={styles.row}>
-              <div className={styles.rowTitle}>Carbohydrates</div>
-              <div className={styles.rowValue}>{formatValue(nutritionTotals.carbs, "g")}</div>
+            <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px]">
+              <div className="text-[18px] font-semibold">Carbohydrates</div>
+              <div className="text-[18px] font-semibold">{formatValue(nutritionTotals.carbs, "g")}</div>
             </div>
 
-            <div className={styles.subRow}>
-              <div className={styles.subTitle}>Fiber</div>
-              <div className={styles.subValue}>{formatValue(nutritionTotals.fiber, "g")}</div>
+            <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px] pl-5">
+              <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">Fiber</div>
+              <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">{formatValue(nutritionTotals.fiber, "g")}</div>
             </div>
 
-            <div className={styles.subRow}>
-              <div className={styles.subTitle}>Sugars</div>
-              <div className={styles.subValue}>{formatValue(nutritionTotals.sugars, "g")}</div>
+            <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px] pl-5">
+              <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">Sugars</div>
+              <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">{formatValue(nutritionTotals.sugars, "g")}</div>
             </div>
 
-            <div className={styles.row}>
-              <div className={styles.rowTitle}>Protein</div>
-              <div className={styles.rowValue}>{formatValue(nutritionTotals.protein, "g")}</div>
+            <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px]">
+              <div className="text-[18px] font-semibold">Protein</div>
+              <div className="text-[18px] font-semibold">{formatValue(nutritionTotals.protein, "g")}</div>
             </div>
 
-            <div className={styles.footerText}>
+            <div className="mt-3 text-xs font-medium leading-[1.05] text-[rgba(0,0,0,0.55)]">
               Aggregated nutrition totals for all items currently in your cart.
             </div>
           </section>
