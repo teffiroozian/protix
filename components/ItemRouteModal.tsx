@@ -390,7 +390,7 @@ export default function ItemRouteModal({
           />
         </div>
 
-        <div className="fixed right-0 bottom-0 left-0 flex justify-center border-t border-black/10 bg-white/95 px-4 py-3">
+        <div className="sticky bottom-0 mt-6 -mx-6 flex justify-center border-t border-black/10 bg-white/95 px-4 py-3">
           <button
             type="button"
             className="rounded-xl border border-black/20 bg-black/90 px-6 py-2.5 text-base font-bold text-white"
