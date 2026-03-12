@@ -385,7 +385,7 @@ export default function ItemRouteModal({
             }
             customizationTotals={customizationTotals}
             showCustomizationDeltas={hasActiveCustomization}
-            showVariantsInDetails={false}
+            showVariantsInDetails={true}
           />
         </div>
 
