@@ -114,6 +114,10 @@ function isIconImage(icon: string) {
   return icon.startsWith("/") || icon.startsWith("http://") || icon.startsWith("https://");
 }
 
+export function getVariantPortionLabel(variant: ItemVariant) {
+  return variant.label;
+}
+
 export default function ItemDetailsPanel({
   item,
   nutrition,
@@ -564,7 +568,7 @@ export default function ItemDetailsPanel({
                       className={`w-full cursor-inherit rounded-lg border-2 border-[rgba(0,0,0,0.6)] bg-transparent px-3 py-1.5 text-center text-[18px] font-bold text-[rgba(0,0,0,0.6)] ${isActive ? "bg-black text-white" : ""}`}
                       onClick={() => onSelectVariant?.(variant.id)}
                     >
-                      {variant.label}
+                      {getVariantPortionLabel(variant)}
                     </button>
                   );
                 })}

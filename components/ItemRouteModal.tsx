@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import ItemDetailsPanel from "@/components/ItemDetailsPanel";
+import ItemDetailsPanel, { getVariantPortionLabel } from "@/components/ItemDetailsPanel";
 import type {
   AddonOption,
   AddonRef,
@@ -333,7 +333,7 @@ export default function ItemRouteModal({
                         }`}
                         onClick={() => setSelectedVariantId(variant.id)}
                       >
-                        {variant.label}
+                        {getVariantPortionLabel(variant)}
                       </button>
                     );
                   })}
