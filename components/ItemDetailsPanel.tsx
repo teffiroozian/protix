@@ -1,7 +1,6 @@
 import { useState } from "react";
 import Image from "next/image";
 import ingredientsCatalog from "@/data/ingredientsCatalog.json";
-import styles from "./ItemDetails.module.css";
 import type {
   AddonOption,
   AddonRef,
@@ -12,6 +11,7 @@ import type {
   Nutrition,
   RestaurantAddons,
 } from "@/types/menu";
+
 
 function format(n?: number, suffix = "") {
   return n === undefined || n === null || Number.isNaN(n) ? `—${suffix}` : `${n}${suffix}`;
@@ -127,10 +127,10 @@ export default function ItemDetailsPanel({
   const ingredients = resolveIngredients(item.ingredients);
 
   return (
-    <div className={styles.wrapper}>
+    <div className="grid grid-cols-2 gap-3 rounded-[18px] bg-[#e0e0e0] px-3 py-2">
       {availableAddonSections.length > 0 ? (
-        <section className={styles.addonsCard}>
-          <div className={styles.addonsContent}>
+        <section className="col-span-2 rounded-[18px] border border-[rgba(0,0,0,0.15)] bg-white px-[18px] py-[14px]">
+          <div className="grid gap-[14px]">
             {availableAddonSections.map((section) => {
               const sectionStateKey = `addon-${section.ref}`;
               const isSectionOpen = sectionOpenState[sectionStateKey] ?? true;
@@ -148,9 +148,9 @@ export default function ItemDetailsPanel({
                   ? formatSummaryDetail(sauceSelections[0]?.name ?? "None", sauceSummaryCalories)
                   : formatSummaryDetail(selectedAddon?.name ?? "None", selectedAddon?.calories ?? 0);
               return (
-                <div key={section.ref} className={styles.addonGroup}>
+                <div key={section.ref} className="min-w-0">
                   <div
-                    className={styles.addonGroupHeader}
+                    className="flex min-h-[52px] w-full cursor-pointer items-center justify-between gap-[10px] rounded-[10px] border-0 bg-transparent p-3 text-left"
                     role="button"
                     tabIndex={0}
                     onClick={() =>
@@ -169,18 +169,18 @@ export default function ItemDetailsPanel({
                       }
                     }}
                   >
-                    <h3 className={styles.addonGroupTitle}>
+                    <h3 className="m-0 text-2xl font-bold">
                       {section.title}
-                      {!isSectionOpen ? <span className={styles.addonSummaryDetail}> {summaryDetail}</span> : null}
+                      {!isSectionOpen ? <span className="text-[18px] font-semibold text-[rgba(0,0,0,0.5)]"> {summaryDetail}</span> : null}
                     </h3>
-                    <div className={styles.addonHeaderControls}>
-                      <span className={styles.chevronButton} aria-hidden="true">
+                    <div className="inline-flex items-center gap-2">
+                      <span className="inline-flex h-7 w-7 cursor-inherit items-center justify-center rounded-md border border-[rgba(0,0,0,0.4)] bg-white text-base leading-none" aria-hidden="true">
                         {isSectionOpen ? "˄" : "˅"}
                       </span>
                     </div>
                   </div>
                   {isSectionOpen ? (
-                    <ul className={styles.addonList}>
+                    <ul className="mt-2 grid list-none grid-cols-2 items-stretch gap-[10px] pl-0">
                       {section.addons.map((addon) => {
                         const sauceCount = section.ref === "sauces" ? (sauceSelectionCounts?.[addon.name] ?? 0) : 0;
                         const isSelected =
@@ -189,10 +189,10 @@ export default function ItemDetailsPanel({
                             : selectedAddons?.[section.ref]?.name === addon.name;
 
                         return (
-                        <li key={`${section.ref}-${addon.name}`} className={styles.addonItem}>
+                        <li key={`${section.ref}-${addon.name}`} className="flex">
                           <button
                             type="button"
-                            className={`${styles.addonTileButton} ${isSelected ? styles.addonTileButtonActive : ""}`}
+                            className={`box-border flex h-full w-full cursor-pointer flex-row items-center gap-3 rounded-[10px] border border-[rgba(0,0,0,0.15)] bg-[#f9f9f9] px-3 py-2 ${isSelected ? "shadow-[inset_0_0_0_3px_#16a34a]" : ""}`}
                             onClick={() => {
                               if (section.ref === "sauces") {
                                 onToggleSauce?.(addon);
@@ -202,22 +202,22 @@ export default function ItemDetailsPanel({
                             }}
                           >
                             {addon.image === "none" ? (
-                              <div className={`${styles.addonImage} ${styles.addonImageNone}`}>✕</div>
+                              <div className={`grid h-[72px] w-[72px] min-w-[72px] place-items-center rounded-lg bg-cover bg-center text-[32px] font-bold text-black `}>✕</div>
                             ) : addon.image ? (
                               <div
-                                className={styles.addonImage}
+                                className="grid h-[72px] w-[72px] min-w-[72px] place-items-center rounded-lg bg-cover bg-center text-[32px] font-bold text-black"
                                 style={{ backgroundImage: `url(${addon.image})` }}
                               />
                             ) : (
-                              <div className={styles.addonImage} />
+                              <div className="grid h-[72px] w-[72px] min-w-[72px] place-items-center rounded-lg bg-cover bg-center text-[32px] font-bold text-black" />
                             )}
-                            <div className={styles.addonText}>
-                              <div className={styles.addonName}>{addon.name}</div>
-                              <div className={styles.addonCalories}>+{addon.calories} Cal</div>
+                            <div className="flex min-w-0 flex-col items-start justify-center gap-[6px]">
+                              <div className="line-clamp-2 break-words text-left text-base font-bold leading-[1.2]">{addon.name}</div>
+                              <div className="text-base font-bold text-[rgba(0,0,0,0.5)]">+{addon.calories} Cal</div>
                             </div>
                             {section.ref === "sauces" && addon.name !== "None" ? (
                               <div
-                                className={styles.addonCounter}
+                                className="ml-auto inline-flex items-center gap-[6px]"
                                 onClick={(event) => event.stopPropagation()}
                                 onMouseDown={(event) => event.stopPropagation()}
                               >
@@ -226,7 +226,7 @@ export default function ItemDetailsPanel({
                                     <span
                                       role="button"
                                       tabIndex={0}
-                                      className={styles.counterButton}
+                                      className="inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-[rgba(0,0,0,0.35)] bg-white text-[18px] font-bold leading-none"
                                       aria-label={`Remove one ${addon.name}`}
                                       onClick={() => onDecrementSauce?.(addon)}
                                       onKeyDown={(event) => {
@@ -238,11 +238,11 @@ export default function ItemDetailsPanel({
                                     >
                                       -
                                     </span>
-                                    <span className={styles.counterValue}>{sauceCount}</span>
+                                    <span className="min-w-4 text-center text-base font-bold">{sauceCount}</span>
                                     <span
                                       role="button"
                                       tabIndex={0}
-                                      className={styles.counterButton}
+                                      className="inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-[rgba(0,0,0,0.35)] bg-white text-[18px] font-bold leading-none"
                                       aria-label={`Add one more ${addon.name}`}
                                       onClick={() => onIncrementSauce?.(addon)}
                                       onKeyDown={(event) => {
@@ -259,7 +259,7 @@ export default function ItemDetailsPanel({
                                   <span
                                     role="button"
                                     tabIndex={0}
-                                    className={styles.counterButton}
+                                    className="inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-[rgba(0,0,0,0.35)] bg-white text-[18px] font-bold leading-none"
                                     aria-label={`Add ${addon.name}`}
                                     onClick={() => onIncrementSauce?.(addon)}
                                     onKeyDown={(event) => {
@@ -288,9 +288,9 @@ export default function ItemDetailsPanel({
       ) : null}
 
       {displayMode === "full" && commonChanges && commonChanges.length > 0 ? (
-        <section className={styles.addonsCard}>
-          <div className={styles.addonsContent}>
-            <div className={styles.addonGroup}>
+        <section className="col-span-2 rounded-[18px] border border-[rgba(0,0,0,0.15)] bg-white px-[18px] py-[14px]">
+          <div className="grid gap-[14px]">
+            <div className="min-w-0">
               {(() => {
                 const commonKey = "common-changes";
                 const isCommonOpen = sectionOpenState[commonKey] ?? true;
@@ -310,7 +310,7 @@ export default function ItemDetailsPanel({
                 return (
                   <>
                     <div
-                      className={styles.addonGroupHeader}
+                      className="flex min-h-[52px] w-full cursor-pointer items-center justify-between gap-[10px] rounded-[10px] border-0 bg-transparent p-3 text-left"
                       role="button"
                       tabIndex={0}
                       onClick={() =>
@@ -329,36 +329,36 @@ export default function ItemDetailsPanel({
                         }
                       }}
                     >
-                      <h3 className={styles.addonGroupTitle}>
+                      <h3 className="m-0 text-2xl font-bold">
                         Common Changes
-                        {!isCommonOpen ? <span className={styles.addonSummaryDetail}> {commonSummaryDetail}</span> : null}
+                        {!isCommonOpen ? <span className="text-[18px] font-semibold text-[rgba(0,0,0,0.5)]"> {commonSummaryDetail}</span> : null}
                       </h3>
-                      <div className={styles.addonHeaderControls}>
-                        <span className={styles.chevronButton} aria-hidden="true">
+                      <div className="inline-flex items-center gap-2">
+                        <span className="inline-flex h-7 w-7 cursor-inherit items-center justify-center rounded-md border border-[rgba(0,0,0,0.4)] bg-white text-base leading-none" aria-hidden="true">
                           {isCommonOpen ? "˄" : "˅"}
                         </span>
                       </div>
                     </div>
                     {isCommonOpen ? (
-                      <ul className={styles.addonList}>
+                      <ul className="mt-2 grid list-none grid-cols-2 items-stretch gap-[10px] pl-0">
                         {commonChanges.map((change) => {
                           const isActive = selectedCommonChangeIds?.includes(change.id) ?? false;
                           const calorieDeltaLabel = `${change.delta.calories >= 0 ? "+" : ""}${change.delta.calories}cal`;
                           const proteinDeltaLabel = `${change.delta.protein >= 0 ? "+" : ""}${change.delta.protein}g protein`;
                           return (
-                            <li key={change.id} className={styles.addonItem}>
+                            <li key={change.id} className="flex">
                               <button
                                 type="button"
-                                className={`${styles.addonTileButton} ${isActive ? styles.addonTileButtonActive : ""}`}
+                                className={`box-border flex h-full w-full cursor-pointer flex-row items-center gap-3 rounded-[10px] border border-[rgba(0,0,0,0.15)] bg-[#f9f9f9] px-3 py-2 ${isActive ? "shadow-[inset_0_0_0_3px_#16a34a]" : ""}`}
                                 onClick={() => onToggleCommonChange?.(change.id)}
                               >
-                                <div className={`${styles.addonImage} ${styles.addonImageNone}`}>↺</div>
-                                <div className={styles.addonText}>
-                                  <div className={styles.addonName}>{change.label}</div>
-                                  <div className={styles.addonCalories}>{`${calorieDeltaLabel} • ${proteinDeltaLabel}`}</div>
+                                <div className={`grid h-[72px] w-[72px] min-w-[72px] place-items-center rounded-lg bg-cover bg-center text-[32px] font-bold text-black `}>↺</div>
+                                <div className="flex min-w-0 flex-col items-start justify-center gap-[6px]">
+                                  <div className="line-clamp-2 break-words text-left text-base font-bold leading-[1.2]">{change.label}</div>
+                                  <div className="text-base font-bold text-[rgba(0,0,0,0.5)]">{`${calorieDeltaLabel} • ${proteinDeltaLabel}`}</div>
                                 </div>
                                 <span
-                                  className={`${styles.commonChangeCheckbox} ${isActive ? styles.commonChangeCheckboxActive : ""}`}
+                                  className={`ml-auto inline-flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-[4px] border-2 border-[rgba(0,0,0,0.45)] bg-white text-sm font-extrabold text-white ${isActive ? "border-[#16a34a] bg-[#16a34a] text-white" : ""}`}
                                   aria-hidden="true"
                                 >
                                   {isActive ? "✓" : ""}
@@ -377,111 +377,111 @@ export default function ItemDetailsPanel({
         </section>
       ) : null}
 
-      {displayMode === "full" ? <section className={styles.labelCard}>
-        <div className={styles.amountPerServing}>Amount per serving</div>
+      {displayMode === "full" ? <section className="rounded-[18px] border border-[rgba(0,0,0,0.15)] bg-white p-[18px]">
+        <div className="text-xs font-medium text-[rgba(0,0,0,0.55)]">Amount per serving</div>
 
-        <div className={styles.caloriesRow}>
-          <div className={styles.caloriesText}>Calories</div>
-          <div className={styles.valueWithDelta}>
-            <div className={styles.caloriesValue}>{n.calories === undefined || Number.isNaN(n.calories) ? "—" : n.calories}</div>
+        <div className="mt-1 flex items-end justify-between">
+          <div className="text-2xl font-bold">Calories</div>
+          <div className="inline-flex items-baseline gap-[6px]">
+            <div className="text-2xl font-bold">{n.calories === undefined || Number.isNaN(n.calories) ? "—" : n.calories}</div>
             {showCustomizationDeltas ? (
-              <span className={styles.deltaValue}>{formatDelta(activeCustomizationTotals.calories)}</span>
+              <span className="text-sm font-bold text-[#16a34a]">{formatDelta(activeCustomizationTotals.calories)}</span>
             ) : null}
           </div>
         </div>
 
-        <div className={styles.thickRule} />
+        <div className="my-[12px] mb-2 h-[5px] rounded-[999px] bg-[rgba(0,0,0,0.75)]" />
 
-        <div className={styles.row}>
-          <div className={styles.rowTitle}>Total Fat</div>
-          <div className={styles.valueWithDelta}>
-            <div className={styles.rowValue}>{format(n.totalFat, "g")}</div>
-            {showCustomizationDeltas ? <span className={styles.deltaValue}>{formatDelta(activeCustomizationTotals.fat, "g")}</span> : null}
+        <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px]">
+          <div className="text-[18px] font-semibold">Total Fat</div>
+          <div className="inline-flex items-baseline gap-[6px]">
+            <div className="text-[18px] font-semibold">{format(n.totalFat, "g")}</div>
+            {showCustomizationDeltas ? <span className="text-sm font-bold text-[#16a34a]">{formatDelta(activeCustomizationTotals.fat, "g")}</span> : null}
           </div>
         </div>
 
-        <div className={styles.subRow}>
-          <div className={styles.subTitle}>Sat Fat</div>
-          <div className={styles.subValue}>{format(n.satFat, "g")}</div>
+        <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px] pl-5">
+          <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">Sat Fat</div>
+          <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">{format(n.satFat, "g")}</div>
         </div>
 
-        <div className={styles.subRow}>
-          <div className={styles.subTitle}>Trans Fat</div>
-          <div className={styles.subValue}>{format(n.transFat, "g")}</div>
+        <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px] pl-5">
+          <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">Trans Fat</div>
+          <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">{format(n.transFat, "g")}</div>
         </div>
 
-        <div className={styles.row}>
-          <div className={styles.rowTitle}>Cholesterol</div>
-          <div className={styles.rowValue}>{format(n.cholesterol, "mg")}</div>
+        <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px]">
+          <div className="text-[18px] font-semibold">Cholesterol</div>
+          <div className="text-[18px] font-semibold">{format(n.cholesterol, "mg")}</div>
         </div>
 
-        <div className={styles.row}>
-          <div className={styles.rowTitle}>Sodium</div>
-          <div className={styles.rowValue}>{format(n.sodium, "mg")}</div>
+        <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px]">
+          <div className="text-[18px] font-semibold">Sodium</div>
+          <div className="text-[18px] font-semibold">{format(n.sodium, "mg")}</div>
         </div>
 
-        <div className={styles.row}>
-          <div className={styles.rowTitle}>Carbohydrates</div>
-          <div className={styles.valueWithDelta}>
-            <div className={styles.rowValue}>{format(n.carbs, "g")}</div>
-            {showCustomizationDeltas ? <span className={styles.deltaValue}>{formatDelta(activeCustomizationTotals.carbs, "g")}</span> : null}
+        <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px]">
+          <div className="text-[18px] font-semibold">Carbohydrates</div>
+          <div className="inline-flex items-baseline gap-[6px]">
+            <div className="text-[18px] font-semibold">{format(n.carbs, "g")}</div>
+            {showCustomizationDeltas ? <span className="text-sm font-bold text-[#16a34a]">{formatDelta(activeCustomizationTotals.carbs, "g")}</span> : null}
           </div>
         </div>
 
-        <div className={styles.subRow}>
-          <div className={styles.subTitle}>Fiber</div>
-          <div className={styles.subValue}>{format(n.fiber, "g")}</div>
+        <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px] pl-5">
+          <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">Fiber</div>
+          <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">{format(n.fiber, "g")}</div>
         </div>
 
-        <div className={styles.subRow}>
-          <div className={styles.subTitle}>Sugars</div>
-          <div className={styles.subValue}>{format(n.sugars, "g")}</div>
+        <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px] pl-5">
+          <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">Sugars</div>
+          <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">{format(n.sugars, "g")}</div>
         </div>
 
-        <div className={styles.row}>
-          <div className={styles.rowTitle}>Protein</div>
-          <div className={styles.valueWithDelta}>
-            <div className={styles.rowValue}>{format(n.protein, "g")}</div>
-            {showCustomizationDeltas ? <span className={styles.deltaValue}>{formatDelta(activeCustomizationTotals.protein, "g")}</span> : null}
+        <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px]">
+          <div className="text-[18px] font-semibold">Protein</div>
+          <div className="inline-flex items-baseline gap-[6px]">
+            <div className="text-[18px] font-semibold">{format(n.protein, "g")}</div>
+            {showCustomizationDeltas ? <span className="text-sm font-bold text-[#16a34a]">{formatDelta(activeCustomizationTotals.protein, "g")}</span> : null}
           </div>
         </div>
 
-        <div className={styles.footerText}>
+        <div className="mt-3 text-xs font-medium leading-[1.05] text-[rgba(0,0,0,0.55)]">
           2,000 calories a day is used for general nutrition advice, but calorie needs
           vary. Values may vary by location, serving size, and customizations.
         </div>
       </section> : null}
 
-      {displayMode === "full" ? <section className={styles.detailsCard}>
-        <div className={styles.detailsTitle}>Details</div>
+      {displayMode === "full" ? <section className="rounded-[18px] border border-[rgba(0,0,0,0.15)] bg-white p-[18px]">
+        <div className="text-2xl font-bold">Details</div>
 
-        <div className={styles.detailsRow}>
-          <div className={styles.detailsLabel}>Category</div>
-          <div className={styles.pill}>{item.categories?.join(", ") ?? "—"}</div>
+        <div className="mt-[18px] flex items-center justify-between gap-[14px]">
+          <div className="text-[18px] font-semibold text-[rgba(0,0,0,0.8)]">Category</div>
+          <div className="rounded-[999px] border-2 border-[rgba(0,0,0,0.8)] px-3 py-1 text-[18px] font-extrabold">{item.categories?.join(", ") ?? "—"}</div>
         </div>
 
-        <div className={styles.detailsDivider} />
+        <div className="mt-[14px] h-px bg-[rgba(0,0,0,0.2)]" />
 
-        <div className={styles.detailsRow}>
-          <div className={styles.detailsLabel}>Cal to Protein Ratio</div>
-          <div className={styles.detailsValue}>
+        <div className="mt-[18px] flex items-center justify-between gap-[14px]">
+          <div className="text-[18px] font-semibold text-[rgba(0,0,0,0.8)]">Cal to Protein Ratio</div>
+          <div className="text-[18px] font-semibold">
             {calToProteinRatio(n.calories, n.protein)}
           </div>
         </div>
 
         {variants && variants.length > 0 ? (
           <>
-            <div className={styles.detailsDivider} />
-            <div className={`${styles.detailsRow} ${styles.portionRow}`}>
-              <div className={styles.detailsLabel}>Portion</div>
-              <div className={styles.portionOptions}>
+            <div className="mt-[14px] h-px bg-[rgba(0,0,0,0.2)]" />
+            <div className={`mt-[18px] flex items-center justify-between gap-[14px] flex-col items-start`}>
+              <div className="text-[18px] font-semibold text-[rgba(0,0,0,0.8)]">Portion</div>
+              <div className="grid w-full grid-cols-3 gap-2">
                 {variants.map((variant) => {
                   const isActive = variant.id === selectedVariantId;
                   return (
                     <button
                       key={variant.id}
                       type="button"
-                      className={`${styles.portionButton} ${isActive ? styles.portionButtonActive : ""}`}
+                      className={`w-full cursor-inherit rounded-lg border-2 border-[rgba(0,0,0,0.6)] bg-transparent px-3 py-1.5 text-center text-[18px] font-bold text-[rgba(0,0,0,0.6)] ${isActive ? "bg-black text-white" : ""}`}
                       onClick={() => onSelectVariant?.(variant.id)}
                     >
                       {variant.label}
@@ -493,26 +493,26 @@ export default function ItemDetailsPanel({
           </>
         ) : null}
 
-        <div className={styles.detailsDivider} />
+        <div className="mt-[14px] h-px bg-[rgba(0,0,0,0.2)]" />
 
         {item.restaurant ? (
           <>
-            <div className={styles.detailsDivider} />
-            <div className={styles.detailsRow}>
-              <div className={styles.detailsLabel}>Restaurant</div>
-              <div className={styles.detailsValue}>{item.restaurant}</div>
+            <div className="mt-[14px] h-px bg-[rgba(0,0,0,0.2)]" />
+            <div className="mt-[18px] flex items-center justify-between gap-[14px]">
+              <div className="text-[18px] font-semibold text-[rgba(0,0,0,0.8)]">Restaurant</div>
+              <div className="text-[18px] font-semibold">{item.restaurant}</div>
             </div>
           </>
         ) : null}
 
         {ingredients.length > 0 ? (
           <>
-            <div className={styles.detailsDivider} />
-            <div className={`${styles.detailsRow} ${styles.ingredientsRow}`}>
-              <div className={styles.detailsLabel}>Ingredients</div>
-              <div className={styles.ingredientsGrid}>
+            <div className="mt-[14px] h-px bg-[rgba(0,0,0,0.2)]" />
+            <div className={`mt-[18px] flex items-center justify-between gap-[14px] flex-col items-start`}>
+              <div className="text-[18px] font-semibold text-[rgba(0,0,0,0.8)]">Ingredients</div>
+              <div className="grid w-full grid-cols-3 gap-2">
                 {ingredients.map((ingredient) => (
-                  <div key={ingredient.id} className={styles.ingredientChip}>
+                  <div key={ingredient.id} className="inline-flex items-center gap-[6px] whitespace-nowrap rounded-[999px] border border-[rgba(0,0,0,0.2)] bg-[#f8f8f8] px-[10px] py-1.5 text-sm font-semibold">
                     <span aria-hidden="true">{isIconImage(ingredient.icon) ? <Image src={ingredient.icon} alt="" width={24} height={24} /> : ingredient.icon}</span>
                     <span>{ingredient.label}</span>
                   </div>
