@@ -12,6 +12,7 @@ import type {
   RestaurantAddons,
   IngredientItem,
 } from "@/types/menu";
+import { ChevronDown } from "lucide-react";
 
 
 function format(n?: number, suffix = "") {
@@ -303,8 +304,11 @@ export default function ItemDetailsPanel({
                       {!isSectionOpen ? <span className="text-[18px] font-semibold text-[rgba(0,0,0,0.5)]"> {summaryDetail}</span> : null}
                     </h3>
                     <div className="inline-flex items-center gap-2">
-                      <span className="inline-flex h-7 w-7 cursor-inherit items-center justify-center rounded-md border border-[rgba(0,0,0,0.4)] bg-white text-base leading-none" aria-hidden="true">
-                        {isSectionOpen ? "˄" : "˅"}
+                      <span className="inline-flex h-7 w-7 cursor-inherit items-center justify-center bg-white">
+                        <ChevronDown
+                          size={24}
+                          className={`transition-transform ${isSectionOpen ? "rotate-180" : ""}`}
+                        />
                       </span>
                     </div>
                   </div>
@@ -462,11 +466,12 @@ export default function ItemDetailsPanel({
                         Common Changes
                         {!isCommonOpen ? <span className="text-[18px] font-semibold text-[rgba(0,0,0,0.5)]"> {commonSummaryDetail}</span> : null}
                       </h3>
-                      <div className="inline-flex items-center gap-2">
-                        <span className="inline-flex h-7 w-7 cursor-inherit items-center justify-center rounded-md border border-[rgba(0,0,0,0.4)] bg-white text-base leading-none" aria-hidden="true">
-                          {isCommonOpen ? "˄" : "˅"}
-                        </span>
-                      </div>
+                      <span className="inline-flex h-7 w-7 cursor-inherit items-center justify-center bg-white">
+                        <ChevronDown
+                          size={24}
+                          className={`transition-transform ${isCommonOpen ? "rotate-180" : ""}`}
+                        />
+                      </span>
                     </div>
                     {isCommonOpen ? (
                       <ul className="mt-2 grid list-none grid-cols-2 items-stretch gap-[10px] pl-0">
