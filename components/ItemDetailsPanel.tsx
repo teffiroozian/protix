@@ -142,7 +142,9 @@ export function PortionSelector({
       <div className={`text-lg font-semibold text-[rgba(0,0,0,0.8)] ${isTopLayout ? "w-full text-center" : ""}`}>
         Portion
       </div>
-      <div className={`grid w-full gap-2 ${isTopLayout ? "grid-cols-4" : "grid-cols-3"}`}>
+      <div
+        className={isTopLayout ? "flex w-full flex-wrap justify-center gap-2" : "grid w-full grid-cols-3 gap-2"}
+      >
         {variants.map((variant) => {
           const isActive = variant.id === selectedVariantId;
           const variantColorClasses = isActive
@@ -153,7 +155,7 @@ export function PortionSelector({
             <button
               key={variant.id}
               type="button"
-              className={`w-full cursor-pointer rounded-lg border-2 border-[rgba(0,0,0,0.6)] px-3 py-1.5 text-center text-[18px] font-bold ${variantColorClasses}`}
+              className={`${isTopLayout ? "min-w-[140px]" : "w-full"} cursor-pointer rounded-lg border-2 border-[rgba(0,0,0,0.6)] px-3 py-1.5 text-center text-[18px] font-bold ${variantColorClasses}`}
               onClick={() => onSelectVariant?.(variant.id)}
             >
               {variant.label}
