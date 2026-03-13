@@ -85,7 +85,7 @@ export default function StickyRestaurantBar({
 
   return (
     <div className="fixed left-0 right-0 top-0 z-50" data-sticky-nav="true">
-      <div className="relative z-[110] mx-auto flex max-w-6xl items-center mx-2 mt-1 rounded-t-2xl border border-slate-200/70 bg-white/95 shadow-[0_6px_16px_rgba(15,23,42,0.12)] backdrop-blur">
+      <div className="relative z-[110] mx-auto flex max-w-6xl items-center mx-2 mt-1 rounded-t-2xl border border-slate-200/70 bg-white shadow-[0_-6px_16px_rgba(15,23,42,0.12)] backdrop-blur">
         <div className="mx-auto flex w-full max-w-5xl items-center gap-3 px-4 py-2 sm:px-6">
           <Link
             href="/"
@@ -157,7 +157,7 @@ export default function StickyRestaurantBar({
       </div>
 
       <div
-        className="relative z-[100] mx-auto flex w-full max-w-6xl items-center rounded-b-2xl border border-slate-200/70 bg-white/95 shadow-[0_6px_16px_rgba(15,23,42,0.12)] backdrop-blur"
+        className="relative z-[100] mx-auto flex w-full max-w-6xl items-center rounded-b-2xl border border-slate-200/70 bg-white shadow-[0_6px_16px_rgba(15,23,42,0.12)] backdrop-blur"
       >
         <div className="mx-auto flex w-full max-w-5xl items-center gap-3 px-4 py-2 sm:px-6">
           <div className="min-w-0 flex-1">
