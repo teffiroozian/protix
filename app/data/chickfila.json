@@ -1642,11 +1642,6 @@
             ],
             "portionType": "single",
             "image": "/restaurants/chickfila/menu/treats/icedream-cup.webp",
-            "ingredients": [
-                "cookie-crumbles",
-                "chocolate-syrup",
-                "strawberry-syrup"
-            ],
             "nutrition": {
                 "calories": 140,
                 "totalFat": 3.5,
