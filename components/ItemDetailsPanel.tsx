@@ -42,12 +42,17 @@ function resolvePanelIngredients(
   item: MenuItem,
   ingredientItems: IngredientItem[] = [],
   addons?: RestaurantAddons,
-  menuItems: MenuItem[] = []
+  menuItems: MenuItem[] = [],
+  variants?: ItemVariant[] | null,
+  selectedVariantId?: string
 ) {
+  const activeVariant = variants?.find((variant) => variant.id === selectedVariantId);
+  const activePortionType = activeVariant?.portionType ?? item.portionType;
+  const isSingleIngredientItem = activePortionType === "single";
   const ingredientIds =
     item.ingredients && item.ingredients.length > 0
       ? item.ingredients
-      : item.portionType === "single"
+      : isSingleIngredientItem
         ? [item.id ?? item.name]
         : [];
 
@@ -92,12 +97,17 @@ function resolvePanelIngredients(
 
     const label = catalogEntry?.label ?? match?.name ?? fallbackLabel;
     const addonMatch = addonLookup.get(label.toLowerCase());
+    const isSingleIngredientRow = isSingleIngredientItem && ingredientIds.length === 1;
+    const activeVariantCalories = activeVariant?.nutrition.calories;
 
     return {
       id: ingredientId,
       label: menuItemMatch?.name ?? label,
       icon: catalogEntry?.icon ?? match?.image ?? menuItemMatch?.image ?? addonMatch?.image ?? "🥣",
-      calories: menuItemMatch?.nutrition.calories ?? match?.nutrition.calories ?? addonMatch?.calories,
+      calories:
+        isSingleIngredientRow && activeVariantCalories !== undefined
+          ? activeVariantCalories
+          : menuItemMatch?.nutrition.calories ?? match?.nutrition.calories ?? addonMatch?.calories,
     };
   });
 }
@@ -230,7 +240,14 @@ export default function ItemDetailsPanel({
     );
 
   const activeCustomizationTotals = customizationTotals ?? { calories: 0, protein: 0, carbs: 0, fat: 0 };
-  const ingredients = resolvePanelIngredients(item, ingredientItems, addons, menuItems);
+  const ingredients = resolvePanelIngredients(
+    item,
+    ingredientItems,
+    addons,
+    menuItems,
+    variants,
+    selectedVariantId
+  );
 
   return (
     <div className="grid grid-cols-2 gap-3 rounded-[18px] bg-[#e0e0e0] px-3 py-2">
