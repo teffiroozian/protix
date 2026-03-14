@@ -102,6 +102,7 @@ export default function ItemRouteModal({
     return flaggedDefault?.id ?? variants[0]?.id ?? "";
   }, [item.defaultVariantId, variants]);
   const [selectedVariantId, setSelectedVariantId] = useState(defaultVariantId);
+  const [quantity, setQuantity] = useState(1);
   const [selectedAddons, setSelectedAddons] = useState<Partial<Record<AddonRef, AddonOption>>>({});
   const [selectedSauceCounts, setSelectedSauceCounts] = useState<Record<string, number>>({});
   const [selectedCommonChangeIds, setSelectedCommonChangeIds] = useState<string[]>([]);
@@ -238,7 +239,7 @@ export default function ItemRouteModal({
       variantLabel: selectedVariant?.label,
       optionsLabel,
       customizations: selectedCommonChanges.length ? selectedCommonChanges : undefined,
-      quantity: 1,
+      quantity,
       macrosPerItem: {
         calories: nutrition.calories ?? 0,
         protein: nutrition.protein ?? 0,
@@ -249,6 +250,14 @@ export default function ItemRouteModal({
 
     handleClose();
     window.setTimeout(() => addItem(cartItem), 0);
+  };
+
+  const handleDecrementQuantity = () => {
+    setQuantity((prev) => Math.max(1, prev - 1));
+  };
+
+  const handleIncrementQuantity = () => {
+    setQuantity((prev) => prev + 1);
   };
 
   return (
@@ -389,7 +398,26 @@ export default function ItemRouteModal({
         </div>
         </div>
 
-        <div className="sticky bottom-0 -mx-6 z-10 flex h-fit justify-center border-t border-black/10 bg-white px-4 py-3 shadow-[0_-4px_10px_rgba(0,0,0,0.08)]">
+        <div className="sticky bottom-0 -mx-6 z-10 flex h-fit items-center justify-center gap-3 border-t border-black/10 bg-white px-4 py-3 shadow-[0_-4px_10px_rgba(0,0,0,0.08)]">
+          <div className="inline-flex items-center rounded-xl border border-slate-200 bg-slate-50 p-1">
+            <button
+              type="button"
+              onClick={handleDecrementQuantity}
+              className="inline-flex size-8 items-center justify-center rounded-full text-base font-semibold text-slate-700 transition hover:bg-white"
+              aria-label={`Decrease quantity of ${item.name}`}
+            >
+              -
+            </button>
+            <span className="min-w-8 text-center text-sm font-semibold text-slate-900">{quantity}</span>
+            <button
+              type="button"
+              onClick={handleIncrementQuantity}
+              className="inline-flex size-8 items-center justify-center rounded-full text-base font-semibold text-slate-700 transition hover:bg-white"
+              aria-label={`Increase quantity of ${item.name}`}
+            >
+              +
+            </button>
+          </div>
           <button
             type="button"
             className="cursor-pointer rounded-xl border border-black/20 bg-black/90 px-6 py-2.5 text-base font-bold text-white"
