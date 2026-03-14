@@ -403,7 +403,7 @@ export default function ItemRouteModal({
             <button
               type="button"
               onClick={handleDecrementQuantity}
-              className="inline-flex size-8 items-center justify-center rounded-full text-base font-semibold text-slate-700 transition hover:bg-white"
+              className="cursor-pointer inline-flex size-8 items-center justify-center rounded-lg text-base font-semibold text-slate-700 transition hover:bg-white"
               aria-label={`Decrease quantity of ${item.name}`}
             >
               -
@@ -412,7 +412,7 @@ export default function ItemRouteModal({
             <button
               type="button"
               onClick={handleIncrementQuantity}
-              className="inline-flex size-8 items-center justify-center rounded-full text-base font-semibold text-slate-700 transition hover:bg-white"
+              className="cursor-pointer inline-flex size-8 items-center justify-center rounded-lg text-base font-semibold text-slate-700 transition hover:bg-white"
               aria-label={`Increase quantity of ${item.name}`}
             >
               +

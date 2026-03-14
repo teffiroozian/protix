@@ -51,8 +51,11 @@ const CATEGORY_PRIORITY_GROUPS = [
   { label: "Salads", aliases: ["salad", "salads"] },
   { label: "Wraps", aliases: ["wrap", "wraps"] },
   { label: "Breakfast", aliases: ["breakfast"] },
-  { label: "Kids", aliases: ["kid", "kids"] },
   { label: "Sides", aliases: ["side", "sides"] },
+  { label: "Kids", aliases: ["kid", "kids"] },
+  { label: "Desserts", aliases: ["dessert", "desserts"] },
+  { label: "Treats", aliases: ["treat", "treats"] },
+  { label: "Drinks", aliases: ["drink", "drinks", "beverage", "beverages"] },
   {
     label: "Dipping Sauces",
     aliases: ["sauce", "sauces", "dipping sauce", "dipping sauces"],
@@ -61,8 +64,6 @@ const CATEGORY_PRIORITY_GROUPS = [
     label: "Dressings",
     aliases: ["dressing", "dressings"],
   },
-  { label: "Desserts", aliases: ["dessert", "desserts"] },
-  { label: "Drinks", aliases: ["drink", "drinks", "beverage", "beverages"] },
 ] as const;
 
 const categoryPriorityLookup = new Map(
