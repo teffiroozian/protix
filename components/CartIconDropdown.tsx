@@ -150,13 +150,13 @@ export default function CartIconDropdown({
                       Cal:<span className="ml-1 font-semibold text-slate-900">{lastAddedMacros?.calories ?? 0}</span>
                     </p>
                     <p className="whitespace-nowrap text-slate-500">
-                      P:<span className="ml-1 font-semibold text-slate-900">{lastAddedMacros?.protein ?? 0}g</span>
+                      P:<span className="ml-1 font-semibold text-[#c2410c]">{lastAddedMacros?.protein ?? 0}g</span>
                     </p>
                     <p className="whitespace-nowrap text-slate-500">
-                      C:<span className="ml-1 font-semibold text-slate-900">{lastAddedMacros?.carbs ?? 0}g</span>
+                      C:<span className="ml-1 font-semibold text-[#ca8a04]">{lastAddedMacros?.carbs ?? 0}g</span>
                     </p>
                     <p className="whitespace-nowrap text-slate-500">
-                      F:<span className="ml-1 font-semibold text-slate-900">{lastAddedMacros?.fat ?? 0}g</span>
+                      F:<span className="ml-1 font-semibold text-[#2563eb]">{lastAddedMacros?.fat ?? 0}g</span>
                     </p>
                   </div>
                 </div>
@@ -177,15 +177,15 @@ export default function CartIconDropdown({
                 <p className="mt-2 text-[10px] uppercase tracking-wide text-slate-500">Calories</p>
               </div>
               <div className="px-1 py-1">
-                <p className="text-2xl font-bold leading-none text-emerald-700">{totals.protein}g</p>
+                <p className="text-2xl font-bold leading-none text-[#c2410c]">{totals.protein}g</p>
                 <p className="mt-2 text-[10px] uppercase tracking-wide text-slate-500">Protein</p>
               </div>
               <div className="px-1 py-1">
-                <p className="text-2xl font-bold leading-none text-amber-700">{totals.carbs}g</p>
+                <p className="text-2xl font-bold leading-none text-[#ca8a04]">{totals.carbs}g</p>
                 <p className="mt-2 text-[10px] uppercase tracking-wide text-slate-500">Carbs</p>
               </div>
               <div className="px-1 py-1">
-                <p className="text-2xl font-bold leading-none text-sky-700">{totals.fat}g</p>
+                <p className="text-2xl font-bold leading-none text-[#2563eb]">{totals.fat}g</p>
                 <p className="mt-2 text-[10px] uppercase tracking-wide text-slate-500">Fat</p>
               </div>
             </div>
