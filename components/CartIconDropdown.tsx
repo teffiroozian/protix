@@ -171,7 +171,7 @@ export default function CartIconDropdown({
 
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-500">Total Macros</p>
-            <div className="mt-3 grid grid-cols-4 gap-2">
+            <div className="mt-3 grid grid-cols-4 gap-2 text-center">
               <div className="px-1 py-1">
                 <p className="text-xl font-bold leading-none text-slate-900">{totals.calories}</p>
                 <p className="mt-2 text-[10px] uppercase tracking-wide text-slate-500">Calories</p>
