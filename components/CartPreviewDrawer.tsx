@@ -139,8 +139,8 @@ export default function CartPreviewDrawer() {
                       key={item.id}
                       className="rounded-2xl border border-slate-200 bg-white px-3 py-3 shadow-sm"
                     >
-                      <div className="flex items-center gap-3">
-                        <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-slate-100 ring-1 ring-slate-200">
+                      <div className="flex items-start gap-3">
+                        <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-slate-100 ring-1 ring-slate-200">
                           {item.image ? (
                             <Image
                               src={item.image}
@@ -161,7 +161,7 @@ export default function CartPreviewDrawer() {
                             {item.name}
                           </p>
 
-                          <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm leading-none">
+                          <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm leading-none">
                             <p className="whitespace-nowrap text-slate-500">
                               Cal:
                               <span className="ml-1 font-semibold text-slate-900">
