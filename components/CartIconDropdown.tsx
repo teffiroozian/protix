@@ -89,9 +89,7 @@ export default function CartIconDropdown({
     </>
   );
 
-  const itemMeta = [lastAddedItem?.variantLabel, lastAddedItem?.optionsLabel]
-    .filter(Boolean)
-    .join(" • ");
+  const addonsLabel = lastAddedItem?.optionsLabel ?? "";
   const itemInitial = (lastAddedItem?.name?.trim().charAt(0) || "+").toUpperCase();
   const lastAddedMacros = lastAddedItem?.macrosPerItem;
 
@@ -143,7 +141,13 @@ export default function CartIconDropdown({
                 </div>
                 <div className="min-w-0 space-y-1.5">
                   <p className="truncate text-base font-semibold leading-tight text-slate-900">
-                    {lastAddedItem.name}
+                    <span>{lastAddedItem.name}</span>
+                    {lastAddedItem.variantLabel ? (
+                      <>
+                        <span className="mx-1.5">·</span>
+                        <span>{lastAddedItem.variantLabel}</span>
+                      </>
+                    ) : null}
                   </p>
                   <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm leading-none">
                     <p className="whitespace-nowrap text-slate-500">
@@ -159,7 +163,7 @@ export default function CartIconDropdown({
                       F:<span className="ml-1 font-semibold text-slate-900">{lastAddedMacros?.fat ?? 0}g</span>
                     </p>
                   </div>
-                  {itemMeta ? <p className="line-clamp-1 text-xs text-slate-500">{itemMeta}</p> : null}
+                  {addonsLabel ? <p className="line-clamp-1 text-xs text-slate-500">{addonsLabel}</p> : null}
                 </div>
               </>
             ) : (

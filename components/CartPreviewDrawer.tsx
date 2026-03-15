@@ -125,12 +125,7 @@ export default function CartPreviewDrawer() {
                 {items.map((item) => {
                   const customizationDisplayList =
                     getCustomizationDisplayList(item);
-                  const itemMeta = [
-                    item.variantLabel,
-                    ...customizationDisplayList,
-                  ]
-                    .filter(Boolean)
-                    .join(" • ");
+                  const addonsLabel = customizationDisplayList.join(" • ");
                   const itemInitial =
                     (item.name?.trim().charAt(0) || "+").toUpperCase();
 
@@ -158,7 +153,13 @@ export default function CartPreviewDrawer() {
 
                         <div className="min-w-0 flex-1">
                           <p className="truncate text-base font-semibold leading-tight text-slate-900">
-                            {item.name}
+                            <span>{item.name}</span>
+                            {item.variantLabel ? (
+                              <>
+                                <span className="mx-1.5">·</span>
+                                <span>{item.variantLabel}</span>
+                              </>
+                            ) : null}
                           </p>
 
                           <div className="mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm leading-none">
@@ -188,9 +189,9 @@ export default function CartPreviewDrawer() {
                             </p>
                           </div>
 
-                          {itemMeta ? (
+                          {addonsLabel ? (
                             <p className="mt-1.5 line-clamp-1 text-xs text-slate-500">
-                              {itemMeta}
+                              {addonsLabel}
                             </p>
                           ) : null}
 
