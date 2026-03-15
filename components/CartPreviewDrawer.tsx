@@ -7,8 +7,6 @@ import restaurants from "@/app/data/index.json";
 import { useRestaurantUi } from "@/components/RestaurantUiContext";
 import { useCart } from "@/stores/cartStore";
 
-const formatMacro = (label: string, value: number) => `${value}${label}`;
-
 const getCustomizationDisplayList = (item: {
   optionsLabel?: string;
   customizations?: string[];
@@ -127,47 +125,72 @@ export default function CartPreviewDrawer() {
                 {items.map((item) => {
                   const customizationDisplayList =
                     getCustomizationDisplayList(item);
+                  const itemMeta = [
+                    item.variantLabel,
+                    ...customizationDisplayList,
+                  ]
+                    .filter(Boolean)
+                    .join(" • ");
+                  const itemInitial =
+                    (item.name?.trim().charAt(0) || "+").toUpperCase();
 
                   return (
                     <li
                       key={item.id}
                       className="rounded-2xl border border-slate-200 bg-white px-3 py-3 shadow-sm"
                     >
-                      <div className="flex gap-3">
-                        <div className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-sm font-semibold text-slate-600">
-                          {item.name[0]}
+                      <div className="flex items-center gap-3">
+                        <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-slate-100 ring-1 ring-slate-200">
+                          {item.image ? (
+                            <Image
+                              src={item.image}
+                              alt={item.name}
+                              fill
+                              className="object-cover"
+                              sizes="56px"
+                            />
+                          ) : (
+                            <div className="inline-flex h-full w-full items-center justify-center text-base font-semibold text-slate-600">
+                              {itemInitial}
+                            </div>
+                          )}
                         </div>
 
                         <div className="min-w-0 flex-1">
-                          <p className="text-sm font-semibold text-slate-900">
+                          <p className="truncate text-base font-semibold leading-tight text-slate-900">
                             {item.name}
-                            {item.variantLabel ? (
-                              <span className="font-normal text-slate-500">
-                                {" "}
-                                • {item.variantLabel}
-                              </span>
-                            ) : null}
                           </p>
 
-                          <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-[11px] font-medium uppercase tracking-wide text-slate-600">
-                            <span>{item.macrosPerItem.calories} cal</span>
-                            <span>
-                              {formatMacro(
-                                "g protein",
-                                item.macrosPerItem.protein,
-                              )}
-                            </span>
-                            <span>
-                              {formatMacro("g carbs", item.macrosPerItem.carbs)}
-                            </span>
-                            <span>
-                              {formatMacro("g fat", item.macrosPerItem.fat)}
-                            </span>
+                          <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm leading-none">
+                            <p className="whitespace-nowrap text-slate-500">
+                              Cal:
+                              <span className="ml-1 font-semibold text-slate-900">
+                                {item.macrosPerItem.calories}
+                              </span>
+                            </p>
+                            <p className="whitespace-nowrap text-slate-500">
+                              P:
+                              <span className="ml-1 font-semibold text-slate-900">
+                                {item.macrosPerItem.protein}g
+                              </span>
+                            </p>
+                            <p className="whitespace-nowrap text-slate-500">
+                              C:
+                              <span className="ml-1 font-semibold text-slate-900">
+                                {item.macrosPerItem.carbs}g
+                              </span>
+                            </p>
+                            <p className="whitespace-nowrap text-slate-500">
+                              F:
+                              <span className="ml-1 font-semibold text-slate-900">
+                                {item.macrosPerItem.fat}g
+                              </span>
+                            </p>
                           </div>
 
-                          {customizationDisplayList.length > 0 ? (
-                            <p className="mt-1 text-xs font-medium text-slate-500">
-                              + {customizationDisplayList.join(" • ")}
+                          {itemMeta ? (
+                            <p className="mt-1.5 line-clamp-1 text-xs text-slate-500">
+                              {itemMeta}
                             </p>
                           ) : null}
 
