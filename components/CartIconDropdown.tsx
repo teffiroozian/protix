@@ -144,7 +144,7 @@ export default function CartIconDropdown({
                     <span>{lastAddedItem.name}</span>
                     {lastAddedItem.variantLabel ? (
                       <>
-                        <span className="mx-1.5">·</span>
+                        <span className="mx-1.5">•</span>
                         <span>{lastAddedItem.variantLabel}</span>
                       </>
                     ) : null}

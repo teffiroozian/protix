@@ -156,7 +156,7 @@ export default function CartPreviewDrawer() {
                             <span>{item.name}</span>
                             {item.variantLabel ? (
                               <>
-                                <span className="mx-1.5">·</span>
+                                <span className="mx-1.5">•</span>
                                 <span>{item.variantLabel}</span>
                               </>
                             ) : null}
