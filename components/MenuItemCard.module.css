@@ -269,6 +269,22 @@
   background: rgba(255, 255, 255, 0.9);
 }
 
+.qtyStepperWrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.modifyButton {
+  border: 1px solid rgba(0, 0, 0, 0.18);
+  border-radius: 12px;
+  padding: 8px 12px;
+  background: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
 .qtyStepButton {
   border: 1px solid rgba(0, 0, 0, 0.14);
   border-radius: 8px;
