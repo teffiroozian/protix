@@ -379,9 +379,9 @@ export default function CartPage() {
             </div>
           </section>
         </div>
-
-        <div className="flex min-h-[520px] flex-col rounded-3xl border border-black/10 bg-white p-5">
+        <div className="flex flex-col">
           <h2 className="text-xl font-semibold text-neutral-900">Meal Breakdown</h2>
+        <div className="flex min-h-[520px] flex-col mt-4 rounded-3xl border border-black/10 bg-white p-5">
 
           <div className="mt-4 flex min-h-0 flex-1 flex-col justify-between gap-4">
             <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-neutral-500">Items</p>
@@ -436,6 +436,7 @@ export default function CartPage() {
                 </div>
               </div>
             </div>
+          </div>
           </div>
         </div>
       </section>
