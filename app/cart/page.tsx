@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { CartMacros } from "@/stores/cartStore";
-import type { AddonOption, MenuItem, Nutrition, RestaurantAddons } from "@/types/menu";
+import type { AddonOption, CommonChange, IngredientItem, MenuItem, Nutrition, RestaurantAddons } from "@/types/menu";
 import MenuItemCard from "@/components/MenuItemCard";
 import StickyMacroTotalsBar from "@/components/StickyMacroTotalsBar";
 import restaurants from "@/app/data/index.json";
@@ -43,6 +43,14 @@ const addonsLookupByRestaurant: Record<string, RestaurantAddons> = {
   panera: normalizeAddons(paneraMenu.addons),
   starbucks: normalizeAddons(starbucksMenu.addons),
   subway: normalizeAddons(subwayMenu.addons),
+};
+
+const ingredientLookupByRestaurant: Partial<Record<string, IngredientItem[]>> = {
+  chickfila: chickfilaMenu.ingredients,
+};
+
+const commonChangesLookupByRestaurant: Partial<Record<string, CommonChange[]>> = {
+  chickfila: chickfilaMenu.commonChanges,
 };
 
 type NutritionTotals = {
@@ -259,6 +267,9 @@ export default function CartPage() {
                   restaurantId={cartItem.restaurantId}
                   item={menuItem}
                   addons={addonsLookupByRestaurant[cartItem.restaurantId]}
+                  ingredientItems={ingredientLookupByRestaurant[cartItem.restaurantId]}
+                  menuItems={menuLookupByRestaurant[cartItem.restaurantId]}
+                  commonChanges={commonChangesLookupByRestaurant[cartItem.restaurantId]}
                   mode="cart"
                   cartQuantity={cartItem.quantity}
                   cartItemId={cartItem.id}
