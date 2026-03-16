@@ -21,7 +21,7 @@ export default async function RestaurantPage({
   if (!restaurant || !restaurantData) {
     return (
       <main style={{ maxWidth: 900, margin: "48px auto", padding: 16 }}>
-        <Link href="/" style={{ textDecoration: "none" }}>
+        <Link href="/" style={{ textDecoration: "none", cursor: "pointer" }}>
           ← Back
         </Link>
         <h1 style={{ marginTop: 16 }}>Restaurant not found</h1>

@@ -235,7 +235,7 @@ export default function CartPage() {
         <div className="mb-4">
           <Link
             href={backToMenuHref}
-            className="inline-flex items-center gap-2 rounded-lg border border-black/15 px-3 py-1.5 text-sm font-medium text-neutral-700 transition hover:bg-neutral-100"
+            className="cursor-pointer inline-flex items-center gap-2 rounded-lg border border-black/15 px-3 py-1.5 text-sm font-medium text-neutral-700 transition hover:bg-neutral-100"
           >
             ← Back to menu
           </Link>

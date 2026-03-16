@@ -37,17 +37,17 @@ export function FilterChips({
   return (
     <div className={`${withMargin ? "mt-2.5" : "mt-0"} flex w-full flex-wrap justify-end gap-2`}>
       {filters.proteinMin ? (
-        <button type="button" onClick={onClearProtein} className="rounded-full border border-black/20 bg-black/5 px-2.5 py-1 text-xs font-semibold">
+        <button type="button" onClick={onClearProtein} className="cursor-pointer rounded-full border border-black/20 bg-black/5 px-2.5 py-1 text-xs font-semibold">
           Protein {filters.proteinMin}g+ ✕
         </button>
       ) : null}
       {filters.caloriesMax ? (
-        <button type="button" onClick={onClearCalories} className="rounded-full border border-black/20 bg-black/5 px-2.5 py-1 text-xs font-semibold">
+        <button type="button" onClick={onClearCalories} className="cursor-pointer rounded-full border border-black/20 bg-black/5 px-2.5 py-1 text-xs font-semibold">
           Under {filters.caloriesMax} cal ✕
         </button>
       ) : null}
       {(filters.proteinMin || filters.caloriesMax) ? (
-        <button type="button" onClick={onClearAll} className="rounded-full border border-black/20 bg-white px-2.5 py-1 text-xs font-semibold">
+        <button type="button" onClick={onClearAll} className="cursor-pointer rounded-full border border-black/20 bg-white px-2.5 py-1 text-xs font-semibold">
           Clear All
         </button>
       ) : null}

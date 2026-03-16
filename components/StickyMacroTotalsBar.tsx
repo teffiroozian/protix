@@ -74,7 +74,7 @@ export default function StickyMacroTotalsBar({
             <button
               type="button"
               onClick={onSaveMeal}
-              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border-2 border-black/80 bg-transparent px-6 text-base font-semibold text-[#1A1A1A] transition hover:bg-black/5"
+              className="cursor-pointer inline-flex h-11 items-center justify-center gap-2 rounded-xl border-2 border-black/80 bg-transparent px-6 text-base font-semibold text-[#1A1A1A] transition hover:bg-black/5"
             >
               <Bookmark className="h-4 w-4" strokeWidth={2.5} aria-hidden="true" />
               <span>Save Meal</span>
@@ -82,7 +82,7 @@ export default function StickyMacroTotalsBar({
             <button
               type="button"
               onClick={onGenerateSnapshot}
-              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-black bg-black px-6 text-base font-semibold text-white transition hover:bg-neutral-900"
+              className="cursor-pointer inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-black bg-black px-6 text-base font-semibold text-white transition hover:bg-neutral-900"
             >
               <Camera className="h-4 w-4" strokeWidth={2.5} />
               <span>Generate Snapshot</span>
