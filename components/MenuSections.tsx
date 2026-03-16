@@ -253,18 +253,9 @@ export function getCategoryLabel(category: string, mode: CategoryMode = "menu") 
 
 function EmptyFilteredState() {
   return (
-    <div
-      style={{
-        marginTop: 32,
-        border: "1px solid rgba(0,0,0,0.12)",
-        borderRadius: 16,
-        padding: "18px 16px",
-        color: "rgba(0,0,0,0.72)",
-        fontWeight: 500,
-      }}
-    >
-      No items match these filters. Try lowering protein minimum or increasing calories.
-    </div>
+    <div className="mt-8 border border-black/10 rounded-2xl px-4 py-[18px] text-black/70 font-medium">
+  No items match these filters. Try lowering protein minimum or increasing calories.
+</div>
   );
 }
 
@@ -296,8 +287,8 @@ export default function MenuSections({
     }
 
     return (
-      <div style={{ marginTop: 32, display: "grid", gap: 12 }}>
-        <ul style={{ marginTop: 0, padding: 0, display: "grid", gap: 12 }}>
+      <div className="mt-8 grid gap-3">
+        <ul className="mt-0 p-0 grid gap-3">
           {sortedItems.map((item, index) => (
             <MenuItemCard
               key={`${item.name}-${index}`}
@@ -361,17 +352,17 @@ export default function MenuSections({
   }
 
   return (
-    <div style={{display: "grid", gap: 80 }}>
+    <div className="grid gap-20">
       {sections.map((section) => (
         <section
           key={section}
           id={categorySectionId(section)}
-          style={{ scrollMarginTop: 0 }}
+          className="scroll-mt-0"
         >
           <h2 className="my-5 text-3xl font-bold text-slate-900">
             {categoryHeading(section, categoryMode)}
           </h2>
-          <ul style={{ marginTop: 12, padding: 0, display: "grid", gap: 12 }}>
+          <ul className="mt-3 p-0 grid gap-3">
             {(sortedGrouped[section] ?? []).map((item, index) => (
               <MenuItemCard
                 key={`${item.name}-${index}`}
