@@ -147,6 +147,25 @@ function getSelectedSauceCountsFromLabel(item: MenuItem, addons: RestaurantAddon
   }, {});
 }
 
+function getSelectedCommonChangeIdsFromCustomizations(
+  commonChanges: CommonChange[] | undefined,
+  customizations: string[] | undefined
+) {
+  if (!commonChanges || commonChanges.length === 0 || !customizations || customizations.length === 0) {
+    return [];
+  }
+
+  const normalizedCustomizations = new Set(customizations.map((label) => label.replace(/^\+\s*/, "").trim().toLowerCase()));
+
+  return commonChanges
+    .filter((change) => {
+      const normalizedLabel = change.label.trim().toLowerCase();
+      const normalizedCartLabel = formatCommonChangeForCart(change.label).trim().toLowerCase();
+      return normalizedCustomizations.has(normalizedLabel) || normalizedCustomizations.has(normalizedCartLabel);
+    })
+    .map((change) => change.id);
+}
+
 export default function MenuItemCard({
   restaurantId,
   item,
@@ -210,7 +229,9 @@ export default function MenuItemCard({
   const [selectedSauceCounts, setSelectedSauceCounts] = useState<Record<string, number>>(() =>
     mode === "cart" ? getSelectedSauceCountsFromLabel(item, addons, initialCartOptionsLabel) : {}
   );
-  const [selectedCommonChangeIds, setSelectedCommonChangeIds] = useState<string[]>([]);
+  const [selectedCommonChangeIds, setSelectedCommonChangeIds] = useState<string[]>(() =>
+    mode === "cart" ? getSelectedCommonChangeIdsFromCustomizations(commonChanges, initialCartCustomizations) : []
+  );
   const [isAddFeedbackVisible, setIsAddFeedbackVisible] = useState(false);
   const { items, addItem, updateQuantity } = useCart();
   const selectedVariant = variants?.find((variant) => variant.id === selectedVariantId);
@@ -348,15 +369,6 @@ export default function MenuItemCard({
     [applicableCommonChanges, selectedCommonChangeIds]
   );
 
-  const hasAddonSections = useMemo(
-    () =>
-      (item.addonRefs ?? []).some((ref) => {
-        const options = addons?.[ref];
-        return Boolean(options && options.length > 0);
-      }),
-    [addons, item.addonRefs]
-  );
-
   const retainedCustomizations = useMemo(() => {
     if (!initialCartCustomizations || initialCartCustomizations.length === 0) return [];
 
@@ -367,11 +379,16 @@ export default function MenuItemCard({
       }
     }
 
+    const commonChangeLabels = new Set((commonChanges ?? []).flatMap((change) => [
+      change.label.replace(/^\+\s*/, "").trim(),
+      formatCommonChangeForCart(change.label).replace(/^\+\s*/, "").trim(),
+    ]));
+
     return initialCartCustomizations.filter((label) => {
       const normalized = label.replace(/^\+\s*/, "").trim();
-      return !addonNames.has(normalized);
+      return !addonNames.has(normalized) && !commonChangeLabels.has(normalized);
     });
-  }, [addons, initialCartCustomizations, item.addonRefs]);
+  }, [addons, commonChanges, initialCartCustomizations, item.addonRefs]);
 
   const optionsLabel = useMemo(() => {
     const dressingSegments = Object.values(selectedAddons)
@@ -427,7 +444,8 @@ export default function MenuItemCard({
   const emitCartConfiguration = (
     nextVariantId: string,
     nextAddons: Partial<Record<AddonRef, AddonOption>>,
-    nextSauceCounts: Record<string, number>
+    nextSauceCounts: Record<string, number>,
+    nextSelectedCommonChangeIds: string[] = selectedCommonChangeIds
   ) => {
     if (!isCartMode || !onCartConfigurationChange || !cartItemId) return;
 
@@ -451,6 +469,19 @@ export default function MenuItemCard({
       { calories: 0, protein: 0, carbs: 0, fat: 0 }
     );
 
+    const commonChangeTotalsForCart = applicableCommonChanges.reduce<MacroDelta>(
+      (sum, change) => {
+        if (!nextSelectedCommonChangeIds.includes(change.id)) return sum;
+        return {
+          calories: sum.calories + change.delta.calories,
+          protein: sum.protein + change.delta.protein,
+          carbs: sum.carbs + change.delta.carbs,
+          fat: sum.fat + deltaFat(change),
+        };
+      },
+      { calories: 0, protein: 0, carbs: 0, fat: 0 }
+    );
+
     const dressingSegments = Object.values(nextAddons)
       .filter((addon): addon is AddonOption => Boolean(addon && addon.name !== "None"))
       .map((addon) => addon.name);
@@ -460,7 +491,10 @@ export default function MenuItemCard({
     const nextOptionsLabel = [...dressingSegments, ...sauceSegments].length > 0
       ? [...dressingSegments, ...sauceSegments].join(" + ")
       : undefined;
-    const nextCustomizations = [...retainedCustomizations];
+    const selectedCommonChangesForCart = applicableCommonChanges
+      .filter((change) => nextSelectedCommonChangeIds.includes(change.id))
+      .map((change) => formatCommonChangeForCart(change.label));
+    const nextCustomizations = [...retainedCustomizations, ...selectedCommonChangesForCart];
 
     onCartConfigurationChange({
       variantId: activeVariant?.id,
@@ -470,9 +504,9 @@ export default function MenuItemCard({
       image: activeVariant?.image ?? item.image,
       macrosPerItem: {
         calories: (baseForCart.calories ?? 0) + addonTotalsForCart.calories,
-        protein: (baseForCart.protein ?? 0) + addonTotalsForCart.protein,
-        carbs: (baseForCart.carbs ?? 0) + addonTotalsForCart.carbs,
-        fat: (baseForCart.totalFat ?? 0) + addonTotalsForCart.fat,
+        protein: (baseForCart.protein ?? 0) + addonTotalsForCart.protein + commonChangeTotalsForCart.protein,
+        carbs: (baseForCart.carbs ?? 0) + addonTotalsForCart.carbs + commonChangeTotalsForCart.carbs,
+        fat: (baseForCart.totalFat ?? 0) + addonTotalsForCart.fat + commonChangeTotalsForCart.fat,
       },
     });
   };
@@ -528,22 +562,18 @@ export default function MenuItemCard({
       }}
     >
       <div
-        role={!isCartMode || hasAddonSections ? "button" : undefined}
-        tabIndex={!isCartMode || hasAddonSections ? 0 : undefined}
+        role="button"
+        tabIndex={0}
         className={styles.header}
-        onClick={!isCartMode || hasAddonSections ? () => setOpen((v) => !v) : undefined}
-        onKeyDown={
-          !isCartMode || hasAddonSections
-            ? (event) => {
-                if (event.key === "Enter" || event.key === " ") {
-                  event.preventDefault();
-                  setOpen((v) => !v);
-                }
-              }
-            : undefined
-        }
-        aria-expanded={!isCartMode || hasAddonSections ? open : undefined}
-        aria-controls={!isCartMode || hasAddonSections ? `${id}-details` : undefined}
+        onClick={() => setOpen((v) => !v)}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            setOpen((v) => !v);
+          }
+        }}
+        aria-expanded={open}
+        aria-controls={`${id}-details`}
       >
         <div className={styles.leftMedia}>
           {selectedItemImage ? (
@@ -639,7 +669,20 @@ export default function MenuItemCard({
                 </button>
               ) : null}
               {isCartMode || matchingCartItem ? (
-                <div className={styles.qtyStepper}>
+                <div className={styles.qtyStepperWrap}>
+                  {isCartMode ? (
+                    <button
+                      type="button"
+                      className={styles.modifyButton}
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        setOpen(true);
+                      }}
+                    >
+                      Modify
+                    </button>
+                  ) : null}
+                  <div className={styles.qtyStepper}>
                   <button
                     type="button"
                     className={styles.qtyStepButton}
@@ -677,6 +720,7 @@ export default function MenuItemCard({
                   >
                     +
                   </button>
+                  </div>
                 </div>
               ) : (
                 <button
@@ -695,7 +739,7 @@ export default function MenuItemCard({
           </div>
         </div>
 
-        {(!isCartMode || hasAddonSections) ? <div className={styles.iconActions}>
+        <div className={styles.iconActions}>
           {hasMods && !isCartMode ? (
             <div
               role="button"
@@ -718,17 +762,15 @@ export default function MenuItemCard({
             </div>
           ) : null}
           <div
-              role={isCartMode ? "button" : undefined}
-              tabIndex={isCartMode ? 0 : undefined}
-              aria-label={isCartMode ? `Toggle addon options for ${item.name}` : undefined}
+              role="button"
+              tabIndex={0}
+              aria-label={`Toggle addon options for ${item.name}`}
               className={`${styles.iconButton} ${styles.expandIcon} ${open ? styles.expandIconOpen : ""}`}
               onClick={(event) => {
-                if (!isCartMode || !hasAddonSections) return;
                 event.stopPropagation();
                 setOpen((v) => !v);
               }}
               onKeyDown={(event) => {
-                if (!isCartMode || !hasAddonSections) return;
                 if (event.key === "Enter" || event.key === " ") {
                   event.preventDefault();
                   event.stopPropagation();
@@ -738,11 +780,10 @@ export default function MenuItemCard({
             >
               +
             </div>
-        </div> : null}
+        </div>
       </div>
 
-      {(!isCartMode || hasAddonSections) ? (
-        <div id={`${id}-details`} className={`${styles.details} ${open ? styles.detailsOpen : ""}`}>
+      <div id={`${id}-details`} className={`${styles.details} ${open ? styles.detailsOpen : ""}`}>
           <div className={styles.detailsInner}>
             <ItemDetailsPanel
               item={item}
@@ -751,7 +792,7 @@ export default function MenuItemCard({
               selectedVariantId={selectedVariantId}
               onSelectVariant={(nextVariantId) => {
                 setSelectedVariantId(nextVariantId);
-                emitCartConfiguration(nextVariantId, selectedAddons, selectedSauceCounts);
+                emitCartConfiguration(nextVariantId, selectedAddons, selectedSauceCounts, selectedCommonChangeIds);
               }}
               addons={addons}
               ingredientItems={ingredientItems}
@@ -760,7 +801,7 @@ export default function MenuItemCard({
               onSelectAddon={(ref, addon) => {
                 setSelectedAddons((prev) => {
                   const next = { ...prev, [ref]: addon ?? emptyAddon };
-                  emitCartConfiguration(selectedVariantId, next, selectedSauceCounts);
+                  emitCartConfiguration(selectedVariantId, next, selectedSauceCounts, selectedCommonChangeIds);
                   return next;
                 });
               }}
@@ -770,7 +811,7 @@ export default function MenuItemCard({
                   const currentTotal = Object.values(prev).reduce((sum, count) => sum + count, 0);
                   if (currentTotal >= maxSauceSelections) return prev;
                   const next = { ...prev, [addon.name]: (prev[addon.name] ?? 0) + 1 };
-                  emitCartConfiguration(selectedVariantId, selectedAddons, next);
+                  emitCartConfiguration(selectedVariantId, selectedAddons, next, selectedCommonChangeIds);
                   return next;
                 });
               }}
@@ -784,7 +825,7 @@ export default function MenuItemCard({
                   } else {
                     next[addon.name] = current - 1;
                   }
-                  emitCartConfiguration(selectedVariantId, selectedAddons, next);
+                  emitCartConfiguration(selectedVariantId, selectedAddons, next, selectedCommonChangeIds);
                   return next;
                 });
               }}
@@ -792,7 +833,7 @@ export default function MenuItemCard({
                 setSelectedSauceCounts((prev) => {
                   if (addon.name === "None") {
                     if (Object.keys(prev).length === 0) return prev;
-                    emitCartConfiguration(selectedVariantId, selectedAddons, {});
+                    emitCartConfiguration(selectedVariantId, selectedAddons, {}, selectedCommonChangeIds);
                     return {};
                   }
 
@@ -800,37 +841,35 @@ export default function MenuItemCard({
                   if (current > 0) {
                     const next = { ...prev };
                     delete next[addon.name];
-                    emitCartConfiguration(selectedVariantId, selectedAddons, next);
+                    emitCartConfiguration(selectedVariantId, selectedAddons, next, selectedCommonChangeIds);
                     return next;
                   }
 
                   const currentTotal = Object.values(prev).reduce((sum, count) => sum + count, 0);
                   if (currentTotal >= maxSauceSelections) return prev;
                   const next = { ...prev, [addon.name]: 1 };
-                  emitCartConfiguration(selectedVariantId, selectedAddons, next);
+                  emitCartConfiguration(selectedVariantId, selectedAddons, next, selectedCommonChangeIds);
                   return next;
                 });
               }}
-              commonChanges={isCartMode ? undefined : applicableCommonChanges}
-              selectedCommonChangeIds={isCartMode ? undefined : selectedCommonChangeIds}
-              onToggleCommonChange={
-                isCartMode
-                  ? undefined
-                  : (changeId) =>
-                      setSelectedCommonChangeIds((prev) =>
-                        prev.includes(changeId)
-                          ? prev.filter((id) => id !== changeId)
-                          : [...prev, changeId]
-                      )
+              commonChanges={applicableCommonChanges}
+              selectedCommonChangeIds={selectedCommonChangeIds}
+              onToggleCommonChange={(changeId) =>
+                setSelectedCommonChangeIds((prev) => {
+                  const next = prev.includes(changeId)
+                    ? prev.filter((id) => id !== changeId)
+                    : [...prev, changeId];
+                  emitCartConfiguration(selectedVariantId, selectedAddons, selectedSauceCounts, next);
+                  return next;
+                })
               }
               customizationTotals={customizationTotals}
               showCustomizationDeltas={hasActiveCustomization}
-              displayMode={isCartMode ? "addonsOnly" : "full"}
+              displayMode="full"
             />
 
           </div>
         </div>
-      ) : null}
     </li>
   );
 }
