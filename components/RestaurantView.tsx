@@ -376,7 +376,7 @@ export default function RestaurantView({
                     <button
                       type="button"
                       onClick={() => handleCategorySelect(option.id)}
-                      className={`inline-flex items-center gap-3 rounded-full px-4 py-2 text-left text-base font-semibold transition-colors duration-50 ease-in ${isActive
+                      className={`cursor-pointer inline-flex items-center gap-3 rounded-full px-4 py-2 text-left text-base font-semibold transition-colors duration-50 ease-in ${isActive
                           ? "shadow-[0px_0_8px_rgba(0,0,0,0.25)] bg-white text-slate-800"
                           : "text-slate-700 hover:bg-slate-200"
                         }`}

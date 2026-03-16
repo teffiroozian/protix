@@ -207,7 +207,7 @@ export default function CartIconDropdown({
                   setDismissedAddedAt(lastAddedAt);
                 }
               }}
-              className="inline-flex h-10 flex-1 items-center justify-center rounded-lg border border-slate-300 bg-white px-3 text-sm font-medium text-slate-900 transition hover:bg-slate-50"
+              className="cursor-pointer inline-flex h-10 flex-1 items-center justify-center rounded-lg border border-slate-300 bg-white px-3 text-sm font-medium text-slate-900 transition hover:bg-slate-50"
             >
               View Cart
             </button>
@@ -218,7 +218,7 @@ export default function CartIconDropdown({
                   setDismissedAddedAt(lastAddedAt);
                 }
               }}
-              className="inline-flex h-10 flex-1 items-center justify-center rounded-lg bg-slate-900 px-3 text-sm font-medium text-white transition hover:bg-slate-800"
+              className="cursor-pointer inline-flex h-10 flex-1 items-center justify-center rounded-lg bg-slate-900 px-3 text-sm font-medium text-white transition hover:bg-slate-800"
             >
               View All Items
             </Link>

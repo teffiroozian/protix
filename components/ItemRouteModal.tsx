@@ -264,14 +264,14 @@ export default function ItemRouteModal({
     <div className="fixed inset-0 z-[100] flex items-center justify-center" role="dialog" aria-modal="true" aria-label={item.name}>
       <button
         type="button"
-        className="absolute inset-0 border-0 bg-slate-900/66"
+        className="cursor-pointer absolute inset-0 border-0 bg-slate-900/66"
         onClick={handleClose}
         aria-label="Close item modal"
       />
       <div className="relative m-4 h-[calc(100%-32px)] w-[min(1024px,calc(100%-32px))] overflow-hidden rounded-2xl bg-white px-6 pt-6">
         <button
           type="button"
-          className="sticky top-0 ml-auto h-9 w-9 rounded-full border border-black/12 bg-white/95 text-2xl"
+          className="cursor-pointer sticky top-0 ml-auto h-9 w-9 rounded-full border border-black/12 bg-white/95 text-2xl"
           onClick={handleClose}
           aria-label="Close item modal"
         >
