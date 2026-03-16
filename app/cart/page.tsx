@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo } from "react";
 import type { CartMacros } from "@/stores/cartStore";
 import type { AddonOption, CommonChange, IngredientItem, MenuItem, Nutrition, RestaurantAddons } from "@/types/menu";
 import MenuItemCard from "@/components/MenuItemCard";
@@ -169,8 +169,6 @@ function buildCartNutritionTotals(items: ReturnType<typeof useCart>["items"]): N
 export default function CartPage() {
   const router = useRouter();
   const { items, totals, updateQuantity, updateItem } = useCart();
-  const expandedTotalsRef = useRef<HTMLElement | null>(null);
-  const [expandedTotalsInView, setExpandedTotalsInView] = useState(false);
 
   const itemCount = useMemo(
     () => items.reduce((sum, item) => sum + item.quantity, 0),
@@ -189,22 +187,6 @@ export default function CartPage() {
 
   const nutritionTotals = useMemo(() => buildCartNutritionTotals(items), [items]);
 
-  useEffect(() => {
-    const node = expandedTotalsRef.current;
-    if (!node) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setExpandedTotalsInView(entry.isIntersecting);
-      },
-      { threshold: 0.2 }
-    );
-
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
-
-  const showStickyBar = items.length > 0 && !expandedTotalsInView;
   const macroTotalGrams = totals.protein + totals.carbs + totals.fat;
   const macroSegments = [
     {
@@ -226,7 +208,7 @@ export default function CartPage() {
   const proteinPer100Calories = totals.calories > 0 ? Math.round((totals.protein / totals.calories) * 100) : 0;
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-6 px-4 pb-72 pt-8 sm:px-6 sm:pt-10">
+    <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-6 px-4 pb-10 pt-8 sm:px-6 sm:pt-10">
       <header className="rounded-3xl border border-black/10 bg-white px-5 py-5 shadow-sm sm:px-6">
         <div className="mb-4">
           <Link
@@ -254,7 +236,7 @@ export default function CartPage() {
         </div>
       </header>
 
-      <section className="mx-auto w-full max-w-[900px] space-y-3">
+      <section className="w-full space-y-3">
         {items.length === 0 ? (
           <div className="rounded-2xl border border-black/10 bg-white px-5 py-8 text-center shadow-sm">
             <p className="text-lg font-medium text-neutral-900">Your cart is empty.</p>
@@ -315,8 +297,8 @@ export default function CartPage() {
         )}
       </section>
 
-      <section ref={expandedTotalsRef} className="rounded-3xl border border-black/10 bg-white p-4 shadow-sm">
-        <div className="grid gap-4 grid-cols-2 rounded-3xl bg-[#e0e0e0] p-4">
+      <section className="rounded-3xl border border-black/10 bg-white p-4 shadow-sm">
+        <div className="grid grid-cols-1 gap-4 rounded-3xl bg-[#e0e0e0] p-4 lg:grid-cols-2">
 
             <div className="rounded-[18px] border border-[rgba(0,0,0,0.15)] bg-white p-[18px]">
               <h2 className="text-2xl font-bold text-neutral-900">Nutrition Summary</h2>
@@ -435,15 +417,19 @@ export default function CartPage() {
                   </div>
               </div>
             </div>
+            <div className="col-span-2">
+          <StickyMacroTotalsBar
+            totals={totals}
+            inline
+            onSaveMeal={() => window.alert("Save Meal coming soon")}
+            onGenerateSnapshot={() => router.push("/cart/snapshot")}
+          />
         </div>
-      </section>
+        </div>
+      
 
-      <StickyMacroTotalsBar
-        totals={totals}
-        visible={showStickyBar}
-        onSaveMeal={() => window.alert("Save Meal coming soon")}
-        onGenerateSnapshot={() => router.push("/cart/snapshot")}
-      />
+        
+      </section>
     </main>
   );
 }

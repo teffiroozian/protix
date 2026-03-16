@@ -5,7 +5,8 @@ import { Bookmark, Camera } from "lucide-react";
 
 type StickyMacroTotalsBarProps = {
   totals: CartMacros;
-  visible: boolean;
+  visible?: boolean;
+  inline?: boolean;
   onSaveMeal?: () => void;
   onGenerateSnapshot?: () => void;
 };
@@ -24,33 +25,38 @@ const macroRows: Array<{
 
 export default function StickyMacroTotalsBar({
   totals,
-  visible,
+  visible = true,
+  inline = false,
   onSaveMeal,
   onGenerateSnapshot,
 }: StickyMacroTotalsBarProps) {
-  return (
-    <div
-      className={`fixed left-0 right-0 bottom-4 mx-auto z-40 max-w-5xl px-4 transition-all duration-300 ease-out sm:px-6 ${
+  const wrapperClassName = inline
+    ? "w-full"
+    : `fixed left-0 right-0 bottom-4 mx-auto z-40 max-w-5xl px-4 transition-all duration-300 ease-out sm:px-6 ${
         visible
           ? "pointer-events-none translate-y-0 opacity-100"
           : "pointer-events-none translate-y-4 opacity-0"
-      }`}
-    >
-      <div
-        className={`mx-auto w-full max-w-[1700px] rounded-[2.25rem] border border-black/10 bg-[#f5f5f5] px-6 py-5 shadow-[0_10px_30px_rgba(0,0,0,0.24)] transition-all duration-300 sm:px-8 sm:py-6 ${
-          visible ? "pointer-events-auto" : "pointer-events-none"
-        }`}
-      >
-        <div className="flex items-center gap-10">
+      }`;
+
+  const panelClassName = inline
+    ? "w-full rounded-3xl border border-black/10 bg-white px-4 py-4"
+    : `mx-auto w-full rounded-[2.25rem] border border-black/10 bg-[#f5f5f5] px-6 py-5 shadow-[0_10px_30px_rgba(0,0,0,0.24)] transition-all duration-300 sm:px-8 sm:py-6 ${
+        visible ? "pointer-events-auto" : "pointer-events-none"
+      }`;
+
+  return (
+    <div className={wrapperClassName}>
+      <div className={panelClassName}>
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:gap-8">
           <section className="flex-1">
-            <p className="text-center text-md font-semibold tracking-tight text-neutral-500">
+            <p className="text-center text-sm font-semibold tracking-tight text-neutral-500">
               TOTAL MACROS
             </p>
 
-            <div className="mt-6 grid grid-cols-4 gap-x-6 gap-y-4 text-center">
+            <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-4 text-center sm:grid-cols-4 sm:gap-x-6">
               {macroRows.map((macro) => (
                 <div key={macro.key}>
-                  <p className={`text-3xl font-bold leading-none ${macro.valueClassName}`}>
+                  <p className={`text-2xl font-bold leading-none sm:text-3xl ${macro.valueClassName}`}>
                     {totals[macro.key]}
                     {macro.unit ?? ""}
                   </p>
@@ -64,21 +70,21 @@ export default function StickyMacroTotalsBar({
 
           
 
-          <div className="flex flex-col gap-3">
+          <div className="flex w-full flex-col gap-3 sm:w-auto">
             <button
               type="button"
               onClick={onSaveMeal}
-              className="inline-flex h-12 items-center justify-center gap-3 rounded-2xl border-2 border-black/85 bg-transparent px-8 text-lg font-semibold text-[#1A1A1A] transition hover:bg-black/5"
+              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border-2 border-black/80 bg-transparent px-6 text-base font-semibold text-[#1A1A1A] transition hover:bg-black/5"
             >
-              <Bookmark className="h-5 w-5" strokeWidth={2.5} aria-hidden="true" />
+              <Bookmark className="h-4 w-4" strokeWidth={2.5} aria-hidden="true" />
               <span>Save Meal</span>
             </button>
             <button
               type="button"
               onClick={onGenerateSnapshot}
-              className="inline-flex h-12 items-center justify-center gap-3 rounded-2xl border border-black bg-black px-8 text-lg font-semibold text-white transition hover:bg-neutral-900"
+              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-black bg-black px-6 text-base font-semibold text-white transition hover:bg-neutral-900"
             >
-              <Camera className="w-5 h-5" strokeWidth={2.5} />
+              <Camera className="h-4 w-4" strokeWidth={2.5} />
               <span>Generate Snapshot</span>
             </button>
           </div>
