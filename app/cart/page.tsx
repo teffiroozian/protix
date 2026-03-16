@@ -210,17 +210,17 @@ export default function CartPage() {
     {
       label: "Protein",
       percent: macroTotalGrams > 0 ? (totals.protein / macroTotalGrams) * 100 : 0,
-      color: "bg-emerald-500",
+      color: "bg-[#c2410c] text-white",
     },
     {
       label: "Carbs",
       percent: macroTotalGrams > 0 ? (totals.carbs / macroTotalGrams) * 100 : 0,
-      color: "bg-amber-400",
+      color: "bg-[#ca8a04] text-white",
     },
     {
       label: "Fat",
       percent: macroTotalGrams > 0 ? (totals.fat / macroTotalGrams) * 100 : 0,
-      color: "bg-rose-400",
+      color: "bg-[#2563eb] text-white",
     },
   ];
   const proteinPer100Calories = totals.calories > 0 ? Math.round((totals.protein / totals.calories) * 100) : 0;
@@ -315,8 +315,8 @@ export default function CartPage() {
         )}
       </section>
 
-      <section ref={expandedTotalsRef} className="grid gap-4 lg:grid-cols-2">
-        <div className="rounded-3xl border border-black/10 bg-white p-5 shadow-sm sm:p-6">
+      <section ref={expandedTotalsRef} className="grid gap-4 grid-cols-2 rounded-3xl border border-black/10 bg-white p-5 shadow-sm sm:p-6">
+        <div>
           <h2 className="text-xl font-semibold text-neutral-900">Nutrition Summary</h2>
 
           <section className="mt-4 rounded-[18px] border border-[rgba(0,0,0,0.15)] bg-white p-[18px]">
@@ -380,10 +380,11 @@ export default function CartPage() {
           </section>
         </div>
 
-        <div className="flex min-h-[520px] flex-col rounded-3xl border border-black/10 bg-white p-5 shadow-sm sm:p-6">
+        <div className="flex min-h-[520px] flex-col rounded-3xl border border-black/10 bg-white p-5">
           <h2 className="text-xl font-semibold text-neutral-900">Meal Breakdown</h2>
 
           <div className="mt-4 flex min-h-0 flex-1 flex-col justify-between gap-4">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-neutral-500">Items</p>
             {items.length === 0 ? (
               <p className="text-sm text-neutral-600">No meal items yet.</p>
             ) : (
@@ -415,8 +416,8 @@ export default function CartPage() {
             )}
 
             <div className="space-y-3 pt-2">
+              <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">Protein Efficiency</p>
               <div className="rounded-xl border border-black/10 bg-neutral-50 px-3 py-2">
-                <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">Protein Efficiency</p>
                 <p className="mt-1 text-sm font-medium text-neutral-900">{proteinPer100Calories}g of Protein in 100cals</p>
               </div>
 
