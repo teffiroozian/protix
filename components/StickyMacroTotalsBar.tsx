@@ -1,6 +1,7 @@
 "use client";
 
 import type { CartMacros } from "@/stores/cartStore";
+import { Bookmark, Camera } from "lucide-react";
 
 type StickyMacroTotalsBarProps = {
   totals: CartMacros;
@@ -67,7 +68,7 @@ export default function StickyMacroTotalsBar({
               onClick={onSaveMeal}
               className="inline-flex h-12 items-center justify-center gap-3 rounded-2xl border-2 border-black/85 bg-transparent px-10 text-lg font-semibold text-[#1A1A1A] transition hover:bg-black/5"
             >
-              <span aria-hidden="true">🔖</span>
+              <Bookmark className="h-5 w-5" strokeWidth={2.5} aria-hidden="true" />
               <span>Save Meal</span>
             </button>
             <button
@@ -75,7 +76,7 @@ export default function StickyMacroTotalsBar({
               onClick={onGenerateSnapshot}
               className="inline-flex h-12 items-center justify-center gap-3 rounded-2xl border border-black bg-black px-10 text-lg font-semibold text-white transition hover:bg-neutral-900"
             >
-              <span aria-hidden="true">↓</span>
+              <Camera className="w-5 h-5" strokeWidth={2.5} />
               <span>Generate Snapshot</span>
             </button>
           </div>
