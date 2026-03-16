@@ -315,129 +315,127 @@ export default function CartPage() {
         )}
       </section>
 
-      <section ref={expandedTotalsRef} className="grid gap-4 grid-cols-2 rounded-3xl border border-black/10 bg-white p-5 shadow-sm sm:p-6">
-        <div>
-          <h2 className="text-xl font-semibold text-neutral-900">Nutrition Summary</h2>
+      <section ref={expandedTotalsRef} className="rounded-3xl border border-black/10 bg-white p-4 shadow-sm">
+        <div className="grid gap-4 grid-cols-2 rounded-3xl bg-[#e0e0e0] p-4">
 
-          <section className="mt-4 rounded-[18px] border border-[rgba(0,0,0,0.15)] bg-white p-[18px]">
-            <div className="text-xs font-medium text-[rgba(0,0,0,0.55)]">Amount per serving</div>
+            <div className="rounded-[18px] border border-[rgba(0,0,0,0.15)] bg-white p-[18px]">
+              <h2 className="text-2xl font-bold text-neutral-900">Nutrition Summary</h2>
+              <div className="mt-6 text-xs font-medium text-[rgba(0,0,0,0.55)]">Amount per serving</div>
 
-            <div className="mt-1 flex items-end justify-between">
-              <div className="text-2xl font-bold">Calories</div>
-              <div className="text-2xl font-bold">{nutritionTotals.calories}</div>
-            </div>
-
-            <div className="my-[12px] mb-2 h-[5px] rounded-[999px] bg-[rgba(0,0,0,0.75)]" />
-
-            <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px]">
-              <div className="text-[18px] font-semibold">Total Fat</div>
-              <div className="text-[18px] font-semibold">{formatValue(nutritionTotals.totalFat, "g")}</div>
-            </div>
-
-            <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px] pl-5">
-              <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">Sat Fat</div>
-              <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">{formatValue(nutritionTotals.satFat, "g")}</div>
-            </div>
-
-            <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px] pl-5">
-              <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">Trans Fat</div>
-              <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">{formatValue(nutritionTotals.transFat, "g")}</div>
-            </div>
-
-            <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px]">
-              <div className="text-[18px] font-semibold">Cholesterol</div>
-              <div className="text-[18px] font-semibold">{formatValue(nutritionTotals.cholesterol, "mg")}</div>
-            </div>
-
-            <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px]">
-              <div className="text-[18px] font-semibold">Sodium</div>
-              <div className="text-[18px] font-semibold">{formatValue(nutritionTotals.sodium, "mg")}</div>
-            </div>
-
-            <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px]">
-              <div className="text-[18px] font-semibold">Carbohydrates</div>
-              <div className="text-[18px] font-semibold">{formatValue(nutritionTotals.carbs, "g")}</div>
-            </div>
-
-            <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px] pl-5">
-              <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">Fiber</div>
-              <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">{formatValue(nutritionTotals.fiber, "g")}</div>
-            </div>
-
-            <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px] pl-5">
-              <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">Sugars</div>
-              <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">{formatValue(nutritionTotals.sugars, "g")}</div>
-            </div>
-
-            <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px]">
-              <div className="text-[18px] font-semibold">Protein</div>
-              <div className="text-[18px] font-semibold">{formatValue(nutritionTotals.protein, "g")}</div>
-            </div>
-
-            <div className="mt-3 text-xs font-medium leading-[1.05] text-[rgba(0,0,0,0.55)]">
-              Aggregated nutrition totals for all items currently in your cart.
-            </div>
-          </section>
-        </div>
-        <div className="flex flex-col">
-          <h2 className="text-xl font-semibold text-neutral-900">Meal Breakdown</h2>
-        <div className="flex min-h-[520px] flex-col mt-4 rounded-3xl border border-black/10 bg-white p-5">
-
-          <div className="mt-4 flex min-h-0 flex-1 flex-col justify-between gap-4">
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-neutral-500">Items</p>
-            {items.length === 0 ? (
-              <p className="text-sm text-neutral-600">No meal items yet.</p>
-            ) : (
-              <ul className="min-h-0 flex-1 space-y-2 overflow-y-auto pr-1">
-                {items.map((item) => {
-                  const detailLine = summarizeItem(item);
-
-                  return (
-                    <li
-                      key={`${item.id}-breakdown`}
-                      className="flex items-center gap-3 rounded-xl border border-black/10 bg-neutral-50 px-3 py-2"
-                    >
-                      <div className="h-11 w-11 shrink-0 overflow-hidden rounded-lg border border-black/10 bg-white">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={item.image} alt={item.name} className="h-full w-full object-cover" />
-                      </div>
-                      <div className="min-w-0">
-                        <p className="truncate text-sm font-medium text-neutral-900">
-                          {item.quantity}x {item.name}
-                        </p>
-                        {detailLine !== "No customizations" ? (
-                          <p className="truncate text-xs text-neutral-500">{detailLine}</p>
-                        ) : null}
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
-
-            <div className="space-y-3 pt-2">
-              <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">Protein Efficiency</p>
-              <div className="rounded-xl border border-black/10 bg-neutral-50 px-3 py-2">
-                <p className="mt-1 text-sm font-medium text-neutral-900">{proteinPer100Calories}g of Protein in 100cals</p>
+              <div className="mt-1 flex items-end justify-between">
+                <div className="text-xl font-bold">Calories</div>
+                <div className="text-xl font-bold">{nutritionTotals.calories}</div>
               </div>
 
-              <div>
-                <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-neutral-500">Macro Split</p>
-                <div className="flex h-11 w-full overflow-hidden rounded-full border border-black/10 bg-neutral-100">
-                  {macroSegments.map((segment) => (
-                    <div
-                      key={segment.label}
-                      className={`flex min-w-0 items-center justify-center px-1 text-[11px] font-semibold text-neutral-900 ${segment.color}`}
-                      style={{ width: `${segment.percent}%` }}
-                    >
-                      {segment.percent >= 18 ? `${segment.label} ${Math.round(segment.percent)}%` : ""}
+              <div className="my-[12px] mb-2 h-[5px] rounded-[999px] bg-[rgba(0,0,0,0.75)]" />
+
+              <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px]">
+                <div className="text-lg font-semibold">Total Fat</div>
+                <div className="text-lg font-semibold">{formatValue(nutritionTotals.totalFat, "g")}</div>
+              </div>
+
+              <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px] pl-5">
+                <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">Sat Fat</div>
+                <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">{formatValue(nutritionTotals.satFat, "g")}</div>
+              </div>
+
+              <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px] pl-5">
+                <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">Trans Fat</div>
+                <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">{formatValue(nutritionTotals.transFat, "g")}</div>
+              </div>
+
+              <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px]">
+                <div className="text-lg font-semibold">Cholesterol</div>
+                <div className="text-lg font-semibold">{formatValue(nutritionTotals.cholesterol, "mg")}</div>
+              </div>
+
+              <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px]">
+                <div className="text-lg font-semibold">Sodium</div>
+                <div className="text-lg font-semibold">{formatValue(nutritionTotals.sodium, "mg")}</div>
+              </div>
+
+              <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px]">
+                <div className="text-lg font-semibold">Carbohydrates</div>
+                <div className="text-lg font-semibold">{formatValue(nutritionTotals.carbs, "g")}</div>
+              </div>
+
+              <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px] pl-5">
+                <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">Fiber</div>
+                <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">{formatValue(nutritionTotals.fiber, "g")}</div>
+              </div>
+
+              <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px] pl-5">
+                <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">Sugars</div>
+                <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">{formatValue(nutritionTotals.sugars, "g")}</div>
+              </div>
+
+              <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px]">
+                <div className="text-lg font-semibold">Protein</div>
+                <div className="text-lg font-semibold">{formatValue(nutritionTotals.protein, "g")}</div>
+              </div>
+
+              <div className="mt-3 text-xs font-medium leading-[1.05] text-[rgba(0,0,0,0.55)]">
+                Aggregated nutrition totals for all items currently in your cart.
+              </div>
+            </div>
+            
+            <div className="flex min-h-0 flex-col rounded-3xl border border-black/10 bg-white p-5">
+              <h2 className="text-2xl font-bold text-neutral-900">Meal Breakdown</h2>
+              <div className="mt-6 flex min-h-0 flex-1 flex-col justify-between gap-2">
+                <p className="text-sm font-semibold uppercase tracking-wide text-neutral-500">Items</p>
+                {items.length === 0 ? (
+                  <p className="text-sm text-neutral-600">No meal items yet.</p>
+                ) : (
+                  <ul className="min-h-0 flex-1 space-y-2 overflow-y-auto pr-1">
+                    {items.map((item) => {
+                      const detailLine = summarizeItem(item);
+
+                      return (
+                        <li
+                          key={`${item.id}-breakdown`}
+                          className="flex items-center gap-3 rounded-xl border border-black/10 bg-neutral-50 px-3 py-2"
+                        >
+                          <div className="h-11 w-11 shrink-0 overflow-hidden rounded-lg border border-black/10 bg-white">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={item.image} alt={item.name} className="h-full w-full object-cover" />
+                          </div>
+                          <div className="min-w-0">
+                            <p className="truncate text-sm font-medium text-neutral-900">
+                              {item.quantity}x {item.name}
+                            </p>
+                            {detailLine !== "No customizations" ? (
+                              <p className="truncate text-xs text-neutral-500">{detailLine}</p>
+                            ) : null}
+                          </div>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
+
+                <div className="space-y-2 pt-4">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">Protein Efficiency</p>
+                  <div className="rounded-xl border border-black/10 bg-neutral-50 px-3 py-2">
+                    <p className="mt-1 text-sm font-medium text-neutral-900">{proteinPer100Calories}g of Protein in 100cals</p>
+                  </div>
+
+                  <div>
+                    <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-neutral-500">Macro Split</p>
+                    <div className="flex h-11 w-full overflow-hidden rounded-full border border-black/10 bg-neutral-100">
+                      {macroSegments.map((segment) => (
+                        <div
+                          key={segment.label}
+                          className={`flex min-w-0 items-center justify-center px-1 text-[11px] font-semibold text-neutral-900 ${segment.color}`}
+                          style={{ width: `${segment.percent}%` }}
+                        >
+                          {segment.percent >= 18 ? `${segment.label} ${Math.round(segment.percent)}%` : ""}
+                        </div>
+                      ))}
                     </div>
-                  ))}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          </div>
         </div>
       </section>
 
