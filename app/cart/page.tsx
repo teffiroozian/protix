@@ -160,7 +160,7 @@ function buildCartNutritionTotals(items: ReturnType<typeof useCart>["items"]): N
 
 export default function CartPage() {
   const router = useRouter();
-  const { items, totals, updateQuantity, updateItem } = useCart();
+  const { items, totals, updateQuantity, updateItem, lastAddedItem } = useCart();
   const expandedTotalsRef = useRef<HTMLElement | null>(null);
   const [expandedTotalsInView, setExpandedTotalsInView] = useState(false);
 
@@ -174,10 +174,11 @@ export default function CartPage() {
     [items]
   );
 
-  const headerRestaurant = restaurants.find((restaurant) => restaurant.id === cartRestaurantIds[0]);
-  const backToMenuHref = cartRestaurantIds[0] ? `/restaurant/${cartRestaurantIds[0]}` : "/";
-  const headerTitle = cartRestaurantIds.length > 1 ? "Mixed Restaurants" : (headerRestaurant?.name ?? "Meal Finalization");
-  const headerLogo = cartRestaurantIds.length > 1 ? undefined : headerRestaurant?.logo;
+  const activeRestaurantId = lastAddedItem?.restaurantId ?? cartRestaurantIds[0];
+  const headerRestaurant = restaurants.find((restaurant) => restaurant.id === activeRestaurantId);
+  const backToMenuHref = activeRestaurantId ? `/restaurant/${activeRestaurantId}` : "/";
+  const headerTitle = headerRestaurant?.name ?? "Meal Finalization";
+  const headerLogo = headerRestaurant?.logo;
 
   const nutritionTotals = useMemo(() => buildCartNutritionTotals(items), [items]);
 
