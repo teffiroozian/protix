@@ -6,7 +6,6 @@ import ScrollToTopOnMount from "@/components/ScrollToTopOnMount";
 import { RestaurantSearchProvider } from "@/components/RestaurantSearchContext";
 import { RestaurantUiProvider } from "@/components/RestaurantUiContext";
 import CartPreviewDrawer from "@/components/CartPreviewDrawer";
-import { getRestaurantData } from "@/lib/restaurants";
 
 export default async function RestaurantPage({
   params,
@@ -16,9 +15,8 @@ export default async function RestaurantPage({
   const { id } = await params;
 
   const restaurant = restaurants.find((r) => r.id === id);
-  const restaurantData = await getRestaurantData(id);
 
-  if (!restaurant || !restaurantData) {
+  if (!restaurant) {
     return (
       <main style={{ maxWidth: 900, margin: "48px auto", padding: 16 }}>
         <Link href="/" style={{ textDecoration: "none", cursor: "pointer" }}>
@@ -41,10 +39,14 @@ export default async function RestaurantPage({
               restaurantId={restaurant.id}
               restaurantName={restaurant.name}
               restaurantLogo={restaurant.logo}
-              items={restaurantData.items}
-              ingredients={restaurantData.ingredients}
-              addons={restaurantData.addons}
-              commonChanges={restaurantData.commonChanges}
+              // TODO: Replace this temporary fallback with shared loader data from `@/lib/restaurant-data-loader`.
+              items={[]}
+              // TODO: Replace this temporary fallback with shared loader data from `@/lib/restaurant-data-loader`.
+              ingredients={[]}
+              // TODO: Replace this temporary fallback with shared loader data from `@/lib/restaurant-data-loader`.
+              addons={[]}
+              // TODO: Replace this temporary fallback with shared loader data from `@/lib/restaurant-data-loader`.
+              commonChanges={[]}
             />
           </main>
         </div>
