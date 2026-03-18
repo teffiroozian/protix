@@ -46,7 +46,7 @@ const supportedIngredientModifierOptions = [
 
 type SupportedIngredientModifierId = (typeof supportedIngredientModifierOptions)[number]["id"];
 
-function resolvePanelIngredients(
+export function resolvePanelIngredients(
   item: MenuItem,
   ingredientItems: IngredientItem[] = [],
   addons?: RestaurantAddons,
@@ -103,8 +103,6 @@ function resolvePanelIngredients(
     const label = menuItemMatch?.name ?? match?.name ?? fallbackLabel;
     const addonMatch = addonLookup.get(label.toLowerCase());
     const isSingleIngredientRow = isSingleIngredientItem && ingredientIds.length === 1;
-    const activeVariantCalories = activeVariant?.nutrition.calories;
-
     const normalizedAllowedModifiers = new Set(
       (match?.allowedModifiers ?? []).map((modifier) => modifier.trim().toLowerCase())
     );
@@ -112,16 +110,31 @@ function resolvePanelIngredients(
       .filter((modifier) => modifier.aliases.some((alias) => normalizedAllowedModifiers.has(alias)))
       .map((modifier) => ({ id: modifier.id, label: modifier.label }));
 
+    const nutrition =
+      isSingleIngredientRow && activeVariant?.nutrition
+        ? activeVariant.nutrition
+        : menuItemMatch?.nutrition ??
+          match?.nutrition ?? {
+            calories: addonMatch?.calories,
+            protein: addonMatch?.protein,
+            carbs: addonMatch?.carbs,
+            totalFat: addonMatch?.totalFat ?? addonMatch?.fat,
+            satFat: addonMatch?.satFat,
+            transFat: addonMatch?.transFat,
+            cholesterol: addonMatch?.cholesterol,
+            sodium: addonMatch?.sodium,
+            fiber: addonMatch?.fiber,
+            sugars: addonMatch?.sugars,
+          };
+
     return {
       id: ingredientId,
       label,
       icon: match?.image ?? menuItemMatch?.image ?? addonMatch?.image ?? "🥣",
       ingredientItem: match,
       supportedModifiers,
-      calories:
-        isSingleIngredientRow && activeVariantCalories !== undefined
-          ? activeVariantCalories
-          : menuItemMatch?.nutrition.calories ?? match?.nutrition.calories ?? addonMatch?.calories,
+      nutrition,
+      calories: nutrition.calories,
     };
   });
 }
@@ -190,6 +203,8 @@ export function PortionSelector({
     </div>
   );
 }
+export type ResolvedPanelIngredient = ReturnType<typeof resolvePanelIngredients>[number];
+
 export default function ItemDetailsPanel({
   item,
   nutrition,
@@ -212,8 +227,8 @@ export default function ItemDetailsPanel({
   showCustomizationDeltas,
   displayMode = "full",
   showVariantsInDetails = true,
-  selectedIngredientModifierIds,
-  onSetIngredientModifier,
+  selectedIngredientModifiers,
+  onIngredientModifierChange,
 }: {
   item: MenuItem;
   nutrition: Nutrition;
@@ -236,8 +251,8 @@ export default function ItemDetailsPanel({
   showCustomizationDeltas?: boolean;
   displayMode?: "full" | "addonsOnly";
   showVariantsInDetails?: boolean;
-  selectedIngredientModifierIds?: Partial<Record<string, SupportedIngredientModifierId | "normal">>;
-  onSetIngredientModifier?: (ingredientId: string, modifierId: SupportedIngredientModifierId | "normal") => void;
+  selectedIngredientModifiers?: Partial<Record<string, SupportedIngredientModifierId | "normal">>;
+  onIngredientModifierChange?: (ingredientId: string, modifierId: SupportedIngredientModifierId | "normal") => void;
 }) {
   const n = nutrition;
   const addonRefs = item.addonRefs ?? [];
@@ -298,7 +313,7 @@ export default function ItemDetailsPanel({
                         ...ingredient.supportedModifiers,
                       ].map((modifier) => {
                         const isSelected =
-                          (selectedIngredientModifierIds?.[ingredient.id] ?? "normal") === modifier.id;
+                          (selectedIngredientModifiers?.[ingredient.id] ?? "normal") === modifier.id;
 
                         return (
                           <button
@@ -309,7 +324,7 @@ export default function ItemDetailsPanel({
                                 ? "border-black bg-black text-white"
                                 : "border-black/15 bg-[#f6f6f6] text-black/65 hover:bg-black/5"
                             }`}
-                            onClick={() => onSetIngredientModifier?.(ingredient.id, modifier.id)}
+                            onClick={() => onIngredientModifierChange?.(ingredient.id, modifier.id)}
                             aria-pressed={isSelected}
                           >
                             {modifier.label}

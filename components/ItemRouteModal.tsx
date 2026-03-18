@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import ItemDetailsPanel, { PortionSelector } from "@/components/ItemDetailsPanel";
+import ItemDetailsPanel, { PortionSelector, resolvePanelIngredients } from "@/components/ItemDetailsPanel";
 import type {
   AddonOption,
   AddonRef,
@@ -116,7 +116,7 @@ export default function ItemRouteModal({
   const [selectedAddons, setSelectedAddons] = useState<Partial<Record<AddonRef, AddonOption>>>({});
   const [selectedSauceCounts, setSelectedSauceCounts] = useState<Record<string, number>>({});
   const [selectedCommonChangeIds, setSelectedCommonChangeIds] = useState<string[]>([]);
-  const [selectedIngredientModifierIds, setSelectedIngredientModifierIds] = useState<Record<string, "normal" | "remove" | "extra">>({});
+  const [selectedIngredientModifiers, setSelectedIngredientModifiers] = useState<Record<string, "normal" | "remove" | "extra">>({});
   const { addItem } = useCart();
   const selectedVariant = variants?.find((variant) => variant.id === selectedVariantId);
   const selectedItemImage = selectedVariant?.image ?? item.image;
@@ -164,6 +164,23 @@ export default function ItemRouteModal({
     [selectedAddons, selectedSauceOptions]
   );
 
+  const resolvedIngredients = useMemo(
+    () => resolvePanelIngredients(item, ingredients, addons, menuItems ?? [], variants, selectedVariantId),
+    [addons, ingredients, item, menuItems, selectedVariantId, variants]
+  );
+
+  const ingredientLookup = useMemo(() => {
+    const lookup = new Map<string, (typeof resolvedIngredients)[number]>();
+
+    resolvedIngredients.forEach((ingredient) => {
+      lookup.set(ingredient.id, ingredient);
+      lookup.set(ingredient.id.toLowerCase(), ingredient);
+      lookup.set(ingredient.label.toLowerCase(), ingredient);
+    });
+
+    return lookup;
+  }, [resolvedIngredients]);
+
   const commonChangeTotals = useMemo(
     () =>
       applicableCommonChanges.reduce<MacroDelta>(
@@ -181,14 +198,40 @@ export default function ItemRouteModal({
     [applicableCommonChanges, selectedCommonChangeIds]
   );
 
+  const ingredientModifierTotals = useMemo(
+    () =>
+      Object.entries(selectedIngredientModifiers).reduce<MacroDelta>(
+        (sum, [ingredientId, modifierId]) => {
+          if (modifierId === "normal") return sum;
+
+          const ingredient =
+            ingredientLookup.get(ingredientId) ??
+            ingredientLookup.get(ingredientId.toLowerCase());
+
+          if (!ingredient) return sum;
+
+          const direction = modifierId === "remove" ? -1 : 1;
+
+          return {
+            calories: sum.calories + (ingredient.nutrition.calories ?? 0) * direction,
+            protein: sum.protein + (ingredient.nutrition.protein ?? 0) * direction,
+            carbs: sum.carbs + (ingredient.nutrition.carbs ?? 0) * direction,
+            fat: sum.fat + (ingredient.nutrition.totalFat ?? 0) * direction,
+          };
+        },
+        { calories: 0, protein: 0, carbs: 0, fat: 0 }
+      ),
+    [ingredientLookup, selectedIngredientModifiers]
+  );
+
   const customizationTotals = useMemo(
     () => ({
-      calories: addonTotals.calories + commonChangeTotals.calories,
-      protein: addonTotals.protein + commonChangeTotals.protein,
-      carbs: addonTotals.carbs + commonChangeTotals.carbs,
-      fat: addonTotals.fat + commonChangeTotals.fat,
+      calories: addonTotals.calories + commonChangeTotals.calories + ingredientModifierTotals.calories,
+      protein: addonTotals.protein + commonChangeTotals.protein + ingredientModifierTotals.protein,
+      carbs: addonTotals.carbs + commonChangeTotals.carbs + ingredientModifierTotals.carbs,
+      fat: addonTotals.fat + commonChangeTotals.fat + ingredientModifierTotals.fat,
     }),
-    [addonTotals, commonChangeTotals]
+    [addonTotals, commonChangeTotals, ingredientModifierTotals]
   );
 
   const hasActiveCustomization = useMemo(
@@ -232,16 +275,17 @@ export default function ItemRouteModal({
   );
   const selectedIngredientCustomizations = useMemo(
     () =>
-      Object.entries(selectedIngredientModifierIds)
+      Object.entries(selectedIngredientModifiers)
         .filter(([, modifierId]) => modifierId !== "normal")
         .flatMap(([ingredientId, modifierId]) => {
           const ingredientName =
-            ingredients?.find((ingredient) => ingredient.id === ingredientId)?.name ??
+            ingredientLookup.get(ingredientId)?.label ??
+            ingredientLookup.get(ingredientId.toLowerCase())?.label ??
             ingredientId;
           const label = formatIngredientCustomizationLabel(ingredientName, modifierId);
           return label ? [label] : [];
         }),
-    [ingredients, selectedIngredientModifierIds]
+    [ingredientLookup, selectedIngredientModifiers]
   );
 
   const handleClose = () => {
@@ -421,9 +465,9 @@ export default function ItemRouteModal({
             customizationTotals={customizationTotals}
             showCustomizationDeltas={hasActiveCustomization}
             showVariantsInDetails={true}
-            selectedIngredientModifierIds={selectedIngredientModifierIds}
-            onSetIngredientModifier={(ingredientId, modifierId) =>
-              setSelectedIngredientModifierIds((prev) => ({ ...prev, [ingredientId]: modifierId }))
+            selectedIngredientModifiers={selectedIngredientModifiers}
+            onIngredientModifierChange={(ingredientId, modifierId) =>
+              setSelectedIngredientModifiers((prev) => ({ ...prev, [ingredientId]: modifierId }))
             }
           />
         </div>
