@@ -961,8 +961,8 @@ export default function MenuItemCard({
                 return next;
               })
             }
-            selectedIngredientModifierIds={selectedIngredientModifierIds}
-            onSetIngredientModifier={(ingredientId, modifierId) =>
+            selectedIngredientModifiers={selectedIngredientModifierIds}
+            onIngredientModifierChange={(ingredientId, modifierId) =>
               setSelectedIngredientModifierIds((prev) => {
                 const next = { ...prev, [ingredientId]: modifierId };
                 emitCartConfiguration(

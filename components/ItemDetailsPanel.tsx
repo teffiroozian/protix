@@ -212,8 +212,8 @@ export default function ItemDetailsPanel({
   showCustomizationDeltas,
   displayMode = "full",
   showVariantsInDetails = true,
-  selectedIngredientModifierIds,
-  onSetIngredientModifier,
+  selectedIngredientModifiers,
+  onIngredientModifierChange,
 }: {
   item: MenuItem;
   nutrition: Nutrition;
@@ -236,8 +236,8 @@ export default function ItemDetailsPanel({
   showCustomizationDeltas?: boolean;
   displayMode?: "full" | "addonsOnly";
   showVariantsInDetails?: boolean;
-  selectedIngredientModifierIds?: Partial<Record<string, SupportedIngredientModifierId | "normal">>;
-  onSetIngredientModifier?: (ingredientId: string, modifierId: SupportedIngredientModifierId | "normal") => void;
+  selectedIngredientModifiers?: Partial<Record<string, SupportedIngredientModifierId | "normal">>;
+  onIngredientModifierChange?: (ingredientId: string, modifierId: SupportedIngredientModifierId | "normal") => void;
 }) {
   const n = nutrition;
   const addonRefs = item.addonRefs ?? [];
@@ -298,7 +298,7 @@ export default function ItemDetailsPanel({
                         ...ingredient.supportedModifiers,
                       ].map((modifier) => {
                         const isSelected =
-                          (selectedIngredientModifierIds?.[ingredient.id] ?? "normal") === modifier.id;
+                          (selectedIngredientModifiers?.[ingredient.id] ?? "normal") === modifier.id;
 
                         return (
                           <button
@@ -309,7 +309,7 @@ export default function ItemDetailsPanel({
                                 ? "border-black bg-black text-white"
                                 : "border-black/15 bg-[#f6f6f6] text-black/65 hover:bg-black/5"
                             }`}
-                            onClick={() => onSetIngredientModifier?.(ingredient.id, modifier.id)}
+                            onClick={() => onIngredientModifierChange?.(ingredient.id, modifier.id)}
                             aria-pressed={isSelected}
                           >
                             {modifier.label}
