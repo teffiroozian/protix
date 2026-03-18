@@ -289,18 +289,30 @@ export default function ItemDetailsPanel({
           <h2 className="mb-4 text-2xl font-bold">Ingredients</h2>
           <div className="grid grid-cols-2 gap-3">
             {ingredients.map((ingredient) => (
-              <article key={ingredient.id} className="overflow-hidden rounded-xl border border-black/12 bg-white text-left">
-                <div className="grid grid-cols-[88px_minmax(0,1fr)] items-center gap-3 p-3">
-                  <div className="flex h-[88px] w-[88px] items-center justify-center" aria-hidden="true">
+              <article
+                key={ingredient.id}
+                className="overflow-hidden rounded-[10px] border border-[rgba(0,0,0,0.15)] bg-[#f9f9f9] text-left"
+              >
+                <div className="flex items-center gap-3 px-3 py-2">
+                  <div
+                    className="grid h-[72px] w-[72px] min-w-[72px] place-items-center rounded-lg bg-cover bg-center"
+                    aria-hidden="true"
+                  >
                     {isIconImage(ingredient.icon) ? (
-                      <Image src={ingredient.icon} alt="" width={88} height={88} />
+                      <Image
+                        src={ingredient.icon}
+                        alt=""
+                        width={72}
+                        height={72}
+                        className="h-[72px] w-[72px] rounded-lg object-cover"
+                      />
                     ) : (
                       ingredient.icon
                     )}
                   </div>
-                  <div className="flex min-w-0 flex-col gap-1.5">
-                    <div className="line-clamp-2 text-sm leading-[1.3] font-bold">{ingredient.label}</div>
-                    <div className="text-xs font-semibold text-black/60">
+                  <div className="flex min-w-0 flex-col items-start justify-center gap-[6px]">
+                    <div className="line-clamp-2 break-words text-left text-base font-bold leading-[1.2]">{ingredient.label}</div>
+                    <div className="text-base font-bold text-[rgba(0,0,0,0.5)]">
                       {ingredient.calories !== undefined ? `${ingredient.calories} Cal` : "— Cal"}
                     </div>
                   </div>
