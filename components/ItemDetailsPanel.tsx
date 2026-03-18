@@ -39,6 +39,13 @@ function normalizeIngredientToken(value: string) {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, "").trim();
 }
 
+const supportedIngredientModifierOptions = [
+  { id: "remove", label: "Remove", aliases: ["remove"] },
+  { id: "extra", label: "Extra", aliases: ["extra", "double"] },
+] as const;
+
+type SupportedIngredientModifierId = (typeof supportedIngredientModifierOptions)[number]["id"];
+
 function resolvePanelIngredients(
   item: MenuItem,
   ingredientItems: IngredientItem[] = [],
@@ -98,10 +105,19 @@ function resolvePanelIngredients(
     const isSingleIngredientRow = isSingleIngredientItem && ingredientIds.length === 1;
     const activeVariantCalories = activeVariant?.nutrition.calories;
 
+    const normalizedAllowedModifiers = new Set(
+      (match?.allowedModifiers ?? []).map((modifier) => modifier.trim().toLowerCase())
+    );
+    const supportedModifiers = supportedIngredientModifierOptions
+      .filter((modifier) => modifier.aliases.some((alias) => normalizedAllowedModifiers.has(alias)))
+      .map((modifier) => ({ id: modifier.id, label: modifier.label }));
+
     return {
       id: ingredientId,
       label,
       icon: match?.image ?? menuItemMatch?.image ?? addonMatch?.image ?? "🥣",
+      ingredientItem: match,
+      supportedModifiers,
       calories:
         isSingleIngredientRow && activeVariantCalories !== undefined
           ? activeVariantCalories
@@ -196,6 +212,8 @@ export default function ItemDetailsPanel({
   showCustomizationDeltas,
   displayMode = "full",
   showVariantsInDetails = true,
+  selectedIngredientModifierIds,
+  onSetIngredientModifier,
 }: {
   item: MenuItem;
   nutrition: Nutrition;
@@ -218,6 +236,8 @@ export default function ItemDetailsPanel({
   showCustomizationDeltas?: boolean;
   displayMode?: "full" | "addonsOnly";
   showVariantsInDetails?: boolean;
+  selectedIngredientModifierIds?: Partial<Record<string, SupportedIngredientModifierId | "normal">>;
+  onSetIngredientModifier?: (ingredientId: string, modifierId: SupportedIngredientModifierId | "normal") => void;
 }) {
   const n = nutrition;
   const addonRefs = item.addonRefs ?? [];
@@ -252,23 +272,53 @@ export default function ItemDetailsPanel({
       {ingredients.length > 0 ? (
         <section className="col-span-2 rounded-[14px] border border-black/12 bg-white p-5">
           <h2 className="mb-4 text-2xl font-bold">Ingredients</h2>
-          <div className="grid grid-cols-5 gap-2.5">
+          <div className="grid grid-cols-2 gap-3">
             {ingredients.map((ingredient) => (
-              <article
-                key={ingredient.id}
-                className="grid justify-items-center gap-1.5 rounded-xl border border-black/12 bg-white p-2.5 text-center"
-              >
-                <div className="flex h-[100px] w-[100px] items-center justify-center" aria-hidden="true">
-                  {isIconImage(ingredient.icon) ? (
-                    <Image src={ingredient.icon} alt="" width={100} height={100} />
-                  ) : (
-                    ingredient.icon
-                  )}
+              <article key={ingredient.id} className="overflow-hidden rounded-xl border border-black/12 bg-white text-left">
+                <div className="grid grid-cols-[88px_minmax(0,1fr)] items-center gap-3 p-3">
+                  <div className="flex h-[88px] w-[88px] items-center justify-center" aria-hidden="true">
+                    {isIconImage(ingredient.icon) ? (
+                      <Image src={ingredient.icon} alt="" width={88} height={88} />
+                    ) : (
+                      ingredient.icon
+                    )}
+                  </div>
+                  <div className="flex min-w-0 flex-col gap-1.5">
+                    <div className="line-clamp-2 text-sm leading-[1.3] font-bold">{ingredient.label}</div>
+                    <div className="text-xs font-semibold text-black/60">
+                      {ingredient.calories !== undefined ? `${ingredient.calories} Cal` : "— Cal"}
+                    </div>
+                  </div>
                 </div>
-                <div className="line-clamp-2 text-sm leading-[1.3] font-bold">{ingredient.label}</div>
-                <div className="text-xs font-semibold text-black/60">
-                  {ingredient.calories !== undefined ? `${ingredient.calories} Cal` : "— Cal"}
-                </div>
+                {ingredient.supportedModifiers.length > 0 ? (
+                  <div className="border-t border-black/10 px-3 py-2.5">
+                    <div className="flex flex-wrap justify-end gap-1.5">
+                      {[
+                        { id: "normal" as const, label: "Normal" },
+                        ...ingredient.supportedModifiers,
+                      ].map((modifier) => {
+                        const isSelected =
+                          (selectedIngredientModifierIds?.[ingredient.id] ?? "normal") === modifier.id;
+
+                        return (
+                          <button
+                            key={modifier.id}
+                            type="button"
+                            className={`cursor-pointer rounded-full border px-2.5 py-1 text-[11px] font-semibold transition ${
+                              isSelected
+                                ? "border-black bg-black text-white"
+                                : "border-black/15 bg-[#f6f6f6] text-black/65 hover:bg-black/5"
+                            }`}
+                            onClick={() => onSetIngredientModifier?.(ingredient.id, modifier.id)}
+                            aria-pressed={isSelected}
+                          >
+                            {modifier.label}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ) : null}
               </article>
             ))}
           </div>
