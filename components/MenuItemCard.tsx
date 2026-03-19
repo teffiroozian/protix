@@ -495,7 +495,11 @@ export default function MenuItemCard({
       change.label.replace(/^\+\s*/, "").trim(),
       formatCommonChangeForCart(change.label).replace(/^\+\s*/, "").trim(),
     ]));
-    const ingredientLabels = new Set(resolvedIngredients.map((ingredient) => ingredient.label.toLowerCase()));
+    const ingredientLabels = new Set(
+      resolvedIngredients
+        .filter((ingredient) => !ingredient.isNoneOption)
+        .map((ingredient) => ingredient.label.toLowerCase())
+    );
 
     return initialCartCustomizations.filter((label) => {
       const normalized = label.replace(/^\+\s*/, "").trim();
@@ -522,7 +526,7 @@ export default function MenuItemCard({
   const customizations = useMemo(() => {
     const modifierLabels = selectedCommonChanges.map((change) => formatCommonChangeForCart(change.label));
     const ingredientCountLabels = resolvedIngredients
-      .filter((ingredient) => (ingredientCounts[ingredient.id] ?? ingredient.defaultCount) !== ingredient.defaultCount)
+      .filter((ingredient) => !ingredient.isNoneOption && (ingredientCounts[ingredient.id] ?? ingredient.defaultCount) !== ingredient.defaultCount)
       .flatMap((ingredient) => {
         const ingredientCount = ingredientCounts[ingredient.id] ?? ingredient.defaultCount;
         return [formatIngredientCountCustomizationLabel(ingredient.label, ingredientCount)];
@@ -642,6 +646,7 @@ export default function MenuItemCard({
       .map((change) => formatCommonChangeForCart(change.label));
     const selectedIngredientCustomizationsForCart = resolvedIngredients
       .filter((ingredient) => {
+        if (ingredient.isNoneOption) return false;
         const ingredientCount = nextSelectedIngredientCounts[ingredient.id] ?? ingredient.defaultCount;
         return ingredientCount !== ingredient.defaultCount;
       })

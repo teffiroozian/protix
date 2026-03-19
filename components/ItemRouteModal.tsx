@@ -282,7 +282,7 @@ export default function ItemRouteModal({
   const selectedIngredientCustomizations = useMemo(
     () =>
       resolvedIngredients
-        .filter((ingredient) => (ingredientCounts[ingredient.id] ?? ingredient.defaultCount) !== ingredient.defaultCount)
+        .filter((ingredient) => !ingredient.isNoneOption && (ingredientCounts[ingredient.id] ?? ingredient.defaultCount) !== ingredient.defaultCount)
         .flatMap((ingredient) => {
           const ingredientCount = ingredientCounts[ingredient.id] ?? ingredient.defaultCount;
           return [ingredientCount === 0 ? `${ingredient.label}: Removed` : `${ingredient.label}: ${ingredientCount}x`];
