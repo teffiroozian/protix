@@ -275,66 +275,78 @@ export default function ItemDetailsPanel({
       {ingredients.length > 0 ? (
         <section className="col-span-2 rounded-[14px] border border-black/12 bg-white p-5">
           <h2 className="mb-6 text-2xl font-bold">Ingredients</h2>
-          <div className="grid grid-cols-2 gap-3">
-            {ingredients.map((ingredient) => (
-              <article
-                key={ingredient.id}
-                className="overflow-hidden rounded-[10px] border border-[rgba(0,0,0,0.15)] bg-white text-left"
-              >
-                <div className="flex items-center gap-3 px-3 py-2">
+          <ul className="grid list-none grid-cols-2 items-stretch gap-[10px] pl-0">
+            {ingredients.map((ingredient) => {
+              const ingredientCount = selectedIngredientCounts?.[ingredient.id] ?? 1;
+              const isSelected = ingredientCount > 0;
+
+              return (
+                <li key={ingredient.id} className="flex">
                   <div
-                    className="grid h-[72px] w-[72px] min-w-[72px] place-items-center rounded-lg bg-cover bg-center"
-                    aria-hidden="true"
+                    className={`box-border flex h-full w-full flex-row items-center gap-3 rounded-[10px] border border-[rgba(0,0,0,0.15)] bg-[#f9f9f9] px-3 py-2 ${isSelected ? "shadow-[inset_0_0_0_3px_#16a34a]" : ""}`}
                   >
-                    {isIconImage(ingredient.icon) ? (
-                      <Image
-                        src={ingredient.icon}
-                        alt=""
-                        width={72}
-                        height={72}
-                        className="h-[72px] w-[72px] rounded-lg object-cover"
-                      />
-                    ) : (
-                      ingredient.icon
-                    )}
-                  </div>
-                  <div className="flex min-w-0 flex-col items-start justify-center gap-[6px]">
-                    <div className="line-clamp-2 break-words text-left text-base font-bold leading-[1.2]">{ingredient.label}</div>
-                    <div className="text-sm font-bold text-[rgba(0,0,0,0.5)]">
-                      {ingredient.calories !== undefined ? `${ingredient.calories} Cal` : "— Cal"}
+                    <div
+                      className="grid h-[72px] w-[72px] min-w-[72px] place-items-center rounded-lg bg-cover bg-center"
+                      aria-hidden="true"
+                    >
+                      {isIconImage(ingredient.icon) ? (
+                        <Image
+                          src={ingredient.icon}
+                          alt=""
+                          width={72}
+                          height={72}
+                          className="h-[72px] w-[72px] rounded-lg object-cover"
+                        />
+                      ) : (
+                        ingredient.icon
+                      )}
                     </div>
-                  </div>
-                </div>
-                {typeof ingredient.maxQuantity === "number" ? (
-                  <div className="px-3 py-2.5">
-                    <div className="flex items-center justify-end gap-2">
-                      <button
-                        type="button"
-                        className="cursor-pointer inline-flex h-8 w-8 items-center justify-center rounded-full border border-black/15 bg-white text-base font-semibold text-slate-700 transition hover:bg-black/5 disabled:cursor-not-allowed disabled:opacity-40"
-                        onClick={() => onDecrementIngredient?.(ingredient.id)}
-                        disabled={(selectedIngredientCounts?.[ingredient.id] ?? 1) <= 0}
-                        aria-label={`Decrease ${ingredient.label}`}
-                      >
-                        −
-                      </button>
-                      <span className="min-w-6 text-center text-sm font-semibold text-slate-900">
-                        {selectedIngredientCounts?.[ingredient.id] ?? 1}
-                      </span>
-                      <button
-                        type="button"
-                        className="cursor-pointer inline-flex h-8 w-8 items-center justify-center rounded-full border border-black/15 bg-white text-base font-semibold text-slate-700 transition hover:bg-black/5 disabled:cursor-not-allowed disabled:opacity-40"
-                        onClick={() => onIncrementIngredient?.(ingredient.id)}
-                        disabled={(selectedIngredientCounts?.[ingredient.id] ?? 1) >= ingredient.maxQuantity}
-                        aria-label={`Increase ${ingredient.label}`}
-                      >
-                        +
-                      </button>
+                    <div className="flex min-w-0 flex-col items-start justify-center gap-[6px]">
+                      <div className="line-clamp-2 break-words text-left text-base font-bold leading-[1.2]">{ingredient.label}</div>
+                      <div className="text-sm font-bold text-[rgba(0,0,0,0.5)]">
+                        {ingredient.calories !== undefined ? `${ingredient.calories} Cal` : "— Cal"}
+                      </div>
                     </div>
+                    {typeof ingredient.maxQuantity === "number" ? (
+                      <div className="ml-auto inline-flex items-center gap-[6px]">
+                        {ingredientCount > 0 ? (
+                          <>
+                            <button
+                              type="button"
+                              className="inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-[rgba(0,0,0,0.35)] bg-white text-[18px] font-bold leading-none"
+                              aria-label={`Remove one ${ingredient.label}`}
+                              onClick={() => onDecrementIngredient?.(ingredient.id)}
+                            >
+                              -
+                            </button>
+                            <span className="min-w-4 text-center text-base font-bold">{ingredientCount}</span>
+                            <button
+                              type="button"
+                              className="inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-[rgba(0,0,0,0.35)] bg-white text-[18px] font-bold leading-none disabled:cursor-not-allowed disabled:opacity-40"
+                              aria-label={`Add one more ${ingredient.label}`}
+                              onClick={() => onIncrementIngredient?.(ingredient.id)}
+                              disabled={ingredientCount >= ingredient.maxQuantity}
+                            >
+                              +
+                            </button>
+                          </>
+                        ) : (
+                          <button
+                            type="button"
+                            className="inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-[rgba(0,0,0,0.35)] bg-white text-[18px] font-bold leading-none"
+                            aria-label={`Add ${ingredient.label}`}
+                            onClick={() => onIncrementIngredient?.(ingredient.id)}
+                          >
+                            +
+                          </button>
+                        )}
+                      </div>
+                    ) : null}
                   </div>
-                ) : null}
-              </article>
-            ))}
-          </div>
+                </li>
+              );
+            })}
+          </ul>
         </section>
       ) : null}
 
