@@ -33,6 +33,14 @@
             "Treats": [
                 "Treat Toppings"
             ]
+        },
+        "singleSelectIngredientTabsByItemCategory": {
+            "Sandwich": [
+                "Buns"
+            ],
+            "Breakfast": [
+                "Buns"
+            ]
         }
     },
     "items": [
