@@ -12,8 +12,8 @@ import type {
   RestaurantAddons,
   RestaurantCustomizationRules,
 } from "@/types/menu";
-import { Check, ChevronDown } from "lucide-react";
-import { INCLUDED_INGREDIENT_TAB, ingredientMatchesTab, resolveIngredientTabs } from "@/lib/ingredientTabs";
+import { Check, ChevronDown, ChevronRight } from "lucide-react";
+import { INCLUDED_INGREDIENT_TAB, getIngredientTabDisplayLabel, ingredientMatchesTab, isSingleSelectIngredientTab, resolveIngredientTabs } from "@/lib/ingredientTabs";
 
 
 function format(n?: number, suffix = "") {
@@ -39,6 +39,48 @@ const addonSectionTitles: Record<AddonRef, string> = {
 
 function normalizeIngredientToken(value: string) {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, "").trim();
+}
+
+function normalizeIngredientCategory(value: string) {
+  return value.trim().toLowerCase();
+}
+
+function includedIngredientPriority(ingredient: ResolvedPanelIngredient) {
+  const categories = ingredient.ingredientItem?.categories?.length
+    ? ingredient.ingredientItem.categories
+    : ingredient.ingredientItem?.category
+      ? [ingredient.ingredientItem.category]
+      : [];
+  const normalizedCategories = categories.map((category) => normalizeIngredientCategory(category));
+
+  if (normalizedCategories.some((category) => category === "buns" || category === "bun")) {
+    return 0;
+  }
+
+  if (normalizedCategories.some((category) => category === "cheeses" || category === "cheese")) {
+    return 1;
+  }
+
+  if (normalizedCategories.some((category) => category === "proteins" || category === "protein")) {
+    return 2;
+  }
+
+  if (normalizedCategories.some((category) => category.includes("topping"))) {
+    return 3;
+  }
+
+  if (
+    normalizedCategories.some(
+      (category) =>
+        category.includes("sauce") ||
+        category.includes("condiment") ||
+        category.includes("dressing")
+    )
+  ) {
+    return 4;
+  }
+
+  return 5;
 }
 
 export type ResolvedPanelIngredient = {
@@ -182,7 +224,20 @@ export function resolvePanelIngredientTabs(
   return resolvedTabs.map((tab) => {
     const tabIngredients =
       tab === INCLUDED_INGREDIENT_TAB
-        ? ingredientIds.map((ingredientId) => getResolvedIngredient(ingredientId))
+        ? ingredientIds
+            .map((ingredientId, index) => ({
+              ingredient: getResolvedIngredient(ingredientId),
+              index,
+            }))
+            .sort((left, right) => {
+              const priorityDifference =
+                includedIngredientPriority(left.ingredient) - includedIngredientPriority(right.ingredient);
+
+              return priorityDifference !== 0
+                ? priorityDifference
+                : left.index - right.index;
+            })
+            .map(({ ingredient }) => ingredient)
         : ingredientItems
             .filter((ingredient) => ingredientMatchesTab(ingredient, tab))
             .map((ingredient) => getResolvedIngredient(ingredient.id ?? ingredient.name, ingredient));
@@ -290,6 +345,7 @@ export default function ItemDetailsPanel({
   selectedIngredientCounts,
   onIncrementIngredient,
   onDecrementIngredient,
+  onSelectSingleIngredientOption,
 }: {
   item: MenuItem;
   nutrition: Nutrition;
@@ -316,6 +372,7 @@ export default function ItemDetailsPanel({
   selectedIngredientCounts?: Partial<Record<string, number>>;
   onIncrementIngredient?: (ingredientId: string) => void;
   onDecrementIngredient?: (ingredientId: string) => void;
+  onSelectSingleIngredientOption?: (ingredientId: string, ingredientIdsInTab: string[]) => void;
 }) {
   const n = nutrition;
   const addonRefs = item.addonRefs ?? [];
@@ -351,6 +408,9 @@ export default function ItemDetailsPanel({
     ingredientTabs.find((tab) => tab.label === activeIngredientTab) ??
     availableIngredientTabs[0] ??
     ingredientTabs[0];
+  const isSelectedIngredientTabSingleSelect = selectedIngredientTab
+    ? isSingleSelectIngredientTab(selectedIngredientTab.label, customizationRules)
+    : false;
   const shouldShowIngredientSection =
     ingredientTabs.length > 1 || (ingredientTabs[0]?.ingredients.length ?? 0) > 0;
 
@@ -374,7 +434,7 @@ export default function ItemDetailsPanel({
                   }`}
                   onClick={() => setActiveIngredientTab(tab.label)}
                 >
-                  {tab.label}
+                  {getIngredientTabDisplayLabel(tab.label)}
                 </button>
               );
             })}
@@ -384,70 +444,115 @@ export default function ItemDetailsPanel({
               {selectedIngredientTab.ingredients.map((ingredient) => {
                 const ingredientCount = selectedIngredientCounts?.[ingredient.id] ?? ingredient.defaultCount;
                 const isSelected = ingredientCount > 0;
-
-                return (
-                  <li key={ingredient.id} className="flex">
+                const linkedSingleSelectTab =
+                  selectedIngredientTab.label === INCLUDED_INGREDIENT_TAB
+                    ? availableIngredientTabs.find(
+                        (tab) =>
+                          tab.label !== INCLUDED_INGREDIENT_TAB &&
+                          isSingleSelectIngredientTab(tab.label, customizationRules) &&
+                          tab.ingredients.some((candidate) => candidate.id === ingredient.id)
+                      )
+                    : undefined;
+                const ingredientIdsInTab = selectedIngredientTab.ingredients.map((candidate) => candidate.id);
+                const usesSelectableCard = isSelectedIngredientTabSingleSelect || Boolean(linkedSingleSelectTab);
+                const cardClasses = `box-border flex h-full w-full flex-row items-center gap-3 rounded-[10px] border border-[rgba(0,0,0,0.15)] bg-[#f9f9f9] px-3 py-2 text-left ${isSelected ? "shadow-[inset_0_0_0_1px_#000000]" : ""} ${usesSelectableCard ? "cursor-pointer" : "cursor-default"}`;
+                const cardContent = (
+                  <>
                     <div
-                      className={`box-border flex h-full w-full flex-row items-center gap-3 rounded-[10px] border border-[rgba(0,0,0,0.15)] bg-[#f9f9f9] px-3 py-2 ${isSelected ? "shadow-[inset_0_0_0_1px_#000000]" : ""}`}
+                      className="grid h-[72px] w-[72px] min-w-[72px] place-items-center rounded-lg bg-cover bg-center"
+                      aria-hidden="true"
                     >
-                      <div
-                        className="grid h-[72px] w-[72px] min-w-[72px] place-items-center rounded-lg bg-cover bg-center"
+                      {isIconImage(ingredient.icon) ? (
+                        <Image
+                          src={ingredient.icon}
+                          alt=""
+                          width={72}
+                          height={72}
+                          className="h-[72px] w-[72px] rounded-lg object-cover"
+                        />
+                      ) : (
+                        ingredient.icon
+                      )}
+                    </div>
+                    <div className="flex min-w-0 flex-col items-start justify-center gap-[6px]">
+                      <div className="line-clamp-2 break-words text-left text-base font-bold leading-[1.2]">{ingredient.label}</div>
+                      <div className="text-sm font-bold text-[rgba(0,0,0,0.5)]">
+                        {ingredient.calories !== undefined ? `${ingredient.calories} Cal` : "— Cal"}
+                      </div>
+                    </div>
+                    {isSelectedIngredientTabSingleSelect ? (
+                      <span
                         aria-hidden="true"
+                        className={`ml-auto inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full border ${isSelected ? "border-[3px] border-[#16a34a]" : "border-2 border-[rgba(0,0,0,0.25)]"}`}
                       >
-                        {isIconImage(ingredient.icon) ? (
-                          <Image
-                            src={ingredient.icon}
-                            alt=""
-                            width={72}
-                            height={72}
-                            className="h-[72px] w-[72px] rounded-lg object-cover"
-                          />
-                        ) : (
-                          ingredient.icon
-                        )}
-                      </div>
-                      <div className="flex min-w-0 flex-col items-start justify-center gap-[6px]">
-                        <div className="line-clamp-2 break-words text-left text-base font-bold leading-[1.2]">{ingredient.label}</div>
-                        <div className="text-sm font-bold text-[rgba(0,0,0,0.5)]">
-                          {ingredient.calories !== undefined ? `${ingredient.calories} Cal` : "— Cal"}
-                        </div>
-                      </div>
-                      {typeof ingredient.maxQuantity === "number" ? (
-                        <div className="ml-auto inline-flex items-center gap-[6px]">
-                          {ingredientCount > 0 ? (
-                            <>
-                              <button
-                                type="button"
-                                className="inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-[rgba(0,0,0,0.35)] bg-white text-[18px] font-bold leading-none"
-                                aria-label={`Remove one ${ingredient.label}`}
-                                onClick={() => onDecrementIngredient?.(ingredient.id)}
-                              >
-                                -
-                              </button>
-                              <span className="min-w-4 text-center text-base font-bold">{ingredientCount}</span>
-                              <button
-                                type="button"
-                                className="inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-[rgba(0,0,0,0.35)] bg-white text-[18px] font-bold leading-none disabled:cursor-not-allowed disabled:opacity-40"
-                                aria-label={`Add one more ${ingredient.label}`}
-                                onClick={() => onIncrementIngredient?.(ingredient.id)}
-                                disabled={ingredientCount >= ingredient.maxQuantity}
-                              >
-                                +
-                              </button>
-                            </>
-                          ) : (
+                        <span
+                          className={`h-2.5 w-2.5 rounded-full ${isSelected ? "bg-[#16a34a]" : "bg-transparent"}`}
+                        />
+                      </span>
+                    ) : typeof ingredient.maxQuantity === "number" ? (
+                      <div className="ml-auto inline-flex items-center gap-[6px]">
+                        {ingredientCount > 0 ? (
+                          <>
                             <button
                               type="button"
                               className="inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-[rgba(0,0,0,0.35)] bg-white text-[18px] font-bold leading-none"
-                              aria-label={`Add ${ingredient.label}`}
+                              aria-label={`Remove one ${ingredient.label}`}
+                              onClick={() => onDecrementIngredient?.(ingredient.id)}
+                            >
+                              -
+                            </button>
+                            <span className="min-w-4 text-center text-base font-bold">{ingredientCount}</span>
+                            <button
+                              type="button"
+                              className="inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-[rgba(0,0,0,0.35)] bg-white text-[18px] font-bold leading-none disabled:cursor-not-allowed disabled:opacity-40"
+                              aria-label={`Add one more ${ingredient.label}`}
                               onClick={() => onIncrementIngredient?.(ingredient.id)}
+                              disabled={ingredientCount >= ingredient.maxQuantity}
                             >
                               +
                             </button>
-                          )}
-                        </div>
-                      ) : null}
-                    </div>
+                          </>
+                        ) : (
+                          <button
+                            type="button"
+                            className="inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-[rgba(0,0,0,0.35)] bg-white text-[18px] font-bold leading-none"
+                            aria-label={`Add ${ingredient.label}`}
+                            onClick={() => onIncrementIngredient?.(ingredient.id)}
+                          >
+                            +
+                          </button>
+                        )}
+                      </div>
+                    ) : linkedSingleSelectTab ? (
+                      <span className="ml-auto inline-flex h-7 w-7 shrink-0 items-center justify-center text-black/55" aria-hidden="true">
+                        <ChevronRight size={22} />
+                      </span>
+                    ) : null}
+                  </>
+                );
+
+                return (
+                  <li key={ingredient.id} className="flex">
+                    {usesSelectableCard ? (
+                      <button
+                        type="button"
+                        className={cardClasses}
+                        onClick={() => {
+                          if (isSelectedIngredientTabSingleSelect) {
+                            onSelectSingleIngredientOption?.(ingredient.id, ingredientIdsInTab);
+                            return;
+                          }
+
+                          if (linkedSingleSelectTab) {
+                            setActiveIngredientTab(linkedSingleSelectTab.label);
+                          }
+                        }}
+                      >
+                        {cardContent}
+                      </button>
+                    ) : (
+                      <div className={cardClasses}>{cardContent}</div>
+                    )}
                   </li>
                 );
               })}

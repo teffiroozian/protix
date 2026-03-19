@@ -6,6 +6,10 @@ function normalizeTabName(value: string) {
   return value.trim().toLowerCase();
 }
 
+export function getIngredientTabDisplayLabel(tabName: string) {
+  return normalizeTabName(tabName) === "sandwich toppings" ? "Toppings" : tabName;
+}
+
 export function resolveIngredientTabs(
   item: MenuItem,
   customizationRules?: RestaurantCustomizationRules
@@ -38,4 +42,12 @@ export function ingredientMatchesTab(ingredient: IngredientItem, tabName: string
       : [];
 
   return ingredientCategories.some((category) => normalizeTabName(category) === normalizeTabName(tabName));
+}
+
+export function isSingleSelectIngredientTab(
+  tabName: string,
+  customizationRules?: RestaurantCustomizationRules
+) {
+  const singleSelectTabs = customizationRules?.singleSelectIngredientTabs ?? [];
+  return singleSelectTabs.some((tab) => normalizeTabName(tab) === normalizeTabName(tabName));
 }

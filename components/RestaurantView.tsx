@@ -47,6 +47,7 @@ import StickyRestaurantBar from "./StickyRestaurantBar";
 const CATEGORY_ICONS: Record<string, LucideIcon> = {
   sandwiches: Sandwich,
   "sandwich toppings": Sandwich,
+  toppings: Sandwich,
   chicken: Drumstick,
   proteins: Drumstick,
   condiments: Utensils,
@@ -64,6 +65,7 @@ const CATEGORY_ICONS: Record<string, LucideIcon> = {
   entrees: Utensils,
   "bowls & plates": Soup,
   buns: Sandwich,
+  cheeses: Circle,
   "soup toppings": Soup,
   "parfait toppings": IceCreamCone,
   "treat toppings": IceCreamCone,
