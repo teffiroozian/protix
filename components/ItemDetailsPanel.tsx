@@ -41,6 +41,48 @@ function normalizeIngredientToken(value: string) {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, "").trim();
 }
 
+function normalizeIngredientCategory(value: string) {
+  return value.trim().toLowerCase();
+}
+
+function includedIngredientPriority(ingredient: ResolvedPanelIngredient) {
+  const categories = ingredient.ingredientItem?.categories?.length
+    ? ingredient.ingredientItem.categories
+    : ingredient.ingredientItem?.category
+      ? [ingredient.ingredientItem.category]
+      : [];
+  const normalizedCategories = categories.map((category) => normalizeIngredientCategory(category));
+
+  if (normalizedCategories.some((category) => category === "buns" || category === "bun")) {
+    return 0;
+  }
+
+  if (normalizedCategories.some((category) => category === "cheeses" || category === "cheese")) {
+    return 1;
+  }
+
+  if (normalizedCategories.some((category) => category === "proteins" || category === "protein")) {
+    return 2;
+  }
+
+  if (normalizedCategories.some((category) => category.includes("topping"))) {
+    return 3;
+  }
+
+  if (
+    normalizedCategories.some(
+      (category) =>
+        category.includes("sauce") ||
+        category.includes("condiment") ||
+        category.includes("dressing")
+    )
+  ) {
+    return 4;
+  }
+
+  return 5;
+}
+
 export type ResolvedPanelIngredient = {
   id: string;
   label: string;
@@ -182,7 +224,20 @@ export function resolvePanelIngredientTabs(
   return resolvedTabs.map((tab) => {
     const tabIngredients =
       tab === INCLUDED_INGREDIENT_TAB
-        ? ingredientIds.map((ingredientId) => getResolvedIngredient(ingredientId))
+        ? ingredientIds
+            .map((ingredientId, index) => ({
+              ingredient: getResolvedIngredient(ingredientId),
+              index,
+            }))
+            .sort((left, right) => {
+              const priorityDifference =
+                includedIngredientPriority(left.ingredient) - includedIngredientPriority(right.ingredient);
+
+              return priorityDifference !== 0
+                ? priorityDifference
+                : left.index - right.index;
+            })
+            .map(({ ingredient }) => ingredient)
         : ingredientItems
             .filter((ingredient) => ingredientMatchesTab(ingredient, tab))
             .map((ingredient) => getResolvedIngredient(ingredient.id ?? ingredient.name, ingredient));
