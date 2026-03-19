@@ -4,7 +4,12 @@ import { useEffect, useId, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { AddonOption, AddonRef, CommonChange, IngredientItem, MacroDelta, MenuItem, RestaurantAddons } from "@/types/menu";
 import { useCart } from "@/stores/cartStore";
-import ItemDetailsPanel, { resolvePanelIngredients } from "./ItemDetailsPanel";
+import ItemDetailsPanel, {
+  getIngredientModifierDeltaMultiplier,
+  ingredientModifierLabelById,
+  resolvePanelIngredients,
+  type SupportedIngredientModifierId,
+} from "./ItemDetailsPanel";
 import VariantSelector from "./VariantSelector";
 
 function pad2(n: number) {
@@ -80,11 +85,6 @@ const emptyAddon: AddonOption = {
 
 const sauceRef: AddonRef = "sauces";
 const maxSauceSelections = 5;
-const ingredientModifierLabelById: Record<string, string> = {
-  remove: "Remove",
-  extra: "Extra",
-};
-
 type CartConfigurationPayload = {
   variantId?: string;
   variantLabel?: string;
@@ -169,7 +169,7 @@ function getSelectedCommonChangeIdsFromCustomizations(
     .map((change) => change.id);
 }
 
-function formatIngredientCustomizationLabel(ingredientName: string, modifierId: string) {
+function formatIngredientCustomizationLabel(ingredientName: string, modifierId: SupportedIngredientModifierId) {
   const modifierLabel = ingredientModifierLabelById[modifierId];
   if (!modifierLabel) return undefined;
   return `${ingredientName}: ${modifierLabel}`;
@@ -180,7 +180,7 @@ function getSelectedIngredientModifierIdsFromCustomizations(
   customizations: string[] | undefined
 ) {
   if (!ingredientItems || ingredientItems.length === 0 || !customizations || customizations.length === 0) {
-    return {} as Record<string, "normal" | "remove" | "extra">;
+    return {} as Record<string, "normal" | SupportedIngredientModifierId>;
   }
 
   const ingredientLookup = new Map<string, string>();
@@ -189,12 +189,12 @@ function getSelectedIngredientModifierIdsFromCustomizations(
     ingredientLookup.set(ingredient.name.trim().toLowerCase(), ingredient.id ?? ingredient.name);
   });
 
-  return customizations.reduce<Record<string, "normal" | "remove" | "extra">>((acc, label) => {
-    const match = label.match(/^(.*?):\s*(Remove|Extra)$/i);
+  return customizations.reduce<Record<string, "normal" | SupportedIngredientModifierId>>((acc, label) => {
+    const match = label.match(/^(.*?):\s*(Remove|Light|Extra)$/i);
     if (!match) return acc;
 
     const ingredientKey = match[1].trim().toLowerCase();
-    const modifierId = match[2].trim().toLowerCase() as "remove" | "extra";
+    const modifierId = match[2].trim().toLowerCase() as SupportedIngredientModifierId;
     const ingredientId = ingredientLookup.get(ingredientKey);
     if (!ingredientId) return acc;
 
@@ -269,7 +269,7 @@ export default function MenuItemCard({
   const [selectedCommonChangeIds, setSelectedCommonChangeIds] = useState<string[]>(() =>
     mode === "cart" ? getSelectedCommonChangeIdsFromCustomizations(commonChanges, initialCartCustomizations) : []
   );
-  const [selectedIngredientModifierIds, setSelectedIngredientModifierIds] = useState<Record<string, "normal" | "remove" | "extra">>(() =>
+  const [selectedIngredientModifierIds, setSelectedIngredientModifierIds] = useState<Record<string, "normal" | SupportedIngredientModifierId>>(() =>
     mode === "cart" ? getSelectedIngredientModifierIdsFromCustomizations(ingredientItems, initialCartCustomizations) : {}
   );
   const [isAddFeedbackVisible, setIsAddFeedbackVisible] = useState(false);
@@ -378,7 +378,7 @@ export default function MenuItemCard({
 
           if (!ingredient) return sum;
 
-          const direction = modifierId === "remove" ? -1 : 1;
+          const direction = getIngredientModifierDeltaMultiplier(modifierId);
 
           return {
             calories: sum.calories + (ingredient.nutrition.calories ?? 0) * direction,
@@ -550,7 +550,7 @@ export default function MenuItemCard({
     nextAddons: Partial<Record<AddonRef, AddonOption>>,
     nextSauceCounts: Record<string, number>,
     nextSelectedCommonChangeIds: string[] = selectedCommonChangeIds,
-    nextSelectedIngredientModifierIds: Record<string, "normal" | "remove" | "extra"> = selectedIngredientModifierIds
+    nextSelectedIngredientModifierIds: Record<string, "normal" | SupportedIngredientModifierId> = selectedIngredientModifierIds
   ) => {
     if (!isCartMode || !onCartConfigurationChange || !cartItemId) return;
 
@@ -597,7 +597,7 @@ export default function MenuItemCard({
 
         if (!ingredient) return sum;
 
-        const direction = modifierId === "remove" ? -1 : 1;
+        const direction = getIngredientModifierDeltaMultiplier(modifierId);
 
         return {
           calories: sum.calories + (ingredient.nutrition.calories ?? 0) * direction,

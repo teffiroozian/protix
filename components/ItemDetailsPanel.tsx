@@ -39,12 +39,30 @@ function normalizeIngredientToken(value: string) {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, "").trim();
 }
 
-const supportedIngredientModifierOptions = [
-  { id: "remove", label: "Remove", aliases: ["remove"] },
-  { id: "extra", label: "Extra", aliases: ["extra", "double"] },
+export const supportedIngredientModifierOptions = [
+  { id: "remove", label: "Remove", aliases: ["remove"], deltaMultiplier: -1 },
+  { id: "light", label: "Light", aliases: ["light"], deltaMultiplier: -0.5 },
+  { id: "extra", label: "Extra", aliases: ["extra", "double"], deltaMultiplier: 1 },
 ] as const;
 
-type SupportedIngredientModifierId = (typeof supportedIngredientModifierOptions)[number]["id"];
+export type SupportedIngredientModifierId = (typeof supportedIngredientModifierOptions)[number]["id"];
+
+export const ingredientModifierLabelById = supportedIngredientModifierOptions.reduce<Record<SupportedIngredientModifierId, string>>(
+  (acc, modifier) => {
+    acc[modifier.id] = modifier.label;
+    return acc;
+  },
+  {
+    remove: "Remove",
+    light: "Light",
+    extra: "Extra",
+  }
+);
+
+export function getIngredientModifierDeltaMultiplier(modifierId: SupportedIngredientModifierId | "normal") {
+  if (modifierId === "normal") return 0;
+  return supportedIngredientModifierOptions.find((modifier) => modifier.id === modifierId)?.deltaMultiplier ?? 0;
+}
 
 export function resolvePanelIngredients(
   item: MenuItem,
@@ -321,8 +339,9 @@ export default function ItemDetailsPanel({
                   <div className="px-3 py-2.5">
                     <div className="flex flex-wrap justify-end gap-1.5">
                       {[
+                        ...ingredient.supportedModifiers.filter((modifier) => modifier.id === "remove" || modifier.id === "light"),
                         { id: "normal" as const, label: "Normal" },
-                        ...ingredient.supportedModifiers,
+                        ...ingredient.supportedModifiers.filter((modifier) => modifier.id === "extra"),
                       ].map((modifier) => {
                         const isSelected =
                           (selectedIngredientModifiers?.[ingredient.id] ?? "normal") === modifier.id;

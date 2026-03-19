@@ -2,7 +2,13 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import ItemDetailsPanel, { PortionSelector, resolvePanelIngredients } from "@/components/ItemDetailsPanel";
+import ItemDetailsPanel, {
+  getIngredientModifierDeltaMultiplier,
+  ingredientModifierLabelById,
+  PortionSelector,
+  resolvePanelIngredients,
+  type SupportedIngredientModifierId,
+} from "@/components/ItemDetailsPanel";
 import type {
   AddonOption,
   AddonRef,
@@ -25,11 +31,6 @@ const emptyAddon: AddonOption = {
 
 const sauceRef: AddonRef = "sauces";
 const maxSauceSelections = 5;
-const ingredientModifierLabelById: Record<string, string> = {
-  remove: "Remove",
-  extra: "Extra",
-};
-
 function normalizeCategory(category: string) {
   return category.trim().toLowerCase();
 }
@@ -72,7 +73,7 @@ function getApplicableCommonChanges(item: MenuItem, commonChanges?: CommonChange
   });
 }
 
-function formatIngredientCustomizationLabel(ingredientName: string, modifierId: string) {
+function formatIngredientCustomizationLabel(ingredientName: string, modifierId: SupportedIngredientModifierId) {
   const modifierLabel = ingredientModifierLabelById[modifierId];
   if (!modifierLabel) return undefined;
   return `${ingredientName}: ${modifierLabel}`;
@@ -111,7 +112,7 @@ export default function ItemRouteModal({
   const [selectedAddons, setSelectedAddons] = useState<Partial<Record<AddonRef, AddonOption>>>({});
   const [selectedSauceCounts, setSelectedSauceCounts] = useState<Record<string, number>>({});
   const [selectedCommonChangeIds, setSelectedCommonChangeIds] = useState<string[]>([]);
-  const [selectedIngredientModifiers, setSelectedIngredientModifiers] = useState<Record<string, "normal" | "remove" | "extra">>({});
+  const [selectedIngredientModifiers, setSelectedIngredientModifiers] = useState<Record<string, "normal" | SupportedIngredientModifierId>>({});
   const { addItem } = useCart();
   const selectedVariant = variants?.find((variant) => variant.id === selectedVariantId);
   const selectedItemImage = selectedVariant?.image ?? item.image;
@@ -205,7 +206,7 @@ export default function ItemRouteModal({
 
           if (!ingredient) return sum;
 
-          const direction = modifierId === "remove" ? -1 : 1;
+          const direction = getIngredientModifierDeltaMultiplier(modifierId);
 
           return {
             calories: sum.calories + (ingredient.nutrition.calories ?? 0) * direction,
