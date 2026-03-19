@@ -17,6 +17,7 @@ import {
   INCLUDED_INGREDIENT_TAB,
   getIngredientTabDisplayLabel,
   ingredientMatchesTab,
+  resolveIngredientTabMaxQuantity,
   resolveIngredientTabs,
   resolveSingleSelectIngredientTabs,
   type IngredientSelectionMode,
@@ -225,7 +226,8 @@ export function resolvePanelIngredientTabs(
       icon: match?.image ?? menuItemMatch?.image ?? addonMatch?.image ?? "🥣",
       tabLabel: ingredientTabLabel,
       ingredientItem: match,
-      maxQuantity: match?.maxQuantity,
+      maxQuantity:
+        ingredientTabLabel ? resolveIngredientTabMaxQuantity(item, ingredientTabLabel, customizationRules) : undefined,
       nutrition,
       calories: nutrition.calories,
       defaultCount: includedIngredientIds.has(normalizedId) ? 1 : 0,
@@ -260,6 +262,7 @@ export function resolvePanelIngredientTabs(
       return tabIngredients.findIndex((candidate) => candidate.id === ingredient.id) === index;
     });
 
+    const tabMaxQuantity = resolveIngredientTabMaxQuantity(item, tab, customizationRules);
     const selectionMode = singleSelectTabs.has(normalizeIngredientToken(tab)) ? "single" : "quantity";
     const hasDefaultIngredient = uniqueTabIngredients.some((ingredient) => ingredient.defaultCount > 0);
     const ingredients =
@@ -270,6 +273,7 @@ export function resolvePanelIngredientTabs(
               label: "None",
               icon: "✕",
               tabLabel: tab,
+              maxQuantity: tabMaxQuantity,
               nutrition: {},
               calories: 0,
               defaultCount: hasDefaultIngredient ? 0 : 1,
