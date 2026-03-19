@@ -2942,7 +2942,8 @@
                 "fiber": 0,
                 "sugars": 0,
                 "protein": 4
-            }
+            },
+            "maxQuantity": 3
         },
         {
             "id": "sausage",
@@ -3184,7 +3185,8 @@
                 "fiber": 0,
                 "sugars": 0,
                 "protein": 0
-            }
+            },
+            "maxQuantity": 3
         },
         {
             "id": "pickles",
@@ -3465,7 +3467,8 @@
             "image": "/restaurants/chickfila/menu/dipping-sauces/honey_roasted_bbq.webp",
             "nutrition": {
                 "calories": 60
-            }
+            },
+            "maxQuantity": 2
         },
         {
             "id": "crispy-nuggets",
