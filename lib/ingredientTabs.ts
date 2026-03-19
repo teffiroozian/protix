@@ -1,4 +1,10 @@
-import type { IngredientItem, MenuItem, RestaurantCustomizationRules } from "@/types/menu";
+import type {
+  IngredientItem,
+  IngredientSelectionMode,
+  IngredientTabConfig,
+  MenuItem,
+  RestaurantCustomizationRules,
+} from "@/types/menu";
 
 export const INCLUDED_INGREDIENT_TAB = "Included";
 
@@ -6,28 +12,60 @@ function normalizeTabName(value: string) {
   return value.trim().toLowerCase();
 }
 
+export type ResolvedIngredientTabConfig = {
+  id: string;
+  label: string;
+  selectionMode?: IngredientSelectionMode;
+};
+
+function resolveIngredientTabConfig(tab: IngredientTabConfig): ResolvedIngredientTabConfig | null {
+  const label = typeof tab === "string" ? tab : tab.name;
+  const normalizedLabel = normalizeTabName(label);
+
+  if (!normalizedLabel || normalizedLabel === normalizeTabName(INCLUDED_INGREDIENT_TAB)) {
+    return null;
+  }
+
+  return {
+    id: normalizedLabel,
+    label,
+    selectionMode: typeof tab === "string" ? undefined : tab.selectionMode,
+  };
+}
+
 export function resolveIngredientTabs(
   item: MenuItem,
   customizationRules?: RestaurantCustomizationRules
 ) {
-  const itemLevelTabs = item.customization?.ingredientTabs?.filter(Boolean) ?? [];
+  const itemLevelTabs = item.customization?.ingredientTabs ?? [];
   const primaryCategory = item.categories?.[0];
   const restaurantLevelTabs =
     primaryCategory
-      ? customizationRules?.ingredientTabsByItemCategory?.[primaryCategory]?.filter(Boolean) ?? []
+      ? customizationRules?.ingredientTabsByItemCategory?.[primaryCategory] ?? []
       : [];
 
   const configuredTabs = itemLevelTabs.length > 0 ? itemLevelTabs : restaurantLevelTabs;
-  const dedupedConfiguredTabs = configuredTabs.filter((tab, index) => {
-    const normalizedTab = normalizeTabName(tab);
-    if (!normalizedTab || normalizedTab === normalizeTabName(INCLUDED_INGREDIENT_TAB)) {
-      return false;
+  const dedupedConfiguredTabs = configuredTabs.reduce<ResolvedIngredientTabConfig[]>((acc, tab) => {
+    const resolvedTab = resolveIngredientTabConfig(tab);
+    if (!resolvedTab) {
+      return acc;
     }
 
-    return configuredTabs.findIndex((candidate) => normalizeTabName(candidate) === normalizedTab) === index;
-  });
+    if (acc.some((candidate) => candidate.id === resolvedTab.id)) {
+      return acc;
+    }
 
-  return [INCLUDED_INGREDIENT_TAB, ...dedupedConfiguredTabs];
+    acc.push(resolvedTab);
+    return acc;
+  }, []);
+
+  return [
+    {
+      id: normalizeTabName(INCLUDED_INGREDIENT_TAB),
+      label: INCLUDED_INGREDIENT_TAB,
+    },
+    ...dedupedConfiguredTabs,
+  ];
 }
 
 export function ingredientMatchesTab(ingredient: IngredientItem, tabName: string) {

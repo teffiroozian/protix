@@ -5,6 +5,7 @@ import type {
   AddonRef,
   CommonChange,
   IngredientItem,
+  IngredientSelectionMode,
   ItemVariant,
   MacroDelta,
   MenuItem,
@@ -47,16 +48,60 @@ export type ResolvedPanelIngredient = {
   icon: string;
   ingredientItem?: IngredientItem;
   maxQuantity?: number;
+  selectionMode: IngredientSelectionMode;
   nutrition: Nutrition;
   calories?: number;
   defaultCount: number;
+  tabId: string;
+  tabLabel: string;
+  tabSelectionMode: IngredientSelectionMode;
+  tabIngredientIds: string[];
+  isExclusiveTab: boolean;
+  isIncludedByDefault: boolean;
 };
 
 export type ResolvedIngredientTab = {
   id: string;
   label: string;
+  selectionMode: IngredientSelectionMode;
+  isCounted: boolean;
+  isExclusive: boolean;
   ingredients: ResolvedPanelIngredient[];
 };
+
+function resolveIngredientSelectionMode(
+  ingredient: Pick<IngredientItem, "selectionMode" | "maxQuantity"> | undefined,
+  tabSelectionMode?: IngredientSelectionMode
+): IngredientSelectionMode {
+  if (ingredient?.selectionMode) return ingredient.selectionMode;
+  if (tabSelectionMode) return tabSelectionMode;
+  if (typeof ingredient?.maxQuantity === "number") return "counted";
+  return "multiple";
+}
+
+export function normalizeSelectedIngredientCounts(
+  counts: Partial<Record<string, number>>,
+  tabs: ResolvedIngredientTab[]
+): Record<string, number> {
+  const nextCounts: Record<string, number> = { ...counts };
+
+  tabs.forEach((tab) => {
+    if (!tab.isExclusive) return;
+
+    const selectedIngredients = tab.ingredients.filter((ingredient) => (nextCounts[ingredient.id] ?? ingredient.defaultCount) > 0);
+    if (selectedIngredients.length <= 1) return;
+
+    const preservedIngredient =
+      selectedIngredients.find((ingredient) => ingredient.isIncludedByDefault) ??
+      selectedIngredients[0];
+
+    tab.ingredients.forEach((ingredient) => {
+      nextCounts[ingredient.id] = ingredient.id === preservedIngredient.id ? 1 : 0;
+    });
+  });
+
+  return nextCounts;
+}
 
 export function resolvePanelIngredients(
   item: MenuItem,
@@ -107,7 +152,10 @@ export function resolvePanelIngredientTabs(
   const addonLookup = new Map<string, AddonOption>();
   const menuItemByIdLookup = new Map<string, MenuItem>();
   const menuItemByNameLookup = new Map<string, MenuItem>();
-  const resolvedIngredientLookup = new Map<string, ResolvedPanelIngredient>();
+  const resolvedIngredientLookup = new Map<
+    string,
+    Omit<ResolvedPanelIngredient, "tabId" | "tabLabel" | "tabSelectionMode" | "tabIngredientIds" | "isExclusiveTab" | "selectionMode">
+  >();
 
   ingredientItems.forEach((entry) => {
     if (entry.id) ingredientByIdLookup.set(entry.id.toLowerCase(), entry);
@@ -173,6 +221,7 @@ export function resolvePanelIngredientTabs(
       nutrition,
       calories: nutrition.calories,
       defaultCount: includedIngredientIds.has(normalizedId) ? 1 : 0,
+      isIncludedByDefault: includedIngredientIds.has(normalizedId),
     };
 
     resolvedIngredientLookup.set(normalizedId, resolvedIngredient);
@@ -181,20 +230,44 @@ export function resolvePanelIngredientTabs(
 
   return resolvedTabs.map((tab) => {
     const tabIngredients =
-      tab === INCLUDED_INGREDIENT_TAB
+      tab.label === INCLUDED_INGREDIENT_TAB
         ? ingredientIds.map((ingredientId) => getResolvedIngredient(ingredientId))
         : ingredientItems
-            .filter((ingredient) => ingredientMatchesTab(ingredient, tab))
+            .filter((ingredient) => ingredientMatchesTab(ingredient, tab.label))
             .map((ingredient) => getResolvedIngredient(ingredient.id ?? ingredient.name, ingredient));
 
     const uniqueTabIngredients = tabIngredients.filter((ingredient, index) => {
       return tabIngredients.findIndex((candidate) => candidate.id === ingredient.id) === index;
     });
 
+    const resolvedTabSelectionMode =
+      tab.selectionMode ??
+      (uniqueTabIngredients.some((ingredient) => resolveIngredientSelectionMode(ingredient.ingredientItem) === "counted")
+        ? "counted"
+        : "multiple");
+    const tabIngredientIds = uniqueTabIngredients.map((ingredient) => ingredient.id);
+    const isExclusive = resolvedTabSelectionMode === "single";
+    const ingredientsWithTabMetadata = uniqueTabIngredients.map((ingredient) => {
+      const selectionMode = resolveIngredientSelectionMode(ingredient.ingredientItem, resolvedTabSelectionMode);
+
+      return {
+        ...ingredient,
+        selectionMode,
+        tabId: tab.id,
+        tabLabel: tab.label,
+        tabSelectionMode: resolvedTabSelectionMode,
+        tabIngredientIds,
+        isExclusiveTab: isExclusive,
+      };
+    });
+
     return {
-      id: normalizeIngredientToken(tab),
-      label: tab,
-      ingredients: uniqueTabIngredients,
+      id: tab.id,
+      label: tab.label,
+      selectionMode: resolvedTabSelectionMode,
+      isCounted: resolvedTabSelectionMode === "counted",
+      isExclusive,
+      ingredients: ingredientsWithTabMetadata,
     };
   });
 }
@@ -314,8 +387,8 @@ export default function ItemDetailsPanel({
   displayMode?: "full" | "addonsOnly";
   showVariantsInDetails?: boolean;
   selectedIngredientCounts?: Partial<Record<string, number>>;
-  onIncrementIngredient?: (ingredientId: string) => void;
-  onDecrementIngredient?: (ingredientId: string) => void;
+  onIncrementIngredient?: (ingredient: ResolvedPanelIngredient) => void;
+  onDecrementIngredient?: (ingredient: ResolvedPanelIngredient) => void;
 }) {
   const n = nutrition;
   const addonRefs = item.addonRefs ?? [];
@@ -384,6 +457,9 @@ export default function ItemDetailsPanel({
               {selectedIngredientTab.ingredients.map((ingredient) => {
                 const ingredientCount = selectedIngredientCounts?.[ingredient.id] ?? ingredient.defaultCount;
                 const isSelected = ingredientCount > 0;
+                const isCountedIngredient = ingredient.selectionMode === "counted";
+                const canToggleIngredient = ingredient.selectionMode === "multiple";
+                const canSelectIngredient = ingredient.selectionMode === "single";
 
                 return (
                   <li key={ingredient.id} className="flex">
@@ -412,7 +488,7 @@ export default function ItemDetailsPanel({
                           {ingredient.calories !== undefined ? `${ingredient.calories} Cal` : "— Cal"}
                         </div>
                       </div>
-                      {typeof ingredient.maxQuantity === "number" ? (
+                      {isCountedIngredient ? (
                         <div className="ml-auto inline-flex items-center gap-[6px]">
                           {ingredientCount > 0 ? (
                             <>
@@ -420,7 +496,7 @@ export default function ItemDetailsPanel({
                                 type="button"
                                 className="inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-[rgba(0,0,0,0.35)] bg-white text-[18px] font-bold leading-none"
                                 aria-label={`Remove one ${ingredient.label}`}
-                                onClick={() => onDecrementIngredient?.(ingredient.id)}
+                                onClick={() => onDecrementIngredient?.(ingredient)}
                               >
                                 -
                               </button>
@@ -429,8 +505,8 @@ export default function ItemDetailsPanel({
                                 type="button"
                                 className="inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-[rgba(0,0,0,0.35)] bg-white text-[18px] font-bold leading-none disabled:cursor-not-allowed disabled:opacity-40"
                                 aria-label={`Add one more ${ingredient.label}`}
-                                onClick={() => onIncrementIngredient?.(ingredient.id)}
-                                disabled={ingredientCount >= ingredient.maxQuantity}
+                                onClick={() => onIncrementIngredient?.(ingredient)}
+                                disabled={ingredientCount >= (ingredient.maxQuantity ?? 0)}
                               >
                                 +
                               </button>
@@ -440,12 +516,32 @@ export default function ItemDetailsPanel({
                               type="button"
                               className="inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-[rgba(0,0,0,0.35)] bg-white text-[18px] font-bold leading-none"
                               aria-label={`Add ${ingredient.label}`}
-                              onClick={() => onIncrementIngredient?.(ingredient.id)}
+                              onClick={() => onIncrementIngredient?.(ingredient)}
                             >
                               +
                             </button>
                           )}
                         </div>
+                      ) : canSelectIngredient || canToggleIngredient ? (
+                        <button
+                          type="button"
+                          className={`ml-auto inline-flex min-w-[78px] items-center justify-center rounded-full border px-3 py-1 text-sm font-semibold ${
+                            isSelected
+                              ? "border-black bg-black text-white"
+                              : "border-black/20 bg-white text-black/65"
+                          }`}
+                          aria-pressed={isSelected}
+                          onClick={() => {
+                            if (isSelected && canToggleIngredient) {
+                              onDecrementIngredient?.(ingredient);
+                              return;
+                            }
+
+                            onIncrementIngredient?.(ingredient);
+                          }}
+                        >
+                          {isSelected ? "Selected" : canSelectIngredient ? "Choose" : "Add"}
+                        </button>
                       ) : null}
                     </div>
                   </li>

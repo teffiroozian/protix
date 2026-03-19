@@ -75,11 +75,18 @@ export type IngredientModifier = {
 };
 
 export type IngredientTabsOverride = {
-  ingredientTabs?: string[];
+  ingredientTabs?: IngredientTabConfig[];
+};
+
+export type IngredientSelectionMode = "single" | "multiple" | "counted";
+
+export type IngredientTabConfig = string | {
+  name: string;
+  selectionMode?: IngredientSelectionMode;
 };
 
 export type RestaurantCustomizationRules = {
-  ingredientTabsByItemCategory?: Partial<Record<string, string[]>>;
+  ingredientTabsByItemCategory?: Partial<Record<string, IngredientTabConfig[]>>;
 };
 
 export type MenuItem = {
@@ -104,6 +111,7 @@ export type IngredientItem = {
   image?: string;
   category?: string;
   categories?: string[];
+  selectionMode?: IngredientSelectionMode;
   maxQuantity?: number;
 };
 

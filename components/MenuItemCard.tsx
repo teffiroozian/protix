@@ -13,7 +13,12 @@ import type {
   RestaurantCustomizationRules,
 } from "@/types/menu";
 import { useCart } from "@/stores/cartStore";
-import ItemDetailsPanel, { type ResolvedPanelIngredient, resolvePanelIngredients } from "./ItemDetailsPanel";
+import ItemDetailsPanel, {
+  type ResolvedPanelIngredient,
+  normalizeSelectedIngredientCounts,
+  resolvePanelIngredientTabs,
+  resolvePanelIngredients,
+} from "./ItemDetailsPanel";
 import VariantSelector from "./VariantSelector";
 
 function pad2(n: number) {
@@ -301,10 +306,17 @@ export default function MenuItemCard({
     () => resolvePanelIngredients(item, ingredientItems, addons, menuItems ?? [], variants, selectedVariantId, customizationRules),
     [addons, customizationRules, ingredientItems, item, menuItems, selectedVariantId, variants]
   );
+  const resolvedIngredientTabs = useMemo(
+    () => resolvePanelIngredientTabs(item, ingredientItems, addons, menuItems ?? [], variants, selectedVariantId, customizationRules),
+    [addons, customizationRules, ingredientItems, item, menuItems, selectedVariantId, variants]
+  );
   const [selectedIngredientCounts, setSelectedIngredientCounts] = useState<Record<string, number>>(() =>
-    getSelectedIngredientCountsFromCustomizations(
-      resolvedIngredients,
-      mode === "cart" ? initialCartCustomizations : undefined
+    normalizeSelectedIngredientCounts(
+      getSelectedIngredientCountsFromCustomizations(
+        resolvedIngredients,
+        mode === "cart" ? initialCartCustomizations : undefined
+      ),
+      resolvedIngredientTabs
     )
   );
 
@@ -322,13 +334,14 @@ export default function MenuItemCard({
 
   const ingredientCounts = useMemo(() => {
     const defaults = getDefaultIngredientCounts(resolvedIngredients);
-    return Object.keys(defaults).reduce<Record<string, number>>((acc, ingredientId) => {
+    const nextCounts = Object.keys(defaults).reduce<Record<string, number>>((acc, ingredientId) => {
       acc[ingredientId] = ingredientId in selectedIngredientCounts
         ? selectedIngredientCounts[ingredientId]
         : defaults[ingredientId];
       return acc;
     }, {});
-  }, [resolvedIngredients, selectedIngredientCounts]);
+    return normalizeSelectedIngredientCounts(nextCounts, resolvedIngredientTabs);
+  }, [resolvedIngredientTabs, resolvedIngredients, selectedIngredientCounts]);
 
   const selectedSauceOptions = useMemo(() => {
     const sauceOptions = addons?.[sauceRef] ?? [];
@@ -446,7 +459,9 @@ export default function MenuItemCard({
     setSelectedAddons({});
     setSelectedSauceCounts({});
     setSelectedCommonChangeIds([]);
-    setSelectedIngredientCounts(getDefaultIngredientCounts(resolvedIngredients));
+    setSelectedIngredientCounts(
+      normalizeSelectedIngredientCounts(getDefaultIngredientCounts(resolvedIngredients), resolvedIngredientTabs)
+    );
   }
 
   function addNutritionValue(baseValue?: number, deltaValue?: number) {
@@ -1042,11 +1057,20 @@ export default function MenuItemCard({
               })
             }
             selectedIngredientCounts={ingredientCounts}
-            onDecrementIngredient={(ingredientId) =>
+            onDecrementIngredient={(ingredient) =>
               setSelectedIngredientCounts((prev) => {
-                const current = ingredientCounts[ingredientId] ?? 0;
-                const next = { ...prev, [ingredientId]: Math.max(0, current - 1) };
-                if (next[ingredientId] === current) return prev;
+                const current = ingredientCounts[ingredient.id] ?? ingredient.defaultCount;
+                let next = prev;
+
+                if (ingredient.selectionMode === "counted") {
+                  const nextCount = Math.max(0, current - 1);
+                  if (nextCount === current) return prev;
+                  next = { ...prev, [ingredient.id]: nextCount };
+                } else if (ingredient.selectionMode === "multiple" && current > 0) {
+                  next = { ...prev, [ingredient.id]: 0 };
+                } else {
+                  return prev;
+                }
 
                 emitCartConfiguration(
                   selectedVariantId,
@@ -1058,17 +1082,28 @@ export default function MenuItemCard({
                 return next;
               })
             }
-            onIncrementIngredient={(ingredientId) =>
+            onIncrementIngredient={(ingredient) =>
               setSelectedIngredientCounts((prev) => {
-                const ingredient =
-                  ingredientLookup.get(ingredientId) ??
-                  ingredientLookup.get(ingredientId.toLowerCase());
-                const maxQuantity = ingredient?.maxQuantity;
-                if (typeof maxQuantity !== "number") return prev;
+                const current = ingredientCounts[ingredient.id] ?? ingredient.defaultCount;
+                let next = prev;
 
-                const current = ingredientCounts[ingredientId] ?? ingredient?.defaultCount ?? 0;
-                const next = { ...prev, [ingredientId]: Math.min(maxQuantity, current + 1) };
-                if (next[ingredientId] === current) return prev;
+                if (ingredient.selectionMode === "counted") {
+                  const maxQuantity = ingredient.maxQuantity;
+                  if (typeof maxQuantity !== "number") return prev;
+
+                  const nextCount = Math.min(maxQuantity, current + 1);
+                  if (nextCount === current) return prev;
+                  next = { ...prev, [ingredient.id]: nextCount };
+                } else if (ingredient.selectionMode === "single") {
+                  next = { ...prev };
+                  ingredient.tabIngredientIds.forEach((siblingId) => {
+                    next[siblingId] = siblingId === ingredient.id ? 1 : 0;
+                  });
+                } else {
+                  const nextCount = current > 0 ? current : 1;
+                  if (nextCount === current) return prev;
+                  next = { ...prev, [ingredient.id]: nextCount };
+                }
 
                 emitCartConfiguration(
                   selectedVariantId,

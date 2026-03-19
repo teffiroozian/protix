@@ -2,7 +2,13 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import ItemDetailsPanel, { PortionSelector, type ResolvedPanelIngredient, resolvePanelIngredients } from "@/components/ItemDetailsPanel";
+import ItemDetailsPanel, {
+  PortionSelector,
+  type ResolvedPanelIngredient,
+  normalizeSelectedIngredientCounts,
+  resolvePanelIngredientTabs,
+  resolvePanelIngredients,
+} from "@/components/ItemDetailsPanel";
 import type {
   AddonOption,
   AddonRef,
@@ -120,8 +126,12 @@ export default function ItemRouteModal({
     () => resolvePanelIngredients(item, ingredients, addons, menuItems ?? [], variants, selectedVariantId, customizationRules),
     [addons, customizationRules, ingredients, item, menuItems, selectedVariantId, variants]
   );
+  const resolvedIngredientTabs = useMemo(
+    () => resolvePanelIngredientTabs(item, ingredients, addons, menuItems ?? [], variants, selectedVariantId, customizationRules),
+    [addons, customizationRules, ingredients, item, menuItems, selectedVariantId, variants]
+  );
   const [selectedIngredientCounts, setSelectedIngredientCounts] = useState<Record<string, number>>(() =>
-    getDefaultIngredientCounts(resolvedIngredients)
+    normalizeSelectedIngredientCounts(getDefaultIngredientCounts(resolvedIngredients), resolvedIngredientTabs)
   );
 
   const applicableCommonChanges = useMemo(
@@ -181,13 +191,14 @@ export default function ItemRouteModal({
 
   const ingredientCounts = useMemo(() => {
     const defaults = getDefaultIngredientCounts(resolvedIngredients);
-    return Object.keys(defaults).reduce<Record<string, number>>((acc, ingredientId) => {
+    const nextCounts = Object.keys(defaults).reduce<Record<string, number>>((acc, ingredientId) => {
       acc[ingredientId] = ingredientId in selectedIngredientCounts
         ? selectedIngredientCounts[ingredientId]
         : defaults[ingredientId];
       return acc;
     }, {});
-  }, [resolvedIngredients, selectedIngredientCounts]);
+    return normalizeSelectedIngredientCounts(nextCounts, resolvedIngredientTabs);
+  }, [resolvedIngredientTabs, resolvedIngredients, selectedIngredientCounts]);
 
   const commonChangeTotals = useMemo(
     () =>
@@ -468,29 +479,48 @@ export default function ItemRouteModal({
             showCustomizationDeltas={hasActiveCustomization}
             showVariantsInDetails={true}
             selectedIngredientCounts={ingredientCounts}
-            onDecrementIngredient={(ingredientId) =>
+            onDecrementIngredient={(ingredient) =>
               setSelectedIngredientCounts((prev) => {
-                const current = ingredientCounts[ingredientId] ?? 0;
-                const nextCount = Math.max(0, current - 1);
-                if (nextCount === current) return prev;
+                const current = ingredientCounts[ingredient.id] ?? ingredient.defaultCount;
 
-                return { ...prev, [ingredientId]: nextCount };
+                if (ingredient.selectionMode === "counted") {
+                  const nextCount = Math.max(0, current - 1);
+                  if (nextCount === current) return prev;
+                  return { ...prev, [ingredient.id]: nextCount };
+                }
+
+                if (ingredient.selectionMode === "multiple" && current > 0) {
+                  return { ...prev, [ingredient.id]: 0 };
+                }
+
+                return prev;
               })
             }
-            onIncrementIngredient={(ingredientId) =>
+            onIncrementIngredient={(ingredient) =>
               setSelectedIngredientCounts((prev) => {
-                const ingredient =
-                  ingredientLookup.get(ingredientId) ??
-                  ingredientLookup.get(ingredientId.toLowerCase());
-                const maxQuantity = ingredient?.maxQuantity;
+                const current = ingredientCounts[ingredient.id] ?? ingredient.defaultCount;
 
-                if (typeof maxQuantity !== "number") return prev;
+                if (ingredient.selectionMode === "counted") {
+                  const maxQuantity = ingredient.maxQuantity;
+                  if (typeof maxQuantity !== "number") return prev;
 
-                const current = ingredientCounts[ingredientId] ?? ingredient?.defaultCount ?? 0;
-                const nextCount = Math.min(maxQuantity, current + 1);
+                  const nextCount = Math.min(maxQuantity, current + 1);
+                  if (nextCount === current) return prev;
+
+                  return { ...prev, [ingredient.id]: nextCount };
+                }
+
+                if (ingredient.selectionMode === "single") {
+                  const nextCounts = { ...prev };
+                  ingredient.tabIngredientIds.forEach((siblingId) => {
+                    nextCounts[siblingId] = siblingId === ingredient.id ? 1 : 0;
+                  });
+                  return nextCounts;
+                }
+
+                const nextCount = current > 0 ? current : 1;
                 if (nextCount === current) return prev;
-
-                return { ...prev, [ingredientId]: nextCount };
+                return { ...prev, [ingredient.id]: nextCount };
               })
             }
           />

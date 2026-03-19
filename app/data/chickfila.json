@@ -4,7 +4,10 @@
     "customizationRules": {
         "ingredientTabsByItemCategory": {
             "Sandwich": [
-                "Buns",
+                {
+                    "name": "Buns",
+                    "selectionMode": "single"
+                },
                 "Proteins",
                 "Sandwich Toppings"
             ],
