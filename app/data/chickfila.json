@@ -589,6 +589,7 @@
             "portionType": "single",
             "image": "/restaurants/chickfila/menu/salads/cobb-salad.webp",
             "ingredients": [
+                "crispy-nuggets",
                 "grape-tomato",
                 "roasted-corn",
                 "bacon-crumbles",
