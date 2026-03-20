@@ -52,6 +52,16 @@
             "Salad Toppings": 6,
             "Salad Condiments": 6
 
+        },
+        "ingredientOptionsByItemCategory": {
+            "Salad": {
+                "Protein": [
+                    "grilled-filet",
+                    "spicy-filet",
+                    "cfa-filet",
+                    "spicy-grilled-filet-cold"
+                ]
+            }
         }
     },
     "items": [
