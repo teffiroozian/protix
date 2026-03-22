@@ -165,18 +165,20 @@ export default function RestaurantView({
       return "Other";
     };
 
-    return ingredients.map((ingredient, index) => ({
-      id:
-        ingredient.id ??
-        `${restaurantId}-ingredient-${ingredient.name}-${index}`
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, "-"),
-      name: ingredient.name,
-      nutrition: ingredient.nutrition,
-      image: ingredient.image,
-      categories: [resolveIngredientCategory(ingredient)],
-      portionType: "addon",
-    }));
+    return ingredients
+      .filter((ingredient) => !ingredient.hideFromIngredientView)
+      .map((ingredient, index) => ({
+        id:
+          ingredient.id ??
+          `${restaurantId}-ingredient-${ingredient.name}-${index}`
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-"),
+        name: ingredient.name,
+        nutrition: ingredient.nutrition,
+        image: ingredient.image,
+        categories: [resolveIngredientCategory(ingredient)],
+        portionType: "addon",
+      }));
   }, [ingredients, restaurantId]);
 
   const allItems = useMemo(() => [...items, ...addonItems], [items, addonItems]);

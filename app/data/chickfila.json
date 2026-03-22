@@ -48,8 +48,8 @@
             "Sandwich Toppings": 6,
             "Salad Toppings": 6,
             "Salad Condiments": 6,
-            "Wrap Toppings": 2
-
+            "Wrap Toppings": 2,
+            "Sauces": 2
         },
         "ingredientOptionsByItemCategory": {
             "Salad": {
@@ -3546,7 +3546,8 @@
             "nutrition": {
                 "calories": 60
             },
-            "maxQuantity": 2
+            "maxQuantity": 2,
+            "hideFromIngredientView": true
         },
         {
             "id": "crispy-nuggets",
