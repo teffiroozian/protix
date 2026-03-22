@@ -3095,7 +3095,6 @@
             "id": "blue-cheese-crumbles",
             "name": "Blue Cheese Crumbles",
             "categories": [
-                "Salad Condiments",
                 "Salad Toppings"
             ],
             "image": "/restaurants/chickfila/ingredients/salad-extras/blue-cheese-crumbles.png",
@@ -3558,7 +3557,8 @@
             "image": "/restaurants/chickfila/menu/chicken/crispy-nuggets.webp",
             "nutrition": {
                 "calories": 250
-            }
+            },
+            "hideFromIngredientView": true
         },
         {
             "id": "grilled-nuggets",
@@ -3569,7 +3569,8 @@
             "image": "/restaurants/chickfila/menu/chicken/grilled-nuggets.webp",
             "nutrition": {
                 "calories": 130
-            }
+            },
+            "hideFromIngredientView": true
         },
         {
             "id": "chick-n-strips",
@@ -3580,7 +3581,8 @@
             "image": "/restaurants/chickfila/menu/chicken/chicken-strips.webp",
             "nutrition": {
                 "calories": 310
-            }
+            },
+            "hideFromIngredientView": true
         },
         {
             "id": "hash-browns",
@@ -3591,7 +3593,8 @@
             "image": "/restaurants/chickfila/menu/breakfast/hash-browns.webp",
             "nutrition": {
                 "calories": 270
-            }
+            },
+            "hideFromIngredientView": true
         }
     ],
     "addons": {

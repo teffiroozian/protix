@@ -38,7 +38,6 @@ export function categorySectionId(category: string) {
 
 const CATEGORY_PRIORITY_GROUPS = [
   { label: "Entrees", aliases: ["entree", "entrees"] },
-  { label: "Burgers", aliases: ["burger", "burgers"] },
   { label: "Sandwiches", aliases: ["sandwich", "sandwiches"] },
   {
     label: "Chicken",
@@ -52,10 +51,10 @@ const CATEGORY_PRIORITY_GROUPS = [
   { label: "Wraps", aliases: ["wrap", "wraps"] },
   { label: "Breakfast", aliases: ["breakfast"] },
   { label: "Sides", aliases: ["side", "sides"] },
+  { label: "Drinks", aliases: ["drink", "drinks", "beverage", "beverages"] },
   { label: "Kids", aliases: ["kid", "kids"] },
   { label: "Desserts", aliases: ["dessert", "desserts"] },
   { label: "Treats", aliases: ["treat", "treats"] },
-  { label: "Drinks", aliases: ["drink", "drinks", "beverage", "beverages"] },
   {
     label: "Dipping Sauces",
     aliases: ["sauce", "sauces", "dipping sauce", "dipping sauces"],
@@ -67,8 +66,8 @@ const CATEGORY_PRIORITY_GROUPS = [
 ] as const;
 
 const INGREDIENT_CATEGORY_PRIORITY_GROUPS = [
-  { label: "Proteins", aliases: ["protein", "proteins"] },
   { label: "Buns", aliases: ["bun", "buns"] },
+  { label: "Proteins", aliases: ["protein", "proteins"] },
   { label: "Cheeses", aliases: ["cheese", "cheeses"] },
   {
     label: "Sandwich Toppings",
