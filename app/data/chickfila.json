@@ -2873,7 +2873,7 @@
             "id": "grilled-breakfast-filet",
             "name": "Grilled Breakfast Filet",
             "categories": [
-                "Proteins"
+                "Breakfast Proteins"
             ],
             "image": "/restaurants/chickfila/ingredients/proteins/grilled-filet.webp",
             "nutrition": {
@@ -2893,7 +2893,7 @@
             "id": "cfa-breakfast-filet",
             "name": "Chick-fil-A® Breakfast Filet",
             "categories": [
-                "Proteins"
+                "Breakfast Proteins"
             ],
             "image": "/restaurants/chickfila/ingredients/proteins/cfa-filet.webp",
             "nutrition": {
@@ -2913,7 +2913,7 @@
             "id": "spicy-breakfast-filet",
             "name": "Spicy Breakfast Filet",
             "categories": [
-                "Proteins"
+                "Breakfast Proteins"
             ],
             "image": "/restaurants/chickfila/ingredients/proteins/spicy-filet.webp",
             "nutrition": {
@@ -3421,7 +3421,7 @@
             "id": "buttery-biscuit",
             "name": "Buttery Biscuit",
             "categories": [
-                "Breakfast"
+                "Breakfast Buns"
             ],
             "image": "/restaurants/chickfila/ingredients/breakfast/buttery-biscuit.png",
             "nutrition": {
@@ -3432,7 +3432,7 @@
             "id": "english-muffin",
             "name": "English Muffin",
             "categories": [
-                "Breakfast"
+                "Breakfast Buns"
             ],
             "image": "/restaurants/chickfila/ingredients/breakfast/english-muffin.webp",
             "nutrition": {
@@ -3443,7 +3443,7 @@
             "id": "egg-whites",
             "name": "Egg Whites",
             "categories": [
-                "Breakfast"
+                "Eggs"
             ],
             "image": "/restaurants/chickfila/ingredients/breakfast/egg-whites.webp",
             "nutrition": {
@@ -3452,9 +3452,9 @@
         },
         {
             "id": "egg",
-            "name": "egg",
+            "name": "Egg",
             "categories": [
-                "Breakfast"
+                "Eggs"
             ],
             "image": "/restaurants/chickfila/ingredients/breakfast/egg.webp",
             "nutrition": {
@@ -3465,7 +3465,7 @@
             "id": "mini-yeast-rolls",
             "name": "Mini Yeast Rolls",
             "categories": [
-                "Breakfast"
+                "Breakfast Buns"
             ],
             "image": "/restaurants/chickfila/ingredients/breakfast/mini-yeast-roll.png",
             "nutrition": {
