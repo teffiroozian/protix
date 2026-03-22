@@ -48,6 +48,7 @@
             "Sandwich Toppings": 6,
             "Salad Toppings": 6,
             "Salad Condiments": 6,
+            "Sauces": 2,
             "Wrap Toppings": 2
         },
         "ingredientOptionsByItemCategory": {

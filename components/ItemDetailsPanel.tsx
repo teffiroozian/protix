@@ -184,7 +184,11 @@ export function resolvePanelIngredientTabs(
     menuItemByNameLookup.set(normalizeIngredientToken(menuItem.name), menuItem);
   });
 
-  function getResolvedIngredient(ingredientId: string, explicitIngredientItem?: IngredientItem) {
+  function getResolvedIngredient(
+    ingredientId: string,
+    explicitIngredientItem?: IngredientItem,
+    explicitTabLabel?: string
+  ) {
     const normalizedId = ingredientId.toLowerCase();
     const existing = resolvedIngredientLookup.get(normalizedId);
     if (existing) {
@@ -207,9 +211,11 @@ export function resolvePanelIngredientTabs(
       menuItemByNameLookup.get(normalizeIngredientToken(fallbackLabel));
 
     const label = menuItemMatch?.name ?? match?.name ?? fallbackLabel;
-    const ingredientTabLabel = resolvedTabs.find((tab) => {
-      return tab !== INCLUDED_INGREDIENT_TAB && match ? ingredientMatchesTab(match, tab) : false;
-    });
+    const ingredientTabLabel =
+      explicitTabLabel ??
+      resolvedTabs.find((tab) => {
+        return tab !== INCLUDED_INGREDIENT_TAB && match ? ingredientMatchesTab(match, tab) : false;
+      });
     const addonMatch =
       addonLookup.get(ingredientId.toLowerCase()) ??
       addonLookup.get(normalizeIngredientToken(ingredientId)) ??
@@ -278,7 +284,7 @@ export function resolvePanelIngredientTabs(
             })
             .map(({ ingredient }) => ingredient)
         : configuredIngredientIds?.length
-            ? configuredIngredientIds.map((ingredientId) => getResolvedIngredient(ingredientId))
+            ? configuredIngredientIds.map((ingredientId) => getResolvedIngredient(ingredientId, undefined, tab))
         : ingredientItems
             .filter((ingredient) => ingredientMatchesTab(ingredient, tab))
             .map((ingredient) => getResolvedIngredient(ingredient.id ?? ingredient.name, ingredient));
