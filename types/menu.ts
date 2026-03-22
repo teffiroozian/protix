@@ -111,6 +111,7 @@ export type IngredientItem = {
   category?: string;
   categories?: string[];
   maxQuantity?: number;
+  hideFromIngredientView?: boolean;
 };
 
 export type RestaurantMenu = {
