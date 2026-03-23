@@ -276,7 +276,7 @@ export function resolvePanelIngredientTabs(
     )?.[1];
   }
 
-  return resolvedTabs.map((tab) => {
+  const resolvedIngredientTabs: ResolvedIngredientTab[] = resolvedTabs.map((tab) => {
     const configuredIngredientIds = tab === INCLUDED_INGREDIENT_TAB ? undefined : getConfiguredIngredientIdsForTab(tab);
     const tabIngredients =
       tab === INCLUDED_INGREDIENT_TAB
@@ -340,6 +340,39 @@ export function resolvePanelIngredientTabs(
       ingredients,
     };
   });
+
+  const mergedTabs = new Map<string, ResolvedIngredientTab>();
+  resolvedIngredientTabs.forEach((tab) => {
+    const displayLabel = getIngredientTabDisplayLabel(tab.label);
+    const existingTab = mergedTabs.get(displayLabel);
+
+    if (!existingTab) {
+      mergedTabs.set(displayLabel, {
+        ...tab,
+        id: normalizeIngredientToken(displayLabel),
+        label: displayLabel,
+      });
+      return;
+    }
+
+    const mergedIngredients = [...existingTab.ingredients];
+    tab.ingredients.forEach((ingredient) => {
+      if (!mergedIngredients.some((candidate) => candidate.id === ingredient.id)) {
+        mergedIngredients.push(ingredient);
+      }
+    });
+
+    const selectionMode: IngredientSelectionMode =
+      existingTab.selectionMode === tab.selectionMode ? existingTab.selectionMode : "quantity";
+
+    mergedTabs.set(displayLabel, {
+      ...existingTab,
+      selectionMode,
+      ingredients: mergedIngredients,
+    });
+  });
+
+  return [...mergedTabs.values()];
 }
 
 function tabSupportsNoneOption(item: MenuItem, tabName: string) {
@@ -537,15 +570,18 @@ export default function ItemDetailsPanel({
     const seenSingleSelectTabs = new Set<string>();
 
     selectedIngredientTab.ingredients.forEach((ingredient) => {
-      const linkedSingleSelectTab =
-        ingredient.tabLabel
-          ? ingredientTabs.find(
-              (tab) => tab.label === ingredient.tabLabel && tab.selectionMode === "single"
-            )
-          : undefined;
+      const linkedIngredientTab = ingredientTabs.find(
+        (tab) =>
+          tab.label !== INCLUDED_INGREDIENT_TAB &&
+          tab.ingredients.some((candidate) => candidate.id === ingredient.id)
+      );
+      const linkedIngredient = linkedIngredientTab?.ingredients.find(
+        (candidate) => candidate.id === ingredient.id
+      );
+      const linkedSingleSelectTab = linkedIngredientTab?.selectionMode === "single" ? linkedIngredientTab : undefined;
 
       if (!linkedSingleSelectTab) {
-        includedIngredients.push(ingredient);
+        includedIngredients.push(linkedIngredient ?? ingredient);
         includedIngredientIds.add(ingredient.id);
         return;
       }
