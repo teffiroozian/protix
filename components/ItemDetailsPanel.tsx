@@ -299,7 +299,7 @@ export function resolvePanelIngredientTabs(
     const selectionMode = singleSelectTabs.has(normalizeTabName(tab)) ? "single" : "quantity";
     const hasDefaultIngredient = uniqueTabIngredients.some((ingredient) => ingredient.defaultCount > 0);
     const ingredients =
-      selectionMode === "single" && isCheeseTab(tab)
+      selectionMode === "single" && tabSupportsNoneOption(item, tab)
         ? [
             {
               id: `none-${normalizeIngredientToken(tab)}`,
@@ -325,8 +325,18 @@ export function resolvePanelIngredientTabs(
   });
 }
 
-function isCheeseTab(tabName: string) {
+function tabSupportsNoneOption(item: MenuItem, tabName: string) {
   const normalized = normalizeIngredientCategory(tabName);
+  const configuredTabsWithNoneOption = item.customization?.tabsWithNoneOption ?? [];
+
+  if (
+    configuredTabsWithNoneOption.some(
+      (candidateTab) => normalizeIngredientCategory(candidateTab) === normalized
+    )
+  ) {
+    return true;
+  }
+
   return normalized === "cheese" || normalized === "cheeses";
 }
 

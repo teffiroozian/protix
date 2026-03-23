@@ -925,7 +925,23 @@
                     },
                     "label": "Medium"
                 }
-            ]
+            ],
+            "customization": {
+                "ingredientTabs": [
+                    "Toppings"
+                ],
+                "ingredientTabMaxQuantities": {
+                    "Toppings": 1
+                },
+                "ingredientOptionsByTab": {
+                    "Toppings": [
+                        "bacon-crumbles"
+                    ]
+                },
+                "tabsWithNoneOption": [
+                    "Toppings"
+                ]
+            }
         },
         {
             "id": "chicken_noodle_soup",
