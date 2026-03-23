@@ -1172,7 +1172,12 @@
                     },
                     "label": "4 ct"
                 }
-            ]
+            ],
+            "customization": {
+                "ingredientTabs": [
+                    "Included"
+                ]
+            }
         },
         {
             "id": "egg_white_grill",
