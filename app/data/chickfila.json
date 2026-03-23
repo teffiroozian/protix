@@ -986,7 +986,20 @@
                     },
                     "label": "Bowl"
                 }
-            ]
+            ],
+            "customization": {
+                "ingredientTabs": [
+                    "Soup Toppings"
+                ],
+                "ingredientTabMaxQuantities": {
+                    "Soup Toppings": 1
+                },
+                "ingredientOptionsByTab": {
+                    "Soup Toppings": [
+                        "saltines"
+                    ]
+                }
+            }
         },
         {
             "id": "side_salad",
@@ -1039,6 +1052,24 @@
                 "fiber": 18,
                 "sugars": 4,
                 "protein": 25
+            },
+            "customization": {
+                "ingredientTabs": [
+                    "Condiments",
+                    "Soup Toppings"
+                ],
+                "ingredientTabMaxQuantities": {
+                    "Condiments": 1,
+                    "Soup Toppings": 1
+                },
+                "ingredientOptionsByTab": {
+                    "Condiments": [
+                        "seasoned-tortilla-strips"
+                    ],
+                    "Soup Toppings": [
+                        "saltines"
+                    ]
+                }
             }
         },
         {

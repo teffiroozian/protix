@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import type {
   AddonOption,
@@ -248,6 +248,14 @@ export function resolvePanelIngredientTabs(
   }
 
   function getConfiguredIngredientIdsForTab(tabName: string) {
+    const itemLevelIngredientOptions = Object.entries(item.customization?.ingredientOptionsByTab ?? {}).find(
+      ([candidateTab]) => normalizeIngredientCategory(candidateTab) === normalizeIngredientCategory(tabName)
+    )?.[1];
+
+    if (itemLevelIngredientOptions?.length) {
+      return itemLevelIngredientOptions;
+    }
+
     if (!primaryCategory) return undefined;
 
     const categoryIngredientOptions = Object.entries(customizationRules?.ingredientOptionsByItemCategory ?? {}).find(
@@ -472,8 +480,9 @@ export default function ItemDetailsPanel({
   const [activeIngredientTab, setActiveIngredientTab] = useState(ingredientTabs[0]?.label ?? INCLUDED_INGREDIENT_TAB);
   const availableIngredientTabs = ingredientTabs.filter((tab) => tab.ingredients.length > 0);
   const selectedIngredientTab =
-    ingredientTabs.find((tab) => tab.label === activeIngredientTab) ??
+    availableIngredientTabs.find((tab) => tab.label === activeIngredientTab) ??
     availableIngredientTabs[0] ??
+    ingredientTabs.find((tab) => tab.label === activeIngredientTab) ??
     ingredientTabs[0];
   const navigateToSingleSelectTab = (
     ingredientId: string,
@@ -487,7 +496,7 @@ export default function ItemDetailsPanel({
     );
     setActiveIngredientTab(linkedTab.label);
   };
-  const displayIngredients = useMemo(() => {
+  const displayIngredients = (() => {
     if (!selectedIngredientTab) return [];
     if (selectedIngredientTab.label !== INCLUDED_INGREDIENT_TAB) {
       return selectedIngredientTab.ingredients;
@@ -565,9 +574,9 @@ export default function ItemDetailsPanel({
     });
 
     return includedIngredients;
-  }, [ingredientTabs, selectedIngredientCounts, selectedIngredientTab]);
+  })();
   const shouldShowIngredientSection =
-    ingredientTabs.length > 1 || (ingredientTabs[0]?.ingredients.length ?? 0) > 0;
+    availableIngredientTabs.length > 1 || (availableIngredientTabs[0]?.ingredients.length ?? 0) > 0;
 
   return (
     <div className="grid grid-cols-2 gap-3 rounded-[18px] bg-[#e0e0e0] px-3 py-2">
@@ -575,7 +584,7 @@ export default function ItemDetailsPanel({
         <section className="col-span-2 rounded-[14px] border border-black/12 bg-white p-5">
           <h2 className="mb-6 text-2xl font-bold">Ingredients</h2>
           <div className="mb-4 flex flex-wrap gap-2">
-            {ingredientTabs.map((tab) => {
+            {availableIngredientTabs.map((tab) => {
               const isActive = tab.label === selectedIngredientTab.label;
 
               return (
