@@ -18,7 +18,6 @@
                 "Proteins"
             ],
             "Breakfast": [
-                "Wrap Toppings",
                 "Breakfast Buns",
                 "Cheeses",
                 "Eggs"
@@ -1173,7 +1172,12 @@
                     },
                     "label": "4 ct"
                 }
-            ]
+            ],
+            "customization": {
+                "ingredientTabs": [
+                    "Included"
+                ]
+            }
         },
         {
             "id": "egg_white_grill",
@@ -1224,6 +1228,14 @@
                 "fiber": 3,
                 "sugars": 2,
                 "protein": 34
+            },
+            "customization": {
+                "ingredientTabs": [
+                    "Wrap Toppings"
+                ],
+                "ingredientTabMaxQuantities": {
+                    "Wrap Toppings": 2
+                }
             }
         },
         {
@@ -1248,6 +1260,14 @@
                 "fiber": 2,
                 "sugars": 2,
                 "protein": 29
+            },
+            "customization": {
+                "ingredientTabs": [
+                    "Wrap Toppings"
+                ],
+                "ingredientTabMaxQuantities": {
+                    "Wrap Toppings": 2
+                }
             }
         },
         {
@@ -1471,7 +1491,12 @@
                     },
                     "label": "Large"
                 }
-            ]
+            ],
+            "customization": {
+                "ingredientTabs": [
+                    "Included"
+                ]
+            }
         },
         {
             "id": "chick_fil_a_chicken_biscuit",
@@ -3306,8 +3331,7 @@
             "name": "Shredded Monterey Cheddar Cheese",
             "categories": [
                 "Wrap Toppings",
-                "Salad Toppings",
-                "Breakfast"
+                "Salad Toppings"
             ],
             "image": "/restaurants/chickfila/ingredients/salad-toppings/shredded-cheddar.webp",
             "nutrition": {
@@ -3475,7 +3499,7 @@
             "id": "mini-yeast-rolls",
             "name": "Mini Yeast Rolls",
             "categories": [
-                "Breakfast Buns"
+                "Breakfast Rolls"
             ],
             "image": "/restaurants/chickfila/ingredients/breakfast/mini-yeast-roll.png",
             "nutrition": {
