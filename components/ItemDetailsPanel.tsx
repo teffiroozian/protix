@@ -141,9 +141,18 @@ export function resolvePanelIngredients(
   const ingredientMap = new Map<string, ResolvedPanelIngredient>();
   tabs.forEach((tab) => {
     tab.ingredients.forEach((ingredient) => {
-      if (!ingredientMap.has(ingredient.id)) {
+      const existingIngredient = ingredientMap.get(ingredient.id);
+      if (!existingIngredient) {
         ingredientMap.set(ingredient.id, ingredient);
+        return;
       }
+
+      ingredientMap.set(ingredient.id, {
+        ...existingIngredient,
+        ...ingredient,
+        tabLabel: ingredient.tabLabel ?? existingIngredient.tabLabel,
+        maxQuantity: ingredient.maxQuantity ?? existingIngredient.maxQuantity,
+      });
     });
   });
 
@@ -297,7 +306,15 @@ export function resolvePanelIngredientTabs(
 
     const tabMaxQuantity = resolveIngredientTabMaxQuantity(item, tab, customizationRules);
     const selectionMode = singleSelectTabs.has(normalizeTabName(tab)) ? "single" : "quantity";
-    const hasDefaultIngredient = uniqueTabIngredients.some((ingredient) => ingredient.defaultCount > 0);
+    const scopedTabIngredients =
+      tab === INCLUDED_INGREDIENT_TAB
+        ? uniqueTabIngredients
+        : uniqueTabIngredients.map((ingredient) => ({
+            ...ingredient,
+            tabLabel: tab,
+            maxQuantity: tabMaxQuantity,
+          }));
+    const hasDefaultIngredient = scopedTabIngredients.some((ingredient) => ingredient.defaultCount > 0);
     const ingredients =
       selectionMode === "single" && tabSupportsNoneOption(item, tab)
         ? [
@@ -312,9 +329,9 @@ export function resolvePanelIngredientTabs(
               defaultCount: hasDefaultIngredient ? 0 : 1,
               isNoneOption: true,
             },
-            ...uniqueTabIngredients,
+            ...scopedTabIngredients,
           ]
-        : uniqueTabIngredients;
+        : scopedTabIngredients;
 
     return {
       id: normalizeIngredientToken(tab),
