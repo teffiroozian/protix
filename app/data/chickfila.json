@@ -846,7 +846,21 @@
                     },
                     "label": "Granola"
                 }
-            ]
+            ],
+            "customization": {
+                "ingredientTabs": [
+                    "Toppings"
+                ],
+                "ingredientTabMaxQuantities": {
+                    "Toppings": 2
+                },
+                "ingredientOptionsByTab": {
+                    "Toppings": [
+                        "parfait-fruit",
+                        "harvest-nut-granola"
+                    ]
+                }
+            }
         },
         {
             "id": "fruit_cup",
@@ -941,7 +955,10 @@
                 "tabsWithNoneOption": [
                     "Toppings"
                 ]
-            }
+            },
+            "ingredients": [
+                "mac_and_cheese"
+            ]
         },
         {
             "id": "chicken_noodle_soup",
