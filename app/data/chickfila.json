@@ -783,7 +783,12 @@
                     },
                     "label": "Large"
                 }
-            ]
+            ],
+            "customization": {
+                "ingredientTabs": [
+                    "Included"
+                ]
+            }
         },
         {
             "id": "berry_parfait",
@@ -846,7 +851,21 @@
                     },
                     "label": "Granola"
                 }
-            ]
+            ],
+            "customization": {
+                "ingredientTabs": [
+                    "Toppings"
+                ],
+                "ingredientTabMaxQuantities": {
+                    "Toppings": 4
+                },
+                "ingredientOptionsByTab": {
+                    "Toppings": [
+                        "parfait-fruit",
+                        "harvest-nut-granola"
+                    ]
+                }
+            }
         },
         {
             "id": "fruit_cup",
@@ -867,6 +886,11 @@
                 "fiber": 2,
                 "sugars": 12,
                 "protein": 1
+            },
+            "customization": {
+                "ingredientTabs": [
+                    "Included"
+                ]
             }
         },
         {
@@ -925,6 +949,25 @@
                     },
                     "label": "Medium"
                 }
+            ],
+            "customization": {
+                "ingredientTabs": [
+                    "Toppings"
+                ],
+                "ingredientTabMaxQuantities": {
+                    "Toppings": 1
+                },
+                "ingredientOptionsByTab": {
+                    "Toppings": [
+                        "bacon-crumbles"
+                    ]
+                },
+                "tabsWithNoneOption": [
+                    "Toppings"
+                ]
+            },
+            "ingredients": [
+                "mac_and_cheese"
             ]
         },
         {
@@ -986,7 +1029,20 @@
                     },
                     "label": "Bowl"
                 }
-            ]
+            ],
+            "customization": {
+                "ingredientTabs": [
+                    "Soup Toppings"
+                ],
+                "ingredientTabMaxQuantities": {
+                    "Soup Toppings": 5
+                },
+                "ingredientOptionsByTab": {
+                    "Soup Toppings": [
+                        "saltines"
+                    ]
+                }
+            }
         },
         {
             "id": "side_salad",
@@ -1039,6 +1095,24 @@
                 "fiber": 18,
                 "sugars": 4,
                 "protein": 25
+            },
+            "customization": {
+                "ingredientTabs": [
+                    "Condiments",
+                    "Soup Toppings"
+                ],
+                "ingredientTabMaxQuantities": {
+                    "Condiments": 5,
+                    "Soup Toppings": 5
+                },
+                "ingredientOptionsByTab": {
+                    "Condiments": [
+                        "seasoned-tortilla-strips"
+                    ],
+                    "Soup Toppings": [
+                        "saltines"
+                    ]
+                }
             }
         },
         {
@@ -1060,6 +1134,11 @@
                 "fiber": 2,
                 "sugars": 0,
                 "protein": 3
+            },
+            "customization": {
+                "ingredientTabs": [
+                    "Included"
+                ]
             }
         },
         {
@@ -1081,6 +1160,11 @@
                 "fiber": 1,
                 "sugars": 8,
                 "protein": 0
+            },
+            "customization": {
+                "ingredientTabs": [
+                    "Included"
+                ]
             }
         },
         {
@@ -1102,6 +1186,11 @@
                 "fiber": 2,
                 "sugars": 3,
                 "protein": 3
+            },
+            "customization": {
+                "ingredientTabs": [
+                    "Included"
+                ]
             }
         },
         {
