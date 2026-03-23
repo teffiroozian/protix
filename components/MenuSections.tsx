@@ -73,24 +73,22 @@ const INGREDIENT_CATEGORY_PRIORITY_GROUPS = [
     label: "Sandwich Toppings",
     aliases: ["sandwich topping", "sandwich toppings", "topping", "toppings"],
   },
-  { label: "Wrap Toppings", aliases: ["wrap topping", "wrap toppings"] },
   { label: "Salad Toppings", aliases: ["salad topping", "salad toppings"] },
   {
     label: "Salad Condiments",
     aliases: ["salad condiment", "salad condiments"],
   },
+  { label: "Wrap Toppings", aliases: ["wrap topping", "wrap toppings"] },
+  { label: "Breakfast Buns", aliases: ["breakfast bun", "breakfast buns"] },
+  { label: "Breakfast Protein", aliases: ["breakfast protein", "breakfast proteins"] },
+  { label: "Eggs", aliases: ["egg", "eggs"] },
   { label: "Soup Toppings", aliases: ["soup topping", "soup toppings"] },
   {
     label: "Parfait Toppings",
     aliases: ["parfait topping", "parfait toppings"],
   },
   { label: "Treat Toppings", aliases: ["treat topping", "treat toppings"] },
-  { label: "Condiments", aliases: ["condiment", "condiments"] },
-  {
-    label: "Dipping Sauces",
-    aliases: ["sauce", "sauces", "dipping sauce", "dipping sauces"],
-  },
-  { label: "Dressings", aliases: ["dressing", "dressings"] },
+{ label: "Condiments", aliases: ["condiment", "condiments"] },
 ] as const;
 
 type CategoryMode = "menu" | "ingredients";
