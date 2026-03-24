@@ -3,6 +3,7 @@
 import type { CartMacros } from "@/stores/cartStore";
 import type { LucideIcon } from "lucide-react";
 import { Bookmark, Camera } from "lucide-react";
+import type { ReactNode } from "react";
 
 type StickyMacroTotalsBarProps = {
   totals: CartMacros;
@@ -11,10 +12,14 @@ type StickyMacroTotalsBarProps = {
   contextLine?: string;
   primaryActionLabel?: string;
   secondaryActionLabel?: string;
+  secondaryActionExpandedLabel?: string;
   PrimaryActionIcon?: LucideIcon;
   SecondaryActionIcon?: LucideIcon;
+  SecondaryActionExpandedIcon?: LucideIcon;
   onPrimaryAction?: () => void;
   onSecondaryAction?: () => void;
+  detailsOpen?: boolean;
+  detailsContent?: ReactNode;
 };
 
 const macroRows: Array<{
@@ -36,10 +41,14 @@ export default function StickyMacroTotalsBar({
   contextLine,
   primaryActionLabel = "Generate Snapshot",
   secondaryActionLabel = "Save Meal",
+  secondaryActionExpandedLabel,
   PrimaryActionIcon = Camera,
   SecondaryActionIcon = Bookmark,
+  SecondaryActionExpandedIcon,
   onPrimaryAction,
   onSecondaryAction,
+  detailsOpen = false,
+  detailsContent,
 }: StickyMacroTotalsBarProps) {
   const wrapperClassName = inline
     ? "w-full"
@@ -84,16 +93,18 @@ export default function StickyMacroTotalsBar({
             </div>
           </section>
 
-          
-
           <div className="flex w-full flex-col gap-3 sm:w-auto">
             <button
               type="button"
               onClick={onSecondaryAction}
               className="cursor-pointer inline-flex h-11 items-center justify-center gap-2 rounded-xl border-2 border-black/80 bg-transparent px-6 text-base font-semibold text-[#1A1A1A] transition hover:bg-black/5"
             >
-              <SecondaryActionIcon className="h-4 w-4" strokeWidth={2.5} aria-hidden="true" />
-              <span>{secondaryActionLabel}</span>
+              {detailsOpen && SecondaryActionExpandedIcon ? (
+                <SecondaryActionExpandedIcon className="h-4 w-4" strokeWidth={2.5} aria-hidden="true" />
+              ) : (
+                <SecondaryActionIcon className="h-4 w-4" strokeWidth={2.5} aria-hidden="true" />
+              )}
+              <span>{detailsOpen && secondaryActionExpandedLabel ? secondaryActionExpandedLabel : secondaryActionLabel}</span>
             </button>
             <button
               type="button"
@@ -105,6 +116,11 @@ export default function StickyMacroTotalsBar({
             </button>
           </div>
         </div>
+        {detailsOpen && detailsContent ? (
+          <div className="mt-5 border-t border-black/10 pt-5">
+            {detailsContent}
+          </div>
+        ) : null}
       </div>
     </div>
   );

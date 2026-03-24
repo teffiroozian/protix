@@ -7,6 +7,8 @@ import type { LucideIcon } from "lucide-react";
 import {
   Beef,
   CakeSlice,
+  ChevronDown,
+  ChevronUp,
   Circle,
   CircleDashed,
   CupSoda,
@@ -24,7 +26,6 @@ import {
   SquarePlus,
   Soup,
   ToggleLeft,
-  RotateCcw,
   ShoppingCart,
   Utensils,
   Waves,
@@ -159,7 +160,10 @@ export default function RestaurantView({
   const { searchOpen, searchQuery, setSearchQuery, openSearch, closeSearch } =
     useRestaurantSearch();
   const { addItem } = useCart();
-  const [selectedIngredientItems, setSelectedIngredientItems] = useState<Record<string, MenuItem>>({});
+  const [selectedIngredientItems, setSelectedIngredientItems] = useState<
+    Record<string, { item: MenuItem; quantity: number }>
+  >({});
+  const [isBuildSummaryExpanded, setIsBuildSummaryExpanded] = useState(false);
   const [selectedEntree, setSelectedEntree] = useState<EntreeSelection>(null);
   const selectedEntreeConfig = selectedEntree ? CHIPOTLE_ENTREE_CONFIGURATIONS[selectedEntree] : null;
   const selectedIncludedIngredientIds = useMemo(
@@ -469,18 +473,63 @@ export default function RestaurantView({
   const selectedIngredientTotals = useMemo(
     () =>
       Object.values(selectedIngredientItems).reduce(
-        (acc, ingredient) => ({
-          calories: acc.calories + (ingredient.nutrition.calories ?? 0),
-          protein: acc.protein + (ingredient.nutrition.protein ?? 0),
-          carbs: acc.carbs + (ingredient.nutrition.carbs ?? 0),
-          fat: acc.fat + (ingredient.nutrition.totalFat ?? 0),
+        (acc, selectedIngredient) => ({
+          calories:
+            acc.calories +
+            (selectedIngredient.item.nutrition.calories ?? 0) * selectedIngredient.quantity,
+          protein:
+            acc.protein +
+            (selectedIngredient.item.nutrition.protein ?? 0) * selectedIngredient.quantity,
+          carbs:
+            acc.carbs +
+            (selectedIngredient.item.nutrition.carbs ?? 0) * selectedIngredient.quantity,
+          fat:
+            acc.fat +
+            (selectedIngredient.item.nutrition.totalFat ?? 0) * selectedIngredient.quantity,
         }),
         { calories: 0, protein: 0, carbs: 0, fat: 0 }
       ),
     [selectedIngredientItems]
   );
 
-  const selectedIngredientCount = Object.keys(selectedIngredientItems).length;
+  const selectedNutritionLabelTotals = useMemo(
+    () =>
+      Object.values(selectedIngredientItems).reduce(
+        (acc, selectedIngredient) => {
+          const { item, quantity } = selectedIngredient;
+          return {
+            calories: acc.calories + (item.nutrition.calories ?? 0) * quantity,
+            totalFat: acc.totalFat + (item.nutrition.totalFat ?? 0) * quantity,
+            satFat: acc.satFat + (item.nutrition.satFat ?? 0) * quantity,
+            transFat: acc.transFat + (item.nutrition.transFat ?? 0) * quantity,
+            cholesterol: acc.cholesterol + (item.nutrition.cholesterol ?? 0) * quantity,
+            sodium: acc.sodium + (item.nutrition.sodium ?? 0) * quantity,
+            carbs: acc.carbs + (item.nutrition.carbs ?? 0) * quantity,
+            fiber: acc.fiber + (item.nutrition.fiber ?? 0) * quantity,
+            sugars: acc.sugars + (item.nutrition.sugars ?? 0) * quantity,
+            protein: acc.protein + (item.nutrition.protein ?? 0) * quantity,
+          };
+        },
+        {
+          calories: 0,
+          totalFat: 0,
+          satFat: 0,
+          transFat: 0,
+          cholesterol: 0,
+          sodium: 0,
+          carbs: 0,
+          fiber: 0,
+          sugars: 0,
+          protein: 0,
+        }
+      ),
+    [selectedIngredientItems]
+  );
+
+  const selectedIngredientCount = Object.values(selectedIngredientItems).reduce(
+    (acc, selectedIngredient) => acc + selectedIngredient.quantity,
+    0
+  );
   const buildName = selectedEntree
     ? `${restaurantName} ${CHIPOTLE_ENTREE_CONFIGURATIONS[selectedEntree].label} Build`
     : `${restaurantName} Build`;
@@ -505,7 +554,7 @@ export default function RestaurantView({
         delete next[itemId];
         return next;
       }
-      return { ...prev, [itemId]: item };
+      return { ...prev, [itemId]: { item, quantity: 1 } };
     });
   };
 
@@ -535,28 +584,11 @@ export default function RestaurantView({
           return;
         }
 
-        next[includedIngredientId] = includedIngredientItem;
+        next[includedIngredientId] = { item: includedIngredientItem, quantity: 1 };
       });
 
       return next;
     });
-  };
-
-  const handleResetBuildSelections = () => {
-    if (selectedIncludedIngredientIds.length === 0) {
-      setSelectedIngredientItems({});
-      return;
-    }
-
-    const includedIngredientSelections: Record<string, MenuItem> = {};
-    selectedIncludedIngredientIds.forEach((includedIngredientId) => {
-      const includedIngredientItem = ingredientItemsById.get(includedIngredientId);
-      if (includedIngredientItem) {
-        includedIngredientSelections[includedIngredientId] = includedIngredientItem;
-      }
-    });
-
-    setSelectedIngredientItems(includedIngredientSelections);
   };
 
   const handleAddBuildToCart = () => {
@@ -567,9 +599,32 @@ export default function RestaurantView({
       restaurantId,
       itemId: `${restaurantId}-build`,
       name: buildName,
-      customizations: Object.values(selectedIngredientItems).map((ingredient) => ingredient.name),
+      customizations: Object.values(selectedIngredientItems).flatMap(({ item, quantity }) =>
+        Array.from({ length: quantity }, () => item.name)
+      ),
       quantity: 1,
       macrosPerItem: selectedIngredientTotals,
+    });
+  };
+
+  const adjustIngredientQuantity = (ingredientId: string, delta: 1 | -1) => {
+    if (lockedIngredientIds.has(ingredientId)) return;
+
+    setSelectedIngredientItems((previous) => {
+      const existing = previous[ingredientId];
+      if (!existing) return previous;
+
+      const maxQuantity = ingredients.find((ingredient) => ingredient.id === ingredientId)?.maxQuantity ?? 2;
+      const nextQuantity = Math.max(0, Math.min(maxQuantity, existing.quantity + delta));
+      const next = { ...previous };
+
+      if (nextQuantity === 0) {
+        delete next[ingredientId];
+        return next;
+      }
+
+      next[ingredientId] = { ...existing, quantity: nextQuantity };
+      return next;
     });
   };
 
@@ -587,6 +642,8 @@ export default function RestaurantView({
       };
     });
   };
+
+  const selectedIngredientEntries = Object.entries(selectedIngredientItems);
 
   return (
     <div>
@@ -753,11 +810,74 @@ export default function RestaurantView({
         <StickyMacroTotalsBar
           totals={selectedIngredientTotals}
           contextLine={buildContextLine}
-          secondaryActionLabel="Reset"
+          secondaryActionLabel="View Selected"
+          secondaryActionExpandedLabel="View Selected"
           primaryActionLabel="Add to Cart"
-          SecondaryActionIcon={RotateCcw}
+          SecondaryActionIcon={ChevronDown}
+          SecondaryActionExpandedIcon={ChevronUp}
           PrimaryActionIcon={ShoppingCart}
-          onSecondaryAction={handleResetBuildSelections}
+          detailsOpen={isBuildSummaryExpanded}
+          detailsContent={
+            <div className="grid gap-4 lg:grid-cols-2">
+              <section className="rounded-2xl border border-black/10 bg-[#F6F6F6] p-4">
+                <h3 className="text-2xl font-bold text-slate-900">Nutrition Summary</h3>
+                <p className="mt-2 text-sm text-slate-500">Amount per serving</p>
+                <div className="mt-1 flex items-end justify-between border-b border-black/60 pb-2">
+                  <span className="text-[2rem] font-extrabold leading-tight text-slate-900">Calories</span>
+                  <span className="text-3xl font-extrabold leading-tight text-slate-900">{selectedNutritionLabelTotals.calories}</span>
+                </div>
+
+                <div className="mt-3 space-y-2 text-lg text-slate-900">
+                  <div className="flex justify-between border-b border-black/10 pb-1.5"><span className="font-semibold">Total Fat</span><span className="font-semibold">{selectedNutritionLabelTotals.totalFat}g</span></div>
+                  <div className="flex justify-between border-b border-black/10 pb-1.5 pl-4"><span>Sat Fat</span><span>{selectedNutritionLabelTotals.satFat}g</span></div>
+                  <div className="flex justify-between border-b border-black/10 pb-1.5 pl-4"><span>Trans Fat</span><span>{selectedNutritionLabelTotals.transFat}g</span></div>
+                  <div className="flex justify-between border-b border-black/10 pb-1.5"><span className="font-semibold">Cholesterol</span><span className="font-semibold">{selectedNutritionLabelTotals.cholesterol}mg</span></div>
+                  <div className="flex justify-between border-b border-black/10 pb-1.5"><span className="font-semibold">Sodium</span><span className="font-semibold">{selectedNutritionLabelTotals.sodium}mg</span></div>
+                  <div className="flex justify-between border-b border-black/10 pb-1.5"><span className="font-semibold">Carbohydrates</span><span className="font-semibold">{selectedNutritionLabelTotals.carbs}g</span></div>
+                  <div className="flex justify-between border-b border-black/10 pb-1.5 pl-4"><span>Fiber</span><span>{selectedNutritionLabelTotals.fiber}g</span></div>
+                  <div className="flex justify-between border-b border-black/10 pb-1.5 pl-4"><span>Sugars</span><span>{selectedNutritionLabelTotals.sugars}g</span></div>
+                  <div className="flex justify-between pb-1.5"><span className="text-2xl font-bold">Protein</span><span className="text-2xl font-bold">{selectedNutritionLabelTotals.protein}g</span></div>
+                </div>
+              </section>
+
+              <section className="rounded-2xl border border-black/10 bg-[#F6F6F6] p-4">
+                <h3 className="text-2xl font-bold text-slate-900">Selected Ingredients</h3>
+                <p className="mt-1 text-sm font-semibold text-slate-600">
+                  {CHIPOTLE_ENTREE_CONFIGURATIONS[selectedEntree ?? "bowl"].label} · {selectedIngredientCount} selected
+                </p>
+                <ul className="mt-4 grid gap-2">
+                  {selectedIngredientEntries.map(([ingredientId, selectedIngredient]) => (
+                    <li key={ingredientId} className="flex items-center justify-between rounded-xl border border-black/10 bg-white px-3 py-2">
+                      <span className="text-sm font-medium text-slate-900">
+                        {selectedIngredient.item.name}
+                        {selectedIngredient.quantity > 1 ? ` (x${selectedIngredient.quantity})` : ""}
+                      </span>
+                      <div className="inline-flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => adjustIngredientQuantity(ingredientId, -1)}
+                          disabled={lockedIngredientIds.has(ingredientId)}
+                          className="h-7 w-7 rounded-full border border-black/20 text-base font-bold text-slate-700 disabled:cursor-not-allowed disabled:opacity-40"
+                        >
+                          −
+                        </button>
+                        <span className="w-4 text-center text-sm font-semibold text-slate-900">{selectedIngredient.quantity}</span>
+                        <button
+                          type="button"
+                          onClick={() => adjustIngredientQuantity(ingredientId, 1)}
+                          disabled={lockedIngredientIds.has(ingredientId)}
+                          className="h-7 w-7 rounded-full border border-black/20 text-base font-bold text-slate-700 disabled:cursor-not-allowed disabled:opacity-40"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            </div>
+          }
+          onSecondaryAction={() => setIsBuildSummaryExpanded((previous) => !previous)}
           onPrimaryAction={handleAddBuildToCart}
         />
       ) : null}
