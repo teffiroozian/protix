@@ -159,7 +159,7 @@
     {
       "id": "chipotle-ingredient-tortilla",
       "name": "Tortilla",
-      "category": "Included Ingredient",
+      "category": "Side",
       "image": "/restaurants/chipotle/logo.jpeg",
       "nutrition": {
         "calories": 320,

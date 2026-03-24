@@ -108,7 +108,13 @@ export default function RestaurantView({
   customizationRules?: RestaurantCustomizationRules;
 }) {
   type EntreeSelection = "bowl" | "burrito" | null;
-  const burritoTortillaIngredientId = "chipotle-ingredient-tortilla";
+  const entreeConfigurations: Record<
+    Exclude<EntreeSelection, null>,
+    { label: string; includedIngredientId?: string }
+  > = {
+    bowl: { label: "Bowl" },
+    burrito: { label: "Burrito", includedIngredientId: "chipotle-ingredient-tortilla" },
+  };
   const isChipotleBuildPage = isBuildYourOwn && restaurantId === "chipotle";
   const SECTION_HEADER_TOP_GAP = 24;
 
@@ -148,6 +154,8 @@ export default function RestaurantView({
   const { addItem } = useCart();
   const [selectedIngredientItems, setSelectedIngredientItems] = useState<Record<string, MenuItem>>({});
   const [selectedEntree, setSelectedEntree] = useState<EntreeSelection>(null);
+  const selectedEntreeConfig = selectedEntree ? entreeConfigurations[selectedEntree] : null;
+  const selectedIncludedIngredientId = selectedEntreeConfig?.includedIngredientId;
 
   const addonItems = useMemo<MenuItem[]>(() => {
     if (!addons) return [];
@@ -201,22 +209,36 @@ export default function RestaurantView({
 
     return ingredients
       .filter((ingredient) => !ingredient.hideFromIngredientView)
-      .map((ingredient, index) => ({
-        id:
+      .map((ingredient, index) => {
+        const ingredientId =
           ingredient.id ??
           `${restaurantId}-ingredient-${ingredient.name}-${index}`
             .toLowerCase()
-            .replace(/[^a-z0-9]+/g, "-"),
-        name: ingredient.name,
-        nutrition: ingredient.nutrition,
-        image: ingredient.image,
-        categories: [resolveIngredientCategory(ingredient)],
-        portionType: "addon",
-      }));
-  }, [ingredients, restaurantId]);
+            .replace(/[^a-z0-9]+/g, "-");
+        const resolvedCategory = resolveIngredientCategory(ingredient);
+        const displayCategory =
+          selectedIncludedIngredientId && ingredientId === selectedIncludedIngredientId
+            ? "Included Ingredient"
+            : resolvedCategory;
 
-  const tortillaIngredientItem = useMemo(
-    () => ingredientMenuItems.find((ingredient) => ingredient.id === burritoTortillaIngredientId),
+        return {
+          id: ingredientId,
+          name: ingredient.name,
+          nutrition: ingredient.nutrition,
+          image: ingredient.image,
+          categories: [displayCategory],
+          portionType: "addon",
+        };
+      });
+  }, [ingredients, restaurantId, selectedIncludedIngredientId]);
+
+  const ingredientItemsById = useMemo(
+    () =>
+      new Map(
+        ingredientMenuItems
+          .filter((ingredient): ingredient is MenuItem & { id: string } => Boolean(ingredient.id))
+          .map((ingredient) => [ingredient.id, ingredient])
+      ),
     [ingredientMenuItems]
   );
 
@@ -450,16 +472,16 @@ export default function RestaurantView({
 
   const selectedIngredientCount = Object.keys(selectedIngredientItems).length;
   const buildName = selectedEntree
-    ? `${restaurantName} ${selectedEntree === "burrito" ? "Burrito" : "Bowl"} Build`
+    ? `${restaurantName} ${entreeConfigurations[selectedEntree].label} Build`
     : `${restaurantName} Build`;
   const buildContextLine = `${selectedIngredientCount} selected · ${buildName}`;
   const shouldShowBuildStickyBar = isBuildYourOwn && viewMode === "ingredients" && (!isChipotleBuildPage || selectedEntree !== null);
   const lockedIngredientIds = useMemo(() => {
-    if (selectedEntree !== "burrito") {
+    if (!selectedIncludedIngredientId) {
       return new Set<string>();
     }
-    return new Set<string>([burritoTortillaIngredientId]);
-  }, [selectedEntree]);
+    return new Set<string>([selectedIncludedIngredientId]);
+  }, [selectedIncludedIngredientId]);
 
   const handleIngredientSelectionChange = (item: MenuItem, selected: boolean) => {
     const itemId = item.id;
@@ -478,28 +500,47 @@ export default function RestaurantView({
   };
 
   const handleEntreeSelection = (entree: Exclude<EntreeSelection, null>) => {
+    const nextIncludedIngredientId = entreeConfigurations[entree].includedIngredientId;
+    const previousIncludedIngredientId = selectedEntree
+      ? entreeConfigurations[selectedEntree].includedIngredientId
+      : undefined;
     setSelectedEntree(entree);
     setSelectedIngredientItems((previous) => {
-      if (entree !== "burrito") {
-        if (!(burritoTortillaIngredientId in previous)) return previous;
-        const next = { ...previous };
-        delete next[burritoTortillaIngredientId];
+      const next = { ...previous };
+
+      if (previousIncludedIngredientId && previousIncludedIngredientId in next) {
+        delete next[previousIncludedIngredientId];
+      }
+
+      if (!nextIncludedIngredientId) {
         return next;
       }
 
-      if (!tortillaIngredientItem || previous[burritoTortillaIngredientId]) {
-        return previous;
+      const includedIngredientItem = ingredientItemsById.get(nextIncludedIngredientId);
+      if (!includedIngredientItem || next[nextIncludedIngredientId]) {
+        return next;
       }
 
       return {
-        ...previous,
-        [burritoTortillaIngredientId]: tortillaIngredientItem,
+        ...next,
+        [nextIncludedIngredientId]: includedIngredientItem,
       };
     });
   };
 
   const handleResetBuildSelections = () => {
-    setSelectedIngredientItems({});
+    if (!selectedIncludedIngredientId) {
+      setSelectedIngredientItems({});
+      return;
+    }
+
+    const includedIngredientItem = ingredientItemsById.get(selectedIncludedIngredientId);
+    if (!includedIngredientItem) {
+      setSelectedIngredientItems({});
+      return;
+    }
+
+    setSelectedIngredientItems({ [selectedIncludedIngredientId]: includedIngredientItem });
   };
 
   const handleAddBuildToCart = () => {
@@ -561,8 +602,8 @@ export default function RestaurantView({
       {isChipotleBuildPage && selectedEntree !== null ? (
         <div className="mb-5 flex items-center justify-between rounded-2xl border border-black/10 bg-white px-5 py-3">
           <p className="text-sm font-semibold text-slate-700">
-            Entrée: <span className="text-slate-900">{selectedEntree === "burrito" ? "Burrito" : "Bowl"}</span>
-          </p>
+                Entrée: <span className="text-slate-900">{entreeConfigurations[selectedEntree].label}</span>
+              </p>
           <button
             type="button"
             onClick={() => setSelectedEntree(null)}
