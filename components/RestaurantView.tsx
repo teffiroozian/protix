@@ -107,6 +107,15 @@ export default function RestaurantView({
   commonChanges?: CommonChange[];
   customizationRules?: RestaurantCustomizationRules;
 }) {
+  type EntreeSelection = "bowl" | "burrito" | null;
+  const entreeConfigurations: Record<
+    Exclude<EntreeSelection, null>,
+    { label: string; includedIngredientId?: string }
+  > = {
+    bowl: { label: "Bowl" },
+    burrito: { label: "Burrito", includedIngredientId: "chipotle-ingredient-tortilla" },
+  };
+  const isChipotleBuildPage = isBuildYourOwn && restaurantId === "chipotle";
   const SECTION_HEADER_TOP_GAP = 24;
 
   const getStickyOffset = () => {
@@ -144,6 +153,9 @@ export default function RestaurantView({
     useRestaurantSearch();
   const { addItem } = useCart();
   const [selectedIngredientItems, setSelectedIngredientItems] = useState<Record<string, MenuItem>>({});
+  const [selectedEntree, setSelectedEntree] = useState<EntreeSelection>(null);
+  const selectedEntreeConfig = selectedEntree ? entreeConfigurations[selectedEntree] : null;
+  const selectedIncludedIngredientId = selectedEntreeConfig?.includedIngredientId;
 
   const addonItems = useMemo<MenuItem[]>(() => {
     if (!addons) return [];
@@ -197,19 +209,38 @@ export default function RestaurantView({
 
     return ingredients
       .filter((ingredient) => !ingredient.hideFromIngredientView)
-      .map((ingredient, index) => ({
-        id:
+      .map((ingredient, index) => {
+        const ingredientId =
           ingredient.id ??
           `${restaurantId}-ingredient-${ingredient.name}-${index}`
             .toLowerCase()
-            .replace(/[^a-z0-9]+/g, "-"),
-        name: ingredient.name,
-        nutrition: ingredient.nutrition,
-        image: ingredient.image,
-        categories: [resolveIngredientCategory(ingredient)],
-        portionType: "addon",
-      }));
-  }, [ingredients, restaurantId]);
+            .replace(/[^a-z0-9]+/g, "-");
+        const resolvedCategory = resolveIngredientCategory(ingredient);
+        const displayCategory =
+          selectedIncludedIngredientId && ingredientId === selectedIncludedIngredientId
+            ? "Included Ingredient"
+            : resolvedCategory;
+
+        return {
+          id: ingredientId,
+          name: ingredient.name,
+          nutrition: ingredient.nutrition,
+          image: ingredient.image,
+          categories: [displayCategory],
+          portionType: "addon",
+        };
+      });
+  }, [ingredients, restaurantId, selectedIncludedIngredientId]);
+
+  const ingredientItemsById = useMemo(
+    () =>
+      new Map(
+        ingredientMenuItems
+          .filter((ingredient): ingredient is MenuItem & { id: string } => Boolean(ingredient.id))
+          .map((ingredient) => [ingredient.id, ingredient])
+      ),
+    [ingredientMenuItems]
+  );
 
   const allItems = useMemo(() => [...items, ...addonItems], [items, addonItems]);
   const sourceItems = viewMode === "ingredients" ? ingredientMenuItems : allItems;
@@ -440,13 +471,22 @@ export default function RestaurantView({
   );
 
   const selectedIngredientCount = Object.keys(selectedIngredientItems).length;
-  const buildName = `${restaurantName} Build`;
+  const buildName = selectedEntree
+    ? `${restaurantName} ${entreeConfigurations[selectedEntree].label} Build`
+    : `${restaurantName} Build`;
   const buildContextLine = `${selectedIngredientCount} selected · ${buildName}`;
-  const shouldShowBuildStickyBar = isBuildYourOwn && viewMode === "ingredients";
+  const shouldShowBuildStickyBar = isBuildYourOwn && viewMode === "ingredients" && (!isChipotleBuildPage || selectedEntree !== null);
+  const lockedIngredientIds = useMemo(() => {
+    if (!selectedIncludedIngredientId) {
+      return new Set<string>();
+    }
+    return new Set<string>([selectedIncludedIngredientId]);
+  }, [selectedIncludedIngredientId]);
 
   const handleIngredientSelectionChange = (item: MenuItem, selected: boolean) => {
     const itemId = item.id;
     if (!itemId) return;
+    if (lockedIngredientIds.has(itemId)) return;
 
     setSelectedIngredientItems((prev) => {
       if (!selected) {
@@ -459,8 +499,52 @@ export default function RestaurantView({
     });
   };
 
+  const handleEntreeSelection = (entree: Exclude<EntreeSelection, null>) => {
+    const nextIncludedIngredientId = entreeConfigurations[entree].includedIngredientId;
+    const allIncludedIngredientIds = new Set(
+      Object.values(entreeConfigurations)
+        .map((configuration) => configuration.includedIngredientId)
+        .filter((ingredientId): ingredientId is string => Boolean(ingredientId))
+    );
+    setSelectedEntree(entree);
+    setSelectedIngredientItems((previous) => {
+      const next = { ...previous };
+
+      allIncludedIngredientIds.forEach((ingredientId) => {
+        if (ingredientId in next) {
+          delete next[ingredientId];
+        }
+      });
+
+      if (!nextIncludedIngredientId) {
+        return next;
+      }
+
+      const includedIngredientItem = ingredientItemsById.get(nextIncludedIngredientId);
+      if (!includedIngredientItem || next[nextIncludedIngredientId]) {
+        return next;
+      }
+
+      return {
+        ...next,
+        [nextIncludedIngredientId]: includedIngredientItem,
+      };
+    });
+  };
+
   const handleResetBuildSelections = () => {
-    setSelectedIngredientItems({});
+    if (!selectedIncludedIngredientId) {
+      setSelectedIngredientItems({});
+      return;
+    }
+
+    const includedIngredientItem = ingredientItemsById.get(selectedIncludedIngredientId);
+    if (!includedIngredientItem) {
+      setSelectedIngredientItems({});
+      return;
+    }
+
+    setSelectedIngredientItems({ [selectedIncludedIngredientId]: includedIngredientItem });
   };
 
   const handleAddBuildToCart = () => {
@@ -494,6 +578,21 @@ export default function RestaurantView({
 
   return (
     <div>
+      {isChipotleBuildPage && selectedEntree !== null ? (
+        <div className="mb-5 flex items-center justify-between rounded-2xl border border-black/10 bg-white px-5 py-3">
+          <p className="text-sm font-semibold text-slate-700">
+                Entrée: <span className="text-slate-900">{entreeConfigurations[selectedEntree].label}</span>
+              </p>
+          <button
+            type="button"
+            onClick={() => setSelectedEntree(null)}
+            className="cursor-pointer text-sm font-semibold text-slate-600 underline underline-offset-2 hover:text-slate-900"
+          >
+            Change
+          </button>
+        </div>
+      ) : null}
+
       <StickyRestaurantBar
         restaurantName={restaurantName}
         restaurantLogo={restaurantLogo}
@@ -511,101 +610,129 @@ export default function RestaurantView({
         calorieBounds={calorieBounds}
       />
 
-
-      <div className="grid items-start gap-6 [grid-template-columns:240px_minmax(0,1fr)]">
-        <aside className="sticky top-[160px] flex max-h-[calc(100vh-160px)] flex-col py-6">
-          <h3 className="mb-8 shrink-0 text-2xl font-bold text-slate-900">
-            {viewMode === "ranking"
-              ? "Show"
-              : viewMode === "ingredients"
-                ? "Ingredients"
-                : "Categories"}
-          </h3>
-
-          <div className="min-h-0 flex-1 overflow-y-auto px-2 py-2">
-            {viewMode === "ranking" ? (
-              <div className="grid gap-3">
-                {[
-                  { key: "main-entrees" as const, label: "Main Entrees" },
-                  { key: "shareables" as const, label: "Shareables" },
-                  { key: "sides" as const, label: "Sides" },
-                  { key: "drinks" as const, label: "Drinks" },
-                ].map((option) => {
-                  const isChecked = rankedAllFilters[option.key];
-
-                  return (
-                    <label
-                      key={option.key}
-                      className="inline-flex cursor-pointer items-center gap-3 rounded-[10px] px-2 py-1.5 text-base font-semibold text-slate-800 hover:bg-slate-200/70"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={isChecked}
-                        onChange={() => toggleRankedAllFilter(option.key)}
-                        className="h-4 w-4 cursor-pointer rounded border border-black/30 accent-black"
-                      />
-                      <span>{option.label}</span>
-                    </label>
-                  );
-                })}
+      {isChipotleBuildPage && selectedEntree === null ? (
+        <div className="py-6">
+          <section className="mx-auto flex min-h-[calc(100vh-260px)] w-full max-w-5xl flex-col items-center justify-center px-4 py-12">
+              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">Chipotle</p>
+              <h2 className="mt-4 text-center text-5xl font-bold tracking-tight text-slate-900">Choose your entrée</h2>
+              <p className="mt-3 text-center text-lg text-slate-600">
+                Start your build by selecting a base.
+              </p>
+              <div className="mt-10 grid w-full max-w-3xl gap-4 sm:grid-cols-2">
+                <button
+                  type="button"
+                  onClick={() => handleEntreeSelection("bowl")}
+                  className="cursor-pointer rounded-3xl border border-black/15 bg-white px-6 py-8 text-left text-2xl font-semibold text-slate-900 shadow-[0_8px_22px_rgba(0,0,0,0.08)] transition hover:-translate-y-0.5 hover:border-black/30 hover:shadow-[0_12px_26px_rgba(0,0,0,0.12)]"
+                >
+                  Bowl
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleEntreeSelection("burrito")}
+                  className="cursor-pointer rounded-3xl border border-black/15 bg-white px-6 py-8 text-left text-2xl font-semibold text-slate-900 shadow-[0_8px_22px_rgba(0,0,0,0.08)] transition hover:-translate-y-0.5 hover:border-black/30 hover:shadow-[0_12px_26px_rgba(0,0,0,0.12)]"
+                >
+                  Burrito
+                </button>
               </div>
-            ) : (
-              <nav
-                aria-label={
-                  viewMode === "ingredients"
-                    ? "Ingredient categories"
-                    : "Menu categories"
-                }
-                className="grid gap-4"
-              >
-                {categoryOptions.map((option) => {
-                  const isActive = option.id === resolvedActiveCategory;
-                  const Icon = CATEGORY_ICONS[option.label.toLowerCase()] ?? Circle;
+            </section>
+        </div>
+      ) : (
+        <div className="grid items-start gap-6 [grid-template-columns:240px_minmax(0,1fr)]">
+          <aside className="sticky top-[160px] flex max-h-[calc(100vh-160px)] flex-col py-6">
+            <h3 className="mb-8 shrink-0 text-2xl font-bold text-slate-900">
+              {viewMode === "ranking"
+                ? "Show"
+                : viewMode === "ingredients"
+                  ? "Ingredients"
+                  : "Categories"}
+            </h3>
 
-                  return (
-                    <div key={option.id} className="relative pl-3">
-                      {isActive ? (
-                        <span className="absolute left-0 top-1/2 h-7 w-1 -translate-y-1/2 rounded-full shadow-[0px_0_8px_rgba(0,0,0,0.25)] bg-white" aria-hidden="true" />
-                      ) : null}
+            <div className="min-h-0 flex-1 overflow-y-auto px-2 py-2">
+              {viewMode === "ranking" ? (
+                <div className="grid gap-3">
+                  {[
+                    { key: "main-entrees" as const, label: "Main Entrees" },
+                    { key: "shareables" as const, label: "Shareables" },
+                    { key: "sides" as const, label: "Sides" },
+                    { key: "drinks" as const, label: "Drinks" },
+                  ].map((option) => {
+                    const isChecked = rankedAllFilters[option.key];
 
-                      <button
-                        type="button"
-                        onClick={() => handleCategorySelect(option.id)}
-                        className={`cursor-pointer inline-flex items-center gap-3 rounded-full px-4 py-2 text-left text-base font-semibold transition-colors duration-50 ease-in ${isActive
-                            ? "shadow-[0px_0_8px_rgba(0,0,0,0.25)] bg-white text-slate-800"
-                            : "text-slate-700 hover:bg-slate-200"
-                          }`}
+                    return (
+                      <label
+                        key={option.key}
+                        className="inline-flex cursor-pointer items-center gap-3 rounded-[10px] px-2 py-1.5 text-base font-semibold text-slate-800 hover:bg-slate-200/70"
                       >
-                        <Icon className="h-4 w-4" strokeWidth={2.5} aria-hidden="true" />
+                        <input
+                          type="checkbox"
+                          checked={isChecked}
+                          onChange={() => toggleRankedAllFilter(option.key)}
+                          className="h-4 w-4 cursor-pointer rounded border border-black/30 accent-black"
+                        />
                         <span>{option.label}</span>
-                      </button>
-                    </div>
-                  );
-                })}
-              </nav>
-            )}
-          </div>
-        </aside>
+                      </label>
+                    );
+                  })}
+                </div>
+              ) : (
+                <nav
+                  aria-label={
+                    viewMode === "ingredients"
+                      ? "Ingredient categories"
+                      : "Menu categories"
+                  }
+                  className="grid gap-4"
+                >
+                  {categoryOptions.map((option) => {
+                    const isActive = option.id === resolvedActiveCategory;
+                    const Icon = CATEGORY_ICONS[option.label.toLowerCase()] ?? Circle;
 
-        <div className="min-w-0">
-          <div className="mx-auto max-w-[900px]">
-            <MenuSections
-              restaurantId={restaurantId}
-              items={filteredItems}
-              sort={sort}
-              addons={addons}
-              ingredients={ingredients}
-              commonChanges={commonChanges}
-              customizationRules={customizationRules}
-              groupByCategory={viewMode !== "ranking"}
-              categoryMode={viewMode === "ranking" ? "menu" : viewMode}
-              isBuildYourOwn={isBuildYourOwn}
-              selectedIngredientIds={new Set(Object.keys(selectedIngredientItems))}
-              onIngredientSelectionChange={handleIngredientSelectionChange}
-            />
+                    return (
+                      <div key={option.id} className="relative pl-3">
+                        {isActive ? (
+                          <span className="absolute left-0 top-1/2 h-7 w-1 -translate-y-1/2 rounded-full shadow-[0px_0_8px_rgba(0,0,0,0.25)] bg-white" aria-hidden="true" />
+                        ) : null}
+
+                        <button
+                          type="button"
+                          onClick={() => handleCategorySelect(option.id)}
+                          className={`cursor-pointer inline-flex items-center gap-3 rounded-full px-4 py-2 text-left text-base font-semibold transition-colors duration-50 ease-in ${isActive
+                              ? "shadow-[0px_0_8px_rgba(0,0,0,0.25)] bg-white text-slate-800"
+                              : "text-slate-700 hover:bg-slate-200"
+                            }`}
+                        >
+                          <Icon className="h-4 w-4" strokeWidth={2.5} aria-hidden="true" />
+                          <span>{option.label}</span>
+                        </button>
+                      </div>
+                    );
+                  })}
+                </nav>
+              )}
+            </div>
+          </aside>
+
+          <div className="min-w-0">
+            <div className="mx-auto max-w-[900px]">
+              <MenuSections
+                restaurantId={restaurantId}
+                items={filteredItems}
+                sort={sort}
+                addons={addons}
+                ingredients={ingredients}
+                commonChanges={commonChanges}
+                customizationRules={customizationRules}
+                groupByCategory={viewMode !== "ranking"}
+                categoryMode={viewMode === "ranking" ? "menu" : viewMode}
+                isBuildYourOwn={isBuildYourOwn}
+                selectedIngredientIds={new Set(Object.keys(selectedIngredientItems))}
+                lockedIngredientIds={lockedIngredientIds}
+                onIngredientSelectionChange={handleIngredientSelectionChange}
+              />
+            </div>
           </div>
         </div>
-      </div>
+      )}
       {shouldShowBuildStickyBar ? <div className="h-48" aria-hidden="true" /> : null}
       {shouldShowBuildStickyBar ? (
         <StickyMacroTotalsBar
