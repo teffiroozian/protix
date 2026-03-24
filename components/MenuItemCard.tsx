@@ -763,20 +763,20 @@ export default function MenuItemCard({
             <div className="truncate text-xl font-semibold text-black">{item.name}</div>
           </div>
 
-          <div className="ml-auto grid grid-cols-4 gap-6 text-center">
-            <div className="flex min-w-[54px] flex-col items-center">
+          <div className="flex items-center gap-8 text-center">
+            <div className="flex min-w-[54px] flex-col items-center gap-1">
               <div className="text-2xl leading-none font-bold text-black">{formatCalories(calories)}</div>
               <div className="text-[10px] font-semibold uppercase tracking-wide text-black/80">cal</div>
             </div>
-            <div className="flex min-w-[54px] flex-col items-center">
+            <div className="flex min-w-[54px] flex-col items-center gap-1">
               <div className="text-2xl leading-none font-bold text-[#c2410c]">{formatMacro(protein)}</div>
               <div className="text-[10px] font-semibold uppercase tracking-wide text-black/80">protein</div>
             </div>
-            <div className="flex min-w-[54px] flex-col items-center">
+            <div className="flex min-w-[54px] flex-col items-center gap-1">
               <div className="text-2xl leading-none font-bold text-[#ca8a04]">{formatMacro(carbs)}</div>
               <div className="text-[10px] font-semibold uppercase tracking-wide text-black/80">carbs</div>
             </div>
-            <div className="flex min-w-[54px] flex-col items-center">
+            <div className="flex min-w-[54px] flex-col items-center gap-1">
               <div className="text-2xl leading-none font-bold text-[#2563eb]">{formatMacro(fat)}</div>
               <div className="text-[10px] font-semibold uppercase tracking-wide text-black/80">fat</div>
             </div>
