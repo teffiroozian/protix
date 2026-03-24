@@ -178,7 +178,7 @@ export default function StickyRestaurantBar({
       </div>
 
       {hasActiveFilters ? (
-        <div className="relative z-[90] mx-auto mx-2 mt-1 max-w-6xl rounded-2xl border border-slate-200/70 bg-white/95 shadow-[0_6px_16px_rgba(15,23,42,0.12)] backdrop-blur">
+        <div className="relative z-[100] mx-auto mx-2 mt-0.5 max-w-6xl rounded-2xl border border-slate-200/70 bg-white/95 shadow-[0_6px_16px_rgba(15,23,42,0.12)] backdrop-blur">
           <div className="mx-auto flex w-full max-w-5xl flex-wrap items-center gap-2 px-4 py-2 text-sm sm:flex-nowrap sm:px-6">
             <FilterChips
               filters={filters}
