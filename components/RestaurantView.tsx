@@ -501,16 +501,20 @@ export default function RestaurantView({
 
   const handleEntreeSelection = (entree: Exclude<EntreeSelection, null>) => {
     const nextIncludedIngredientId = entreeConfigurations[entree].includedIngredientId;
-    const previousIncludedIngredientId = selectedEntree
-      ? entreeConfigurations[selectedEntree].includedIngredientId
-      : undefined;
+    const allIncludedIngredientIds = new Set(
+      Object.values(entreeConfigurations)
+        .map((configuration) => configuration.includedIngredientId)
+        .filter((ingredientId): ingredientId is string => Boolean(ingredientId))
+    );
     setSelectedEntree(entree);
     setSelectedIngredientItems((previous) => {
       const next = { ...previous };
 
-      if (previousIncludedIngredientId && previousIncludedIngredientId in next) {
-        delete next[previousIncludedIngredientId];
-      }
+      allIncludedIngredientIds.forEach((ingredientId) => {
+        if (ingredientId in next) {
+          delete next[ingredientId];
+        }
+      });
 
       if (!nextIncludedIngredientId) {
         return next;
@@ -575,23 +579,24 @@ export default function RestaurantView({
   return (
     <div>
       {isChipotleBuildPage && selectedEntree === null ? (
-        <section className="mx-auto mb-8 mt-4 max-w-2xl rounded-3xl border border-black/10 bg-white p-8 shadow-[0_12px_30px_rgba(0,0,0,0.08)]">
-          <h2 className="text-center text-3xl font-bold text-slate-900">Choose your entrée</h2>
-          <p className="mt-2 text-center text-sm font-medium text-slate-500">
-            Pick your base to start building.
+        <section className="mx-auto mt-4 flex min-h-[calc(100vh-260px)] w-full max-w-5xl flex-col items-center justify-center px-4 py-12">
+          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">Chipotle</p>
+          <h2 className="mt-4 text-center text-5xl font-bold tracking-tight text-slate-900">Choose your entrée</h2>
+          <p className="mt-3 text-center text-lg text-slate-600">
+            Start your build by selecting a base.
           </p>
-          <div className="mt-8 grid gap-3 sm:grid-cols-2">
+          <div className="mt-10 grid w-full max-w-3xl gap-4 sm:grid-cols-2">
             <button
               type="button"
               onClick={() => handleEntreeSelection("bowl")}
-              className="cursor-pointer rounded-2xl border border-black/20 bg-white px-4 py-4 text-lg font-semibold text-slate-900 transition hover:border-black/40 hover:bg-slate-50"
+              className="cursor-pointer rounded-3xl border border-black/15 bg-white px-6 py-8 text-left text-2xl font-semibold text-slate-900 shadow-[0_8px_22px_rgba(0,0,0,0.08)] transition hover:-translate-y-0.5 hover:border-black/30 hover:shadow-[0_12px_26px_rgba(0,0,0,0.12)]"
             >
               Bowl
             </button>
             <button
               type="button"
               onClick={() => handleEntreeSelection("burrito")}
-              className="cursor-pointer rounded-2xl border border-black/20 bg-white px-4 py-4 text-lg font-semibold text-slate-900 transition hover:border-black/40 hover:bg-slate-50"
+              className="cursor-pointer rounded-3xl border border-black/15 bg-white px-6 py-8 text-left text-2xl font-semibold text-slate-900 shadow-[0_8px_22px_rgba(0,0,0,0.08)] transition hover:-translate-y-0.5 hover:border-black/30 hover:shadow-[0_12px_26px_rgba(0,0,0,0.12)]"
             >
               Burrito
             </button>
