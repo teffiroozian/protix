@@ -88,8 +88,14 @@ const CATEGORY_ICONS: Record<string, LucideIcon> = {
   treats: IceCreamCone,
 };
 
-type EntreeSelection = "bowl" | "burrito" | "quesadilla" | null;
-type EntreeConfiguration = { label: string; includedIngredientIds?: string[] };
+type EntreeSelection = "bowl" | "burrito" | "quesadilla" | "salad" | "tacos" | null;
+type TacoShellSelection = "crispy" | "soft";
+type TacoCountSelection = 3 | 1;
+type EntreeConfiguration = {
+  label: string;
+  includedIngredientIds?: string[];
+  getIncludedIngredientIds?: (options: { tacoShell: TacoShellSelection }) => string[];
+};
 const CHIPOTLE_ENTREE_CONFIGURATIONS: Record<
   Exclude<EntreeSelection, null>,
   EntreeConfiguration
@@ -99,6 +105,15 @@ const CHIPOTLE_ENTREE_CONFIGURATIONS: Record<
   quesadilla: {
     label: "Quesadilla",
     includedIngredientIds: ["chipotle-ingredient-tortilla", "chipotle-ingredient-cheese"],
+  },
+  salad: { label: "Salad", includedIngredientIds: ["chipotle-ingredient-romaine-lettuce"] },
+  tacos: {
+    label: "Tacos",
+    getIncludedIngredientIds: ({ tacoShell }) => [
+      tacoShell === "crispy"
+        ? "chipotle-ingredient-crispy-corn-tortilla"
+        : "chipotle-ingredient-soft-flour-tortilla",
+    ],
   },
 };
 
@@ -170,10 +185,16 @@ export default function RestaurantView({
   const [isBuildSummaryExpanded, setIsBuildSummaryExpanded] = useState(false);
   const buildStickyContainerRef = useRef<HTMLDivElement | null>(null);
   const [selectedEntree, setSelectedEntree] = useState<EntreeSelection>(null);
+  const [selectedTacoShell, setSelectedTacoShell] = useState<TacoShellSelection>("crispy");
+  const [selectedTacoCount, setSelectedTacoCount] = useState<TacoCountSelection>(3);
   const selectedEntreeConfig = selectedEntree ? CHIPOTLE_ENTREE_CONFIGURATIONS[selectedEntree] : null;
+  const tacoServingMultiplier = selectedEntree === "tacos" && selectedTacoCount === 1 ? 1 / 3 : 1;
   const selectedIncludedIngredientIds = useMemo(
-    () => selectedEntreeConfig?.includedIngredientIds ?? [],
-    [selectedEntreeConfig]
+    () =>
+      selectedEntreeConfig?.getIncludedIngredientIds?.({ tacoShell: selectedTacoShell }) ??
+      selectedEntreeConfig?.includedIngredientIds ??
+      [],
+    [selectedEntreeConfig, selectedTacoShell]
   );
 
   const addonItems = useMemo<MenuItem[]>(() => {
@@ -496,6 +517,15 @@ export default function RestaurantView({
       ),
     [selectedIngredientItems]
   );
+  const adjustedSelectedIngredientTotals = useMemo(
+    () => ({
+      calories: Math.round(selectedIngredientTotals.calories * tacoServingMultiplier),
+      protein: Math.round(selectedIngredientTotals.protein * tacoServingMultiplier),
+      carbs: Math.round(selectedIngredientTotals.carbs * tacoServingMultiplier),
+      fat: Math.round(selectedIngredientTotals.fat * tacoServingMultiplier),
+    }),
+    [selectedIngredientTotals, tacoServingMultiplier]
+  );
 
   const selectedNutritionLabelTotals = useMemo(
     () =>
@@ -530,6 +560,21 @@ export default function RestaurantView({
       ),
     [selectedIngredientItems]
   );
+  const adjustedNutritionLabelTotals = useMemo(
+    () => ({
+      calories: Math.round(selectedNutritionLabelTotals.calories * tacoServingMultiplier),
+      totalFat: Math.round(selectedNutritionLabelTotals.totalFat * tacoServingMultiplier),
+      satFat: Math.round(selectedNutritionLabelTotals.satFat * tacoServingMultiplier),
+      transFat: Math.round(selectedNutritionLabelTotals.transFat * tacoServingMultiplier),
+      cholesterol: Math.round(selectedNutritionLabelTotals.cholesterol * tacoServingMultiplier),
+      sodium: Math.round(selectedNutritionLabelTotals.sodium * tacoServingMultiplier),
+      carbs: Math.round(selectedNutritionLabelTotals.carbs * tacoServingMultiplier),
+      fiber: Math.round(selectedNutritionLabelTotals.fiber * tacoServingMultiplier),
+      sugars: Math.round(selectedNutritionLabelTotals.sugars * tacoServingMultiplier),
+      protein: Math.round(selectedNutritionLabelTotals.protein * tacoServingMultiplier),
+    }),
+    [selectedNutritionLabelTotals, tacoServingMultiplier]
+  );
 
   const selectedIngredientCount = Object.values(selectedIngredientItems).reduce(
     (acc, selectedIngredient) => acc + selectedIngredient.quantity,
@@ -562,13 +607,15 @@ export default function RestaurantView({
     });
   };
 
-  const handleEntreeSelection = (entree: Exclude<EntreeSelection, null>) => {
-    const nextIncludedIngredientIds = CHIPOTLE_ENTREE_CONFIGURATIONS[entree].includedIngredientIds ?? [];
+  const applyIncludedIngredients = (nextIncludedIngredientIds: string[]) => {
     const allIncludedIngredientIds = new Set(
-      Object.values(CHIPOTLE_ENTREE_CONFIGURATIONS)
-        .flatMap((configuration) => configuration.includedIngredientIds ?? [])
+      Object.values(CHIPOTLE_ENTREE_CONFIGURATIONS).flatMap((configuration) => [
+        ...(configuration.includedIngredientIds ?? []),
+        ...(configuration.getIncludedIngredientIds?.({ tacoShell: "crispy" }) ?? []),
+        ...(configuration.getIncludedIngredientIds?.({ tacoShell: "soft" }) ?? []),
+      ])
     );
-    setSelectedEntree(entree);
+
     setSelectedIngredientItems((previous) => {
       const next = { ...previous };
 
@@ -577,10 +624,6 @@ export default function RestaurantView({
           delete next[ingredientId];
         }
       });
-
-      if (nextIncludedIngredientIds.length === 0) {
-        return next;
-      }
 
       nextIncludedIngredientIds.forEach((includedIngredientId) => {
         const includedIngredientItem = ingredientItemsById.get(includedIngredientId);
@@ -595,6 +638,17 @@ export default function RestaurantView({
     });
   };
 
+  const handleEntreeSelection = (entree: Exclude<EntreeSelection, null>) => {
+    const nextIncludedIngredientIds =
+      CHIPOTLE_ENTREE_CONFIGURATIONS[entree].getIncludedIngredientIds?.({
+        tacoShell: selectedTacoShell,
+      }) ??
+      CHIPOTLE_ENTREE_CONFIGURATIONS[entree].includedIngredientIds ??
+      [];
+    setSelectedEntree(entree);
+    applyIncludedIngredients(nextIncludedIngredientIds);
+  };
+
   const handleAddBuildToCart = () => {
     if (selectedIngredientCount === 0) return;
 
@@ -607,7 +661,7 @@ export default function RestaurantView({
         Array.from({ length: quantity }, () => item.name)
       ),
       quantity: 1,
-      macrosPerItem: selectedIngredientTotals,
+      macrosPerItem: adjustedSelectedIngredientTotals,
     });
   };
 
@@ -675,17 +729,95 @@ export default function RestaurantView({
   return (
     <div>
       {isChipotleBuildPage && selectedEntree !== null ? (
-        <div className="mb-5 flex items-center justify-between rounded-2xl border border-black/10 bg-white px-5 py-3">
-          <p className="text-sm font-semibold text-slate-700">
-            Entrée: <span className="text-slate-900">{CHIPOTLE_ENTREE_CONFIGURATIONS[selectedEntree].label}</span>
-          </p>
-          <button
-            type="button"
-            onClick={() => setSelectedEntree(null)}
-            className="cursor-pointer text-sm font-semibold text-slate-600 underline underline-offset-2 hover:text-slate-900"
-          >
-            Change
-          </button>
+        <div className="mb-5 rounded-2xl border border-black/10 bg-white px-5 py-3">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-semibold text-slate-700">
+              Entrée: <span className="text-slate-900">{CHIPOTLE_ENTREE_CONFIGURATIONS[selectedEntree].label}</span>
+            </p>
+            <button
+              type="button"
+              onClick={() => setSelectedEntree(null)}
+              className="cursor-pointer text-sm font-semibold text-slate-600 underline underline-offset-2 hover:text-slate-900"
+            >
+              Change
+            </button>
+          </div>
+          {selectedEntree === "tacos" ? (
+            <div className="mt-4 grid gap-4 sm:grid-cols-2">
+              <div>
+                <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">Shell</p>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectedTacoShell("crispy");
+                      if (selectedEntree === "tacos") {
+                        applyIncludedIngredients(
+                          CHIPOTLE_ENTREE_CONFIGURATIONS.tacos.getIncludedIngredientIds?.({
+                            tacoShell: "crispy",
+                          }) ?? []
+                        );
+                      }
+                    }}
+                    className={`cursor-pointer rounded-full border px-3 py-1.5 text-sm font-semibold ${
+                      selectedTacoShell === "crispy"
+                        ? "border-slate-900 bg-slate-900 text-white"
+                        : "border-black/20 bg-white text-slate-700 hover:border-black/35"
+                    }`}
+                  >
+                    Crispy
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectedTacoShell("soft");
+                      if (selectedEntree === "tacos") {
+                        applyIncludedIngredients(
+                          CHIPOTLE_ENTREE_CONFIGURATIONS.tacos.getIncludedIngredientIds?.({
+                            tacoShell: "soft",
+                          }) ?? []
+                        );
+                      }
+                    }}
+                    className={`cursor-pointer rounded-full border px-3 py-1.5 text-sm font-semibold ${
+                      selectedTacoShell === "soft"
+                        ? "border-slate-900 bg-slate-900 text-white"
+                        : "border-black/20 bg-white text-slate-700 hover:border-black/35"
+                    }`}
+                  >
+                    Soft
+                  </button>
+                </div>
+              </div>
+              <div>
+                <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">Count</p>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedTacoCount(3)}
+                    className={`cursor-pointer rounded-full border px-3 py-1.5 text-sm font-semibold ${
+                      selectedTacoCount === 3
+                        ? "border-slate-900 bg-slate-900 text-white"
+                        : "border-black/20 bg-white text-slate-700 hover:border-black/35"
+                    }`}
+                  >
+                    3 Tacos
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedTacoCount(1)}
+                    className={`cursor-pointer rounded-full border px-3 py-1.5 text-sm font-semibold ${
+                      selectedTacoCount === 1
+                        ? "border-slate-900 bg-slate-900 text-white"
+                        : "border-black/20 bg-white text-slate-700 hover:border-black/35"
+                    }`}
+                  >
+                    1 Taco
+                  </button>
+                </div>
+              </div>
+            </div>
+          ) : null}
         </div>
       ) : null}
 
@@ -836,7 +968,7 @@ export default function RestaurantView({
       {shouldShowBuildStickyBar ? (
         <div ref={buildStickyContainerRef}>
           <StickyMacroTotalsBar
-            totals={selectedIngredientTotals}
+            totals={adjustedSelectedIngredientTotals}
             secondaryActionLabel="View Selected"
             secondaryActionExpandedLabel="View Selected"
             primaryActionLabel="Add to Cart"
@@ -852,46 +984,46 @@ export default function RestaurantView({
 
                   <div className="mt-1 flex items-end justify-between">
                     <div className="text-xl font-bold">Calories</div>
-                    <div className="text-xl font-bold">{selectedNutritionLabelTotals.calories}</div>
+                    <div className="text-xl font-bold">{adjustedNutritionLabelTotals.calories}</div>
                   </div>
 
                   <div className="my-[12px] mb-2 h-[5px] rounded-[999px] bg-[rgba(0,0,0,0.75)]" />
 
                   <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px]">
                     <div className="text-lg font-semibold">Total Fat</div>
-                    <div className="text-lg font-semibold">{formatValue(selectedNutritionLabelTotals.totalFat, "g")}</div>
+                    <div className="text-lg font-semibold">{formatValue(adjustedNutritionLabelTotals.totalFat, "g")}</div>
                   </div>
                   <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px] pl-5">
                     <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">Sat Fat</div>
-                    <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">{formatValue(selectedNutritionLabelTotals.satFat, "g")}</div>
+                    <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">{formatValue(adjustedNutritionLabelTotals.satFat, "g")}</div>
                   </div>
                   <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px] pl-5">
                     <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">Trans Fat</div>
-                    <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">{formatValue(selectedNutritionLabelTotals.transFat, "g")}</div>
+                    <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">{formatValue(adjustedNutritionLabelTotals.transFat, "g")}</div>
                   </div>
                   <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px]">
                     <div className="text-lg font-semibold">Cholesterol</div>
-                    <div className="text-lg font-semibold">{formatValue(selectedNutritionLabelTotals.cholesterol, "mg")}</div>
+                    <div className="text-lg font-semibold">{formatValue(adjustedNutritionLabelTotals.cholesterol, "mg")}</div>
                   </div>
                   <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px]">
                     <div className="text-lg font-semibold">Sodium</div>
-                    <div className="text-lg font-semibold">{formatValue(selectedNutritionLabelTotals.sodium, "mg")}</div>
+                    <div className="text-lg font-semibold">{formatValue(adjustedNutritionLabelTotals.sodium, "mg")}</div>
                   </div>
                   <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px]">
                     <div className="text-lg font-semibold">Carbohydrates</div>
-                    <div className="text-lg font-semibold">{formatValue(selectedNutritionLabelTotals.carbs, "g")}</div>
+                    <div className="text-lg font-semibold">{formatValue(adjustedNutritionLabelTotals.carbs, "g")}</div>
                   </div>
                   <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px] pl-5">
                     <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">Fiber</div>
-                    <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">{formatValue(selectedNutritionLabelTotals.fiber, "g")}</div>
+                    <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">{formatValue(adjustedNutritionLabelTotals.fiber, "g")}</div>
                   </div>
                   <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px] pl-5">
                     <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">Sugars</div>
-                    <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">{formatValue(selectedNutritionLabelTotals.sugars, "g")}</div>
+                    <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">{formatValue(adjustedNutritionLabelTotals.sugars, "g")}</div>
                   </div>
                   <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px]">
                     <div className="text-lg font-semibold">Protein</div>
-                    <div className="text-lg font-semibold">{formatValue(selectedNutritionLabelTotals.protein, "g")}</div>
+                    <div className="text-lg font-semibold">{formatValue(adjustedNutritionLabelTotals.protein, "g")}</div>
                   </div>
                 </section>
 
