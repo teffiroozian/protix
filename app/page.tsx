@@ -121,7 +121,7 @@ export default function Home() {
   return (
     <main className="mx-auto flex max-w-5xl flex-col gap-12 px-4 py-24 sm:px-6">
       <header className="mx-auto max-w-3xl text-center">
-        <h1 className="text-4xl font-semibold tracking-tight leading-tight text-neutral-900">
+        <h1 className="text-center text-4xl font-semibold tracking-tight leading-tight text-neutral-900">
           High-Protein Fast Food Orders
         </h1>
       </header>
@@ -338,7 +338,7 @@ export default function Home() {
 
       <section className="mt-20 flex flex-col gap-8">
         <div>
-          <h2 className="text-3xl font-semibold text-neutral-900">
+          <h2 className="text-center text-3xl font-semibold text-neutral-900">
             Macro Friendly Restaurants
           </h2>
         </div>
@@ -383,7 +383,7 @@ export default function Home() {
 
       <section className="mt-20 flex flex-col gap-4">
         <div>
-          <h2 className="text-3xl font-semibold text-neutral-900">All Restaurants</h2>
+          <h2 className="text-center text-3xl font-semibold text-neutral-900">All Restaurants</h2>
         </div>
 
         <div className="space-y-6">
