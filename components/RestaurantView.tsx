@@ -578,32 +578,6 @@ export default function RestaurantView({
 
   return (
     <div>
-      {isChipotleBuildPage && selectedEntree === null ? (
-        <section className="mx-auto mt-4 flex min-h-[calc(100vh-260px)] w-full max-w-5xl flex-col items-center justify-center px-4 py-12">
-          <p className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">Chipotle</p>
-          <h2 className="mt-4 text-center text-5xl font-bold tracking-tight text-slate-900">Choose your entrée</h2>
-          <p className="mt-3 text-center text-lg text-slate-600">
-            Start your build by selecting a base.
-          </p>
-          <div className="mt-10 grid w-full max-w-3xl gap-4 sm:grid-cols-2">
-            <button
-              type="button"
-              onClick={() => handleEntreeSelection("bowl")}
-              className="cursor-pointer rounded-3xl border border-black/15 bg-white px-6 py-8 text-left text-2xl font-semibold text-slate-900 shadow-[0_8px_22px_rgba(0,0,0,0.08)] transition hover:-translate-y-0.5 hover:border-black/30 hover:shadow-[0_12px_26px_rgba(0,0,0,0.12)]"
-            >
-              Bowl
-            </button>
-            <button
-              type="button"
-              onClick={() => handleEntreeSelection("burrito")}
-              className="cursor-pointer rounded-3xl border border-black/15 bg-white px-6 py-8 text-left text-2xl font-semibold text-slate-900 shadow-[0_8px_22px_rgba(0,0,0,0.08)] transition hover:-translate-y-0.5 hover:border-black/30 hover:shadow-[0_12px_26px_rgba(0,0,0,0.12)]"
-            >
-              Burrito
-            </button>
-          </div>
-        </section>
-      ) : null}
-
       {isChipotleBuildPage && selectedEntree !== null ? (
         <div className="mb-5 flex items-center justify-between rounded-2xl border border-black/10 bg-white px-5 py-3">
           <p className="text-sm font-semibold text-slate-700">
@@ -619,8 +593,6 @@ export default function RestaurantView({
         </div>
       ) : null}
 
-      {!isChipotleBuildPage || selectedEntree !== null ? (
-        <>
       <StickyRestaurantBar
         restaurantName={restaurantName}
         restaurantLogo={restaurantLogo}
@@ -715,23 +687,49 @@ export default function RestaurantView({
         </aside>
 
         <div className="min-w-0">
-          <div className="mx-auto max-w-[900px]">
-            <MenuSections
-              restaurantId={restaurantId}
-              items={filteredItems}
-              sort={sort}
-              addons={addons}
-              ingredients={ingredients}
-              commonChanges={commonChanges}
-              customizationRules={customizationRules}
-              groupByCategory={viewMode !== "ranking"}
-              categoryMode={viewMode === "ranking" ? "menu" : viewMode}
-              isBuildYourOwn={isBuildYourOwn}
-              selectedIngredientIds={new Set(Object.keys(selectedIngredientItems))}
-              lockedIngredientIds={lockedIngredientIds}
-              onIngredientSelectionChange={handleIngredientSelectionChange}
-            />
-          </div>
+          {isChipotleBuildPage && selectedEntree === null ? (
+            <section className="mx-auto flex min-h-[calc(100vh-260px)] w-full max-w-5xl flex-col items-center justify-center px-4 py-12">
+              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">Chipotle</p>
+              <h2 className="mt-4 text-center text-5xl font-bold tracking-tight text-slate-900">Choose your entrée</h2>
+              <p className="mt-3 text-center text-lg text-slate-600">
+                Start your build by selecting a base.
+              </p>
+              <div className="mt-10 grid w-full max-w-3xl gap-4 sm:grid-cols-2">
+                <button
+                  type="button"
+                  onClick={() => handleEntreeSelection("bowl")}
+                  className="cursor-pointer rounded-3xl border border-black/15 bg-white px-6 py-8 text-left text-2xl font-semibold text-slate-900 shadow-[0_8px_22px_rgba(0,0,0,0.08)] transition hover:-translate-y-0.5 hover:border-black/30 hover:shadow-[0_12px_26px_rgba(0,0,0,0.12)]"
+                >
+                  Bowl
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleEntreeSelection("burrito")}
+                  className="cursor-pointer rounded-3xl border border-black/15 bg-white px-6 py-8 text-left text-2xl font-semibold text-slate-900 shadow-[0_8px_22px_rgba(0,0,0,0.08)] transition hover:-translate-y-0.5 hover:border-black/30 hover:shadow-[0_12px_26px_rgba(0,0,0,0.12)]"
+                >
+                  Burrito
+                </button>
+              </div>
+            </section>
+          ) : (
+            <div className="mx-auto max-w-[900px]">
+              <MenuSections
+                restaurantId={restaurantId}
+                items={filteredItems}
+                sort={sort}
+                addons={addons}
+                ingredients={ingredients}
+                commonChanges={commonChanges}
+                customizationRules={customizationRules}
+                groupByCategory={viewMode !== "ranking"}
+                categoryMode={viewMode === "ranking" ? "menu" : viewMode}
+                isBuildYourOwn={isBuildYourOwn}
+                selectedIngredientIds={new Set(Object.keys(selectedIngredientItems))}
+                lockedIngredientIds={lockedIngredientIds}
+                onIngredientSelectionChange={handleIngredientSelectionChange}
+              />
+            </div>
+          )}
         </div>
       </div>
       {shouldShowBuildStickyBar ? <div className="h-48" aria-hidden="true" /> : null}
@@ -746,8 +744,6 @@ export default function RestaurantView({
           onSecondaryAction={handleResetBuildSelections}
           onPrimaryAction={handleAddBuildToCart}
         />
-      ) : null}
-        </>
       ) : null}
     </div>
   );
