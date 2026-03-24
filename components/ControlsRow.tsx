@@ -11,7 +11,7 @@ export type Filters = {
   includeSidesDrinks?: boolean;
   includeLargeShareables?: boolean;
 };
-import { SlidersHorizontal, ChevronDown, ClipboardList, Carrot, Flame, Leaf, Scale } from "lucide-react";
+import { SlidersHorizontal, ChevronDown, ClipboardList, Carrot, Flame, Leaf, Scale, Check } from "lucide-react";
 
 const PROTEIN_OPTIONS = [20, 30, 40, 50];
 
@@ -92,7 +92,7 @@ export default function ControlsRow({
   const [isViewOpen, setIsViewOpen] = useState(false);
   const [isSortOpen, setIsSortOpen] = useState(false);
   const [draftFilters, setDraftFilters] = useState<Filters>(filters);
-  const [hoveredViewOption, setHoveredViewOption] = useState<ViewOption | null>(null);
+  const [hoveredViewOption, setHoveredViewOption] = useState<ViewOption | "all-ranked" | null>(null);
   const [hoveredSortOption, setHoveredSortOption] = useState<SortOption | null>(null);
   const viewMenuRef = useRef<HTMLDivElement>(null);
   const sortMenuRef = useRef<HTMLDivElement>(null);
@@ -261,6 +261,21 @@ export default function ControlsRow({
                       </button>
                     );
                   })}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onEntireMenuChange?.(!entireMenu);
+                      setIsViewOpen(false);
+                    }}
+                    onMouseEnter={() => setHoveredViewOption("all-ranked")}
+                    onMouseLeave={() => setHoveredViewOption(null)}
+                    className={`cursor-pointer inline-flex items-center gap-2 rounded-[10px] border-none px-2.5 py-2 text-left font-semibold text-black/88 transition-colors duration-100 ${
+                      entireMenu ? "bg-black/10" : hoveredViewOption === "all-ranked" ? "bg-slate-900/5" : "bg-transparent"
+                    }`}
+                  >
+                    <Check className="h-4 w-4 shrink-0" strokeWidth={2.2} />
+                    <span>All Ranked</span>
+                  </button>
                 </div>
               </div>
             ) : null}
@@ -310,11 +325,6 @@ export default function ControlsRow({
                     );
                   })}
                 </div>
-                <div className="my-2 h-px bg-black/12" />
-                <label className="flex items-center gap-2 px-2 py-1.5 text-sm font-medium">
-                  <input type="checkbox" checked={entireMenu} onChange={(event) => onEntireMenuChange?.(event.target.checked)} />
-                  Entire menu
-                </label>
               </div>
             ) : null}
           </div>
