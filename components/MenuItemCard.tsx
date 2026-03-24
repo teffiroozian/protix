@@ -289,17 +289,22 @@ export default function MenuItemCard({
   );
   const [isAddFeedbackVisible, setIsAddFeedbackVisible] = useState(false);
   const { items, addItem, updateQuantity } = useCart();
-  const selectedVariant = variants?.find((variant) => variant.id === selectedVariantId);
+  const effectiveSelectedVariantId =
+    variants?.some((variant) => variant.id === selectedVariantId)
+      ? selectedVariantId
+      : defaultVariantId;
+  const selectedVariant = variants?.find((variant) => variant.id === effectiveSelectedVariantId);
   const selectedItemImage = selectedVariant?.image ?? item.image;
   const baseNutrition = selectedVariant?.nutrition ?? item.nutrition;
+
   const applicableCommonChanges = useMemo(
     () => getApplicableCommonChanges(item, commonChanges),
     [item, commonChanges]
   );
 
   const resolvedIngredients = useMemo(
-    () => resolvePanelIngredients(item, ingredientItems, addons, menuItems ?? [], variants, selectedVariantId, customizationRules),
-    [addons, customizationRules, ingredientItems, item, menuItems, selectedVariantId, variants]
+    () => resolvePanelIngredients(item, ingredientItems, addons, menuItems ?? [], variants, effectiveSelectedVariantId, customizationRules),
+    [addons, customizationRules, effectiveSelectedVariantId, ingredientItems, item, menuItems, variants]
   );
   const [selectedIngredientCounts, setSelectedIngredientCounts] = useState<Record<string, number>>(() =>
     getSelectedIngredientCountsFromCustomizations(
@@ -775,7 +780,7 @@ export default function MenuItemCard({
                   {hasVariantDropdown ? (
                     <VariantSelector
                       variants={variants}
-                      selectedId={selectedVariantId}
+                      selectedId={effectiveSelectedVariantId}
                       onChange={(nextVariantId) => {
                         setSelectedVariantId(nextVariantId);
                         emitCartConfiguration(nextVariantId, selectedAddons, selectedSauceCounts);
