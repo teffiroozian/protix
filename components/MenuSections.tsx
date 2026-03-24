@@ -300,6 +300,9 @@ export default function MenuSections({
               customizationRules={customizationRules}
               commonChanges={commonChanges}
               itemHref={`/restaurant/${restaurantId}/items/${toItemSlug(item)}`}
+              displayMode={
+                categoryMode === "ingredients" ? "ingredient-compact" : "default"
+              }
             />
           ))}
         </ul>
@@ -375,6 +378,9 @@ export default function MenuSections({
                 customizationRules={customizationRules}
                 commonChanges={commonChanges}
                 itemHref={`/restaurant/${restaurantId}/items/${toItemSlug(item)}`}
+                displayMode={
+                  categoryMode === "ingredients" ? "ingredient-compact" : "default"
+                }
               />
             ))}
           </ul>
