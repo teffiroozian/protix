@@ -381,20 +381,11 @@ export default function RestaurantView({
 
   const allItems = useMemo(() => {
     const baseItems = [...items, ...addonItems];
-    if (isChipotleBuildPage && selectedEntree === "chips-sides") {
-      return baseItems.filter((item) =>
-        item.categories?.some((category) => category.toLowerCase() === "chips & sides")
-      );
-    }
-    if (isChipotleBuildPage && selectedEntree === "high-protein-menu") {
-      return baseItems.filter((item) =>
-        item.categories?.some((category) => category.toLowerCase() === "high protein menu")
-      );
-    }
-    if (isChipotleBuildPage && selectedEntree === "drinks") {
-      return baseItems.filter(
-        (item) => item.id === "mexican-coca-cola" || item.id === "mexican-sprite"
-      );
+    if (
+      isChipotleBuildPage &&
+      (selectedEntree === "chips-sides" || selectedEntree === "high-protein-menu" || selectedEntree === "drinks")
+    ) {
+      return baseItems.filter((item) => item.entreeGroup === selectedEntree);
     }
     return baseItems;
   }, [addonItems, isChipotleBuildPage, items, selectedEntree]);
