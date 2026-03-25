@@ -273,6 +273,11 @@ export default function MenuSections({
   selectedIngredientIds,
   onIngredientSelectionChange,
   lockedIngredientIds,
+  ingredientSelectionControlById,
+  ingredientRadioGroupNameById,
+  ingredientVariantOptionsById,
+  selectedIngredientVariantIdById,
+  onIngredientVariantChange,
 }: {
   restaurantId: string;
   items: MenuItem[];
@@ -287,6 +292,11 @@ export default function MenuSections({
   selectedIngredientIds?: Set<string>;
   onIngredientSelectionChange?: (item: MenuItem, selected: boolean) => void;
   lockedIngredientIds?: Set<string>;
+  ingredientSelectionControlById?: Record<string, "checkbox" | "radio">;
+  ingredientRadioGroupNameById?: Record<string, string>;
+  ingredientVariantOptionsById?: Record<string, Array<{ id: string; label: string }>>;
+  selectedIngredientVariantIdById?: Record<string, string>;
+  onIngredientVariantChange?: (item: MenuItem, variantId: string) => void;
 }) {
 
   if (!groupByCategory) {
@@ -318,6 +328,11 @@ export default function MenuSections({
               isIngredientSelected={selectedIngredientIds?.has(item.id ?? "")}
               isIngredientLocked={lockedIngredientIds?.has(item.id ?? "")}
               onIngredientSelectionChange={onIngredientSelectionChange}
+              ingredientSelectionControl={ingredientSelectionControlById?.[item.id ?? ""] ?? "checkbox"}
+              ingredientRadioGroupName={ingredientRadioGroupNameById?.[item.id ?? ""]}
+              ingredientVariantOptions={ingredientVariantOptionsById?.[item.id ?? ""]}
+              selectedIngredientVariantId={selectedIngredientVariantIdById?.[item.id ?? ""]}
+              onIngredientVariantChange={(variantId) => onIngredientVariantChange?.(item, variantId)}
             />
           ))}
         </ul>
@@ -401,6 +416,11 @@ export default function MenuSections({
                 isIngredientSelected={selectedIngredientIds?.has(item.id ?? "")}
                 isIngredientLocked={lockedIngredientIds?.has(item.id ?? "")}
                 onIngredientSelectionChange={onIngredientSelectionChange}
+                ingredientSelectionControl={ingredientSelectionControlById?.[item.id ?? ""] ?? "checkbox"}
+                ingredientRadioGroupName={ingredientRadioGroupNameById?.[item.id ?? ""]}
+                ingredientVariantOptions={ingredientVariantOptionsById?.[item.id ?? ""]}
+                selectedIngredientVariantId={selectedIngredientVariantIdById?.[item.id ?? ""]}
+                onIngredientVariantChange={(variantId) => onIngredientVariantChange?.(item, variantId)}
               />
             ))}
           </ul>

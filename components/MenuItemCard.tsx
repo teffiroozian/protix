@@ -246,6 +246,11 @@ export default function MenuItemCard({
   isIngredientSelected: controlledIngredientSelected,
   isIngredientLocked = false,
   onIngredientSelectionChange,
+  ingredientSelectionControl = "checkbox",
+  ingredientRadioGroupName,
+  ingredientVariantOptions,
+  selectedIngredientVariantId,
+  onIngredientVariantChange,
 }: {
   restaurantId: string;
   item: MenuItem;
@@ -271,6 +276,11 @@ export default function MenuItemCard({
   isIngredientSelected?: boolean;
   isIngredientLocked?: boolean;
   onIngredientSelectionChange?: (item: MenuItem, selected: boolean) => void;
+  ingredientSelectionControl?: "checkbox" | "radio";
+  ingredientRadioGroupName?: string;
+  ingredientVariantOptions?: Array<{ id: string; label: string }>;
+  selectedIngredientVariantId?: string;
+  onIngredientVariantChange?: (variantId: string) => void;
 }) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
@@ -742,22 +752,26 @@ export default function MenuItemCard({
           className={`flex items-center gap-4 px-4 py-3 ${isIngredientLocked ? "cursor-not-allowed opacity-95" : "cursor-pointer"}`}
         >
           <span
-            className={`flex h-6 w-6 items-center justify-center rounded-md border text-sm font-bold transition ${
+            className={`flex h-6 w-6 items-center justify-center border text-sm font-bold transition ${
               ingredientSelectionState
                 ? "border-lime-500 bg-lime-500 text-black"
                 : "border-black/40 bg-white text-transparent"
-            }`}
+            } ${ingredientSelectionControl === "radio" ? "rounded-full" : "rounded-md"}`}
             aria-hidden="true"
           >
-            ✓
+            {ingredientSelectionControl === "radio" ? "●" : "✓"}
           </span>
           <input
-            type="checkbox"
+            type={ingredientSelectionControl}
             className="sr-only"
             checked={ingredientSelectionState}
+            name={ingredientSelectionControl === "radio" ? ingredientRadioGroupName : undefined}
             disabled={isIngredientLocked}
             onChange={(event) => {
               const nextSelected = event.target.checked;
+              if (ingredientSelectionControl === "radio" && !nextSelected) {
+                return;
+              }
               setIsIngredientSelected(nextSelected);
               onIngredientSelectionChange?.(item, nextSelected);
             }}
@@ -776,6 +790,28 @@ export default function MenuItemCard({
 
           <div className="min-w-0 flex-1">
             <div className="truncate text-xl font-semibold text-black">{item.name}</div>
+            {ingredientVariantOptions && ingredientVariantOptions.length > 1 ? (
+              <div className="mt-2 flex gap-2">
+                {ingredientVariantOptions.map((variantOption) => (
+                  <button
+                    key={variantOption.id}
+                    type="button"
+                    onClick={(event) => {
+                      event.preventDefault();
+                      event.stopPropagation();
+                      onIngredientVariantChange?.(variantOption.id);
+                    }}
+                    className={`cursor-pointer rounded-full border px-3 py-1 text-xs font-semibold ${
+                      selectedIngredientVariantId === variantOption.id
+                        ? "border-slate-900 bg-slate-900 text-white"
+                        : "border-black/20 bg-white text-slate-700 hover:border-black/35"
+                    }`}
+                  >
+                    {variantOption.label}
+                  </button>
+                ))}
+              </div>
+            ) : null}
           </div>
 
           <div className="flex items-center gap-8 text-center">

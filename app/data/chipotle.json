@@ -169,6 +169,42 @@
       }
     },
     {
+      "id": "chipotle-ingredient-crispy-corn-tortilla",
+      "name": "Crispy Corn Tortilla",
+      "category": "Side",
+      "image": "/restaurants/chipotle/logo.jpeg",
+      "nutrition": {
+        "calories": 200,
+        "protein": 3,
+        "carbs": 29,
+        "totalFat": 9
+      }
+    },
+    {
+      "id": "chipotle-ingredient-soft-flour-tortilla",
+      "name": "Soft Flour Tortilla",
+      "category": "Side",
+      "image": "/restaurants/chipotle/logo.jpeg",
+      "nutrition": {
+        "calories": 250,
+        "protein": 7,
+        "carbs": 40,
+        "totalFat": 8
+      }
+    },
+    {
+      "id": "chipotle-ingredient-romaine-lettuce",
+      "name": "Romaine Lettuce",
+      "category": "Toppings",
+      "image": "/restaurants/chipotle/logo.jpeg",
+      "nutrition": {
+        "calories": 5,
+        "protein": 0,
+        "carbs": 1,
+        "totalFat": 0
+      }
+    },
+    {
       "id": "chipotle-ingredient-cheese",
       "name": "Cheese",
       "category": "Toppings",

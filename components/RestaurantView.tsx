@@ -88,8 +88,18 @@ const CATEGORY_ICONS: Record<string, LucideIcon> = {
   treats: IceCreamCone,
 };
 
-type EntreeSelection = "bowl" | "burrito" | "quesadilla" | null;
-type EntreeConfiguration = { label: string; includedIngredientIds?: string[] };
+type EntreeSelection = "bowl" | "burrito" | "quesadilla" | "salad" | "tacos" | null;
+type TacoShellSelection = "crispy" | "soft";
+type TacoCountSelection = 3 | 1;
+type EntreeConfiguration = {
+  label: string;
+  includedIngredientIds?: string[];
+  getIncludedIngredientIds?: (options: { tacoShell: TacoShellSelection }) => string[];
+};
+const CHIPOTLE_TACO_SHELL_INGREDIENT_IDS = [
+  "chipotle-ingredient-crispy-corn-tortilla",
+  "chipotle-ingredient-soft-flour-tortilla",
+];
 const CHIPOTLE_ENTREE_CONFIGURATIONS: Record<
   Exclude<EntreeSelection, null>,
   EntreeConfiguration
@@ -100,10 +110,35 @@ const CHIPOTLE_ENTREE_CONFIGURATIONS: Record<
     label: "Quesadilla",
     includedIngredientIds: ["chipotle-ingredient-tortilla", "chipotle-ingredient-cheese"],
   },
+  salad: { label: "Salad", includedIngredientIds: ["chipotle-ingredient-romaine-lettuce"] },
+  tacos: {
+    label: "Tacos",
+    getIncludedIngredientIds: ({ tacoShell }) => [
+      tacoShell === "crispy"
+        ? "chipotle-ingredient-crispy-corn-tortilla"
+        : "chipotle-ingredient-soft-flour-tortilla",
+    ],
+  },
 };
 
 function formatValue(value?: number, suffix = "") {
   return value === undefined ? "—" : `${value}${suffix}`;
+}
+
+function scaleNutritionValues(
+  nutrition: MenuItem["nutrition"] | IngredientItem["nutrition"],
+  multiplier: number
+) {
+  if (multiplier === 1) {
+    return nutrition;
+  }
+
+  return Object.fromEntries(
+    Object.entries(nutrition).map(([key, value]) => [
+      key,
+      typeof value === "number" ? Math.round(value * multiplier) : value,
+    ])
+  );
 }
 
 export default function RestaurantView({
@@ -170,10 +205,18 @@ export default function RestaurantView({
   const [isBuildSummaryExpanded, setIsBuildSummaryExpanded] = useState(false);
   const buildStickyContainerRef = useRef<HTMLDivElement | null>(null);
   const [selectedEntree, setSelectedEntree] = useState<EntreeSelection>(null);
+  const [selectedTacoShell, setSelectedTacoShell] = useState<TacoShellSelection>("crispy");
+  const [selectedTacoCount, setSelectedTacoCount] = useState<TacoCountSelection>(3);
   const selectedEntreeConfig = selectedEntree ? CHIPOTLE_ENTREE_CONFIGURATIONS[selectedEntree] : null;
+  const tacoServingMultiplier = selectedEntree === "tacos" && selectedTacoCount === 1 ? 1 / 3 : 1;
+  const ingredientDisplayMultiplier = selectedEntree === "tacos" && selectedTacoCount === 1 ? 1 / 3 : 1;
+  const tacoShellIngredientIds = CHIPOTLE_TACO_SHELL_INGREDIENT_IDS;
   const selectedIncludedIngredientIds = useMemo(
-    () => selectedEntreeConfig?.includedIngredientIds ?? [],
-    [selectedEntreeConfig]
+    () =>
+      selectedEntreeConfig?.getIncludedIngredientIds?.({ tacoShell: selectedTacoShell }) ??
+      selectedEntreeConfig?.includedIngredientIds ??
+      [],
+    [selectedEntreeConfig, selectedTacoShell]
   );
 
   const addonItems = useMemo<MenuItem[]>(() => {
@@ -235,21 +278,28 @@ export default function RestaurantView({
             .toLowerCase()
             .replace(/[^a-z0-9]+/g, "-");
         const resolvedCategory = resolveIngredientCategory(ingredient);
-        const displayCategory =
-          selectedIncludedIngredientIds.includes(ingredientId)
-            ? "Included Ingredient"
-            : resolvedCategory;
+        const shouldPinToIncludedCategory =
+          selectedIncludedIngredientIds.includes(ingredientId) ||
+          (selectedEntree === "tacos" && tacoShellIngredientIds.includes(ingredientId));
+        const displayCategory = shouldPinToIncludedCategory ? "Included Ingredient" : resolvedCategory;
 
         return {
           id: ingredientId,
           name: ingredient.name,
-          nutrition: ingredient.nutrition,
+          nutrition: scaleNutritionValues(ingredient.nutrition, ingredientDisplayMultiplier),
           image: ingredient.image,
           categories: [displayCategory],
           portionType: "addon",
         };
       });
-  }, [ingredients, restaurantId, selectedIncludedIngredientIds]);
+  }, [
+    ingredientDisplayMultiplier,
+    ingredients,
+    restaurantId,
+    selectedEntree,
+    selectedIncludedIngredientIds,
+    tacoShellIngredientIds,
+  ]);
 
   const ingredientItemsById = useMemo(
     () =>
@@ -381,7 +431,7 @@ export default function RestaurantView({
   }, [sourceItems, filters, searchTerms, rankedAllFilters, viewMode]);
 
   const orderedSections = useMemo(
-    () => getOrderedMenuSections(filteredItems, viewMode),
+    () => getOrderedMenuSections(filteredItems, viewMode === "ranking" ? "menu" : viewMode),
     [filteredItems, viewMode]
   );
   const [activeCategory, setActiveCategory] = useState<string>(
@@ -396,7 +446,7 @@ export default function RestaurantView({
     () =>
       orderedSections.map((section) => ({
         id: section,
-        label: getCategoryLabel(section, viewMode),
+        label: getCategoryLabel(section, viewMode === "ranking" ? "menu" : viewMode),
       })),
     [orderedSections, viewMode]
   );
@@ -496,6 +546,15 @@ export default function RestaurantView({
       ),
     [selectedIngredientItems]
   );
+  const adjustedSelectedIngredientTotals = useMemo(
+    () => ({
+      calories: Math.round(selectedIngredientTotals.calories * tacoServingMultiplier),
+      protein: Math.round(selectedIngredientTotals.protein * tacoServingMultiplier),
+      carbs: Math.round(selectedIngredientTotals.carbs * tacoServingMultiplier),
+      fat: Math.round(selectedIngredientTotals.fat * tacoServingMultiplier),
+    }),
+    [selectedIngredientTotals, tacoServingMultiplier]
+  );
 
   const selectedNutritionLabelTotals = useMemo(
     () =>
@@ -530,6 +589,21 @@ export default function RestaurantView({
       ),
     [selectedIngredientItems]
   );
+  const adjustedNutritionLabelTotals = useMemo(
+    () => ({
+      calories: Math.round(selectedNutritionLabelTotals.calories * tacoServingMultiplier),
+      totalFat: Math.round(selectedNutritionLabelTotals.totalFat * tacoServingMultiplier),
+      satFat: Math.round(selectedNutritionLabelTotals.satFat * tacoServingMultiplier),
+      transFat: Math.round(selectedNutritionLabelTotals.transFat * tacoServingMultiplier),
+      cholesterol: Math.round(selectedNutritionLabelTotals.cholesterol * tacoServingMultiplier),
+      sodium: Math.round(selectedNutritionLabelTotals.sodium * tacoServingMultiplier),
+      carbs: Math.round(selectedNutritionLabelTotals.carbs * tacoServingMultiplier),
+      fiber: Math.round(selectedNutritionLabelTotals.fiber * tacoServingMultiplier),
+      sugars: Math.round(selectedNutritionLabelTotals.sugars * tacoServingMultiplier),
+      protein: Math.round(selectedNutritionLabelTotals.protein * tacoServingMultiplier),
+    }),
+    [selectedNutritionLabelTotals, tacoServingMultiplier]
+  );
 
   const selectedIngredientCount = Object.values(selectedIngredientItems).reduce(
     (acc, selectedIngredient) => acc + selectedIngredient.quantity,
@@ -543,12 +617,28 @@ export default function RestaurantView({
     if (selectedIncludedIngredientIds.length === 0) {
       return new Set<string>();
     }
+    if (selectedEntree === "tacos") {
+      return new Set<string>(
+        selectedIncludedIngredientIds.filter((ingredientId) => !tacoShellIngredientIds.includes(ingredientId))
+      );
+    }
     return new Set<string>(selectedIncludedIngredientIds);
-  }, [selectedIncludedIngredientIds]);
+  }, [selectedEntree, selectedIncludedIngredientIds, tacoShellIngredientIds]);
 
   const handleIngredientSelectionChange = (item: MenuItem, selected: boolean) => {
     const itemId = item.id;
     if (!itemId) return;
+
+    if (selectedEntree === "tacos" && tacoShellIngredientIds.includes(itemId)) {
+      if (!selected) return;
+      const nextTacoShell = itemId === "chipotle-ingredient-soft-flour-tortilla" ? "soft" : "crispy";
+      setSelectedTacoShell(nextTacoShell);
+      applyIncludedIngredients(
+        CHIPOTLE_ENTREE_CONFIGURATIONS.tacos.getIncludedIngredientIds?.({ tacoShell: nextTacoShell }) ?? []
+      );
+      return;
+    }
+
     if (lockedIngredientIds.has(itemId)) return;
 
     setSelectedIngredientItems((prev) => {
@@ -562,13 +652,15 @@ export default function RestaurantView({
     });
   };
 
-  const handleEntreeSelection = (entree: Exclude<EntreeSelection, null>) => {
-    const nextIncludedIngredientIds = CHIPOTLE_ENTREE_CONFIGURATIONS[entree].includedIngredientIds ?? [];
+  const applyIncludedIngredients = (nextIncludedIngredientIds: string[]) => {
     const allIncludedIngredientIds = new Set(
-      Object.values(CHIPOTLE_ENTREE_CONFIGURATIONS)
-        .flatMap((configuration) => configuration.includedIngredientIds ?? [])
+      Object.values(CHIPOTLE_ENTREE_CONFIGURATIONS).flatMap((configuration) => [
+        ...(configuration.includedIngredientIds ?? []),
+        ...(configuration.getIncludedIngredientIds?.({ tacoShell: "crispy" }) ?? []),
+        ...(configuration.getIncludedIngredientIds?.({ tacoShell: "soft" }) ?? []),
+      ])
     );
-    setSelectedEntree(entree);
+
     setSelectedIngredientItems((previous) => {
       const next = { ...previous };
 
@@ -577,10 +669,6 @@ export default function RestaurantView({
           delete next[ingredientId];
         }
       });
-
-      if (nextIncludedIngredientIds.length === 0) {
-        return next;
-      }
 
       nextIncludedIngredientIds.forEach((includedIngredientId) => {
         const includedIngredientItem = ingredientItemsById.get(includedIngredientId);
@@ -595,6 +683,17 @@ export default function RestaurantView({
     });
   };
 
+  const handleEntreeSelection = (entree: Exclude<EntreeSelection, null>) => {
+    const nextIncludedIngredientIds =
+      CHIPOTLE_ENTREE_CONFIGURATIONS[entree].getIncludedIngredientIds?.({
+        tacoShell: selectedTacoShell,
+      }) ??
+      CHIPOTLE_ENTREE_CONFIGURATIONS[entree].includedIngredientIds ??
+      [];
+    setSelectedEntree(entree);
+    applyIncludedIngredients(nextIncludedIngredientIds);
+  };
+
   const handleAddBuildToCart = () => {
     if (selectedIngredientCount === 0) return;
 
@@ -607,7 +706,7 @@ export default function RestaurantView({
         Array.from({ length: quantity }, () => item.name)
       ),
       quantity: 1,
-      macrosPerItem: selectedIngredientTotals,
+      macrosPerItem: adjustedSelectedIngredientTotals,
     });
   };
 
@@ -675,17 +774,19 @@ export default function RestaurantView({
   return (
     <div>
       {isChipotleBuildPage && selectedEntree !== null ? (
-        <div className="mb-5 flex items-center justify-between rounded-2xl border border-black/10 bg-white px-5 py-3">
-          <p className="text-sm font-semibold text-slate-700">
-            Entrée: <span className="text-slate-900">{CHIPOTLE_ENTREE_CONFIGURATIONS[selectedEntree].label}</span>
-          </p>
-          <button
-            type="button"
-            onClick={() => setSelectedEntree(null)}
-            className="cursor-pointer text-sm font-semibold text-slate-600 underline underline-offset-2 hover:text-slate-900"
-          >
-            Change
-          </button>
+        <div className="mb-5 rounded-2xl border border-black/10 bg-white px-5 py-3">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-semibold text-slate-700">
+              Entrée: <span className="text-slate-900">{CHIPOTLE_ENTREE_CONFIGURATIONS[selectedEntree].label}</span>
+            </p>
+            <button
+              type="button"
+              onClick={() => setSelectedEntree(null)}
+              className="cursor-pointer text-sm font-semibold text-slate-600 underline underline-offset-2 hover:text-slate-900"
+            >
+              Change
+            </button>
+          </div>
         </div>
       ) : null}
 
@@ -827,6 +928,45 @@ export default function RestaurantView({
                 selectedIngredientIds={new Set(Object.keys(selectedIngredientItems))}
                 lockedIngredientIds={lockedIngredientIds}
                 onIngredientSelectionChange={handleIngredientSelectionChange}
+                ingredientSelectionControlById={
+                  selectedEntree === "tacos"
+                    ? Object.fromEntries(
+                        tacoShellIngredientIds.map((ingredientId) => [ingredientId, "radio" as const])
+                      )
+                    : undefined
+                }
+                ingredientRadioGroupNameById={
+                  selectedEntree === "tacos"
+                    ? Object.fromEntries(
+                        tacoShellIngredientIds.map((ingredientId) => [ingredientId, "chipotle-taco-shell"])
+                      )
+                    : undefined
+                }
+                ingredientVariantOptionsById={
+                  selectedEntree === "tacos"
+                    ? Object.fromEntries(
+                        tacoShellIngredientIds.map((ingredientId) => [
+                          ingredientId,
+                          [
+                            { id: "3", label: "3 Tacos" },
+                            { id: "1", label: "1 Taco" },
+                          ],
+                        ])
+                      )
+                    : undefined
+                }
+                selectedIngredientVariantIdById={
+                  selectedEntree === "tacos"
+                    ? Object.fromEntries(
+                        tacoShellIngredientIds.map((ingredientId) => [ingredientId, String(selectedTacoCount)])
+                      )
+                    : undefined
+                }
+                onIngredientVariantChange={
+                  selectedEntree === "tacos"
+                    ? (_item, variantId) => setSelectedTacoCount(variantId === "1" ? 1 : 3)
+                    : undefined
+                }
               />
             </div>
           </div>
@@ -836,7 +976,7 @@ export default function RestaurantView({
       {shouldShowBuildStickyBar ? (
         <div ref={buildStickyContainerRef}>
           <StickyMacroTotalsBar
-            totals={selectedIngredientTotals}
+            totals={adjustedSelectedIngredientTotals}
             secondaryActionLabel="View Selected"
             secondaryActionExpandedLabel="View Selected"
             primaryActionLabel="Add to Cart"
@@ -852,46 +992,46 @@ export default function RestaurantView({
 
                   <div className="mt-1 flex items-end justify-between">
                     <div className="text-xl font-bold">Calories</div>
-                    <div className="text-xl font-bold">{selectedNutritionLabelTotals.calories}</div>
+                    <div className="text-xl font-bold">{adjustedNutritionLabelTotals.calories}</div>
                   </div>
 
                   <div className="my-[12px] mb-2 h-[5px] rounded-[999px] bg-[rgba(0,0,0,0.75)]" />
 
                   <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px]">
                     <div className="text-lg font-semibold">Total Fat</div>
-                    <div className="text-lg font-semibold">{formatValue(selectedNutritionLabelTotals.totalFat, "g")}</div>
+                    <div className="text-lg font-semibold">{formatValue(adjustedNutritionLabelTotals.totalFat, "g")}</div>
                   </div>
                   <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px] pl-5">
                     <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">Sat Fat</div>
-                    <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">{formatValue(selectedNutritionLabelTotals.satFat, "g")}</div>
+                    <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">{formatValue(adjustedNutritionLabelTotals.satFat, "g")}</div>
                   </div>
                   <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px] pl-5">
                     <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">Trans Fat</div>
-                    <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">{formatValue(selectedNutritionLabelTotals.transFat, "g")}</div>
+                    <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">{formatValue(adjustedNutritionLabelTotals.transFat, "g")}</div>
                   </div>
                   <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px]">
                     <div className="text-lg font-semibold">Cholesterol</div>
-                    <div className="text-lg font-semibold">{formatValue(selectedNutritionLabelTotals.cholesterol, "mg")}</div>
+                    <div className="text-lg font-semibold">{formatValue(adjustedNutritionLabelTotals.cholesterol, "mg")}</div>
                   </div>
                   <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px]">
                     <div className="text-lg font-semibold">Sodium</div>
-                    <div className="text-lg font-semibold">{formatValue(selectedNutritionLabelTotals.sodium, "mg")}</div>
+                    <div className="text-lg font-semibold">{formatValue(adjustedNutritionLabelTotals.sodium, "mg")}</div>
                   </div>
                   <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px]">
                     <div className="text-lg font-semibold">Carbohydrates</div>
-                    <div className="text-lg font-semibold">{formatValue(selectedNutritionLabelTotals.carbs, "g")}</div>
+                    <div className="text-lg font-semibold">{formatValue(adjustedNutritionLabelTotals.carbs, "g")}</div>
                   </div>
                   <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px] pl-5">
                     <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">Fiber</div>
-                    <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">{formatValue(selectedNutritionLabelTotals.fiber, "g")}</div>
+                    <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">{formatValue(adjustedNutritionLabelTotals.fiber, "g")}</div>
                   </div>
                   <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px] pl-5">
                     <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">Sugars</div>
-                    <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">{formatValue(selectedNutritionLabelTotals.sugars, "g")}</div>
+                    <div className="text-base font-medium text-[rgba(0,0,0,0.8)]">{formatValue(adjustedNutritionLabelTotals.sugars, "g")}</div>
                   </div>
                   <div className="flex items-baseline justify-between border-b border-[rgba(0,0,0,0.2)] py-[10px]">
                     <div className="text-lg font-semibold">Protein</div>
-                    <div className="text-lg font-semibold">{formatValue(selectedNutritionLabelTotals.protein, "g")}</div>
+                    <div className="text-lg font-semibold">{formatValue(adjustedNutritionLabelTotals.protein, "g")}</div>
                   </div>
                 </section>
 
