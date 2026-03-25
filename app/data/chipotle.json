@@ -180,8 +180,6 @@
       "name": "Fresh Tomato Salsa",
       "description": "Mild",
       "categories": [
-        "Toppings",
-        "Chips & Sides",
         "Single Sides"
       ],
       "portionType": "side",
@@ -222,10 +220,7 @@
     {
       "id": "roasted-chili-corn-salsa",
       "name": "Roasted Chili-Corn Salsa",
-      "description": "Medium",
       "categories": [
-        "Toppings",
-        "Chips & Sides",
         "Single Sides"
       ],
       "portionType": "side",
@@ -266,10 +261,8 @@
     {
       "id": "tomatillo-green-chili-salsa",
       "name": "Tomatillo-Green Chili Salsa",
-      "description": "Medium",
       "categories": [
         "Toppings",
-        "Chips & Sides",
         "Single Sides"
       ],
       "portionType": "side",
@@ -310,10 +303,9 @@
     {
       "id": "tomatillo-red-chili-salsa",
       "name": "Tomatillo-Red Chili Salsa",
-      "description": "Hot",
+   
       "categories": [
-        "Toppings",
-        "Chips & Sides",
+
         "Single Sides"
       ],
       "portionType": "side",
@@ -663,7 +655,6 @@
       "name": "Side of Cilantro Lime Sauce",
       "description": "Made Fresh Daily",
       "categories": [
-        "Chips & Sides",
         "Single Sides"
       ],
       "portionType": "side",
@@ -680,7 +671,6 @@
       "id": "side-of-queso-blanco",
       "name": "Side of Queso Blanco",
       "categories": [
-        "Chips & Sides",
         "Single Sides"
       ],
       "portionType": "side",
@@ -722,7 +712,6 @@
       "id": "tortilla-on-the-side",
       "name": "Tortilla on the Side",
       "categories": [
-        "Chips & Sides",
         "Single Sides"
       ],
       "portionType": "side",
