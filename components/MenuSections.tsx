@@ -343,6 +343,10 @@ export default function MenuSections({
   const grouped = items.reduce<Record<string, MenuItem[]>>((acc, item) => {
     const itemCategories = new Set(getItemCategories(item));
     const categoryKeys = new Set([...itemCategories]);
+    const shouldSuppressChipotleChipSidesToppings =
+      restaurantId === "chipotle" &&
+      item.entreeGroup === "chips-sides" &&
+      itemCategories.has("single sides");
     item.variants?.forEach((variant) => {
       variant.categories?.forEach((category) => {
         categoryKeys.add(normalizeCategory(category));
@@ -350,6 +354,10 @@ export default function MenuSections({
     });
 
     categoryKeys.forEach((key) => {
+      if (shouldSuppressChipotleChipSidesToppings && key === "toppings") {
+        return;
+      }
+
       if (!acc[key]) acc[key] = [];
 
       if (!item.variants || item.variants.length === 0) {
