@@ -10,8 +10,8 @@
     {
         "id": "chipotle",
         "name": "Chipotle",
-        "logo": "/restaurants/chipotle/logo.jpeg",
-        "cover": "/restaurants/chipotle/cover.png",
+        "logo": "/restaurants/chipotle/brand/logo.jpeg",
+        "cover": "/restaurants/chipotle/brand/cover.png",
         "menuFile": "chipotle.json",
         "isMacroFriendly": true
     },
