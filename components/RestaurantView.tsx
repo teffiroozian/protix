@@ -96,6 +96,10 @@ type EntreeConfiguration = {
   includedIngredientIds?: string[];
   getIncludedIngredientIds?: (options: { tacoShell: TacoShellSelection }) => string[];
 };
+const CHIPOTLE_TACO_SHELL_INGREDIENT_IDS = [
+  "chipotle-ingredient-crispy-corn-tortilla",
+  "chipotle-ingredient-soft-flour-tortilla",
+] as const;
 const CHIPOTLE_ENTREE_CONFIGURATIONS: Record<
   Exclude<EntreeSelection, null>,
   EntreeConfiguration
@@ -189,6 +193,7 @@ export default function RestaurantView({
   const [selectedTacoCount, setSelectedTacoCount] = useState<TacoCountSelection>(3);
   const selectedEntreeConfig = selectedEntree ? CHIPOTLE_ENTREE_CONFIGURATIONS[selectedEntree] : null;
   const tacoServingMultiplier = selectedEntree === "tacos" && selectedTacoCount === 1 ? 1 / 3 : 1;
+  const tacoShellIngredientIds = CHIPOTLE_TACO_SHELL_INGREDIENT_IDS;
   const selectedIncludedIngredientIds = useMemo(
     () =>
       selectedEntreeConfig?.getIncludedIngredientIds?.({ tacoShell: selectedTacoShell }) ??
@@ -256,10 +261,10 @@ export default function RestaurantView({
             .toLowerCase()
             .replace(/[^a-z0-9]+/g, "-");
         const resolvedCategory = resolveIngredientCategory(ingredient);
-        const displayCategory =
-          selectedIncludedIngredientIds.includes(ingredientId)
-            ? "Included Ingredient"
-            : resolvedCategory;
+        const shouldPinToIncludedCategory =
+          selectedIncludedIngredientIds.includes(ingredientId) ||
+          (selectedEntree === "tacos" && tacoShellIngredientIds.includes(ingredientId));
+        const displayCategory = shouldPinToIncludedCategory ? "Included Ingredient" : resolvedCategory;
 
         return {
           id: ingredientId,
@@ -270,7 +275,7 @@ export default function RestaurantView({
           portionType: "addon",
         };
       });
-  }, [ingredients, restaurantId, selectedIncludedIngredientIds]);
+  }, [ingredients, restaurantId, selectedEntree, selectedIncludedIngredientIds, tacoShellIngredientIds]);
 
   const ingredientItemsById = useMemo(
     () =>
@@ -588,12 +593,28 @@ export default function RestaurantView({
     if (selectedIncludedIngredientIds.length === 0) {
       return new Set<string>();
     }
+    if (selectedEntree === "tacos") {
+      return new Set<string>(
+        selectedIncludedIngredientIds.filter((ingredientId) => !tacoShellIngredientIds.includes(ingredientId))
+      );
+    }
     return new Set<string>(selectedIncludedIngredientIds);
-  }, [selectedIncludedIngredientIds]);
+  }, [selectedEntree, selectedIncludedIngredientIds, tacoShellIngredientIds]);
 
   const handleIngredientSelectionChange = (item: MenuItem, selected: boolean) => {
     const itemId = item.id;
     if (!itemId) return;
+
+    if (selectedEntree === "tacos" && tacoShellIngredientIds.includes(itemId)) {
+      if (!selected) return;
+      const nextTacoShell = itemId === "chipotle-ingredient-soft-flour-tortilla" ? "soft" : "crispy";
+      setSelectedTacoShell(nextTacoShell);
+      applyIncludedIngredients(
+        CHIPOTLE_ENTREE_CONFIGURATIONS.tacos.getIncludedIngredientIds?.({ tacoShell: nextTacoShell }) ?? []
+      );
+      return;
+    }
+
     if (lockedIngredientIds.has(itemId)) return;
 
     setSelectedIngredientItems((prev) => {
@@ -742,82 +763,6 @@ export default function RestaurantView({
               Change
             </button>
           </div>
-          {selectedEntree === "tacos" ? (
-            <div className="mt-4 grid gap-4 sm:grid-cols-2">
-              <div>
-                <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">Shell</p>
-                <div className="flex gap-2">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSelectedTacoShell("crispy");
-                      if (selectedEntree === "tacos") {
-                        applyIncludedIngredients(
-                          CHIPOTLE_ENTREE_CONFIGURATIONS.tacos.getIncludedIngredientIds?.({
-                            tacoShell: "crispy",
-                          }) ?? []
-                        );
-                      }
-                    }}
-                    className={`cursor-pointer rounded-full border px-3 py-1.5 text-sm font-semibold ${
-                      selectedTacoShell === "crispy"
-                        ? "border-slate-900 bg-slate-900 text-white"
-                        : "border-black/20 bg-white text-slate-700 hover:border-black/35"
-                    }`}
-                  >
-                    Crispy
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSelectedTacoShell("soft");
-                      if (selectedEntree === "tacos") {
-                        applyIncludedIngredients(
-                          CHIPOTLE_ENTREE_CONFIGURATIONS.tacos.getIncludedIngredientIds?.({
-                            tacoShell: "soft",
-                          }) ?? []
-                        );
-                      }
-                    }}
-                    className={`cursor-pointer rounded-full border px-3 py-1.5 text-sm font-semibold ${
-                      selectedTacoShell === "soft"
-                        ? "border-slate-900 bg-slate-900 text-white"
-                        : "border-black/20 bg-white text-slate-700 hover:border-black/35"
-                    }`}
-                  >
-                    Soft
-                  </button>
-                </div>
-              </div>
-              <div>
-                <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">Count</p>
-                <div className="flex gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setSelectedTacoCount(3)}
-                    className={`cursor-pointer rounded-full border px-3 py-1.5 text-sm font-semibold ${
-                      selectedTacoCount === 3
-                        ? "border-slate-900 bg-slate-900 text-white"
-                        : "border-black/20 bg-white text-slate-700 hover:border-black/35"
-                    }`}
-                  >
-                    3 Tacos
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setSelectedTacoCount(1)}
-                    className={`cursor-pointer rounded-full border px-3 py-1.5 text-sm font-semibold ${
-                      selectedTacoCount === 1
-                        ? "border-slate-900 bg-slate-900 text-white"
-                        : "border-black/20 bg-white text-slate-700 hover:border-black/35"
-                    }`}
-                  >
-                    1 Taco
-                  </button>
-                </div>
-              </div>
-            </div>
-          ) : null}
         </div>
       ) : null}
 
@@ -959,6 +904,45 @@ export default function RestaurantView({
                 selectedIngredientIds={new Set(Object.keys(selectedIngredientItems))}
                 lockedIngredientIds={lockedIngredientIds}
                 onIngredientSelectionChange={handleIngredientSelectionChange}
+                ingredientSelectionControlById={
+                  selectedEntree === "tacos"
+                    ? Object.fromEntries(
+                        tacoShellIngredientIds.map((ingredientId) => [ingredientId, "radio" as const])
+                      )
+                    : undefined
+                }
+                ingredientRadioGroupNameById={
+                  selectedEntree === "tacos"
+                    ? Object.fromEntries(
+                        tacoShellIngredientIds.map((ingredientId) => [ingredientId, "chipotle-taco-shell"])
+                      )
+                    : undefined
+                }
+                ingredientVariantOptionsById={
+                  selectedEntree === "tacos"
+                    ? Object.fromEntries(
+                        tacoShellIngredientIds.map((ingredientId) => [
+                          ingredientId,
+                          [
+                            { id: "3", label: "3 Tacos" },
+                            { id: "1", label: "1 Taco" },
+                          ],
+                        ])
+                      )
+                    : undefined
+                }
+                selectedIngredientVariantIdById={
+                  selectedEntree === "tacos"
+                    ? Object.fromEntries(
+                        tacoShellIngredientIds.map((ingredientId) => [ingredientId, String(selectedTacoCount)])
+                      )
+                    : undefined
+                }
+                onIngredientVariantChange={
+                  selectedEntree === "tacos"
+                    ? (_item, variantId) => setSelectedTacoCount(variantId === "1" ? 1 : 3)
+                    : undefined
+                }
               />
             </div>
           </div>
