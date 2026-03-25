@@ -88,11 +88,21 @@ const CATEGORY_ICONS: Record<string, LucideIcon> = {
   treats: IceCreamCone,
 };
 
-type EntreeSelection = "bowl" | "burrito" | "quesadilla" | "salad" | "tacos" | null;
+type EntreeSelection =
+  | "bowl"
+  | "burrito"
+  | "quesadilla"
+  | "salad"
+  | "tacos"
+  | "kids-meal"
+  | "chips-sides"
+  | null;
 type TacoShellSelection = "crispy" | "soft";
 type TacoCountSelection = 3 | 1;
+type KidsMealSelection = "build-your-own" | "quesadilla";
 type EntreeConfiguration = {
   label: string;
+  nutritionMultiplier?: number;
   includedIngredientIds?: string[];
   getIncludedIngredientIds?: (options: { tacoShell: TacoShellSelection }) => string[];
 };
@@ -118,6 +128,32 @@ const CHIPOTLE_ENTREE_CONFIGURATIONS: Record<
         ? "chipotle-ingredient-crispy-corn-tortilla"
         : "chipotle-ingredient-soft-flour-tortilla",
     ],
+  },
+  "kids-meal": {
+    label: "Kid's Meal",
+    nutritionMultiplier: 0.5,
+  },
+  "chips-sides": {
+    label: "Chips & Sides",
+  },
+};
+
+const CHIPOTLE_KIDS_QUESADILLA_INCLUDED_INGREDIENT_IDS = [
+  "chipotle-ingredient-soft-flour-tortilla",
+  "chipotle-ingredient-cheese",
+];
+const CHIPOTLE_KIDS_QUESADILLA_NUTRITION_OVERRIDES: Record<string, IngredientItem["nutrition"]> = {
+  "chipotle-ingredient-soft-flour-tortilla": {
+    calories: 80,
+    totalFat: 3,
+    protein: 2,
+    carbs: 13,
+  },
+  "chipotle-ingredient-cheese": {
+    calories: 110,
+    totalFat: 8,
+    protein: 6,
+    carbs: 1,
   },
 };
 
@@ -207,16 +243,29 @@ export default function RestaurantView({
   const [selectedEntree, setSelectedEntree] = useState<EntreeSelection>(null);
   const [selectedTacoShell, setSelectedTacoShell] = useState<TacoShellSelection>("crispy");
   const [selectedTacoCount, setSelectedTacoCount] = useState<TacoCountSelection>(3);
+  const [selectedKidsMeal, setSelectedKidsMeal] = useState<KidsMealSelection>("build-your-own");
+  const isChipotleChipsSidesSelection = isChipotleBuildPage && selectedEntree === "chips-sides";
+  const effectiveViewMode: ViewOption = isChipotleChipsSidesSelection ? "menu" : viewMode;
   const selectedEntreeConfig = selectedEntree ? CHIPOTLE_ENTREE_CONFIGURATIONS[selectedEntree] : null;
+  const selectedEntreeNutritionMultiplier = selectedEntreeConfig?.nutritionMultiplier ?? 1;
   const tacoServingMultiplier = selectedEntree === "tacos" && selectedTacoCount === 1 ? 1 / 3 : 1;
-  const ingredientDisplayMultiplier = selectedEntree === "tacos" && selectedTacoCount === 1 ? 1 / 3 : 1;
+  const servingMultiplier = tacoServingMultiplier * selectedEntreeNutritionMultiplier;
+  const ingredientDisplayMultiplier = servingMultiplier;
   const tacoShellIngredientIds = CHIPOTLE_TACO_SHELL_INGREDIENT_IDS;
   const selectedIncludedIngredientIds = useMemo(
-    () =>
-      selectedEntreeConfig?.getIncludedIngredientIds?.({ tacoShell: selectedTacoShell }) ??
-      selectedEntreeConfig?.includedIngredientIds ??
-      [],
-    [selectedEntreeConfig, selectedTacoShell]
+    () => {
+      if (selectedEntree === "kids-meal") {
+        return selectedKidsMeal === "quesadilla"
+          ? CHIPOTLE_KIDS_QUESADILLA_INCLUDED_INGREDIENT_IDS
+          : [];
+      }
+      return (
+        selectedEntreeConfig?.getIncludedIngredientIds?.({ tacoShell: selectedTacoShell }) ??
+        selectedEntreeConfig?.includedIngredientIds ??
+        []
+      );
+    },
+    [selectedEntree, selectedEntreeConfig, selectedKidsMeal, selectedTacoShell]
   );
 
   const addonItems = useMemo<MenuItem[]>(() => {
@@ -286,7 +335,11 @@ export default function RestaurantView({
         return {
           id: ingredientId,
           name: ingredient.name,
-          nutrition: scaleNutritionValues(ingredient.nutrition, ingredientDisplayMultiplier),
+          nutrition:
+            selectedEntree === "kids-meal" && selectedKidsMeal === "quesadilla"
+              ? CHIPOTLE_KIDS_QUESADILLA_NUTRITION_OVERRIDES[ingredientId] ??
+                scaleNutritionValues(ingredient.nutrition, ingredientDisplayMultiplier)
+              : scaleNutritionValues(ingredient.nutrition, ingredientDisplayMultiplier),
           image: ingredient.image,
           categories: [displayCategory],
           portionType: "addon",
@@ -297,6 +350,7 @@ export default function RestaurantView({
     ingredients,
     restaurantId,
     selectedEntree,
+    selectedKidsMeal,
     selectedIncludedIngredientIds,
     tacoShellIngredientIds,
   ]);
@@ -311,8 +365,16 @@ export default function RestaurantView({
     [ingredientMenuItems]
   );
 
-  const allItems = useMemo(() => [...items, ...addonItems], [items, addonItems]);
-  const sourceItems = viewMode === "ingredients" ? ingredientMenuItems : allItems;
+  const allItems = useMemo(() => {
+    const baseItems = [...items, ...addonItems];
+    if (isChipotleBuildPage && selectedEntree === "chips-sides") {
+      return baseItems.filter(
+        (item) => item.id === "chipotle-chips" || item.id === "chipotle-side-of-guacamole"
+      );
+    }
+    return baseItems;
+  }, [addonItems, isChipotleBuildPage, items, selectedEntree]);
+  const sourceItems = effectiveViewMode === "ingredients" ? ingredientMenuItems : allItems;
 
   const calorieBounds = useMemo(() => {
     const calories = sourceItems
@@ -358,7 +420,7 @@ export default function RestaurantView({
 
     return sourceItems
       .map((item) => {
-        if (viewMode !== "ranking") {
+        if (effectiveViewMode !== "ranking") {
           return item;
         }
 
@@ -428,11 +490,11 @@ export default function RestaurantView({
       const searchableText = [item.name.toLowerCase(), ...categoryVariants].join(" ");
       return searchTerms.every((term) => searchableText.includes(term));
     });
-  }, [sourceItems, filters, searchTerms, rankedAllFilters, viewMode]);
+  }, [effectiveViewMode, sourceItems, filters, searchTerms, rankedAllFilters]);
 
   const orderedSections = useMemo(
-    () => getOrderedMenuSections(filteredItems, viewMode === "ranking" ? "menu" : viewMode),
-    [filteredItems, viewMode]
+    () => getOrderedMenuSections(filteredItems, effectiveViewMode === "ranking" ? "menu" : effectiveViewMode),
+    [effectiveViewMode, filteredItems]
   );
   const [activeCategory, setActiveCategory] = useState<string>(
     () => orderedSections[0] ?? ""
@@ -446,9 +508,9 @@ export default function RestaurantView({
     () =>
       orderedSections.map((section) => ({
         id: section,
-        label: getCategoryLabel(section, viewMode === "ranking" ? "menu" : viewMode),
+        label: getCategoryLabel(section, effectiveViewMode === "ranking" ? "menu" : effectiveViewMode),
       })),
-    [orderedSections, viewMode]
+    [effectiveViewMode, orderedSections]
   );
 
   const handleCategorySelect = (categoryId: string) => {
@@ -465,7 +527,7 @@ export default function RestaurantView({
 
 
   useEffect(() => {
-    if (viewMode === "ranking" || orderedSections.length === 0) {
+    if (effectiveViewMode === "ranking" || orderedSections.length === 0) {
       return;
     }
 
@@ -509,10 +571,14 @@ export default function RestaurantView({
       window.removeEventListener("scroll", updateActiveCategoryOnScroll);
       window.removeEventListener("resize", updateActiveCategoryOnScroll);
     };
-  }, [activeCategory, viewMode, orderedSections]);
+  }, [activeCategory, effectiveViewMode, orderedSections]);
 
   const handleViewChange = (nextView: ViewOption) => {
-    if (nextView === viewMode) {
+    if (isChipotleChipsSidesSelection && nextView !== "menu") {
+      return;
+    }
+
+    if (nextView === effectiveViewMode) {
       return;
     }
 
@@ -548,12 +614,12 @@ export default function RestaurantView({
   );
   const adjustedSelectedIngredientTotals = useMemo(
     () => ({
-      calories: Math.round(selectedIngredientTotals.calories * tacoServingMultiplier),
-      protein: Math.round(selectedIngredientTotals.protein * tacoServingMultiplier),
-      carbs: Math.round(selectedIngredientTotals.carbs * tacoServingMultiplier),
-      fat: Math.round(selectedIngredientTotals.fat * tacoServingMultiplier),
+      calories: Math.round(selectedIngredientTotals.calories * servingMultiplier),
+      protein: Math.round(selectedIngredientTotals.protein * servingMultiplier),
+      carbs: Math.round(selectedIngredientTotals.carbs * servingMultiplier),
+      fat: Math.round(selectedIngredientTotals.fat * servingMultiplier),
     }),
-    [selectedIngredientTotals, tacoServingMultiplier]
+    [selectedIngredientTotals, servingMultiplier]
   );
 
   const selectedNutritionLabelTotals = useMemo(
@@ -591,18 +657,18 @@ export default function RestaurantView({
   );
   const adjustedNutritionLabelTotals = useMemo(
     () => ({
-      calories: Math.round(selectedNutritionLabelTotals.calories * tacoServingMultiplier),
-      totalFat: Math.round(selectedNutritionLabelTotals.totalFat * tacoServingMultiplier),
-      satFat: Math.round(selectedNutritionLabelTotals.satFat * tacoServingMultiplier),
-      transFat: Math.round(selectedNutritionLabelTotals.transFat * tacoServingMultiplier),
-      cholesterol: Math.round(selectedNutritionLabelTotals.cholesterol * tacoServingMultiplier),
-      sodium: Math.round(selectedNutritionLabelTotals.sodium * tacoServingMultiplier),
-      carbs: Math.round(selectedNutritionLabelTotals.carbs * tacoServingMultiplier),
-      fiber: Math.round(selectedNutritionLabelTotals.fiber * tacoServingMultiplier),
-      sugars: Math.round(selectedNutritionLabelTotals.sugars * tacoServingMultiplier),
-      protein: Math.round(selectedNutritionLabelTotals.protein * tacoServingMultiplier),
+      calories: Math.round(selectedNutritionLabelTotals.calories * servingMultiplier),
+      totalFat: Math.round(selectedNutritionLabelTotals.totalFat * servingMultiplier),
+      satFat: Math.round(selectedNutritionLabelTotals.satFat * servingMultiplier),
+      transFat: Math.round(selectedNutritionLabelTotals.transFat * servingMultiplier),
+      cholesterol: Math.round(selectedNutritionLabelTotals.cholesterol * servingMultiplier),
+      sodium: Math.round(selectedNutritionLabelTotals.sodium * servingMultiplier),
+      carbs: Math.round(selectedNutritionLabelTotals.carbs * servingMultiplier),
+      fiber: Math.round(selectedNutritionLabelTotals.fiber * servingMultiplier),
+      sugars: Math.round(selectedNutritionLabelTotals.sugars * servingMultiplier),
+      protein: Math.round(selectedNutritionLabelTotals.protein * servingMultiplier),
     }),
-    [selectedNutritionLabelTotals, tacoServingMultiplier]
+    [selectedNutritionLabelTotals, servingMultiplier]
   );
 
   const selectedIngredientCount = Object.values(selectedIngredientItems).reduce(
@@ -610,9 +676,18 @@ export default function RestaurantView({
     0
   );
   const buildName = selectedEntree
-    ? `${restaurantName} ${CHIPOTLE_ENTREE_CONFIGURATIONS[selectedEntree].label} Build`
+    ? `${restaurantName} ${
+        selectedEntree === "kids-meal"
+          ? selectedKidsMeal === "quesadilla"
+            ? "Kid's Quesadilla"
+            : "Kid's Build Your Own"
+          : CHIPOTLE_ENTREE_CONFIGURATIONS[selectedEntree].label
+      } Build`
     : `${restaurantName} Build`;
-  const shouldShowBuildStickyBar = isBuildYourOwn && viewMode === "ingredients" && (!isChipotleBuildPage || selectedEntree !== null);
+  const shouldShowBuildStickyBar =
+    isBuildYourOwn &&
+    effectiveViewMode === "ingredients" &&
+    (!isChipotleBuildPage || (selectedEntree !== null && selectedEntree !== "chips-sides"));
   const lockedIngredientIds = useMemo(() => {
     if (selectedIncludedIngredientIds.length === 0) {
       return new Set<string>();
@@ -654,11 +729,14 @@ export default function RestaurantView({
 
   const applyIncludedIngredients = (nextIncludedIngredientIds: string[]) => {
     const allIncludedIngredientIds = new Set(
-      Object.values(CHIPOTLE_ENTREE_CONFIGURATIONS).flatMap((configuration) => [
-        ...(configuration.includedIngredientIds ?? []),
-        ...(configuration.getIncludedIngredientIds?.({ tacoShell: "crispy" }) ?? []),
-        ...(configuration.getIncludedIngredientIds?.({ tacoShell: "soft" }) ?? []),
-      ])
+      [
+        ...Object.values(CHIPOTLE_ENTREE_CONFIGURATIONS).flatMap((configuration) => [
+          ...(configuration.includedIngredientIds ?? []),
+          ...(configuration.getIncludedIngredientIds?.({ tacoShell: "crispy" }) ?? []),
+          ...(configuration.getIncludedIngredientIds?.({ tacoShell: "soft" }) ?? []),
+        ]),
+        ...CHIPOTLE_KIDS_QUESADILLA_INCLUDED_INGREDIENT_IDS,
+      ]
     );
 
     setSelectedIngredientItems((previous) => {
@@ -685,13 +763,22 @@ export default function RestaurantView({
 
   const handleEntreeSelection = (entree: Exclude<EntreeSelection, null>) => {
     const nextIncludedIngredientIds =
-      CHIPOTLE_ENTREE_CONFIGURATIONS[entree].getIncludedIngredientIds?.({
-        tacoShell: selectedTacoShell,
-      }) ??
-      CHIPOTLE_ENTREE_CONFIGURATIONS[entree].includedIngredientIds ??
-      [];
+      entree === "kids-meal"
+        ? selectedKidsMeal === "quesadilla"
+          ? CHIPOTLE_KIDS_QUESADILLA_INCLUDED_INGREDIENT_IDS
+          : []
+        : CHIPOTLE_ENTREE_CONFIGURATIONS[entree].getIncludedIngredientIds?.({
+            tacoShell: selectedTacoShell,
+          }) ??
+          CHIPOTLE_ENTREE_CONFIGURATIONS[entree].includedIngredientIds ??
+          [];
     setSelectedEntree(entree);
     applyIncludedIngredients(nextIncludedIngredientIds);
+
+    const nextView = entree === "chips-sides" ? "menu" : "ingredients";
+    const nextParams = new URLSearchParams(searchParams.toString());
+    nextParams.set("view", nextView);
+    router.replace(`${pathname}?${nextParams.toString()}`, { scroll: true });
   };
 
   const handleAddBuildToCart = () => {
@@ -793,7 +880,7 @@ export default function RestaurantView({
       <StickyRestaurantBar
         restaurantName={restaurantName}
         restaurantLogo={restaurantLogo}
-        view={viewMode}
+        view={effectiveViewMode}
         onChange={handleViewChange}
         sort={sort}
         onSortChange={handleSortChange}
@@ -806,6 +893,38 @@ export default function RestaurantView({
         onCloseSearch={closeSearch}
         calorieBounds={calorieBounds}
       />
+
+      {isChipotleBuildPage && selectedEntree === "kids-meal" ? (
+        <div className="mt-4 flex flex-wrap items-center gap-3">
+          {([
+            { id: "build-your-own", label: "Kid's Build Your Own" },
+            { id: "quesadilla", label: "Kid's Quesadilla" },
+          ] as const).map((option) => {
+            const isActive = selectedKidsMeal === option.id;
+            return (
+              <button
+                key={option.id}
+                type="button"
+                onClick={() => {
+                  setSelectedKidsMeal(option.id);
+                  applyIncludedIngredients(
+                    option.id === "quesadilla"
+                      ? CHIPOTLE_KIDS_QUESADILLA_INCLUDED_INGREDIENT_IDS
+                      : []
+                  );
+                }}
+                className={`cursor-pointer rounded-full border px-4 py-2 text-sm font-semibold transition ${
+                  isActive
+                    ? "border-slate-900 bg-slate-900 text-white"
+                    : "border-slate-300 bg-white text-slate-800 hover:border-slate-500"
+                }`}
+              >
+                {option.label}
+              </button>
+            );
+          })}
+        </div>
+      ) : null}
 
       {isChipotleBuildPage && selectedEntree === null ? (
         <div className="py-6">
@@ -840,15 +959,15 @@ export default function RestaurantView({
         <div className="grid items-start gap-6 [grid-template-columns:240px_minmax(0,1fr)]">
           <aside className="sticky top-[160px] flex max-h-[calc(100vh-160px)] flex-col py-6">
             <h3 className="mb-8 shrink-0 text-2xl font-bold text-slate-900">
-              {viewMode === "ranking"
+              {effectiveViewMode === "ranking"
                 ? "Show"
-                : viewMode === "ingredients"
+                : effectiveViewMode === "ingredients"
                   ? "Ingredients"
                   : "Categories"}
             </h3>
 
             <div className="min-h-0 flex-1 overflow-y-auto px-2 py-2">
-              {viewMode === "ranking" ? (
+              {effectiveViewMode === "ranking" ? (
                 <div className="grid gap-3">
                   {[
                     { key: "main-entrees" as const, label: "Main Entrees" },
@@ -877,7 +996,7 @@ export default function RestaurantView({
               ) : (
                 <nav
                   aria-label={
-                    viewMode === "ingredients"
+                    effectiveViewMode === "ingredients"
                       ? "Ingredient categories"
                       : "Menu categories"
                   }
@@ -922,8 +1041,8 @@ export default function RestaurantView({
                 ingredients={ingredients}
                 commonChanges={commonChanges}
                 customizationRules={customizationRules}
-                groupByCategory={viewMode !== "ranking"}
-                categoryMode={viewMode === "ranking" ? "menu" : viewMode}
+                groupByCategory={effectiveViewMode !== "ranking"}
+                categoryMode={effectiveViewMode === "ranking" ? "menu" : effectiveViewMode}
                 isBuildYourOwn={isBuildYourOwn}
                 selectedIngredientIds={new Set(Object.keys(selectedIngredientItems))}
                 lockedIngredientIds={lockedIngredientIds}
