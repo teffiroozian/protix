@@ -374,8 +374,8 @@ export default function RestaurantView({
   const allItems = useMemo(() => {
     const baseItems = [...items, ...addonItems];
     if (isChipotleBuildPage && selectedEntree === "chips-sides") {
-      return baseItems.filter(
-        (item) => item.id === "chips" || item.id === "side-of-guacamole"
+      return baseItems.filter((item) =>
+        item.categories?.some((category) => category.toLowerCase() === "chips & sides")
       );
     }
     if (isChipotleBuildPage && selectedEntree === "drinks") {
