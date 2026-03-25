@@ -570,6 +570,54 @@
       }
     },
     {
+      "id": "side-of-chicken-al-pastor-high-protein",
+      "name": "Side of Chicken al Pastor",
+      "description": "28g Protein",
+      "categories": [
+        "High Protein Menu"
+      ],
+      "portionType": "side",
+      "image": "/restaurants/chipotle/logo.jpeg",
+      "nutrition": {
+        "calories": 250,
+        "protein": 28,
+        "carbs": 5,
+        "totalFat": 14
+      }
+    },
+    {
+      "id": "side-of-chicken-high-protein",
+      "name": "Side of Chicken",
+      "description": "32g Protein",
+      "categories": [
+        "High Protein Menu"
+      ],
+      "portionType": "side",
+      "image": "/restaurants/chipotle/logo.jpeg",
+      "nutrition": {
+        "calories": 180,
+        "protein": 32,
+        "carbs": 0,
+        "totalFat": 7
+      }
+    },
+    {
+      "id": "side-of-steak-high-protein",
+      "name": "Side of Steak",
+      "description": "21g Protein",
+      "categories": [
+        "High Protein Menu"
+      ],
+      "portionType": "side",
+      "image": "/restaurants/chipotle/logo.jpeg",
+      "nutrition": {
+        "calories": 150,
+        "protein": 21,
+        "carbs": 1,
+        "totalFat": 6
+      }
+    },
+    {
       "id": "mexican-coca-cola",
       "name": "Mexican Coca-Cola",
       "categories": [
