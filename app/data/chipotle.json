@@ -181,7 +181,8 @@
       "description": "Mild",
       "categories": [
         "Toppings",
-        "Chips & Sides"
+        "Chips & Sides",
+        "Single Sides"
       ],
       "portionType": "side",
       "image": "/restaurants/chipotle/logo.jpeg",
@@ -215,7 +216,8 @@
             "carbs": 0
           }
         }
-      ]
+      ],
+      "entreeGroup": "chips-sides"
     },
     {
       "id": "roasted-chili-corn-salsa",
@@ -223,7 +225,8 @@
       "description": "Medium",
       "categories": [
         "Toppings",
-        "Chips & Sides"
+        "Chips & Sides",
+        "Single Sides"
       ],
       "portionType": "side",
       "image": "/restaurants/chipotle/logo.jpeg",
@@ -257,7 +260,8 @@
             "carbs": 0
           }
         }
-      ]
+      ],
+      "entreeGroup": "chips-sides"
     },
     {
       "id": "tomatillo-green-chili-salsa",
@@ -265,7 +269,8 @@
       "description": "Medium",
       "categories": [
         "Toppings",
-        "Chips & Sides"
+        "Chips & Sides",
+        "Single Sides"
       ],
       "portionType": "side",
       "image": "/restaurants/chipotle/logo.jpeg",
@@ -299,7 +304,8 @@
             "carbs": 0
           }
         }
-      ]
+      ],
+      "entreeGroup": "chips-sides"
     },
     {
       "id": "tomatillo-red-chili-salsa",
@@ -307,7 +313,8 @@
       "description": "Hot",
       "categories": [
         "Toppings",
-        "Chips & Sides"
+        "Chips & Sides",
+        "Single Sides"
       ],
       "portionType": "side",
       "image": "/restaurants/chipotle/logo.jpeg",
@@ -341,7 +348,8 @@
             "carbs": 0
           }
         }
-      ]
+      ],
+      "entreeGroup": "chips-sides"
     },
     {
       "id": "sour-cream",
@@ -655,7 +663,8 @@
       "name": "Side of Cilantro Lime Sauce",
       "description": "Made Fresh Daily",
       "categories": [
-        "Chips & Sides"
+        "Chips & Sides",
+        "Single Sides"
       ],
       "portionType": "side",
       "image": "/restaurants/chipotle/logo.jpeg",
@@ -664,13 +673,15 @@
         "protein": 2,
         "carbs": 3,
         "totalFat": 6
-      }
+      },
+      "entreeGroup": "chips-sides"
     },
     {
       "id": "side-of-queso-blanco",
       "name": "Side of Queso Blanco",
       "categories": [
-        "Chips & Sides"
+        "Chips & Sides",
+        "Single Sides"
       ],
       "portionType": "side",
       "image": "/restaurants/chipotle/logo.jpeg",
@@ -704,13 +715,15 @@
             "totalFat": 37
           }
         }
-      ]
+      ],
+      "entreeGroup": "chips-sides"
     },
     {
       "id": "tortilla-on-the-side",
       "name": "Tortilla on the Side",
       "categories": [
-        "Chips & Sides"
+        "Chips & Sides",
+        "Single Sides"
       ],
       "portionType": "side",
       "image": "/restaurants/chipotle/logo.jpeg",
@@ -719,7 +732,8 @@
         "protein": 9,
         "carbs": 50,
         "totalFat": 8
-      }
+      },
+      "entreeGroup": "chips-sides"
     },
     {
       "id": "side-of-chicken-al-pastor-high-protein",
