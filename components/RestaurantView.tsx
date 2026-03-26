@@ -533,7 +533,14 @@ export default function RestaurantView({
         const isTacoShellIngredient = ingredient.id
           ? tacoShellIngredientIds.includes(ingredient.id)
           : false;
-        if (isTacoShellIngredient && selectedEntree !== "tacos") {
+        const isIncludedForCurrentBuild = ingredient.id
+          ? selectedIncludedIngredientIds.includes(ingredient.id)
+          : false;
+        if (
+          isTacoShellIngredient &&
+          selectedEntree !== "tacos" &&
+          !isIncludedForCurrentBuild
+        ) {
           return false;
         }
 
@@ -2005,8 +2012,17 @@ export default function RestaurantView({
                           }`}
                           aria-pressed={isActive}
                         >
-                          <span className="flex items-start justify-between gap-3">
-                            <span className="relative h-20 w-full overflow-hidden rounded-2xl border border-black/5 bg-slate-50">
+                          <span className="flex items-center gap-3">
+                            <span
+                              className={`inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full border ${
+                                isActive ? "border-lime-500" : "border-slate-400"
+                              }`}
+                              aria-hidden="true"
+                            >
+                              {isActive ? <span className="h-2.5 w-2.5 rounded-full bg-lime-500" /> : null}
+                            </span>
+                            <span className="flex min-w-0 flex-1 flex-col">
+                              <span className="relative h-20 w-full overflow-hidden rounded-2xl border border-black/5 bg-slate-50">
                               <Image
                                 src={option.imageSrc}
                                 alt={option.label}
@@ -2014,16 +2030,9 @@ export default function RestaurantView({
                                 className="object-contain p-2"
                               />
                             </span>
-                            <span
-                              className={`mt-1 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full border ${
-                                isActive ? "border-lime-500" : "border-slate-400"
-                              }`}
-                              aria-hidden="true"
-                            >
-                              {isActive ? <span className="h-2.5 w-2.5 rounded-full bg-lime-500" /> : null}
+                              <span className="mt-3 block text-sm font-semibold text-slate-900">{option.label}</span>
                             </span>
                           </span>
-                          <span className="mt-3 block text-sm font-semibold text-slate-900">{option.label}</span>
                         </button>
                       );
                     })}
