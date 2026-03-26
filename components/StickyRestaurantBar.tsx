@@ -33,6 +33,7 @@ type StickyRestaurantBarProps = {
   };
   secondaryNavLeading?: ReactNode;
   hideViewSelector?: boolean;
+  hideSecondaryNav?: boolean;
 };
 
 export default function StickyRestaurantBar({
@@ -52,6 +53,7 @@ export default function StickyRestaurantBar({
   calorieBounds,
   secondaryNavLeading,
   hideViewSelector = false,
+  hideSecondaryNav = false,
 }: StickyRestaurantBarProps) {
   const searchInputRef = useRef<HTMLInputElement>(null);
   const isSearchMode = searchOpen || searchQuery.trim().length > 0;
@@ -86,7 +88,11 @@ export default function StickyRestaurantBar({
 
   return (
     <div className="fixed left-0 right-0 top-0 z-50" data-sticky-nav="true">
-      <div className="relative z-[110] mx-auto flex max-w-6xl items-center mx-2 mt-1 rounded-t-2xl border border-slate-200/70 bg-white shadow-[0_-6px_16px_rgba(15,23,42,0.12)] backdrop-blur">
+      <div
+        className={`relative z-[110] mx-auto flex max-w-6xl items-center mx-2 mt-1 border border-slate-200/70 bg-white shadow-[0_-6px_16px_rgba(15,23,42,0.12)] backdrop-blur ${
+          hideSecondaryNav ? "rounded-2xl" : "rounded-t-2xl"
+        }`}
+      >
         <div className="mx-auto flex w-full max-w-5xl items-center gap-3 px-4 py-2 sm:px-6">
           <Link
             href="/"
@@ -157,32 +163,34 @@ export default function StickyRestaurantBar({
         </div>
       </div>
 
-      <div
-        className="relative z-[100] mx-auto flex w-full max-w-6xl items-center rounded-b-2xl border border-slate-200/70 bg-white shadow-[0_6px_16px_rgba(15,23,42,0.12)] backdrop-blur"
-      >
-        <div className="mx-auto flex w-full max-w-5xl items-center gap-3 px-4 py-2 sm:px-6">
-          {secondaryNavLeading ? (
-            <div className="shrink-0">
-              {secondaryNavLeading}
+      {hideSecondaryNav ? null : (
+        <div
+          className="relative z-[100] mx-auto flex w-full max-w-6xl items-center rounded-b-2xl border border-slate-200/70 bg-white shadow-[0_6px_16px_rgba(15,23,42,0.12)] backdrop-blur"
+        >
+          <div className="mx-auto flex w-full max-w-5xl items-center gap-3 px-4 py-2 sm:px-6">
+            {secondaryNavLeading ? (
+              <div className="shrink-0">
+                {secondaryNavLeading}
+              </div>
+            ) : null}
+            <div className={`min-w-0 ${secondaryNavLeading ? "ml-auto" : "flex-1"}`}>
+              <ControlsRow
+                view={view}
+                onChange={onChange}
+                sort={sort}
+                onSortChange={onSortChange}
+                filters={filters}
+                onFiltersChange={onFiltersChange}
+                showChips={false}
+                calorieBounds={calorieBounds}
+                hideViewSelector={hideViewSelector}
+              />
             </div>
-          ) : null}
-          <div className={`min-w-0 ${secondaryNavLeading ? "ml-auto" : "flex-1"}`}>
-            <ControlsRow
-              view={view}
-              onChange={onChange}
-              sort={sort}
-              onSortChange={onSortChange}
-              filters={filters}
-              onFiltersChange={onFiltersChange}
-              showChips={false}
-              calorieBounds={calorieBounds}
-              hideViewSelector={hideViewSelector}
-            />
           </div>
         </div>
-      </div>
+      )}
 
-      {hasActiveFilters ? (
+      {hasActiveFilters && !hideSecondaryNav ? (
         <div className="relative z-[100] mx-auto mx-2 mt-0.5 max-w-6xl rounded-2xl border border-slate-200/70 bg-white/95 shadow-[0_6px_16px_rgba(15,23,42,0.12)] backdrop-blur">
           <div className="mx-auto flex w-full max-w-5xl flex-wrap items-center gap-2 px-4 py-2 text-sm sm:flex-nowrap sm:px-6">
             <FilterChips

@@ -1487,6 +1487,7 @@ export default function RestaurantView({
         calorieBounds={calorieBounds}
         secondaryNavLeading={entreeSelectionControl}
         hideViewSelector={isBuildYourOwn}
+        hideSecondaryNav={isChipotleBuildPage && selectedEntree === null}
       />
 
       {isChipotleBuildPage && selectedEntree === "kids-meal" ? (
