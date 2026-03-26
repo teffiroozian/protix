@@ -1226,7 +1226,7 @@ export default function RestaurantView({
         : "ingredients";
     const nextParams = new URLSearchParams(searchParams.toString());
     nextParams.set("view", nextView);
-    router.replace(`${pathname}?${nextParams.toString()}`, { scroll: true });
+    router.push(`${pathname}?${nextParams.toString()}`, { scroll: true });
   };
 
   const handleAddBuildToCart = () => {
