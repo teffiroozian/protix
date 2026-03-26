@@ -200,6 +200,7 @@ const CHIPOTLE_KIDS_QUESADILLA_NUTRITION_OVERRIDES: Record<string, IngredientIte
     carbs: 1,
   },
 };
+const CHIPOTLE_QUESADILLA_TRIPLE_CHEESE_VARIANT_ID = "quesadilla-triple-cheese";
 
 function formatValue(value?: number, suffix = "") {
   return value === undefined ? "—" : `${value}${suffix}`;
@@ -511,6 +512,11 @@ export default function RestaurantView({
           selectedIncludedIngredientIds.includes(ingredientId) ||
           (selectedEntree === "tacos" && tacoShellIngredientIds.includes(ingredientId));
         const displayCategory = shouldPinToIncludedCategory ? "Included Ingredient" : resolvedCategory;
+        const isQuesadillaCheeseIncludedIngredient =
+          ingredientId === "cheese" &&
+          shouldPinToIncludedCategory &&
+          (selectedEntree === "quesadilla" ||
+            (selectedEntree === "kids-meal" && selectedKidsMeal === "quesadilla"));
         const hasCustomVariants = Boolean(ingredient.variants?.length);
         const ingredientBaseNutrition =
           selectedEntree === "kids-meal" && selectedKidsMeal === "quesadilla"
@@ -523,15 +529,25 @@ export default function RestaurantView({
               nutrition: scaleNutritionValues(variant.nutrition, ingredientDisplayMultiplier),
             }))
           : undefined;
-        const defaultVariantId = ingredient.defaultVariantId;
+        const tripleCheeseVariant = isQuesadillaCheeseIncludedIngredient
+          ? {
+              id: CHIPOTLE_QUESADILLA_TRIPLE_CHEESE_VARIANT_ID,
+              label: "",
+              nutrition: scaleNutritionValues(ingredientBaseNutrition, 3),
+            }
+          : null;
+        const defaultVariantId = tripleCheeseVariant
+          ? CHIPOTLE_QUESADILLA_TRIPLE_CHEESE_VARIANT_ID
+          : ingredient.defaultVariantId;
 
         const menuItem: MenuItem = {
           id: ingredientId,
           name: ingredient.name,
           nutrition: ingredientBaseNutrition,
-          variants,
+          variants: tripleCheeseVariant ? [...(variants ?? []), tripleCheeseVariant] : variants,
           defaultVariantId,
-          hideVariantSelector: ingredient.hideVariantSelector,
+          hideVariantSelector:
+            ingredient.hideVariantSelector || isQuesadillaCheeseIncludedIngredient,
           image: ingredient.image,
           categories: [displayCategory],
           portionType: "addon",
@@ -842,24 +858,25 @@ export default function RestaurantView({
 
   const selectedIngredientTotals = useMemo(
     () =>
-      Object.values(selectedIngredientItems).reduce(
-        (acc, selectedIngredient) => ({
-          calories:
-            acc.calories +
-            (selectedIngredient.item.nutrition.calories ?? 0) * selectedIngredient.quantity,
-          protein:
-            acc.protein +
-            (selectedIngredient.item.nutrition.protein ?? 0) * selectedIngredient.quantity,
-          carbs:
-            acc.carbs +
-            (selectedIngredient.item.nutrition.carbs ?? 0) * selectedIngredient.quantity,
-          fat:
-            acc.fat +
-            (selectedIngredient.item.nutrition.totalFat ?? 0) * selectedIngredient.quantity,
-        }),
+      Object.entries(selectedIngredientItems).reduce(
+        (acc, [ingredientId, selectedIngredient]) => {
+          const selectedVariantId =
+            selectedIngredientVariantIds[ingredientId] ?? selectedIngredient.item.defaultVariantId;
+          const selectedVariant = selectedIngredient.item.variants?.find(
+            (variant) => variant.id === selectedVariantId
+          );
+          const nutrition = selectedVariant?.nutrition ?? selectedIngredient.item.nutrition;
+
+          return {
+            calories: acc.calories + (nutrition.calories ?? 0) * selectedIngredient.quantity,
+            protein: acc.protein + (nutrition.protein ?? 0) * selectedIngredient.quantity,
+            carbs: acc.carbs + (nutrition.carbs ?? 0) * selectedIngredient.quantity,
+            fat: acc.fat + (nutrition.totalFat ?? 0) * selectedIngredient.quantity,
+          };
+        },
         { calories: 0, protein: 0, carbs: 0, fat: 0 }
       ),
-    [selectedIngredientItems]
+    [selectedIngredientItems, selectedIngredientVariantIds]
   );
   const adjustedSelectedIngredientTotals = useMemo(
     () => ({
@@ -873,20 +890,26 @@ export default function RestaurantView({
 
   const selectedNutritionLabelTotals = useMemo(
     () =>
-      Object.values(selectedIngredientItems).reduce(
-        (acc, selectedIngredient) => {
-          const { item, quantity } = selectedIngredient;
+      Object.entries(selectedIngredientItems).reduce(
+        (acc, [ingredientId, selectedIngredient]) => {
+          const selectedVariantId =
+            selectedIngredientVariantIds[ingredientId] ?? selectedIngredient.item.defaultVariantId;
+          const selectedVariant = selectedIngredient.item.variants?.find(
+            (variant) => variant.id === selectedVariantId
+          );
+          const nutrition = selectedVariant?.nutrition ?? selectedIngredient.item.nutrition;
+          const { quantity } = selectedIngredient;
           return {
-            calories: acc.calories + (item.nutrition.calories ?? 0) * quantity,
-            totalFat: acc.totalFat + (item.nutrition.totalFat ?? 0) * quantity,
-            satFat: acc.satFat + (item.nutrition.satFat ?? 0) * quantity,
-            transFat: acc.transFat + (item.nutrition.transFat ?? 0) * quantity,
-            cholesterol: acc.cholesterol + (item.nutrition.cholesterol ?? 0) * quantity,
-            sodium: acc.sodium + (item.nutrition.sodium ?? 0) * quantity,
-            carbs: acc.carbs + (item.nutrition.carbs ?? 0) * quantity,
-            fiber: acc.fiber + (item.nutrition.fiber ?? 0) * quantity,
-            sugars: acc.sugars + (item.nutrition.sugars ?? 0) * quantity,
-            protein: acc.protein + (item.nutrition.protein ?? 0) * quantity,
+            calories: acc.calories + (nutrition.calories ?? 0) * quantity,
+            totalFat: acc.totalFat + (nutrition.totalFat ?? 0) * quantity,
+            satFat: acc.satFat + (nutrition.satFat ?? 0) * quantity,
+            transFat: acc.transFat + (nutrition.transFat ?? 0) * quantity,
+            cholesterol: acc.cholesterol + (nutrition.cholesterol ?? 0) * quantity,
+            sodium: acc.sodium + (nutrition.sodium ?? 0) * quantity,
+            carbs: acc.carbs + (nutrition.carbs ?? 0) * quantity,
+            fiber: acc.fiber + (nutrition.fiber ?? 0) * quantity,
+            sugars: acc.sugars + (nutrition.sugars ?? 0) * quantity,
+            protein: acc.protein + (nutrition.protein ?? 0) * quantity,
           };
         },
         {
@@ -902,7 +925,7 @@ export default function RestaurantView({
           protein: 0,
         }
       ),
-    [selectedIngredientItems]
+    [selectedIngredientItems, selectedIngredientVariantIds]
   );
   const adjustedNutritionLabelTotals = useMemo(
     () => ({
@@ -1090,7 +1113,7 @@ export default function RestaurantView({
       if (!selected) return;
       const nextTacoShell = itemId === "soft-flour-tortilla" ? "soft" : "crispy";
       setSelectedTacoShell(nextTacoShell);
-      applyIncludedIngredients(
+      applyIncludedIngredientsNextFrame(
         CHIPOTLE_ENTREE_CONFIGURATIONS.tacos.getIncludedIngredientIds?.({ tacoShell: nextTacoShell }) ?? []
       );
       return;
@@ -1212,10 +1235,46 @@ export default function RestaurantView({
           return;
         }
 
-        next[includedIngredientId] = { item: includedIngredientItem, quantity: 1 };
+        const defaultVariant = includedIngredientItem.variants?.find(
+          (variant) => variant.id === includedIngredientItem.defaultVariantId
+        );
+        next[includedIngredientId] = {
+          item: {
+            ...includedIngredientItem,
+            nutrition: defaultVariant?.nutrition ?? includedIngredientItem.nutrition,
+          },
+          quantity: 1,
+        };
       });
 
       return applyIngredientPortionNutrition(next);
+    });
+
+    setSelectedIngredientVariantIds((previous) => {
+      const next = { ...previous };
+
+      allIncludedIngredientIds.forEach((ingredientId) => {
+        if (ingredientId in next) {
+          delete next[ingredientId];
+        }
+      });
+
+      nextIncludedIngredientIds.forEach((includedIngredientId) => {
+        const includedIngredientItem = ingredientItemsById.get(includedIngredientId);
+        if (!includedIngredientItem?.defaultVariantId) {
+          return;
+        }
+
+        next[includedIngredientId] = includedIngredientItem.defaultVariantId;
+      });
+
+      return next;
+    });
+  };
+
+  const applyIncludedIngredientsNextFrame = (nextIncludedIngredientIds: string[]) => {
+    window.requestAnimationFrame(() => {
+      applyIncludedIngredients(nextIncludedIngredientIds);
     });
   };
 
@@ -1231,7 +1290,7 @@ export default function RestaurantView({
           CHIPOTLE_ENTREE_CONFIGURATIONS[entree].includedIngredientIds ??
           [];
     setSelectedEntree(entree);
-    applyIncludedIngredients(nextIncludedIngredientIds);
+    applyIncludedIngredientsNextFrame(nextIncludedIngredientIds);
 
     const nextView =
       entree === "chips-sides" || entree === "high-protein-menu" || entree === "drinks"
@@ -1240,6 +1299,7 @@ export default function RestaurantView({
     const nextParams = new URLSearchParams(searchParams.toString());
     nextParams.set("view", nextView);
     router.push(`${pathname}?${nextParams.toString()}`, { scroll: true });
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   };
 
   const handleAddBuildToCart = () => {
@@ -1752,7 +1812,7 @@ export default function RestaurantView({
                 type="button"
                 onClick={() => {
                   setSelectedKidsMeal(option.id);
-                  applyIncludedIngredients(
+                  applyIncludedIngredientsNextFrame(
                     option.id === "quesadilla"
                       ? CHIPOTLE_KIDS_QUESADILLA_INCLUDED_INGREDIENT_IDS
                       : []
