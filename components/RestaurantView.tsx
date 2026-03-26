@@ -1700,7 +1700,7 @@ export default function RestaurantView({
   const isSecondaryNavHidden = isChipotleBuildPage && selectedEntree === null;
 
   return (
-    <div className={isSecondaryNavHidden ? "-mt-20" : undefined}>
+    <div className={isSecondaryNavHidden ? "relative -top-20" : undefined}>
       <StickyRestaurantBar
         restaurantName={restaurantName}
         restaurantLogo={restaurantLogo}
