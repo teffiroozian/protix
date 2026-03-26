@@ -2097,7 +2097,7 @@ export default function RestaurantView({
             PrimaryActionIcon={ShoppingCart}
             detailsOpen={isBuildSummaryExpanded}
             detailsContent={
-              <div className="max-h-[calc(100vh-220px)] space-y-3 overflow-y-auto pr-1">
+              <div className="space-y-3">
                 <div className="flex flex-wrap items-center justify-end gap-2">
                   <button
                     type="button"
@@ -2172,7 +2172,7 @@ export default function RestaurantView({
                   </p>
                   <div
                     ref={selectedIngredientsListRef}
-                    className="mt-4 min-h-0 flex-1 overflow-y-auto rounded-xl bg-[#efefef] p-2"
+                    className="mt-4 min-h-0 max-h-[620px] flex-1 overflow-y-auto rounded-xl bg-[#efefef] p-2"
                   >
                     <div className="space-y-3">
                       {groupedSelectedIngredientEntries.map((group) => (
