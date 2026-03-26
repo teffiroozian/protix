@@ -780,7 +780,7 @@ export default function RestaurantView({
   const normalizeIngredientCategory = (value: string | undefined) => value?.trim().toLowerCase() ?? "";
 
   const getIngredientCategoryMaxSelections = (item: MenuItem) => {
-    const category = normalizeIngredientCategory(item.category ?? item.categories?.[0]);
+    const category = normalizeIngredientCategory(item.categories[0]);
     return CHIPOTLE_CATEGORY_MAX_SELECTIONS[category];
   };
 
@@ -790,7 +790,7 @@ export default function RestaurantView({
   ) =>
     Object.values(itemsById).reduce((total, selectedIngredient) => {
       const selectedCategory = normalizeIngredientCategory(
-        selectedIngredient.item.category ?? selectedIngredient.item.categories?.[0]
+        selectedIngredient.item.categories[0]
       );
       return selectedCategory === category ? total + selectedIngredient.quantity : total;
     }, 0);
@@ -819,7 +819,7 @@ export default function RestaurantView({
         return next;
       }
 
-      const category = normalizeIngredientCategory(item.category ?? item.categories?.[0]);
+      const category = normalizeIngredientCategory(item.categories[0]);
       const categoryMaxSelections = getIngredientCategoryMaxSelections(item);
       if (category && typeof categoryMaxSelections === "number") {
         const selectedQuantityInCategory = getSelectedQuantityForCategory(prev, category);
@@ -926,7 +926,7 @@ export default function RestaurantView({
 
       const ingredient = ingredients.find((candidate) => candidate.id === ingredientId);
       const ingredientMaxQuantity = ingredient?.maxQuantity ?? 2;
-      const category = normalizeIngredientCategory(existing.item.category ?? existing.item.categories?.[0]);
+      const category = normalizeIngredientCategory(existing.item.categories[0]);
       const categoryMaxSelections = getIngredientCategoryMaxSelections(existing.item);
       const selectedQuantityInCategory = category
         ? getSelectedQuantityForCategory(previous, category)
@@ -976,7 +976,7 @@ export default function RestaurantView({
     const selectedCategoryQuantities = Object.values(selectedIngredientItems).reduce<Record<string, number>>(
       (acc, selectedIngredient) => {
         const category = normalizeIngredientCategory(
-          selectedIngredient.item.category ?? selectedIngredient.item.categories?.[0]
+          selectedIngredient.item.categories[0]
         );
         if (!category) return acc;
         acc[category] = (acc[category] ?? 0) + selectedIngredient.quantity;
@@ -992,7 +992,7 @@ export default function RestaurantView({
       if (itemId in selectedIngredientItems) return;
       if (lockedIngredientIds.has(itemId)) return;
 
-      const category = normalizeIngredientCategory(item.category ?? item.categories?.[0]);
+      const category = normalizeIngredientCategory(item.categories[0]);
       const categoryCap = category ? CHIPOTLE_CATEGORY_MAX_SELECTIONS[category] : undefined;
       if (typeof categoryCap !== "number") return;
 
