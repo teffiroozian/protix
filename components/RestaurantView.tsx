@@ -1419,7 +1419,17 @@ export default function RestaurantView({
   };
 
   const handleResetSelectedIngredientOrder = () => {
-    setSelectedIngredientItems({});
+    setSelectedIngredientItems(() => {
+      const lockedSelections: Record<string, { item: MenuItem; quantity: number }> = {};
+
+      lockedIngredientIds.forEach((ingredientId) => {
+        const ingredientItem = ingredientItemsById.get(ingredientId);
+        if (!ingredientItem) return;
+        lockedSelections[ingredientId] = { item: ingredientItem, quantity: 1 };
+      });
+
+      return applyIngredientPortionNutrition(lockedSelections);
+    });
     setSelectedIngredientVariantIds({});
     setProteinPortionMode("normal");
     setSplitPortionModeById({});
