@@ -423,8 +423,21 @@ export default function RestaurantView({
       return "Other";
     };
 
-    return ingredients
-      .filter((ingredient) => !ingredient.hideFromIngredientView)
+    const mappedIngredientItems = ingredients
+      .filter((ingredient) => {
+        if (ingredient.hideFromIngredientView) {
+          return false;
+        }
+
+        const isTacoShellIngredient = ingredient.id
+          ? tacoShellIngredientIds.includes(ingredient.id)
+          : false;
+        if (isTacoShellIngredient && selectedEntree !== "tacos") {
+          return false;
+        }
+
+        return true;
+      })
       .map((ingredient, index) => {
         const ingredientId =
           ingredient.id ??
@@ -462,6 +475,25 @@ export default function RestaurantView({
           portionType: "addon",
         };
       });
+
+    if (selectedEntree !== "burrito") {
+      return mappedIngredientItems;
+    }
+
+    const burritoTortillaItem = mappedIngredientItems.find((item) => item.id === "tortilla");
+    if (!burritoTortillaItem) {
+      return mappedIngredientItems;
+    }
+
+    return [
+      ...mappedIngredientItems,
+      {
+        ...burritoTortillaItem,
+        id: "extra-tortilla",
+        name: "Extra Tortilla",
+        categories: ["Side"],
+      },
+    ];
   }, [
     ingredientDisplayMultiplier,
     ingredients,
