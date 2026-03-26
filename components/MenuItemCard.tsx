@@ -245,6 +245,8 @@ export default function MenuItemCard({
   displayMode = "default",
   isIngredientSelected: controlledIngredientSelected,
   isIngredientLocked = false,
+  isIngredientUnavailable = false,
+  ingredientUnavailableReason,
   onIngredientSelectionChange,
   ingredientSelectionControl = "checkbox",
   ingredientRadioGroupName,
@@ -275,6 +277,8 @@ export default function MenuItemCard({
   displayMode?: "default" | "ingredient-compact";
   isIngredientSelected?: boolean;
   isIngredientLocked?: boolean;
+  isIngredientUnavailable?: boolean;
+  ingredientUnavailableReason?: string;
   onIngredientSelectionChange?: (item: MenuItem, selected: boolean) => void;
   ingredientSelectionControl?: "checkbox" | "radio";
   ingredientRadioGroupName?: string;
@@ -737,6 +741,10 @@ export default function MenuItemCard({
   }, [isAddFeedbackVisible]);
 
   const ingredientSelectionState = controlledIngredientSelected ?? isIngredientSelected;
+  const isIngredientSelectionDisabled = isIngredientLocked || isIngredientUnavailable;
+  const ingredientDisabledReason = isIngredientLocked
+    ? "Included in this entree"
+    : ingredientUnavailableReason;
 
   if (displayMode === "ingredient-compact") {
     return (
@@ -748,7 +756,7 @@ export default function MenuItemCard({
         }`}
       >
         <label
-          className={`flex items-center gap-4 px-4 py-3 ${isIngredientLocked ? "cursor-not-allowed opacity-95" : "cursor-pointer"}`}
+          className={`flex items-center gap-4 px-4 py-3 ${isIngredientSelectionDisabled ? "cursor-not-allowed opacity-95" : "cursor-pointer"}`}
         >
           <span
             className={`flex h-6 w-6 items-center justify-center border text-sm font-bold transition ${
@@ -765,16 +773,19 @@ export default function MenuItemCard({
             className="sr-only"
             checked={ingredientSelectionState}
             name={ingredientSelectionControl === "radio" ? ingredientRadioGroupName : undefined}
-            disabled={isIngredientLocked}
+            disabled={isIngredientSelectionDisabled}
             onChange={(event) => {
               const nextSelected = event.target.checked;
               if (ingredientSelectionControl === "radio" && !nextSelected) {
                 return;
               }
+              if (isIngredientSelectionDisabled && nextSelected) {
+                return;
+              }
               setIsIngredientSelected(nextSelected);
               onIngredientSelectionChange?.(item, nextSelected);
             }}
-            aria-label={`${isIngredientLocked ? "Included" : "Select"} ${item.name}`}
+            aria-label={`${isIngredientSelectionDisabled ? ingredientDisabledReason ?? "Unavailable" : "Select"} ${item.name}`}
           />
 
           {selectedItemImage ? (
@@ -789,6 +800,11 @@ export default function MenuItemCard({
 
           <div className="min-w-0 flex-1">
             <div className="truncate text-xl font-semibold text-black">{item.name}</div>
+            {isIngredientUnavailable && ingredientUnavailableReason ? (
+              <div className="mt-1 inline-flex rounded-full border border-amber-300 bg-amber-50 px-2 py-0.5 text-[11px] font-semibold text-amber-700">
+                {ingredientUnavailableReason}
+              </div>
+            ) : null}
             {ingredientVariantOptions && ingredientVariantOptions.length > 1 ? (
               <div className="mt-2 flex gap-2">
                 {ingredientVariantOptions.map((variantOption) => (
