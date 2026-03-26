@@ -276,6 +276,8 @@ export default function MenuSections({
   selectedIngredientIds,
   onIngredientSelectionChange,
   lockedIngredientIds,
+  unavailableIngredientIds,
+  unavailableIngredientReasonById,
   ingredientSelectionControlById,
   ingredientRadioGroupNameById,
   ingredientVariantOptionsById,
@@ -295,6 +297,8 @@ export default function MenuSections({
   selectedIngredientIds?: Set<string>;
   onIngredientSelectionChange?: (item: MenuItem, selected: boolean) => void;
   lockedIngredientIds?: Set<string>;
+  unavailableIngredientIds?: Set<string>;
+  unavailableIngredientReasonById?: Record<string, string>;
   ingredientSelectionControlById?: Record<string, "checkbox" | "radio">;
   ingredientRadioGroupNameById?: Record<string, string>;
   ingredientVariantOptionsById?: Record<string, Array<{ id: string; label: string }>>;
@@ -330,6 +334,8 @@ export default function MenuSections({
               }
               isIngredientSelected={selectedIngredientIds?.has(item.id ?? "")}
               isIngredientLocked={lockedIngredientIds?.has(item.id ?? "")}
+              isIngredientUnavailable={unavailableIngredientIds?.has(item.id ?? "")}
+              ingredientUnavailableReason={unavailableIngredientReasonById?.[item.id ?? ""]}
               onIngredientSelectionChange={onIngredientSelectionChange}
               ingredientSelectionControl={ingredientSelectionControlById?.[item.id ?? ""] ?? "checkbox"}
               ingredientRadioGroupName={ingredientRadioGroupNameById?.[item.id ?? ""]}
@@ -418,6 +424,8 @@ export default function MenuSections({
                 }
                 isIngredientSelected={selectedIngredientIds?.has(item.id ?? "")}
                 isIngredientLocked={lockedIngredientIds?.has(item.id ?? "")}
+                isIngredientUnavailable={unavailableIngredientIds?.has(item.id ?? "")}
+                ingredientUnavailableReason={unavailableIngredientReasonById?.[item.id ?? ""]}
                 onIngredientSelectionChange={onIngredientSelectionChange}
                 ingredientSelectionControl={ingredientSelectionControlById?.[item.id ?? ""] ?? "checkbox"}
                 ingredientRadioGroupName={ingredientRadioGroupNameById?.[item.id ?? ""]}

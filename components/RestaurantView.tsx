@@ -968,6 +968,55 @@ export default function RestaurantView({
   };
 
   const selectedIngredientEntries = Object.entries(selectedIngredientItems);
+  const unavailableIngredientIds = useMemo(() => {
+    if (!isChipotleBuildPage || !selectedEntree) {
+      return new Set<string>();
+    }
+
+    const selectedCategoryQuantities = Object.values(selectedIngredientItems).reduce<Record<string, number>>(
+      (acc, selectedIngredient) => {
+        const category = normalizeIngredientCategory(
+          selectedIngredient.item.category ?? selectedIngredient.item.categories?.[0]
+        );
+        if (!category) return acc;
+        acc[category] = (acc[category] ?? 0) + selectedIngredient.quantity;
+        return acc;
+      },
+      {}
+    );
+
+    const unavailableIds = new Set<string>();
+    visibleMenuItems.forEach((item) => {
+      const itemId = item.id;
+      if (!itemId) return;
+      if (itemId in selectedIngredientItems) return;
+      if (lockedIngredientIds.has(itemId)) return;
+
+      const category = normalizeIngredientCategory(item.category ?? item.categories?.[0]);
+      const categoryCap = category ? CHIPOTLE_CATEGORY_MAX_SELECTIONS[category] : undefined;
+      if (typeof categoryCap !== "number") return;
+
+      if ((selectedCategoryQuantities[category] ?? 0) >= categoryCap) {
+        unavailableIds.add(itemId);
+      }
+    });
+
+    return unavailableIds;
+  }, [
+    isChipotleBuildPage,
+    lockedIngredientIds,
+    selectedEntree,
+    selectedIngredientItems,
+    visibleMenuItems,
+  ]);
+
+  const unavailableIngredientReasonById = useMemo(
+    () =>
+      Object.fromEntries(
+        Array.from(unavailableIngredientIds).map((ingredientId) => [ingredientId, "Category max reached"])
+      ),
+    [unavailableIngredientIds]
+  );
 
   useEffect(() => {
     if (!isBuildSummaryExpanded) return;
@@ -1180,6 +1229,8 @@ export default function RestaurantView({
                 isBuildYourOwn={isBuildYourOwn}
                 selectedIngredientIds={new Set(Object.keys(selectedIngredientItems))}
                 lockedIngredientIds={lockedIngredientIds}
+                unavailableIngredientIds={unavailableIngredientIds}
+                unavailableIngredientReasonById={unavailableIngredientReasonById}
                 onIngredientSelectionChange={handleIngredientSelectionChange}
                 ingredientSelectionControlById={
                   selectedEntree === "tacos"
