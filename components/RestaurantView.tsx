@@ -1270,21 +1270,27 @@ export default function RestaurantView({
     setProteinPortionMode("normal");
     setSplitPortionModeById({});
     setSelectedIngredientVariantIds({});
-    if (selectedEntree === "kids-meal") {
-      applyIncludedIngredients(
-        selectedKidsMeal === "quesadilla" ? CHIPOTLE_KIDS_QUESADILLA_INCLUDED_INGREDIENT_IDS : []
-      );
-    } else {
-      applyIncludedIngredients(
-        selectedEntree
+    const nextIncludedIngredientIds =
+      selectedEntree === "kids-meal"
+        ? selectedKidsMeal === "quesadilla"
+          ? CHIPOTLE_KIDS_QUESADILLA_INCLUDED_INGREDIENT_IDS
+          : []
+        : selectedEntree
           ? CHIPOTLE_ENTREE_CONFIGURATIONS[selectedEntree].getIncludedIngredientIds?.({
               tacoShell: selectedTacoShell,
             }) ??
-              CHIPOTLE_ENTREE_CONFIGURATIONS[selectedEntree].includedIngredientIds ??
-              []
-          : []
-      );
-    }
+            CHIPOTLE_ENTREE_CONFIGURATIONS[selectedEntree].includedIngredientIds ??
+            []
+          : [];
+    setSelectedIngredientItems(() => {
+      const resetSelections: Record<string, { item: MenuItem; quantity: number }> = {};
+      nextIncludedIngredientIds.forEach((ingredientId) => {
+        const ingredientItem = ingredientItemsById.get(ingredientId);
+        if (!ingredientItem) return;
+        resetSelections[ingredientId] = { item: ingredientItem, quantity: 1 };
+      });
+      return applyIngredientPortionNutrition(resetSelections);
+    });
   };
 
   useEffect(() => {
