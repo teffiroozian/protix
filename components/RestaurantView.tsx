@@ -5,29 +5,33 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import type { LucideIcon } from "lucide-react";
 import {
+  Bean,
   Beef,
   CakeSlice,
   ChevronDown,
-  ChevronUp,
   Circle,
   CircleDashed,
   CupSoda,
   Egg,
   EggFried,
+  Expand,
   Diamond,
   Droplets,
   Drumstick,
   IceCreamCone,
   SquareUser,
   LeafyGreen,
+  Pin,
   Salad,
   Sandwich,
   Shell,
   SquarePlus,
+  Sprout,
   Soup,
   ToggleLeft,
   RotateCcw,
   Save,
+  Shrink,
   ShoppingCart,
   Utensils,
   UtensilsCrossed,
@@ -61,9 +65,13 @@ import { useCart } from "@/stores/cartStore";
 const CATEGORY_ICONS: Record<string, LucideIcon> = {
   sandwiches: Sandwich,
   "sandwich toppings": LeafyGreen,
-  toppings: Sandwich,
+  toppings: LeafyGreen,
   chicken: Drumstick,
   proteins: Drumstick,
+  rice: Sprout,
+  beans: Bean,
+  "included ingredient": Pin,
+  "included ingredients": Pin,
   "breakfast protein": Drumstick,
   condiments: Utensils,
   "salad condiments": Utensils,
@@ -73,6 +81,7 @@ const CATEGORY_ICONS: Record<string, LucideIcon> = {
   breakfast: EggFried,
   kids: SquareUser,
   sides: SquarePlus,
+  side: CircleDashed,
   desserts: CakeSlice,
   wraps: Shell,
   "wrap toppings": Waves,
@@ -2105,8 +2114,8 @@ export default function RestaurantView({
             secondaryActionLabel="View Selected"
             secondaryActionExpandedLabel="View Selected"
             primaryActionLabel={isEditingBuild ? "Save & Add" : "Add to Cart"}
-            SecondaryActionIcon={ChevronDown}
-            SecondaryActionExpandedIcon={ChevronUp}
+            SecondaryActionIcon={Expand}
+            SecondaryActionExpandedIcon={Shrink}
             PrimaryActionIcon={ShoppingCart}
             detailsOpen={isBuildSummaryExpanded}
             detailsContent={
