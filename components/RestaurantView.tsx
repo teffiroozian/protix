@@ -1548,18 +1548,34 @@ export default function RestaurantView({
                 }
                 ingredientPortionBadgeById={
                   (() => {
-                    if (!proteinBadgeLabel) return undefined;
+                    const selectedRiceIds = Object.entries(selectedIngredientItems)
+                      .filter(([, selectedIngredient]) => isRiceIngredientItem(selectedIngredient.item))
+                      .map(([ingredientId]) => ingredientId);
+                    const isSplitRiceSelection = selectedRiceIds.length === 2;
                     const badgeById = Object.fromEntries(
                       Object.entries(selectedIngredientItems)
-                        .filter(([, selectedIngredient]) => isProteinIngredientItem(selectedIngredient.item))
+                        .filter(
+                          ([, selectedIngredient]) =>
+                            Boolean(proteinBadgeLabel) && isProteinIngredientItem(selectedIngredient.item)
+                        )
                         .map(([ingredientId]) => [ingredientId, proteinBadgeLabel])
-                    );
+                    ) as Record<string, string>;
+
+                    if (isSplitRiceSelection) {
+                      selectedRiceIds.forEach((ingredientId) => {
+                        badgeById[ingredientId] = "1/2x";
+                      });
+                    }
+
                     return Object.keys(badgeById).length > 0 ? badgeById : undefined;
                   })()
                 }
                 ingredientPortionModeOptionsById={
                   (() => {
-                    const optionsById: Record<string, Array<{ id: string; label: string }>> = Object.fromEntries(
+                    const optionsById: Record<
+                      string,
+                      Array<{ id: string; label: string; disabled?: boolean }>
+                    > = Object.fromEntries(
                       visibleMenuItems
                         .filter((item) => item.id && isProteinIngredientItem(item))
                         .map((item) => [
@@ -1576,7 +1592,11 @@ export default function RestaurantView({
                     ).length;
                     const riceModeOptions =
                       selectedRiceCount === 2
-                        ? [{ id: "normal", label: "Normal" }]
+                        ? [
+                            { id: "light", label: "Light", disabled: true },
+                            { id: "normal", label: "Normal", disabled: true },
+                            { id: "extra", label: "Extra", disabled: true },
+                          ]
                         : [
                             { id: "light", label: "Light" },
                             { id: "normal", label: "Normal" },
