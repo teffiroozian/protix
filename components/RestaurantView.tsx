@@ -1113,7 +1113,7 @@ export default function RestaurantView({
       if (!selected) return;
       const nextTacoShell = itemId === "soft-flour-tortilla" ? "soft" : "crispy";
       setSelectedTacoShell(nextTacoShell);
-      applyIncludedIngredients(
+      applyIncludedIngredientsNextFrame(
         CHIPOTLE_ENTREE_CONFIGURATIONS.tacos.getIncludedIngredientIds?.({ tacoShell: nextTacoShell }) ?? []
       );
       return;
@@ -1272,6 +1272,12 @@ export default function RestaurantView({
     });
   };
 
+  const applyIncludedIngredientsNextFrame = (nextIncludedIngredientIds: string[]) => {
+    window.requestAnimationFrame(() => {
+      applyIncludedIngredients(nextIncludedIngredientIds);
+    });
+  };
+
   const handleEntreeSelection = (entree: Exclude<EntreeSelection, null>) => {
     const nextIncludedIngredientIds =
       entree === "kids-meal"
@@ -1284,7 +1290,7 @@ export default function RestaurantView({
           CHIPOTLE_ENTREE_CONFIGURATIONS[entree].includedIngredientIds ??
           [];
     setSelectedEntree(entree);
-    applyIncludedIngredients(nextIncludedIngredientIds);
+    applyIncludedIngredientsNextFrame(nextIncludedIngredientIds);
 
     const nextView =
       entree === "chips-sides" || entree === "high-protein-menu" || entree === "drinks"
@@ -1806,7 +1812,7 @@ export default function RestaurantView({
                 type="button"
                 onClick={() => {
                   setSelectedKidsMeal(option.id);
-                  applyIncludedIngredients(
+                  applyIncludedIngredientsNextFrame(
                     option.id === "quesadilla"
                       ? CHIPOTLE_KIDS_QUESADILLA_INCLUDED_INGREDIENT_IDS
                       : []
