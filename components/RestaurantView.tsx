@@ -1270,7 +1270,7 @@ export default function RestaurantView({
     }
   };
 
-  const applyIncludedIngredients = (
+  const applyIncludedIngredients = useCallback((
     nextIncludedIngredientIds: string[],
     context: IncludedIngredientContext = {
       selectedEntree,
@@ -1298,7 +1298,38 @@ export default function RestaurantView({
       });
 
       nextIncludedIngredientIds.forEach((includedIngredientId) => {
-        const includedIngredientItem = ingredientItemsById.get(includedIngredientId);
+        const includedIngredientItem =
+          ingredientItemsById.get(includedIngredientId) ??
+          (() => {
+            const fallbackIngredient = ingredients.find(
+              (ingredient) => ingredient.id === includedIngredientId
+            );
+            if (!fallbackIngredient) {
+              return null;
+            }
+
+            const fallbackNutrition =
+              context.selectedEntree === "kids-meal" &&
+              context.selectedKidsMeal === "quesadilla"
+                ? CHIPOTLE_KIDS_QUESADILLA_NUTRITION_OVERRIDES[includedIngredientId] ??
+                  scaleNutritionValues(fallbackIngredient.nutrition, ingredientDisplayMultiplier)
+                : scaleNutritionValues(fallbackIngredient.nutrition, ingredientDisplayMultiplier);
+
+            return {
+              id: includedIngredientId,
+              name: fallbackIngredient.name,
+              nutrition: fallbackNutrition,
+              variants: fallbackIngredient.variants?.map((variant) => ({
+                ...variant,
+                nutrition: scaleNutritionValues(variant.nutrition, ingredientDisplayMultiplier),
+              })),
+              defaultVariantId: fallbackIngredient.defaultVariantId,
+              hideVariantSelector: fallbackIngredient.hideVariantSelector,
+              image: fallbackIngredient.image,
+              categories: ["Included Ingredient"],
+              portionType: "addon" as const,
+            } satisfies MenuItem;
+          })();
         if (!includedIngredientItem || next[includedIngredientId]) {
           return;
         }
@@ -1331,7 +1362,31 @@ export default function RestaurantView({
       });
 
       nextIncludedIngredientIds.forEach((includedIngredientId) => {
-        const includedIngredientItem = ingredientItemsById.get(includedIngredientId);
+        const includedIngredientItem =
+          ingredientItemsById.get(includedIngredientId) ??
+          (() => {
+            const fallbackIngredient = ingredients.find(
+              (ingredient) => ingredient.id === includedIngredientId
+            );
+            if (!fallbackIngredient) {
+              return null;
+            }
+
+            return {
+              id: includedIngredientId,
+              name: fallbackIngredient.name,
+              nutrition: scaleNutritionValues(fallbackIngredient.nutrition, ingredientDisplayMultiplier),
+              variants: fallbackIngredient.variants?.map((variant) => ({
+                ...variant,
+                nutrition: scaleNutritionValues(variant.nutrition, ingredientDisplayMultiplier),
+              })),
+              defaultVariantId: fallbackIngredient.defaultVariantId,
+              hideVariantSelector: fallbackIngredient.hideVariantSelector,
+              image: fallbackIngredient.image,
+              categories: ["Included Ingredient"],
+              portionType: "addon" as const,
+            } satisfies MenuItem;
+          })();
         if (!includedIngredientItem) {
           return;
         }
@@ -1350,17 +1405,23 @@ export default function RestaurantView({
 
       return next;
     });
-  };
+  }, [
+    applyIngredientPortionNutrition,
+    ingredientDisplayMultiplier,
+    ingredients,
+    ingredientItemsById,
+    selectedEntree,
+    selectedKidsMeal,
+  ]);
 
-  const applyIncludedIngredientsNextFrame = (
+  const applyIncludedIngredientsNextFrame = useCallback((
     nextIncludedIngredientIds: string[],
     context?: IncludedIngredientContext
   ) => {
     window.requestAnimationFrame(() => {
       applyIncludedIngredients(nextIncludedIngredientIds, context);
     });
-  };
-
+  }, [applyIncludedIngredients]);
   const handleEntreeSelection = (entree: Exclude<EntreeSelection, null>) => {
     const nextIncludedIngredientIds =
       entree === "kids-meal"
