@@ -858,24 +858,25 @@ export default function RestaurantView({
 
   const selectedIngredientTotals = useMemo(
     () =>
-      Object.values(selectedIngredientItems).reduce(
-        (acc, selectedIngredient) => ({
-          calories:
-            acc.calories +
-            (selectedIngredient.item.nutrition.calories ?? 0) * selectedIngredient.quantity,
-          protein:
-            acc.protein +
-            (selectedIngredient.item.nutrition.protein ?? 0) * selectedIngredient.quantity,
-          carbs:
-            acc.carbs +
-            (selectedIngredient.item.nutrition.carbs ?? 0) * selectedIngredient.quantity,
-          fat:
-            acc.fat +
-            (selectedIngredient.item.nutrition.totalFat ?? 0) * selectedIngredient.quantity,
-        }),
+      Object.entries(selectedIngredientItems).reduce(
+        (acc, [ingredientId, selectedIngredient]) => {
+          const selectedVariantId =
+            selectedIngredientVariantIds[ingredientId] ?? selectedIngredient.item.defaultVariantId;
+          const selectedVariant = selectedIngredient.item.variants?.find(
+            (variant) => variant.id === selectedVariantId
+          );
+          const nutrition = selectedVariant?.nutrition ?? selectedIngredient.item.nutrition;
+
+          return {
+            calories: acc.calories + (nutrition.calories ?? 0) * selectedIngredient.quantity,
+            protein: acc.protein + (nutrition.protein ?? 0) * selectedIngredient.quantity,
+            carbs: acc.carbs + (nutrition.carbs ?? 0) * selectedIngredient.quantity,
+            fat: acc.fat + (nutrition.totalFat ?? 0) * selectedIngredient.quantity,
+          };
+        },
         { calories: 0, protein: 0, carbs: 0, fat: 0 }
       ),
-    [selectedIngredientItems]
+    [selectedIngredientItems, selectedIngredientVariantIds]
   );
   const adjustedSelectedIngredientTotals = useMemo(
     () => ({
@@ -889,20 +890,26 @@ export default function RestaurantView({
 
   const selectedNutritionLabelTotals = useMemo(
     () =>
-      Object.values(selectedIngredientItems).reduce(
-        (acc, selectedIngredient) => {
-          const { item, quantity } = selectedIngredient;
+      Object.entries(selectedIngredientItems).reduce(
+        (acc, [ingredientId, selectedIngredient]) => {
+          const selectedVariantId =
+            selectedIngredientVariantIds[ingredientId] ?? selectedIngredient.item.defaultVariantId;
+          const selectedVariant = selectedIngredient.item.variants?.find(
+            (variant) => variant.id === selectedVariantId
+          );
+          const nutrition = selectedVariant?.nutrition ?? selectedIngredient.item.nutrition;
+          const { quantity } = selectedIngredient;
           return {
-            calories: acc.calories + (item.nutrition.calories ?? 0) * quantity,
-            totalFat: acc.totalFat + (item.nutrition.totalFat ?? 0) * quantity,
-            satFat: acc.satFat + (item.nutrition.satFat ?? 0) * quantity,
-            transFat: acc.transFat + (item.nutrition.transFat ?? 0) * quantity,
-            cholesterol: acc.cholesterol + (item.nutrition.cholesterol ?? 0) * quantity,
-            sodium: acc.sodium + (item.nutrition.sodium ?? 0) * quantity,
-            carbs: acc.carbs + (item.nutrition.carbs ?? 0) * quantity,
-            fiber: acc.fiber + (item.nutrition.fiber ?? 0) * quantity,
-            sugars: acc.sugars + (item.nutrition.sugars ?? 0) * quantity,
-            protein: acc.protein + (item.nutrition.protein ?? 0) * quantity,
+            calories: acc.calories + (nutrition.calories ?? 0) * quantity,
+            totalFat: acc.totalFat + (nutrition.totalFat ?? 0) * quantity,
+            satFat: acc.satFat + (nutrition.satFat ?? 0) * quantity,
+            transFat: acc.transFat + (nutrition.transFat ?? 0) * quantity,
+            cholesterol: acc.cholesterol + (nutrition.cholesterol ?? 0) * quantity,
+            sodium: acc.sodium + (nutrition.sodium ?? 0) * quantity,
+            carbs: acc.carbs + (nutrition.carbs ?? 0) * quantity,
+            fiber: acc.fiber + (nutrition.fiber ?? 0) * quantity,
+            sugars: acc.sugars + (nutrition.sugars ?? 0) * quantity,
+            protein: acc.protein + (nutrition.protein ?? 0) * quantity,
           };
         },
         {
@@ -918,7 +925,7 @@ export default function RestaurantView({
           protein: 0,
         }
       ),
-    [selectedIngredientItems]
+    [selectedIngredientItems, selectedIngredientVariantIds]
   );
   const adjustedNutritionLabelTotals = useMemo(
     () => ({
