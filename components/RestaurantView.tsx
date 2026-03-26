@@ -5,29 +5,33 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import type { LucideIcon } from "lucide-react";
 import {
+  Bean,
   Beef,
   CakeSlice,
   ChevronDown,
-  ChevronUp,
   Circle,
   CircleDashed,
   CupSoda,
   Egg,
   EggFried,
+  Expand,
   Diamond,
   Droplets,
   Drumstick,
   IceCreamCone,
   SquareUser,
   LeafyGreen,
+  Pin,
   Salad,
   Sandwich,
   Shell,
   SquarePlus,
+  Sprout,
   Soup,
   ToggleLeft,
   RotateCcw,
   Save,
+  Shrink,
   ShoppingCart,
   Utensils,
   UtensilsCrossed,
@@ -61,9 +65,13 @@ import { useCart } from "@/stores/cartStore";
 const CATEGORY_ICONS: Record<string, LucideIcon> = {
   sandwiches: Sandwich,
   "sandwich toppings": LeafyGreen,
-  toppings: Sandwich,
+  toppings: LeafyGreen,
   chicken: Drumstick,
   proteins: Drumstick,
+  rice: Sprout,
+  beans: Bean,
+  "included ingredient": Pin,
+  "included ingredients": Pin,
   "breakfast protein": Drumstick,
   condiments: Utensils,
   "salad condiments": Utensils,
@@ -73,6 +81,7 @@ const CATEGORY_ICONS: Record<string, LucideIcon> = {
   breakfast: EggFried,
   kids: SquareUser,
   sides: SquarePlus,
+  side: CircleDashed,
   desserts: CakeSlice,
   wraps: Shell,
   "wrap toppings": Waves,
@@ -932,6 +941,10 @@ export default function RestaurantView({
         selectedEntree !== "chips-sides" &&
         selectedEntree !== "high-protein-menu" &&
         selectedEntree !== "drinks"));
+  const selectedIncludedIngredientIdSet = useMemo(
+    () => new Set<string>(selectedIncludedIngredientIds),
+    [selectedIncludedIngredientIds]
+  );
   const lockedIngredientIds = useMemo(() => {
     if (selectedIncludedIngredientIds.length === 0) {
       return new Set<string>();
@@ -1457,8 +1470,12 @@ export default function RestaurantView({
     );
 
     return [...selectedEntries].sort(([leftId, leftIngredient], [rightId, rightIngredient]) => {
-      const leftCategory = normalizeIngredientCategory(leftIngredient.item.categories?.[0]);
-      const rightCategory = normalizeIngredientCategory(rightIngredient.item.categories?.[0]);
+      const leftCategory = selectedIncludedIngredientIdSet.has(leftId)
+        ? "included ingredient"
+        : normalizeIngredientCategory(leftIngredient.item.categories?.[0]);
+      const rightCategory = selectedIncludedIngredientIdSet.has(rightId)
+        ? "included ingredient"
+        : normalizeIngredientCategory(rightIngredient.item.categories?.[0]);
       const leftCategoryPriority = categoryPriority.get(leftCategory) ?? Number.POSITIVE_INFINITY;
       const rightCategoryPriority = categoryPriority.get(rightCategory) ?? Number.POSITIVE_INFINITY;
 
@@ -1475,7 +1492,7 @@ export default function RestaurantView({
 
       return leftIngredient.item.name.localeCompare(rightIngredient.item.name);
     });
-  }, [ingredientMenuItems, isChipotleBuildPage, selectedIngredientItems]);
+  }, [ingredientMenuItems, isChipotleBuildPage, selectedIncludedIngredientIdSet, selectedIngredientItems]);
   const groupedSelectedIngredientEntries = useMemo(() => {
     const groupedEntries: Array<{
       categoryKey: string;
@@ -1484,7 +1501,10 @@ export default function RestaurantView({
     }> = [];
 
     selectedIngredientEntries.forEach((entry) => {
-      const categoryKey = normalizeIngredientCategory(entry[1].item.categories?.[0]);
+      const [ingredientId, selectedIngredient] = entry;
+      const categoryKey = selectedIncludedIngredientIdSet.has(ingredientId)
+        ? "included ingredient"
+        : normalizeIngredientCategory(selectedIngredient.item.categories?.[0]);
       const existingGroup = groupedEntries.find((group) => group.categoryKey === categoryKey);
       if (existingGroup) {
         existingGroup.entries.push(entry);
@@ -1499,7 +1519,7 @@ export default function RestaurantView({
     });
 
     return groupedEntries;
-  }, [selectedIngredientEntries]);
+  }, [selectedIncludedIngredientIdSet, selectedIngredientEntries]);
   const selectedProteinCount = selectedIngredientEntries.reduce((total, [, selectedIngredient]) => {
     return total + (isProteinIngredientItem(selectedIngredient.item) ? 1 : 0);
   }, 0);
@@ -2105,8 +2125,8 @@ export default function RestaurantView({
             secondaryActionLabel="View Selected"
             secondaryActionExpandedLabel="View Selected"
             primaryActionLabel={isEditingBuild ? "Save & Add" : "Add to Cart"}
-            SecondaryActionIcon={ChevronDown}
-            SecondaryActionExpandedIcon={ChevronUp}
+            SecondaryActionIcon={Expand}
+            SecondaryActionExpandedIcon={Shrink}
             PrimaryActionIcon={ShoppingCart}
             detailsOpen={isBuildSummaryExpanded}
             detailsContent={
