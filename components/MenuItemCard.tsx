@@ -252,6 +252,10 @@ export default function MenuItemCard({
   ingredientRadioGroupName,
   ingredientVariantOptions,
   selectedIngredientVariantId,
+  ingredientPortionBadge,
+  ingredientPortionModeOptions,
+  selectedIngredientPortionModeId,
+  onIngredientPortionModeChange,
   onIngredientVariantChange,
 }: {
   restaurantId: string;
@@ -284,6 +288,10 @@ export default function MenuItemCard({
   ingredientRadioGroupName?: string;
   ingredientVariantOptions?: Array<{ id: string; label: string }>;
   selectedIngredientVariantId?: string;
+  ingredientPortionBadge?: string;
+  ingredientPortionModeOptions?: Array<{ id: string; label: string }>;
+  selectedIngredientPortionModeId?: string;
+  onIngredientPortionModeChange?: (modeId: string) => void;
   onIngredientVariantChange?: (variantId: string) => void;
 }) {
   const [open, setOpen] = useState(false);
@@ -752,6 +760,14 @@ export default function MenuItemCard({
     : ingredientUnavailableReason;
 
   if (displayMode === "ingredient-compact") {
+    const activeCompactOptions =
+      ingredientPortionModeOptions && ingredientPortionModeOptions.length > 0
+        ? ingredientPortionModeOptions
+        : ingredientVariantOptions;
+    const selectedCompactOptionId = ingredientPortionModeOptions
+      ? selectedIngredientPortionModeId
+      : selectedIngredientVariantId;
+
     return (
       <li
         className={`list-none overflow-hidden rounded-2xl bg-white transition ${
@@ -804,25 +820,36 @@ export default function MenuItemCard({
           )}
 
           <div className="min-w-0 flex-1">
+            {ingredientSelectionState && ingredientPortionBadge ? (
+              <div className="mb-1">
+                <span className="inline-flex rounded-full bg-green-600 px-2 py-0.5 text-xs font-bold text-white">
+                  {ingredientPortionBadge}
+                </span>
+              </div>
+            ) : null}
             <div className="truncate text-xl font-semibold text-black">{item.name}</div>
             {isIngredientUnavailable && ingredientUnavailableReason ? (
               <div className="mt-1 inline-flex rounded-full border border-amber-300 bg-amber-50 px-2 py-0.5 text-[11px] font-semibold text-amber-700">
                 {ingredientUnavailableReason}
               </div>
             ) : null}
-            {ingredientSelectionState && ingredientVariantOptions && ingredientVariantOptions.length > 1 ? (
+            {ingredientSelectionState && activeCompactOptions && activeCompactOptions.length > 1 ? (
               <div className="mt-2 flex gap-2">
-                {ingredientVariantOptions.map((variantOption) => (
+                {activeCompactOptions.map((variantOption) => (
                   <button
                     key={variantOption.id}
                     type="button"
                     onClick={(event) => {
                       event.preventDefault();
                       event.stopPropagation();
-                      onIngredientVariantChange?.(variantOption.id);
+                      if (ingredientPortionModeOptions) {
+                        onIngredientPortionModeChange?.(variantOption.id);
+                      } else {
+                        onIngredientVariantChange?.(variantOption.id);
+                      }
                     }}
                     className={`cursor-pointer rounded-full border px-3 py-1 text-xs font-semibold ${
-                      selectedIngredientVariantId === variantOption.id
+                      selectedCompactOptionId === variantOption.id
                         ? "border-slate-900 bg-slate-900 text-white"
                         : "border-black/20 bg-white text-slate-700 hover:border-black/35"
                     }`}

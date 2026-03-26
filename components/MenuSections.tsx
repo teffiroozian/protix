@@ -282,6 +282,10 @@ export default function MenuSections({
   ingredientRadioGroupNameById,
   ingredientVariantOptionsById,
   selectedIngredientVariantIdById,
+  ingredientPortionBadgeById,
+  ingredientPortionModeOptionsById,
+  selectedIngredientPortionModeIdById,
+  onIngredientPortionModeChange,
   onIngredientVariantChange,
 }: {
   restaurantId: string;
@@ -303,6 +307,10 @@ export default function MenuSections({
   ingredientRadioGroupNameById?: Record<string, string>;
   ingredientVariantOptionsById?: Record<string, Array<{ id: string; label: string }>>;
   selectedIngredientVariantIdById?: Record<string, string>;
+  ingredientPortionBadgeById?: Record<string, string>;
+  ingredientPortionModeOptionsById?: Record<string, Array<{ id: string; label: string }>>;
+  selectedIngredientPortionModeIdById?: Record<string, string>;
+  onIngredientPortionModeChange?: (item: MenuItem, modeId: string) => void;
   onIngredientVariantChange?: (item: MenuItem, variantId: string) => void;
 }) {
 
@@ -341,6 +349,10 @@ export default function MenuSections({
               ingredientRadioGroupName={ingredientRadioGroupNameById?.[item.id ?? ""]}
               ingredientVariantOptions={ingredientVariantOptionsById?.[item.id ?? ""]}
               selectedIngredientVariantId={selectedIngredientVariantIdById?.[item.id ?? ""]}
+              ingredientPortionBadge={ingredientPortionBadgeById?.[item.id ?? ""]}
+              ingredientPortionModeOptions={ingredientPortionModeOptionsById?.[item.id ?? ""]}
+              selectedIngredientPortionModeId={selectedIngredientPortionModeIdById?.[item.id ?? ""]}
+              onIngredientPortionModeChange={(modeId) => onIngredientPortionModeChange?.(item, modeId)}
               onIngredientVariantChange={(variantId) => onIngredientVariantChange?.(item, variantId)}
             />
           ))}
@@ -431,6 +443,10 @@ export default function MenuSections({
                 ingredientRadioGroupName={ingredientRadioGroupNameById?.[item.id ?? ""]}
                 ingredientVariantOptions={ingredientVariantOptionsById?.[item.id ?? ""]}
                 selectedIngredientVariantId={selectedIngredientVariantIdById?.[item.id ?? ""]}
+                ingredientPortionBadge={ingredientPortionBadgeById?.[item.id ?? ""]}
+                ingredientPortionModeOptions={ingredientPortionModeOptionsById?.[item.id ?? ""]}
+                selectedIngredientPortionModeId={selectedIngredientPortionModeIdById?.[item.id ?? ""]}
+                onIngredientPortionModeChange={(modeId) => onIngredientPortionModeChange?.(item, modeId)}
                 onIngredientVariantChange={(variantId) => onIngredientVariantChange?.(item, variantId)}
               />
             ))}
