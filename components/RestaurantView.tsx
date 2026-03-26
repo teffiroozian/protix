@@ -18,6 +18,7 @@ import {
   Diamond,
   Droplets,
   Drumstick,
+  Ham,
   IceCreamCone,
   SquareUser,
   LeafyGreen,
@@ -28,7 +29,9 @@ import {
   SquarePlus,
   Sprout,
   Soup,
+  Triangle,
   ToggleLeft,
+  Cylinder,
   RotateCcw,
   Save,
   Shrink,
@@ -97,6 +100,9 @@ const CATEGORY_ICONS: Record<string, LucideIcon> = {
   "treat toppings": IceCreamCone,
   dressings: Droplets,
   "dipping sauces": ToggleLeft,
+  "chips & dips": Triangle,
+  "single sides": Cylinder,
+  "protein cups": Ham,
   treats: IceCreamCone,
 };
 
