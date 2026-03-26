@@ -1752,14 +1752,14 @@ export default function RestaurantView({
       ) : null}
 
       {isChipotleBuildPage && selectedEntree === null ? (
-        <div className="py-6">
-          <section className="mx-auto flex min-h-[calc(100vh-260px)] w-full max-w-5xl flex-col items-center justify-center px-4 py-12">
+        <div>
+          <section className="mx-auto flex w-full max-w-5xl flex-col items-center px-4 pb-12">
               <p className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">Chipotle</p>
-              <h2 className="mt-4 text-center text-5xl font-bold tracking-tight text-slate-900">Choose your entrée</h2>
+              <h2 className="text-center text-5xl font-bold tracking-tight text-slate-900">Choose your entrée</h2>
               <p className="mt-3 text-center text-lg text-slate-600">
                 Start your build by selecting a base.
               </p>
-              <div className="mt-10 grid w-full max-w-3xl gap-4 sm:grid-cols-2">
+              <div className="mt-10 grid w-full max-w-5xl gap-4 sm:grid-cols-3">
                 {(Object.entries(CHIPOTLE_ENTREE_CONFIGURATIONS) as [Exclude<EntreeSelection, null>, EntreeConfiguration][]).map(([entreeKey, entree]) => (
                   <button
                     key={entreeKey}
