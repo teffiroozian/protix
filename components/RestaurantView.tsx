@@ -1449,8 +1449,8 @@ export default function RestaurantView({
       return selectedEntries;
     }
 
-    const categoryPriority = new Map(
-      CHIPOTLE_SELECTED_INGREDIENT_CATEGORY_ORDER.map((category, index) => [category, index] as const)
+    const categoryPriority = new Map<string, number>(
+      CHIPOTLE_SELECTED_INGREDIENT_CATEGORY_ORDER.map((category, index) => [category, index])
     );
     const ingredientIndexById = new Map(
       ingredientMenuItems.map((ingredient, index) => [ingredient.id ?? `${index}`, index] as const)
@@ -1717,6 +1717,11 @@ export default function RestaurantView({
         secondaryNavLeading={entreeSelectionControl}
         hideViewSelector={isBuildYourOwn}
         hideSecondaryNav={isChipotleBuildPage && selectedEntree === null}
+      />
+
+      <div
+        className={isChipotleBuildPage && selectedEntree === null ? "h-20" : "h-40"}
+        aria-hidden="true"
       />
 
       {isChipotleBuildPage && selectedEntree === "kids-meal" ? (
