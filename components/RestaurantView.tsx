@@ -1449,7 +1449,7 @@ export default function RestaurantView({
       return selectedEntries;
     }
 
-    const categoryPriority = new Map(
+    const categoryPriority = new Map<string, number>(
       CHIPOTLE_SELECTED_INGREDIENT_CATEGORY_ORDER.map((category, index) => [category, index] as const)
     );
     const ingredientIndexById = new Map(
