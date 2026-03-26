@@ -91,6 +91,11 @@ const CATEGORY_ICONS: Record<string, LucideIcon> = {
 const CHIPOTLE_HIDDEN_MENU_SECTIONS_BY_ENTREE: Record<string, string[]> = {
   "chips-sides": ["toppings"],
 };
+const CHIPOTLE_CATEGORY_MAX_SELECTIONS: Record<string, number> = {
+  proteins: 2,
+  rice: 1,
+  beans: 1,
+};
 
 type EntreeSelection =
   | "bowl"
@@ -772,6 +777,24 @@ export default function RestaurantView({
     return new Set<string>(selectedIncludedIngredientIds);
   }, [selectedEntree, selectedIncludedIngredientIds, tacoShellIngredientIds]);
 
+  const normalizeIngredientCategory = (value: string | undefined) => value?.trim().toLowerCase() ?? "";
+
+  const getIngredientCategoryMaxSelections = (item: MenuItem) => {
+    const category = normalizeIngredientCategory(item.category ?? item.categories?.[0]);
+    return CHIPOTLE_CATEGORY_MAX_SELECTIONS[category];
+  };
+
+  const getSelectedQuantityForCategory = (
+    itemsById: Record<string, { item: MenuItem; quantity: number }>,
+    category: string
+  ) =>
+    Object.values(itemsById).reduce((total, selectedIngredient) => {
+      const selectedCategory = normalizeIngredientCategory(
+        selectedIngredient.item.category ?? selectedIngredient.item.categories?.[0]
+      );
+      return selectedCategory === category ? total + selectedIngredient.quantity : total;
+    }, 0);
+
   const handleIngredientSelectionChange = (item: MenuItem, selected: boolean) => {
     const itemId = item.id;
     if (!itemId) return;
@@ -795,6 +818,16 @@ export default function RestaurantView({
         delete next[itemId];
         return next;
       }
+
+      const category = normalizeIngredientCategory(item.category ?? item.categories?.[0]);
+      const categoryMaxSelections = getIngredientCategoryMaxSelections(item);
+      if (category && typeof categoryMaxSelections === "number") {
+        const selectedQuantityInCategory = getSelectedQuantityForCategory(prev, category);
+        if (selectedQuantityInCategory >= categoryMaxSelections) {
+          return prev;
+        }
+      }
+
       return { ...prev, [itemId]: { item, quantity: 1 } };
     });
   };
@@ -891,8 +924,22 @@ export default function RestaurantView({
       const existing = previous[ingredientId];
       if (!existing) return previous;
 
-      const maxQuantity = ingredients.find((ingredient) => ingredient.id === ingredientId)?.maxQuantity ?? 2;
-      const nextQuantity = Math.max(0, Math.min(maxQuantity, existing.quantity + delta));
+      const ingredient = ingredients.find((candidate) => candidate.id === ingredientId);
+      const ingredientMaxQuantity = ingredient?.maxQuantity ?? 2;
+      const category = normalizeIngredientCategory(existing.item.category ?? existing.item.categories?.[0]);
+      const categoryMaxSelections = getIngredientCategoryMaxSelections(existing.item);
+      const selectedQuantityInCategory = category
+        ? getSelectedQuantityForCategory(previous, category)
+        : 0;
+      const categoryRemainingSelections =
+        delta > 0 && typeof categoryMaxSelections === "number"
+          ? Math.max(0, categoryMaxSelections - (selectedQuantityInCategory - existing.quantity))
+          : undefined;
+      const nextQuantityCap =
+        typeof categoryRemainingSelections === "number"
+          ? Math.min(ingredientMaxQuantity, categoryRemainingSelections)
+          : ingredientMaxQuantity;
+      const nextQuantity = Math.max(0, Math.min(nextQuantityCap, existing.quantity + delta));
       const next = { ...previous };
 
       if (nextQuantity === 0) {
