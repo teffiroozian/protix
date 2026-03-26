@@ -214,10 +214,18 @@ const CHIPOTLE_QUESADILLA_TRIPLE_CHEESE_VARIANT_ID = "quesadilla-triple-cheese";
 const CHIPOTLE_KIDS_MEAL_OPTIONS: Array<{
   id: KidsMealSelection;
   label: string;
-  Icon: LucideIcon;
+  imageSrc: string;
 }> = [
-  { id: "build-your-own", label: "Kid's BYO", Icon: Utensils },
-  { id: "quesadilla", label: "Kid's Quesadilla", Icon: Shell },
+  {
+    id: "build-your-own",
+    label: "Kid's Build Your Own",
+    imageSrc: "/restaurants/chipotle/entrees/kids-meal.png",
+  },
+  {
+    id: "quesadilla",
+    label: "Kid's Quesadilla",
+    imageSrc: "/restaurants/chipotle/entrees/quesadilla.png",
+  },
 ];
 
 function formatValue(value?: number, suffix = "") {
@@ -1978,29 +1986,44 @@ export default function RestaurantView({
           <div className="min-w-0">
             <div className="mx-auto max-w-[900px]">
               {isChipotleBuildPage && selectedEntree === "kids-meal" ? (
-                <section className="mb-4 rounded-2xl border border-black/10 bg-white p-4">
-                  <p className="text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">
-                    Kid&apos;s meal option
+                <section className="mb-6">
+                  <p className="text-sm font-semibold text-slate-700">
+                    Choose Your Kid&apos;s Meal
                   </p>
                   <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
                     {CHIPOTLE_KIDS_MEAL_OPTIONS.map((option) => {
                       const isActive = selectedKidsMeal === option.id;
-                      const Icon = option.Icon;
                       return (
                         <button
                           key={option.id}
                           type="button"
                           onClick={() => handleKidsMealSelection(option.id)}
-                          className={`cursor-pointer rounded-xl border px-4 py-3 text-left transition ${
+                          className={`cursor-pointer rounded-3xl border bg-white p-4 text-left transition ${
                             isActive
-                              ? "border-slate-900 bg-slate-900 text-white"
-                              : "border-slate-300 bg-white text-slate-800 hover:border-slate-500"
+                              ? "border-2 border-lime-500 shadow-[0_4px_12px_rgba(132,204,22,0.25)]"
+                              : "border-black/10 hover:border-black/25"
                           }`}
+                          aria-pressed={isActive}
                         >
-                          <span className="inline-flex items-center gap-2">
-                            <Icon className="h-4 w-4" aria-hidden="true" />
-                            <span className="text-sm font-semibold">{option.label}</span>
+                          <span className="flex items-start justify-between gap-3">
+                            <span className="relative h-20 w-full overflow-hidden rounded-2xl border border-black/5 bg-slate-50">
+                              <Image
+                                src={option.imageSrc}
+                                alt={option.label}
+                                fill
+                                className="object-contain p-2"
+                              />
+                            </span>
+                            <span
+                              className={`mt-1 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full border ${
+                                isActive ? "border-lime-500" : "border-slate-400"
+                              }`}
+                              aria-hidden="true"
+                            >
+                              {isActive ? <span className="h-2.5 w-2.5 rounded-full bg-lime-500" /> : null}
+                            </span>
                           </span>
+                          <span className="mt-3 block text-sm font-semibold text-slate-900">{option.label}</span>
                         </button>
                       );
                     })}
