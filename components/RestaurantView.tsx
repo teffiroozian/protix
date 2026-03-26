@@ -424,7 +424,20 @@ export default function RestaurantView({
     };
 
     return ingredients
-      .filter((ingredient) => !ingredient.hideFromIngredientView)
+      .filter((ingredient) => {
+        if (ingredient.hideFromIngredientView) {
+          return false;
+        }
+
+        const isTacoShellIngredient = ingredient.id
+          ? tacoShellIngredientIds.includes(ingredient.id)
+          : false;
+        if (isTacoShellIngredient && selectedEntree !== "tacos") {
+          return false;
+        }
+
+        return true;
+      })
       .map((ingredient, index) => {
         const ingredientId =
           ingredient.id ??
