@@ -312,9 +312,14 @@ export default function MenuItemCard({
   const [isAddFeedbackVisible, setIsAddFeedbackVisible] = useState(false);
   const [isIngredientSelected, setIsIngredientSelected] = useState(controlledIngredientSelected ?? false);
   const { items, addItem, updateQuantity } = useCart();
-  const selectedVariant = variants?.find((variant) => variant.id === selectedVariantId);
+  const effectiveSelectedVariantId =
+    displayMode === "ingredient-compact" && selectedIngredientVariantId
+      ? selectedIngredientVariantId
+      : selectedVariantId;
+  const selectedVariant = variants?.find((variant) => variant.id === effectiveSelectedVariantId);
   const selectedItemImage = selectedVariant?.image ?? item.image;
   const baseNutrition = selectedVariant?.nutrition ?? item.nutrition;
+
   const applicableCommonChanges = useMemo(
     () => getApplicableCommonChanges(item, commonChanges),
     [item, commonChanges]
@@ -805,7 +810,7 @@ export default function MenuItemCard({
                 {ingredientUnavailableReason}
               </div>
             ) : null}
-            {ingredientVariantOptions && ingredientVariantOptions.length > 1 ? (
+            {ingredientSelectionState && ingredientVariantOptions && ingredientVariantOptions.length > 1 ? (
               <div className="mt-2 flex gap-2">
                 {ingredientVariantOptions.map((variantOption) => (
                   <button
