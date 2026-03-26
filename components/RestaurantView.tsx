@@ -207,6 +207,26 @@ function scaleNutritionValues(
   );
 }
 
+function buildPortionVariantsFromBase(ingredientId: string, nutrition: MenuItem["nutrition"]) {
+  return [
+    {
+      id: `${ingredientId}-half`,
+      label: "Half",
+      nutrition: scaleNutritionValues(nutrition, 0.5),
+    },
+    {
+      id: `${ingredientId}-normal`,
+      label: "Normal",
+      nutrition: scaleNutritionValues(nutrition, 1),
+    },
+    {
+      id: `${ingredientId}-double`,
+      label: "Double",
+      nutrition: scaleNutritionValues(nutrition, 2),
+    },
+  ];
+}
+
 export default function RestaurantView({
   restaurantId,
   restaurantName,
@@ -367,15 +387,32 @@ export default function RestaurantView({
           selectedIncludedIngredientIds.includes(ingredientId) ||
           (selectedEntree === "tacos" && tacoShellIngredientIds.includes(ingredientId));
         const displayCategory = shouldPinToIncludedCategory ? "Included Ingredient" : resolvedCategory;
+        const hasCustomVariants = Boolean(ingredient.variants?.length);
+        const isProteinIngredient = resolvedCategory.trim().toLowerCase() === "proteins";
+        const ingredientBaseNutrition =
+          selectedEntree === "kids-meal" && selectedKidsMeal === "quesadilla"
+            ? CHIPOTLE_KIDS_QUESADILLA_NUTRITION_OVERRIDES[ingredientId] ??
+              scaleNutritionValues(ingredient.nutrition, ingredientDisplayMultiplier)
+            : scaleNutritionValues(ingredient.nutrition, ingredientDisplayMultiplier);
+        const variants = hasCustomVariants
+          ? ingredient.variants?.map((variant) => ({
+              ...variant,
+              nutrition: scaleNutritionValues(variant.nutrition, ingredientDisplayMultiplier),
+            }))
+          : isChipotleBuildPage && isProteinIngredient
+            ? buildPortionVariantsFromBase(ingredientId, ingredientBaseNutrition)
+            : undefined;
+        const defaultVariantId =
+          ingredient.defaultVariantId ??
+          (isChipotleBuildPage && isProteinIngredient ? `${ingredientId}-normal` : undefined);
 
         return {
           id: ingredientId,
           name: ingredient.name,
-          nutrition:
-            selectedEntree === "kids-meal" && selectedKidsMeal === "quesadilla"
-              ? CHIPOTLE_KIDS_QUESADILLA_NUTRITION_OVERRIDES[ingredientId] ??
-                scaleNutritionValues(ingredient.nutrition, ingredientDisplayMultiplier)
-              : scaleNutritionValues(ingredient.nutrition, ingredientDisplayMultiplier),
+          nutrition: ingredientBaseNutrition,
+          variants,
+          defaultVariantId,
+          hideVariantSelector: ingredient.hideVariantSelector,
           image: ingredient.image,
           categories: [displayCategory],
           portionType: "addon",
@@ -384,6 +421,7 @@ export default function RestaurantView({
   }, [
     ingredientDisplayMultiplier,
     ingredients,
+    isChipotleBuildPage,
     restaurantId,
     selectedEntree,
     selectedKidsMeal,

@@ -114,6 +114,9 @@ export type IngredientItem = {
   image?: string;
   category?: string;
   categories?: string[];
+  variants?: ItemVariant[];
+  defaultVariantId?: string;
+  hideVariantSelector?: boolean;
   maxQuantity?: number;
   hideFromIngredientView?: boolean;
 };
