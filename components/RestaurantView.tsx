@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import type { LucideIcon } from "lucide-react";
@@ -111,6 +111,7 @@ type EntreeSelection =
 type TacoShellSelection = "crispy" | "soft";
 type TacoCountSelection = 3 | 1;
 type KidsMealSelection = "build-your-own" | "quesadilla";
+type ProteinPortionMode = "normal" | "double";
 type EntreeConfiguration = {
   label: string;
   imageSrc: string;
@@ -191,6 +192,14 @@ function formatValue(value?: number, suffix = "") {
   return value === undefined ? "—" : `${value}${suffix}`;
 }
 
+function normalizeIngredientCategory(value: string | undefined) {
+  return value?.trim().toLowerCase() ?? "";
+}
+
+function isProteinIngredientItem(item: Pick<MenuItem, "categories">) {
+  return normalizeIngredientCategory(item.categories?.[0]) === "proteins";
+}
+
 function scaleNutritionValues(
   nutrition: MenuItem["nutrition"] | IngredientItem["nutrition"],
   multiplier: number
@@ -207,24 +216,18 @@ function scaleNutritionValues(
   );
 }
 
-function buildPortionVariantsFromBase(ingredientId: string, nutrition: MenuItem["nutrition"]) {
-  return [
-    {
-      id: `${ingredientId}-half`,
-      label: "Half",
-      nutrition: scaleNutritionValues(nutrition, 0.5),
-    },
-    {
-      id: `${ingredientId}-normal`,
-      label: "Normal",
-      nutrition: scaleNutritionValues(nutrition, 1),
-    },
-    {
-      id: `${ingredientId}-double`,
-      label: "Double",
-      nutrition: scaleNutritionValues(nutrition, 2),
-    },
-  ];
+function getProteinMultiplier(mode: ProteinPortionMode, selectedProteinCount: number) {
+  if (selectedProteinCount <= 0) return 0;
+  if (mode === "double") {
+    return selectedProteinCount === 1 ? 2 : 1;
+  }
+
+  return selectedProteinCount === 1 ? 1 : 0.5;
+}
+
+function getProteinBadgeLabel(mode: ProteinPortionMode, selectedProteinCount: number) {
+  const multiplier = getProteinMultiplier(mode, selectedProteinCount);
+  return multiplier === 0.5 ? "1/2x" : `${multiplier}x`;
 }
 
 export default function RestaurantView({
@@ -289,6 +292,7 @@ export default function RestaurantView({
     Record<string, { item: MenuItem; quantity: number }>
   >({});
   const [selectedIngredientVariantIds, setSelectedIngredientVariantIds] = useState<Record<string, string>>({});
+  const [proteinPortionMode, setProteinPortionMode] = useState<ProteinPortionMode>("normal");
   const [isBuildSummaryExpanded, setIsBuildSummaryExpanded] = useState(false);
   const buildStickyContainerRef = useRef<HTMLDivElement | null>(null);
   const [selectedEntree, setSelectedEntree] = useState<EntreeSelection>(null);
@@ -389,7 +393,6 @@ export default function RestaurantView({
           (selectedEntree === "tacos" && tacoShellIngredientIds.includes(ingredientId));
         const displayCategory = shouldPinToIncludedCategory ? "Included Ingredient" : resolvedCategory;
         const hasCustomVariants = Boolean(ingredient.variants?.length);
-        const isProteinIngredient = resolvedCategory.trim().toLowerCase() === "proteins";
         const ingredientBaseNutrition =
           selectedEntree === "kids-meal" && selectedKidsMeal === "quesadilla"
             ? CHIPOTLE_KIDS_QUESADILLA_NUTRITION_OVERRIDES[ingredientId] ??
@@ -400,12 +403,8 @@ export default function RestaurantView({
               ...variant,
               nutrition: scaleNutritionValues(variant.nutrition, ingredientDisplayMultiplier),
             }))
-          : isChipotleBuildPage && isProteinIngredient
-            ? buildPortionVariantsFromBase(ingredientId, ingredientBaseNutrition)
-            : undefined;
-        const defaultVariantId =
-          ingredient.defaultVariantId ??
-          (isChipotleBuildPage && isProteinIngredient ? `${ingredientId}-normal` : undefined);
+          : undefined;
+        const defaultVariantId = ingredient.defaultVariantId;
 
         return {
           id: ingredientId,
@@ -815,8 +814,42 @@ export default function RestaurantView({
     }
     return new Set<string>(selectedIncludedIngredientIds);
   }, [selectedEntree, selectedIncludedIngredientIds, tacoShellIngredientIds]);
+  const applyProteinPortionNutrition = useCallback(
+    (
+      itemsById: Record<string, { item: MenuItem; quantity: number }>,
+      mode: ProteinPortionMode = proteinPortionMode
+    ) => {
+      const proteinIds = Object.entries(itemsById)
+        .filter(([, selectedIngredient]) => isProteinIngredientItem(selectedIngredient.item))
+        .map(([ingredientId]) => ingredientId);
 
-  const normalizeIngredientCategory = (value: string | undefined) => value?.trim().toLowerCase() ?? "";
+      if (proteinIds.length === 0) {
+        return itemsById;
+      }
+
+      const perProteinMultiplier = getProteinMultiplier(mode, proteinIds.length);
+      const nextItems = { ...itemsById };
+
+      proteinIds.forEach((ingredientId) => {
+        const selectedIngredient = nextItems[ingredientId];
+        const baseIngredient = ingredientItemsById.get(ingredientId);
+        if (!selectedIngredient || !baseIngredient) {
+          return;
+        }
+
+        nextItems[ingredientId] = {
+          ...selectedIngredient,
+          item: {
+            ...selectedIngredient.item,
+            nutrition: scaleNutritionValues(baseIngredient.nutrition, perProteinMultiplier),
+          },
+        };
+      });
+
+      return nextItems;
+    },
+    [ingredientItemsById, proteinPortionMode]
+  );
 
   const getIngredientCategoryMaxSelections = (item: MenuItem) => {
     const category = normalizeIngredientCategory(item.categories[0]);
@@ -855,7 +888,7 @@ export default function RestaurantView({
         if (!(itemId in prev)) return prev;
         const next = { ...prev };
         delete next[itemId];
-        return next;
+        return applyProteinPortionNutrition(next);
       }
 
       const category = normalizeIngredientCategory(item.categories[0]);
@@ -869,7 +902,7 @@ export default function RestaurantView({
 
       const selectedVariantId = selectedIngredientVariantIds[itemId] ?? item.defaultVariantId;
       const selectedVariant = item.variants?.find((variant) => variant.id === selectedVariantId);
-      return {
+      const next = {
         ...prev,
         [itemId]: {
           item: {
@@ -879,6 +912,7 @@ export default function RestaurantView({
           quantity: 1,
         },
       };
+      return applyProteinPortionNutrition(next);
     });
 
     if (!selected) {
@@ -930,7 +964,7 @@ export default function RestaurantView({
         next[includedIngredientId] = { item: includedIngredientItem, quantity: 1 };
       });
 
-      return next;
+      return applyProteinPortionNutrition(next);
     });
   };
 
@@ -1036,6 +1070,11 @@ export default function RestaurantView({
   };
 
   const selectedIngredientEntries = Object.entries(selectedIngredientItems);
+  const selectedProteinCount = selectedIngredientEntries.reduce((total, [, selectedIngredient]) => {
+    return total + (isProteinIngredientItem(selectedIngredient.item) ? 1 : 0);
+  }, 0);
+  const proteinBadgeLabel =
+    selectedProteinCount > 0 ? getProteinBadgeLabel(proteinPortionMode, selectedProteinCount) : undefined;
   const unavailableIngredientIds = useMemo(() => {
     if (!isChipotleBuildPage || !selectedEntree) {
       return new Set<string>();
@@ -1318,7 +1357,13 @@ export default function RestaurantView({
                   (() => {
                     const variantOptionsById = Object.fromEntries(
                       visibleMenuItems
-                        .filter((item) => item.id && item.variants && item.variants.length > 1)
+                        .filter(
+                          (item) =>
+                            item.id &&
+                            item.variants &&
+                            item.variants.length > 1 &&
+                            !isProteinIngredientItem(item)
+                        )
                         .map((item) => [
                           item.id as string,
                           item.variants!.map((variant) => ({ id: variant.id, label: variant.label })),
@@ -1341,7 +1386,13 @@ export default function RestaurantView({
                   (() => {
                     const selectedById = Object.fromEntries(
                       visibleMenuItems
-                        .filter((item) => item.id && item.variants && item.variants.length > 1)
+                        .filter(
+                          (item) =>
+                            item.id &&
+                            item.variants &&
+                            item.variants.length > 1 &&
+                            !isProteinIngredientItem(item)
+                        )
                         .map((item) => [
                           item.id as string,
                           selectedIngredientVariantIds[item.id as string] ??
@@ -1359,6 +1410,53 @@ export default function RestaurantView({
                     return Object.keys(selectedById).length > 0 ? selectedById : undefined;
                   })()
                 }
+                ingredientPortionBadgeById={
+                  (() => {
+                    if (!proteinBadgeLabel) return undefined;
+                    const badgeById = Object.fromEntries(
+                      Object.entries(selectedIngredientItems)
+                        .filter(([, selectedIngredient]) => isProteinIngredientItem(selectedIngredient.item))
+                        .map(([ingredientId]) => [ingredientId, proteinBadgeLabel])
+                    );
+                    return Object.keys(badgeById).length > 0 ? badgeById : undefined;
+                  })()
+                }
+                ingredientPortionModeOptionsById={
+                  (() => {
+                    const optionsById = Object.fromEntries(
+                      visibleMenuItems
+                        .filter((item) => item.id && isProteinIngredientItem(item))
+                        .map((item) => [
+                          item.id as string,
+                          [
+                            { id: "normal", label: "Normal" },
+                            { id: "double", label: "Double" },
+                          ],
+                        ])
+                    );
+
+                    return Object.keys(optionsById).length > 0 ? optionsById : undefined;
+                  })()
+                }
+                selectedIngredientPortionModeIdById={
+                  (() => {
+                    const selectedModeById = Object.fromEntries(
+                      visibleMenuItems
+                        .filter((item) => item.id && isProteinIngredientItem(item))
+                        .map((item) => [item.id as string, proteinPortionMode])
+                    );
+
+                    return Object.keys(selectedModeById).length > 0 ? selectedModeById : undefined;
+                  })()
+                }
+                onIngredientPortionModeChange={(item, modeId) => {
+                  if (!isProteinIngredientItem(item)) return;
+                  if (modeId !== "normal" && modeId !== "double") return;
+                  setSelectedIngredientItems((previous) =>
+                    applyProteinPortionNutrition(previous, modeId)
+                  );
+                  setProteinPortionMode(modeId);
+                }}
                 onIngredientVariantChange={
                   (item, variantId) => {
                     if (selectedEntree === "tacos" && item.id && tacoShellIngredientIds.includes(item.id)) {
