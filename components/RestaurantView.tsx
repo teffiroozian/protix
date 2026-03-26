@@ -1282,7 +1282,7 @@ export default function RestaurantView({
       });
     }
 
-    hydratedEditItemIdRef.current = null;
+    hydratedEditItemIdRef.current = editingCartItem ? editingCartItem.id : null;
     const nextParams = new URLSearchParams(searchParams.toString());
     nextParams.delete("editCartItem");
     const nextQuery = nextParams.toString();
@@ -1424,9 +1424,6 @@ export default function RestaurantView({
     setProteinPortionMode("normal");
     setSplitPortionModeById({});
     selectedIngredientsListRef.current?.scrollTo({ top: 0, behavior: "smooth" });
-    if (typeof window !== "undefined") {
-      window.alert("Selections cleared and order reset.");
-    }
   };
 
   const handleSaveSelectedIngredientOrder = () => {
@@ -2108,7 +2105,7 @@ export default function RestaurantView({
                   <button
                     type="button"
                     onClick={handleResetSelectedIngredientOrder}
-                    className="inline-flex items-center gap-1.5 rounded-full border border-black/20 bg-white px-3 py-1 text-xs font-semibold text-slate-700 transition hover:bg-slate-50"
+                    className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-black/20 bg-white px-3 py-1 text-xs font-semibold text-slate-700 transition hover:bg-slate-50"
                   >
                     <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
                     <span>Reset order</span>
@@ -2116,7 +2113,7 @@ export default function RestaurantView({
                   <button
                     type="button"
                     onClick={handleSaveSelectedIngredientOrder}
-                    className="inline-flex items-center gap-1.5 rounded-full border border-transparent bg-slate-900 px-3 py-1 text-xs font-semibold text-white transition hover:bg-slate-800"
+                    className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-transparent bg-slate-900 px-3 py-1 text-xs font-semibold text-white transition hover:bg-slate-800"
                   >
                     <Save className="h-3.5 w-3.5" aria-hidden="true" />
                     <span>Save order</span>
