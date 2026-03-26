@@ -94,7 +94,7 @@ const CHIPOTLE_HIDDEN_MENU_SECTIONS_BY_ENTREE: Record<string, string[]> = {
 const CHIPOTLE_CATEGORY_MAX_SELECTIONS: Record<string, number> = {
   proteins: 2,
   rice: 2,
-  beans: 1,
+  beans: 2,
 };
 
 type EntreeSelection =
@@ -112,7 +112,7 @@ type TacoShellSelection = "crispy" | "soft";
 type TacoCountSelection = 3 | 1;
 type KidsMealSelection = "build-your-own" | "quesadilla";
 type ProteinPortionMode = "normal" | "double";
-type RicePortionMode = "light" | "normal" | "extra";
+type SplitPortionMode = "light" | "normal" | "extra";
 type EntreeConfiguration = {
   label: string;
   imageSrc: string;
@@ -205,6 +205,14 @@ function isRiceIngredientItem(item: Pick<MenuItem, "categories">) {
   return normalizeIngredientCategory(item.categories?.[0]) === "rice";
 }
 
+function isBeanIngredientItem(item: Pick<MenuItem, "categories">) {
+  return normalizeIngredientCategory(item.categories?.[0]) === "beans";
+}
+
+function isSplitPortionIngredientItem(item: Pick<MenuItem, "categories">) {
+  return isRiceIngredientItem(item) || isBeanIngredientItem(item);
+}
+
 function scaleNutritionValues(
   nutrition: MenuItem["nutrition"] | IngredientItem["nutrition"],
   multiplier: number
@@ -251,7 +259,7 @@ function getNutritionMultiplier(
   return 1;
 }
 
-function getRiceExtraMultiplier(item: MenuItem) {
+function getSplitExtraMultiplier(item: MenuItem) {
   const extraVariant = item.variants?.find((variant) => {
     const label = variant.label?.trim().toLowerCase() ?? "";
     const id = variant.id?.trim().toLowerCase() ?? "";
@@ -328,7 +336,7 @@ export default function RestaurantView({
   >({});
   const [selectedIngredientVariantIds, setSelectedIngredientVariantIds] = useState<Record<string, string>>({});
   const [proteinPortionMode, setProteinPortionMode] = useState<ProteinPortionMode>("normal");
-  const [ricePortionModeById, setRicePortionModeById] = useState<Record<string, RicePortionMode>>({});
+  const [splitPortionModeById, setSplitPortionModeById] = useState<Record<string, SplitPortionMode>>({});
   const [isBuildSummaryExpanded, setIsBuildSummaryExpanded] = useState(false);
   const buildStickyContainerRef = useRef<HTMLDivElement | null>(null);
   const [selectedEntree, setSelectedEntree] = useState<EntreeSelection>(null);
@@ -886,73 +894,78 @@ export default function RestaurantView({
     },
     [ingredientItemsById, proteinPortionMode]
   );
-  const applyRicePortionNutrition = useCallback(
+  const applySplitPortionNutrition = useCallback(
     (
       itemsById: Record<string, { item: MenuItem; quantity: number }>,
-      portionModesById: Record<string, RicePortionMode> = ricePortionModeById
+      portionModesById: Record<string, SplitPortionMode> = splitPortionModeById
     ) => {
-      const riceIds = Object.entries(itemsById)
-        .filter(([, selectedIngredient]) => isRiceIngredientItem(selectedIngredient.item))
-        .map(([ingredientId]) => ingredientId);
-
-      if (riceIds.length === 0) {
-        return itemsById;
-      }
-
       const nextItems = { ...itemsById };
+      const splitCategories = ["rice", "beans"] as const;
 
-      if (riceIds.length >= 2) {
-        riceIds.forEach((ingredientId) => {
-          const selectedIngredient = nextItems[ingredientId];
-          const baseIngredient = ingredientItemsById.get(ingredientId);
-          if (!selectedIngredient || !baseIngredient) return;
+      splitCategories.forEach((splitCategory) => {
+        const selectedSplitIds = Object.entries(itemsById)
+          .filter(
+            ([, selectedIngredient]) =>
+              normalizeIngredientCategory(selectedIngredient.item.categories?.[0]) === splitCategory
+          )
+          .map(([ingredientId]) => ingredientId);
 
-          nextItems[ingredientId] = {
-            ...selectedIngredient,
-            item: {
-              ...selectedIngredient.item,
-              nutrition: scaleNutritionValues(baseIngredient.nutrition, 0.5),
-            },
-          };
-        });
+        if (selectedSplitIds.length === 0) {
+          return;
+        }
 
-        return nextItems;
-      }
+        if (selectedSplitIds.length >= 2) {
+          selectedSplitIds.forEach((ingredientId) => {
+            const selectedIngredient = nextItems[ingredientId];
+            const baseIngredient = ingredientItemsById.get(ingredientId);
+            if (!selectedIngredient || !baseIngredient) return;
 
-      const [riceId] = riceIds;
-      const selectedIngredient = nextItems[riceId];
-      const baseIngredient = ingredientItemsById.get(riceId);
-      if (!selectedIngredient || !baseIngredient) {
-        return nextItems;
-      }
+            nextItems[ingredientId] = {
+              ...selectedIngredient,
+              item: {
+                ...selectedIngredient.item,
+                nutrition: scaleNutritionValues(baseIngredient.nutrition, 0.5),
+              },
+            };
+          });
+          return;
+        }
 
-      const mode = portionModesById[riceId] ?? "normal";
-      const multiplier =
-        mode === "light" ? 0.5 : mode === "extra" ? getRiceExtraMultiplier(baseIngredient) : 1;
-      nextItems[riceId] = {
-        ...selectedIngredient,
-        item: {
-          ...selectedIngredient.item,
-          nutrition: scaleNutritionValues(baseIngredient.nutrition, multiplier),
-        },
-      };
+        const [splitId] = selectedSplitIds;
+        const selectedIngredient = nextItems[splitId];
+        const baseIngredient = ingredientItemsById.get(splitId);
+        if (!selectedIngredient || !baseIngredient) {
+          return;
+        }
+
+        const mode = portionModesById[splitId] ?? "normal";
+        const multiplier =
+          mode === "light" ? 0.5 : mode === "extra" ? getSplitExtraMultiplier(baseIngredient) : 1;
+        nextItems[splitId] = {
+          ...selectedIngredient,
+          item: {
+            ...selectedIngredient.item,
+            nutrition: scaleNutritionValues(baseIngredient.nutrition, multiplier),
+          },
+        };
+      });
 
       return nextItems;
     },
-    [ingredientItemsById, ricePortionModeById]
+    [ingredientItemsById, splitPortionModeById]
   );
   const applyIngredientPortionNutrition = useCallback(
     (
       itemsById: Record<string, { item: MenuItem; quantity: number }>,
       options?: {
         proteinMode?: ProteinPortionMode;
-        riceModesById?: Record<string, RicePortionMode>;
+        splitModesById?: Record<string, SplitPortionMode>;
       }
     ) => {
       const withProtein = applyProteinPortionNutrition(itemsById, options?.proteinMode);
-      return applyRicePortionNutrition(withProtein, options?.riceModesById);
+      return applySplitPortionNutrition(withProtein, options?.splitModesById);
     },
-    [applyProteinPortionNutrition, applyRicePortionNutrition]
+    [applyProteinPortionNutrition, applySplitPortionNutrition]
   );
 
   const getIngredientCategoryMaxSelections = (item: MenuItem) => {
@@ -987,27 +1000,31 @@ export default function RestaurantView({
 
     if (lockedIngredientIds.has(itemId)) return;
 
-    const currentSelectedRiceIds = Object.entries(selectedIngredientItems)
-      .filter(([, selectedIngredient]) => isRiceIngredientItem(selectedIngredient.item))
+    const splitCategory = normalizeIngredientCategory(item.categories?.[0]);
+    const isSplitItem = isSplitPortionIngredientItem(item);
+    const currentSelectedSplitIds = Object.entries(selectedIngredientItems)
+      .filter(
+        ([, selectedIngredient]) =>
+          normalizeIngredientCategory(selectedIngredient.item.categories?.[0]) === splitCategory
+      )
       .map(([ingredientId]) => ingredientId);
-    const isRiceItem = isRiceIngredientItem(item);
-    const nextRicePortionModes = (() => {
-      if (!isRiceItem) return { ...ricePortionModeById };
+    const nextSplitPortionModes = (() => {
+      if (!isSplitItem) return { ...splitPortionModeById };
 
-      const nextModes = { ...ricePortionModeById };
+      const nextModes = { ...splitPortionModeById };
       if (!selected) {
         delete nextModes[itemId];
-        if (currentSelectedRiceIds.length === 2) {
-          const remainingRiceId = currentSelectedRiceIds.find((riceId) => riceId !== itemId);
-          if (remainingRiceId) {
-            nextModes[remainingRiceId] = "normal";
+        if (currentSelectedSplitIds.length === 2) {
+          const remainingSplitId = currentSelectedSplitIds.find((splitId) => splitId !== itemId);
+          if (remainingSplitId) {
+            nextModes[remainingSplitId] = "normal";
           }
         }
         return nextModes;
       }
 
-      if (currentSelectedRiceIds.length === 1 && !currentSelectedRiceIds.includes(itemId)) {
-        nextModes[currentSelectedRiceIds[0]] = "normal";
+      if (currentSelectedSplitIds.length === 1 && !currentSelectedSplitIds.includes(itemId)) {
+        nextModes[currentSelectedSplitIds[0]] = "normal";
         nextModes[itemId] = "normal";
         return nextModes;
       }
@@ -1021,7 +1038,7 @@ export default function RestaurantView({
         if (!(itemId in prev)) return prev;
         const next = { ...prev };
         delete next[itemId];
-        return applyIngredientPortionNutrition(next, { riceModesById: nextRicePortionModes });
+        return applyIngredientPortionNutrition(next, { splitModesById: nextSplitPortionModes });
       }
 
       const category = normalizeIngredientCategory(item.categories[0]);
@@ -1045,10 +1062,10 @@ export default function RestaurantView({
           quantity: 1,
         },
       };
-      return applyIngredientPortionNutrition(next, { riceModesById: nextRicePortionModes });
+      return applyIngredientPortionNutrition(next, { splitModesById: nextSplitPortionModes });
     });
-    if (isRiceItem) {
-      setRicePortionModeById(nextRicePortionModes);
+    if (isSplitItem) {
+      setSplitPortionModeById(nextSplitPortionModes);
     }
 
     if (!selected) {
@@ -1548,10 +1565,6 @@ export default function RestaurantView({
                 }
                 ingredientPortionBadgeById={
                   (() => {
-                    const selectedRiceIds = Object.entries(selectedIngredientItems)
-                      .filter(([, selectedIngredient]) => isRiceIngredientItem(selectedIngredient.item))
-                      .map(([ingredientId]) => ingredientId);
-                    const isSplitRiceSelection = selectedRiceIds.length === 2;
                     const badgeById = Object.fromEntries(
                       Object.entries(selectedIngredientItems)
                         .filter(
@@ -1561,11 +1574,19 @@ export default function RestaurantView({
                         .map(([ingredientId]) => [ingredientId, proteinBadgeLabel])
                     ) as Record<string, string>;
 
-                    if (isSplitRiceSelection) {
-                      selectedRiceIds.forEach((ingredientId) => {
-                        badgeById[ingredientId] = "1/2x";
-                      });
-                    }
+                    (["rice", "beans"] as const).forEach((splitCategory) => {
+                      const selectedSplitIds = Object.entries(selectedIngredientItems)
+                        .filter(
+                          ([, selectedIngredient]) =>
+                            normalizeIngredientCategory(selectedIngredient.item.categories?.[0]) === splitCategory
+                        )
+                        .map(([ingredientId]) => ingredientId);
+                      if (selectedSplitIds.length === 2) {
+                        selectedSplitIds.forEach((ingredientId) => {
+                          badgeById[ingredientId] = "1/2x";
+                        });
+                      }
+                    });
 
                     return Object.keys(badgeById).length > 0 ? badgeById : undefined;
                   })()
@@ -1587,26 +1608,33 @@ export default function RestaurantView({
                         ])
                     );
 
-                    const selectedRiceCount = Object.values(selectedIngredientItems).filter((selectedIngredient) =>
-                      isRiceIngredientItem(selectedIngredient.item)
-                    ).length;
-                    const riceModeOptions =
-                      selectedRiceCount === 2
-                        ? [
-                            { id: "light", label: "Light", disabled: true },
-                            { id: "normal", label: "Normal", disabled: true },
-                            { id: "extra", label: "Extra", disabled: true },
-                          ]
-                        : [
-                            { id: "light", label: "Light" },
-                            { id: "normal", label: "Normal" },
-                            { id: "extra", label: "Extra" },
-                          ];
-                    visibleMenuItems
-                      .filter((item) => item.id && isRiceIngredientItem(item))
-                      .forEach((item) => {
-                        optionsById[item.id as string] = riceModeOptions;
-                      });
+                    (["rice", "beans"] as const).forEach((splitCategory) => {
+                      const selectedSplitCount = Object.values(selectedIngredientItems).filter(
+                        (selectedIngredient) =>
+                          normalizeIngredientCategory(selectedIngredient.item.categories?.[0]) === splitCategory
+                      ).length;
+                      const splitModeOptions =
+                        selectedSplitCount === 2
+                          ? [
+                              { id: "light", label: "Light", disabled: true },
+                              { id: "normal", label: "Normal", disabled: true },
+                              { id: "extra", label: "Extra", disabled: true },
+                            ]
+                          : [
+                              { id: "light", label: "Light" },
+                              { id: "normal", label: "Normal" },
+                              { id: "extra", label: "Extra" },
+                            ];
+                      visibleMenuItems
+                        .filter(
+                          (item) =>
+                            item.id &&
+                            normalizeIngredientCategory(item.categories?.[0]) === splitCategory
+                        )
+                        .forEach((item) => {
+                          optionsById[item.id as string] = splitModeOptions;
+                        });
+                    });
 
                     return Object.keys(optionsById).length > 0 ? optionsById : undefined;
                   })()
@@ -1618,19 +1646,28 @@ export default function RestaurantView({
                         .filter((item) => item.id && isProteinIngredientItem(item))
                         .map((item) => [item.id as string, proteinPortionMode])
                     );
-                    const selectedRiceIds = Object.entries(selectedIngredientItems)
-                      .filter(([, selectedIngredient]) => isRiceIngredientItem(selectedIngredient.item))
-                      .map(([ingredientId]) => ingredientId);
-                    const isSplitRiceSelection = selectedRiceIds.length === 2;
+                    (["rice", "beans"] as const).forEach((splitCategory) => {
+                      const selectedSplitIds = Object.entries(selectedIngredientItems)
+                        .filter(
+                          ([, selectedIngredient]) =>
+                            normalizeIngredientCategory(selectedIngredient.item.categories?.[0]) === splitCategory
+                        )
+                        .map(([ingredientId]) => ingredientId);
+                      const isSplitSelection = selectedSplitIds.length === 2;
 
-                    visibleMenuItems
-                      .filter((item) => item.id && isRiceIngredientItem(item))
-                      .forEach((item) => {
-                        const itemId = item.id as string;
-                        selectedModeById[itemId] = isSplitRiceSelection
-                          ? "normal"
-                          : (ricePortionModeById[itemId] ?? "normal");
-                      });
+                      visibleMenuItems
+                        .filter(
+                          (item) =>
+                            item.id &&
+                            normalizeIngredientCategory(item.categories?.[0]) === splitCategory
+                        )
+                        .forEach((item) => {
+                          const itemId = item.id as string;
+                          selectedModeById[itemId] = isSplitSelection
+                            ? "normal"
+                            : (splitPortionModeById[itemId] ?? "normal");
+                        });
+                    });
 
                     return Object.keys(selectedModeById).length > 0 ? selectedModeById : undefined;
                   })()
@@ -1645,22 +1682,24 @@ export default function RestaurantView({
                     return;
                   }
 
-                  if (!isRiceIngredientItem(item) || !item.id) return;
+                  if (!isSplitPortionIngredientItem(item) || !item.id) return;
                   if (modeId !== "light" && modeId !== "normal" && modeId !== "extra") return;
 
-                  const selectedRiceCount = Object.values(selectedIngredientItems).filter((selectedIngredient) =>
-                    isRiceIngredientItem(selectedIngredient.item)
+                  const splitCategory = normalizeIngredientCategory(item.categories?.[0]);
+                  const selectedSplitCount = Object.values(selectedIngredientItems).filter(
+                    (selectedIngredient) =>
+                      normalizeIngredientCategory(selectedIngredient.item.categories?.[0]) === splitCategory
                   ).length;
-                  if (selectedRiceCount >= 2) return;
+                  if (selectedSplitCount >= 2) return;
 
-                  const nextRiceModesById = {
-                    ...ricePortionModeById,
+                  const nextSplitModesById = {
+                    ...splitPortionModeById,
                     [item.id]: modeId,
                   };
-                  setRicePortionModeById(nextRiceModesById);
+                  setSplitPortionModeById(nextSplitModesById);
                   setSelectedIngredientItems((previous) =>
                     applyIngredientPortionNutrition(previous, {
-                      riceModesById: nextRiceModesById,
+                      splitModesById: nextSplitModesById,
                     })
                   );
                 }}
