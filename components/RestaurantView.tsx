@@ -223,7 +223,7 @@ const CHIPOTLE_KIDS_MEAL_OPTIONS: Array<{
   {
     id: "quesadilla",
     label: "Kid's Quesadilla",
-    imageSrc: "/restaurants/chipotle/entrees/quesadilla.png",
+    imageSrc: "/restaurants/chipotle/entrees/kids-quesadilla.png",
   },
 ];
 
@@ -1063,6 +1063,18 @@ export default function RestaurantView({
     }
     return `${selectedBuildProteinNames[0]} and ${selectedBuildProteinNames[1]} ${selectedBuildEntreeLabel}`;
   }, [selectedBuildEntreeLabel, selectedBuildProteinNames]);
+  const selectedBuildImageSrc = useMemo(() => {
+    if (!selectedEntree) {
+      return CHIPOTLE_ENTREE_CONFIGURATIONS.bowl.imageSrc;
+    }
+    if (selectedEntree === "kids-meal") {
+      return (
+        CHIPOTLE_KIDS_MEAL_OPTIONS.find((option) => option.id === selectedKidsMeal)?.imageSrc ??
+        CHIPOTLE_ENTREE_CONFIGURATIONS["kids-meal"].imageSrc
+      );
+    }
+    return CHIPOTLE_ENTREE_CONFIGURATIONS[selectedEntree].imageSrc;
+  }, [selectedEntree, selectedKidsMeal]);
   const buildName = selectedBuildName;
   const shouldShowBuildStickyBar =
     isBuildYourOwn &&
@@ -1521,6 +1533,7 @@ export default function RestaurantView({
       restaurantId,
       itemId: `${restaurantId}-build`,
       name: buildName,
+      image: selectedBuildImageSrc,
       customizations: nextCustomizations,
       quantity: 1,
       macrosPerItem: adjustedSelectedIngredientTotals,
