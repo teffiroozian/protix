@@ -231,6 +231,14 @@ function formatValue(value?: number, suffix = "") {
   return value === undefined ? "—" : `${value}${suffix}`;
 }
 
+function titleCase(text: string) {
+  return text
+    .trim()
+    .split(/\s+/)
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
+}
+
 function normalizeIngredientCategory(value: string | undefined) {
   return value?.trim().toLowerCase() ?? "";
 }
@@ -1029,15 +1037,33 @@ export default function RestaurantView({
     (acc, selectedIngredient) => acc + selectedIngredient.quantity,
     0
   );
-  const buildName = selectedEntree
-    ? `${restaurantName} ${
-        selectedEntree === "kids-meal"
-          ? selectedKidsMeal === "quesadilla"
-            ? "Kid's Quesadilla"
-            : "Kid's Build Your Own"
-          : CHIPOTLE_ENTREE_CONFIGURATIONS[selectedEntree].label
-      } Build`
-    : `${restaurantName} Build`;
+  const selectedBuildProteinNames = useMemo(
+    () =>
+      Object.values(selectedIngredientItems)
+        .filter(({ item }) => isProteinIngredientItem(item))
+        .map(({ item }) => titleCase(item.name))
+        .filter((name, index, allNames) => allNames.indexOf(name) === index),
+    [selectedIngredientItems]
+  );
+  const selectedBuildEntreeLabel = useMemo(() => {
+    if (!selectedEntree) {
+      return "Bowl";
+    }
+    if (selectedEntree === "kids-meal") {
+      return selectedKidsMeal === "quesadilla" ? "Quesadilla" : "Build Your Own";
+    }
+    return CHIPOTLE_ENTREE_CONFIGURATIONS[selectedEntree].label;
+  }, [selectedEntree, selectedKidsMeal]);
+  const selectedBuildName = useMemo(() => {
+    if (selectedBuildProteinNames.length === 0) {
+      return `Veggie ${selectedBuildEntreeLabel}`;
+    }
+    if (selectedBuildProteinNames.length === 1) {
+      return `${selectedBuildProteinNames[0]} ${selectedBuildEntreeLabel}`;
+    }
+    return `${selectedBuildProteinNames[0]} and ${selectedBuildProteinNames[1]} ${selectedBuildEntreeLabel}`;
+  }, [selectedBuildEntreeLabel, selectedBuildProteinNames]);
+  const buildName = selectedBuildName;
   const shouldShowBuildStickyBar =
     isBuildYourOwn &&
     effectiveViewMode === "ingredients" &&
@@ -2445,7 +2471,7 @@ export default function RestaurantView({
                 <section className="flex h-full min-h-0 flex-col rounded-3xl border border-black/10 bg-white p-5">
                   <h3 className="text-2xl font-bold text-neutral-900">Selected Ingredients</h3>
                   <p className="mt-2 text-sm font-semibold text-slate-600">
-                    {CHIPOTLE_ENTREE_CONFIGURATIONS[selectedEntree ?? "bowl"].label} · {selectedIngredientCount} selected
+                    {selectedBuildName} · {selectedIngredientCount} selected
                   </p>
                   <div
                     ref={selectedIngredientsListRef}
