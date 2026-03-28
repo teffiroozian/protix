@@ -2411,8 +2411,7 @@ export default function RestaurantView({
             PrimaryActionIcon={ShoppingCart}
             detailsOpen={isBuildSummaryExpanded}
             detailsContent={
-              <div className="flex h-full min-h-0 flex-col">
-                <div className="min-h-0 flex-1 space-y-3 overflow-y-auto pr-1">
+              <div className="space-y-3">
                   <div className="flex flex-wrap items-center justify-end gap-2">
                     <button
                       type="button"
@@ -2546,7 +2545,6 @@ export default function RestaurantView({
                       </div>
                     </section>
                   </div>
-                </div>
               </div>
             }
             onSecondaryAction={() => setIsBuildSummaryExpanded((previous) => !previous)}
