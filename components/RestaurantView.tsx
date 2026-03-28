@@ -2403,6 +2403,7 @@ export default function RestaurantView({
         <div ref={buildStickyContainerRef}>
           <StickyMacroTotalsBar
             totals={adjustedSelectedIngredientTotals}
+            alignToMenuContent={isChipotleBuildPage}
             secondaryActionLabel="View Selected"
             secondaryActionExpandedLabel="View Selected"
             primaryActionLabel={isEditingBuild ? "Save & Add" : "Add to Cart"}
