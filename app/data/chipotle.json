@@ -12,17 +12,17 @@
             "portionType": "side",
             "image": "/restaurants/chipotle/menu/sides/chips.png",
             "nutrition": {
-    "calories": 540,
-    "totalFat": 25,
-    "satFat": 3.5,
-    "transFat": 0,
-    "cholesterol": 0,
-    "sodium": 390,
-    "carbs": 73,
-    "fiber": 7,
-    "sugars": 1,
-    "protein": 7
-},
+                "calories": 540,
+                "totalFat": 25,
+                "satFat": 3.5,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 390,
+                "carbs": 73,
+                "fiber": 7,
+                "sugars": 1,
+                "protein": 7
+            },
             "defaultVariantId": "chips",
             "variants": [
                 {
@@ -30,34 +30,34 @@
                     "label": "Regular",
                     "portionType": "side",
                     "nutrition": {
-    "calories": 540,
-    "totalFat": 25,
-    "satFat": 3.5,
-    "transFat": 0,
-    "cholesterol": 0,
-    "sodium": 390,
-    "carbs": 73,
-    "fiber": 7,
-    "sugars": 1,
-    "protein": 7
-}
+                        "calories": 540,
+                        "totalFat": 25,
+                        "satFat": 3.5,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 390,
+                        "carbs": 73,
+                        "fiber": 7,
+                        "sugars": 1,
+                        "protein": 7
+                    }
                 },
                 {
                     "id": "large-chips",
                     "label": "Large",
                     "portionType": "side",
                     "nutrition": {
-    "calories": 810,
-    "totalFat": 38,
-    "satFat": 5,
-    "transFat": 0,
-    "cholesterol": 0,
-    "sodium": 590,
-    "carbs": 110,
-    "fiber": 11,
-    "sugars": 2,
-    "protein": 11
-}
+                        "calories": 810,
+                        "totalFat": 38,
+                        "satFat": 5,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 590,
+                        "carbs": 110,
+                        "fiber": 11,
+                        "sugars": 2,
+                        "protein": 11
+                    }
                 }
             ],
             "entreeGroup": "chips-sides",
@@ -74,17 +74,17 @@
             "hideVariantSelector": true,
             "image": "/restaurants/chipotle/ingredients/toppings/gaucamole.png",
             "nutrition": {
-    "calories": 230,
-    "totalFat": 22,
-    "satFat": 3.5,
-    "transFat": 0,
-    "cholesterol": 0,
-    "sodium": 370,
-    "carbs": 8,
-    "fiber": 6,
-    "sugars": 1,
-    "protein": 2
-},
+                "calories": 230,
+                "totalFat": 22,
+                "satFat": 3.5,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 370,
+                "carbs": 8,
+                "fiber": 6,
+                "sugars": 1,
+                "protein": 2
+            },
             "defaultVariantId": "side-of-guacamole",
             "variants": [
                 {
@@ -92,34 +92,34 @@
                     "label": "Regular",
                     "portionType": "side",
                     "nutrition": {
-    "calories": 230,
-    "totalFat": 22,
-    "satFat": 3.5,
-    "transFat": 0,
-    "cholesterol": 0,
-    "sodium": 370,
-    "carbs": 8,
-    "fiber": 6,
-    "sugars": 1,
-    "protein": 2
-}
+                        "calories": 230,
+                        "totalFat": 22,
+                        "satFat": 3.5,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 370,
+                        "carbs": 8,
+                        "fiber": 6,
+                        "sugars": 1,
+                        "protein": 2
+                    }
                 },
                 {
                     "id": "large-side-of-guacamole",
                     "label": "Large",
                     "portionType": "side",
                     "nutrition": {
-    "calories": 460,
-    "totalFat": 44,
-    "satFat": 7,
-    "transFat": 0,
-    "cholesterol": 0,
-    "sodium": 740,
-    "carbs": 16,
-    "fiber": 12,
-    "sugars": 2,
-    "protein": 4
-}
+                        "calories": 460,
+                        "totalFat": 44,
+                        "satFat": 7,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 740,
+                        "carbs": 16,
+                        "fiber": 12,
+                        "sugars": 2,
+                        "protein": 4
+                    }
                 }
             ],
             "entreeGroup": "chips-sides",
@@ -134,10 +134,16 @@
             "portionType": "side",
             "image": "/restaurants/chipotle/menu/sides/chips-guacamole.png",
             "nutrition": {
-                "calories": 770,
-                "totalFat": 47,
-                "protein": 9,
-                "carbs": 81
+                "calories": 230,
+                "totalFat": 22,
+                "satFat": 3.5,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 370,
+                "carbs": 8,
+                "fiber": 6,
+                "sugars": 1,
+                "protein": 2
             },
             "defaultVariantId": "chips-guacamole",
             "variants": [
@@ -146,10 +152,16 @@
                     "label": "Regular",
                     "portionType": "side",
                     "nutrition": {
-                        "calories": 770,
-                        "totalFat": 47,
-                        "protein": 9,
-                        "carbs": 81
+                        "calories": 230,
+                        "totalFat": 22,
+                        "satFat": 3.5,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 370,
+                        "carbs": 8,
+                        "fiber": 6,
+                        "sugars": 1,
+                        "protein": 2
                     }
                 },
                 {
@@ -157,10 +169,16 @@
                     "label": "Large Chips & Large Guacamole",
                     "portionType": "side",
                     "nutrition": {
-                        "calories": 1270,
-                        "totalFat": 82,
-                        "protein": 15,
-                        "carbs": 126
+                        "calories": 230,
+                        "totalFat": 22,
+                        "satFat": 3.5,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 370,
+                        "carbs": 8,
+                        "fiber": 6,
+                        "sugars": 1,
+                        "protein": 2
                     }
                 }
             ],
@@ -177,17 +195,17 @@
             "portionType": "side",
             "image": "/restaurants/chipotle/menu/sides/chips-tomato-salsa.png",
             "nutrition": {
-    "calories": 25,
-    "totalFat": 0,
-    "satFat": 0,
-    "transFat": 0,
-    "cholesterol": 0,
-    "sodium": 550,
-    "carbs": 4,
-    "fiber": 1,
-    "sugars": 1,
-    "protein": 0
-},
+                "calories": 25,
+                "totalFat": 0,
+                "satFat": 0,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 550,
+                "carbs": 4,
+                "fiber": 1,
+                "sugars": 1,
+                "protein": 0
+            },
             "entreeGroup": "chips-sides",
             "defaultOrder": 4
         },
@@ -201,10 +219,16 @@
             "portionType": "side",
             "image": "/restaurants/chipotle/menu/sides/chips-red-chili-salsa.png",
             "nutrition": {
-                "calories": 570,
-                "totalFat": 25,
-                "protein": 7,
-                "carbs": 77
+                "calories": 30,
+                "totalFat": 0,
+                "satFat": 0,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 500,
+                "carbs": 4,
+                "fiber": 1,
+                "sugars": 0,
+                "protein": 0
             },
             "entreeGroup": "chips-sides",
             "defaultOrder": 5
@@ -219,10 +243,16 @@
             "portionType": "side",
             "image": "/restaurants/chipotle/menu/sides/chips-green-chili-salsa.png",
             "nutrition": {
-                "calories": 555,
-                "totalFat": 25,
-                "protein": 7,
-                "carbs": 77
+                "calories": 15,
+                "totalFat": 0,
+                "satFat": 0,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 260,
+                "carbs": 4,
+                "fiber": 0,
+                "sugars": 2,
+                "protein": 0
             },
             "entreeGroup": "chips-sides",
             "defaultOrder": 6
@@ -237,17 +267,17 @@
             "portionType": "side",
             "image": "/restaurants/chipotle/menu/sides/chips-chili-corn-salsa.png",
             "nutrition": {
-    "calories": 80,
-    "totalFat": 1.5,
-    "satFat": 0,
-    "transFat": 0,
-    "cholesterol": 0,
-    "sodium": 330,
-    "carbs": 16,
-    "fiber": 3,
-    "sugars": 4,
-    "protein": 3
-},
+                "calories": 80,
+                "totalFat": 1.5,
+                "satFat": 0,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 330,
+                "carbs": 16,
+                "fiber": 3,
+                "sugars": 4,
+                "protein": 3
+            },
             "entreeGroup": "chips-sides",
             "defaultOrder": 7
         },
@@ -260,10 +290,16 @@
             "portionType": "side",
             "image": "/restaurants/chipotle/menu/sides/chips-queso-blanco.png",
             "nutrition": {
-                "calories": 780,
-                "totalFat": 43,
-                "protein": 17,
-                "carbs": 80
+                "calories": 120,
+                "totalFat": 9,
+                "satFat": 6,
+                "transFat": 0,
+                "cholesterol": 30,
+                "sodium": 250,
+                "carbs": 4,
+                "fiber": 0,
+                "sugars": 1,
+                "protein": 5
             },
             "defaultVariantId": "chips-queso-blanco",
             "variants": [
@@ -272,10 +308,16 @@
                     "label": "Regular",
                     "portionType": "side",
                     "nutrition": {
-                        "calories": 780,
-                        "totalFat": 43,
-                        "protein": 17,
-                        "carbs": 80
+                        "calories": 120,
+                        "totalFat": 9,
+                        "satFat": 6,
+                        "transFat": 0,
+                        "cholesterol": 30,
+                        "sodium": 250,
+                        "carbs": 4,
+                        "fiber": 0,
+                        "sugars": 1,
+                        "protein": 5
                     }
                 },
                 {
@@ -283,10 +325,16 @@
                     "label": "Large Chips & Large Queso Blanco",
                     "portionType": "side",
                     "nutrition": {
-                        "calories": 1290,
-                        "totalFat": 75,
-                        "protein": 31,
-                        "carbs": 124
+                        "calories": 120,
+                        "totalFat": 9,
+                        "satFat": 6,
+                        "transFat": 0,
+                        "cholesterol": 30,
+                        "sodium": 250,
+                        "carbs": 4,
+                        "fiber": 0,
+                        "sugars": 1,
+                        "protein": 5
                     }
                 }
             ],
@@ -322,17 +370,17 @@
             "hideVariantSelector": true,
             "image": "/restaurants/chipotle/ingredients/toppings/queso-blanco.png",
             "nutrition": {
-    "calories": 240,
-    "totalFat": 18,
-    "satFat": 12,
-    "transFat": 1,
-    "cholesterol": 60,
-    "sodium": 490,
-    "carbs": 7,
-    "fiber": 0,
-    "sugars": 2,
-    "protein": 10
-},
+                "calories": 240,
+                "totalFat": 18,
+                "satFat": 12,
+                "transFat": 1,
+                "cholesterol": 60,
+                "sodium": 490,
+                "carbs": 7,
+                "fiber": 0,
+                "sugars": 2,
+                "protein": 10
+            },
             "defaultVariantId": "side-of-queso-blanco",
             "variants": [
                 {
@@ -340,34 +388,34 @@
                     "label": "Regular",
                     "portionType": "side",
                     "nutrition": {
-    "calories": 240,
-    "totalFat": 18,
-    "satFat": 12,
-    "transFat": 1,
-    "cholesterol": 60,
-    "sodium": 490,
-    "carbs": 7,
-    "fiber": 0,
-    "sugars": 2,
-    "protein": 10
-}
+                        "calories": 240,
+                        "totalFat": 18,
+                        "satFat": 12,
+                        "transFat": 1,
+                        "cholesterol": 60,
+                        "sodium": 490,
+                        "carbs": 7,
+                        "fiber": 0,
+                        "sugars": 2,
+                        "protein": 10
+                    }
                 },
                 {
                     "id": "large-side-of-queso-blanco",
                     "label": "Large",
                     "portionType": "side",
                     "nutrition": {
-    "calories": 480,
-    "totalFat": 37,
-    "satFat": 23,
-    "transFat": 1.5,
-    "cholesterol": 120,
-    "sodium": 980,
-    "carbs": 14,
-    "fiber": 0,
-    "sugars": 5,
-    "protein": 20
-}
+                        "calories": 480,
+                        "totalFat": 37,
+                        "satFat": 23,
+                        "transFat": 1.5,
+                        "cholesterol": 120,
+                        "sodium": 980,
+                        "carbs": 14,
+                        "fiber": 0,
+                        "sugars": 5,
+                        "protein": 20
+                    }
                 }
             ],
             "entreeGroup": "chips-sides",
@@ -382,17 +430,17 @@
             "portionType": "side",
             "image": "/restaurants/chipotle/menu/sides/tortilla.png",
             "nutrition": {
-    "calories": 320,
-    "totalFat": 9,
-    "satFat": 0.5,
-    "transFat": 0,
-    "cholesterol": 0,
-    "sodium": 600,
-    "carbs": 50,
-    "fiber": 3,
-    "sugars": 0,
-    "protein": 8
-},
+                "calories": 320,
+                "totalFat": 9,
+                "satFat": 0.5,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 600,
+                "carbs": 50,
+                "fiber": 3,
+                "sugars": 0,
+                "protein": 8
+            },
             "entreeGroup": "chips-sides",
             "defaultOrder": 11
         },
@@ -425,9 +473,15 @@
             "image": "/restaurants/chipotle/menu/high-protein/chicken-cup.png",
             "nutrition": {
                 "calories": 180,
-                "protein": 32,
+                "totalFat": 7,
+                "satFat": 3,
+                "transFat": 0,
+                "cholesterol": 125,
+                "sodium": 310,
                 "carbs": 0,
-                "totalFat": 7
+                "fiber": 0,
+                "sugars": 0,
+                "protein": 32
             },
             "entreeGroup": "high-protein-menu",
             "defaultOrder": 13
@@ -628,17 +682,17 @@
             "category": "Side",
             "image": "/restaurants/chipotle/menu/sides/tortilla.png",
             "nutrition": {
-    "calories": 320,
-    "totalFat": 9,
-    "satFat": 0.5,
-    "transFat": 0,
-    "cholesterol": 0,
-    "sodium": 600,
-    "carbs": 50,
-    "fiber": 3,
-    "sugars": 0,
-    "protein": 8
-}
+                "calories": 320,
+                "totalFat": 9,
+                "satFat": 0.5,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 600,
+                "carbs": 50,
+                "fiber": 3,
+                "sugars": 0,
+                "protein": 8
+            }
         },
         {
             "id": "crispy-corn-tortilla",
@@ -670,17 +724,17 @@
             "category": "Toppings",
             "image": "/restaurants/chipotle/ingredients/toppings/romaine-lettuce.png",
             "nutrition": {
-    "calories": 5,
-    "totalFat": 0,
-    "satFat": 0,
-    "transFat": 0,
-    "cholesterol": 0,
-    "sodium": 0,
-    "carbs": 1,
-    "fiber": 1,
-    "sugars": 0,
-    "protein": 0
-}
+                "calories": 5,
+                "totalFat": 0,
+                "satFat": 0,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 0,
+                "carbs": 1,
+                "fiber": 1,
+                "sugars": 0,
+                "protein": 0
+            }
         },
         {
             "id": "cheese",
@@ -688,17 +742,17 @@
             "category": "Toppings",
             "image": "/restaurants/chipotle/ingredients/toppings/cheese.png",
             "nutrition": {
-    "calories": 110,
-    "totalFat": 8,
-    "satFat": 5,
-    "transFat": 0,
-    "cholesterol": 30,
-    "sodium": 190,
-    "carbs": 1,
-    "fiber": 0,
-    "sugars": 0,
-    "protein": 6
-}
+                "calories": 110,
+                "totalFat": 8,
+                "satFat": 5,
+                "transFat": 0,
+                "cholesterol": 30,
+                "sodium": 190,
+                "carbs": 1,
+                "fiber": 0,
+                "sugars": 0,
+                "protein": 6
+            }
         },
         {
             "id": "guacamole",
@@ -706,17 +760,17 @@
             "category": "Toppings",
             "image": "/restaurants/chipotle/ingredients/toppings/gaucamole.png",
             "nutrition": {
-    "calories": 230,
-    "totalFat": 22,
-    "satFat": 3.5,
-    "transFat": 0,
-    "cholesterol": 0,
-    "sodium": 370,
-    "carbs": 8,
-    "fiber": 6,
-    "sugars": 1,
-    "protein": 2
-}
+                "calories": 230,
+                "totalFat": 22,
+                "satFat": 3.5,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 370,
+                "carbs": 8,
+                "fiber": 6,
+                "sugars": 1,
+                "protein": 2
+            }
         },
         {
             "id": "cilantro-lime-sauce",
@@ -739,9 +793,15 @@
             "image": "/restaurants/chipotle/ingredients/toppings/tomato-salsa.png",
             "nutrition": {
                 "calories": 25,
-                "protein": 0,
+                "totalFat": 0,
+                "satFat": 0,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 550,
                 "carbs": 4,
-                "totalFat": 0
+                "fiber": 1,
+                "sugars": 1,
+                "protein": 0
             }
         },
         {
@@ -752,9 +812,15 @@
             "image": "/restaurants/chipotle/ingredients/toppings/chili-corn-salsa.png",
             "nutrition": {
                 "calories": 80,
-                "protein": 3,
+                "totalFat": 1.5,
+                "satFat": 0,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 330,
                 "carbs": 16,
-                "totalFat": 2
+                "fiber": 3,
+                "sugars": 4,
+                "protein": 3
             }
         },
         {
@@ -764,17 +830,17 @@
             "category": "Toppings",
             "image": "/restaurants/chipotle/ingredients/toppings/green-chili-salsa.png",
             "nutrition": {
-    "calories": 15,
-    "totalFat": 0,
-    "satFat": 0,
-    "transFat": 0,
-    "cholesterol": 0,
-    "sodium": 260,
-    "carbs": 4,
-    "fiber": 0,
-    "sugars": 2,
-    "protein": 0
-}
+                "calories": 15,
+                "totalFat": 0,
+                "satFat": 0,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 260,
+                "carbs": 4,
+                "fiber": 0,
+                "sugars": 2,
+                "protein": 0
+            }
         },
         {
             "id": "tomatillo-red-chili-salsa",
@@ -783,17 +849,17 @@
             "category": "Toppings",
             "image": "/restaurants/chipotle/ingredients/toppings/red-chili-salsa.png",
             "nutrition": {
-    "calories": 30,
-    "totalFat": 0,
-    "satFat": 0,
-    "transFat": 0,
-    "cholesterol": 0,
-    "sodium": 500,
-    "carbs": 4,
-    "fiber": 1,
-    "sugars": 0,
-    "protein": 0
-}
+                "calories": 30,
+                "totalFat": 0,
+                "satFat": 0,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 500,
+                "carbs": 4,
+                "fiber": 1,
+                "sugars": 0,
+                "protein": 0
+            }
         },
         {
             "id": "sour-cream",
@@ -801,17 +867,17 @@
             "category": "Toppings",
             "image": "/restaurants/chipotle/ingredients/toppings/sour-cream.png",
             "nutrition": {
-    "calories": 110,
-    "totalFat": 9,
-    "satFat": 7,
-    "transFat": 0,
-    "cholesterol": 40,
-    "sodium": 30,
-    "carbs": 2,
-    "fiber": 0,
-    "sugars": 2,
-    "protein": 2
-}
+                "calories": 110,
+                "totalFat": 9,
+                "satFat": 7,
+                "transFat": 0,
+                "cholesterol": 40,
+                "sodium": 30,
+                "carbs": 2,
+                "fiber": 0,
+                "sugars": 2,
+                "protein": 2
+            }
         },
         {
             "id": "fajita-veggies",
@@ -819,17 +885,17 @@
             "category": "Toppings",
             "image": "/restaurants/chipotle/ingredients/toppings/fajita-veggies.png",
             "nutrition": {
-    "calories": 20,
-    "totalFat": 0,
-    "satFat": 0,
-    "transFat": 0,
-    "cholesterol": 0,
-    "sodium": 150,
-    "carbs": 5,
-    "fiber": 1,
-    "sugars": 2,
-    "protein": 1
-}
+                "calories": 20,
+                "totalFat": 0,
+                "satFat": 0,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 150,
+                "carbs": 5,
+                "fiber": 1,
+                "sugars": 2,
+                "protein": 1
+            }
         },
         {
             "id": "queso-blanco",
@@ -837,17 +903,17 @@
             "category": "Toppings",
             "image": "/restaurants/chipotle/ingredients/toppings/queso-blanco.png",
             "nutrition": {
-    "calories": 120,
-    "totalFat": 9,
-    "satFat": 6,
-    "transFat": 0,
-    "cholesterol": 30,
-    "sodium": 250,
-    "carbs": 4,
-    "fiber": 0,
-    "sugars": 1,
-    "protein": 5
-}
+                "calories": 120,
+                "totalFat": 9,
+                "satFat": 6,
+                "transFat": 0,
+                "cholesterol": 30,
+                "sodium": 250,
+                "carbs": 4,
+                "fiber": 0,
+                "sugars": 1,
+                "protein": 5
+            }
         },
         {
             "id": "chicken",
@@ -897,17 +963,17 @@
             "category": "Proteins",
             "image": "/restaurants/chipotle/ingredients/proteins/beef-barbacoa.png",
             "nutrition": {
-    "calories": 170,
-    "totalFat": 7,
-    "satFat": 2.5,
-    "transFat": 0,
-    "cholesterol": 65,
-    "sodium": 530,
-    "carbs": 2,
-    "fiber": 1,
-    "sugars": 0,
-    "protein": 24
-}
+                "calories": 170,
+                "totalFat": 7,
+                "satFat": 2.5,
+                "transFat": 0,
+                "cholesterol": 65,
+                "sodium": 530,
+                "carbs": 2,
+                "fiber": 1,
+                "sugars": 0,
+                "protein": 24
+            }
         },
         {
             "id": "carnitas",
@@ -915,17 +981,17 @@
             "category": "Proteins",
             "image": "/restaurants/chipotle/ingredients/proteins/carnitas.png",
             "nutrition": {
-    "calories": 210,
-    "totalFat": 12,
-    "satFat": 7,
-    "transFat": 0,
-    "cholesterol": 65,
-    "sodium": 450,
-    "carbs": 0,
-    "fiber": 0,
-    "sugars": 0,
-    "protein": 23
-}
+                "calories": 210,
+                "totalFat": 12,
+                "satFat": 7,
+                "transFat": 0,
+                "cholesterol": 65,
+                "sodium": 450,
+                "carbs": 0,
+                "fiber": 0,
+                "sugars": 0,
+                "protein": 23
+            }
         },
         {
             "id": "sofritas",
@@ -934,17 +1000,17 @@
             "category": "Proteins",
             "image": "/restaurants/chipotle/ingredients/proteins/sofritas.png",
             "nutrition": {
-    "calories": 150,
-    "totalFat": 10,
-    "satFat": 1.5,
-    "transFat": 0,
-    "cholesterol": 0,
-    "sodium": 560,
-    "carbs": 9,
-    "fiber": 3,
-    "sugars": 5,
-    "protein": 8
-}
+                "calories": 150,
+                "totalFat": 10,
+                "satFat": 1.5,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 560,
+                "carbs": 9,
+                "fiber": 3,
+                "sugars": 5,
+                "protein": 8
+            }
         },
         {
             "id": "white-rice",
@@ -952,17 +1018,17 @@
             "category": "Rice",
             "image": "/restaurants/chipotle/ingredients/rice/white-rice.png",
             "nutrition": {
-    "calories": 210,
-    "totalFat": 4,
-    "satFat": 1,
-    "transFat": 0,
-    "cholesterol": 0,
-    "sodium": 350,
-    "carbs": 40,
-    "fiber": 1,
-    "sugars": 0,
-    "protein": 4
-}
+                "calories": 210,
+                "totalFat": 4,
+                "satFat": 1,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 350,
+                "carbs": 40,
+                "fiber": 1,
+                "sugars": 0,
+                "protein": 4
+            }
         },
         {
             "id": "brown-rice",
@@ -970,17 +1036,17 @@
             "category": "Rice",
             "image": "/restaurants/chipotle/ingredients/rice/brown-rice.png",
             "nutrition": {
-    "calories": 210,
-    "totalFat": 6,
-    "satFat": 0,
-    "transFat": 0,
-    "cholesterol": 0,
-    "sodium": 190,
-    "carbs": 36,
-    "fiber": 2,
-    "sugars": 0,
-    "protein": 4
-}
+                "calories": 210,
+                "totalFat": 6,
+                "satFat": 0,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 190,
+                "carbs": 36,
+                "fiber": 2,
+                "sugars": 0,
+                "protein": 4
+            }
         },
         {
             "id": "black-beans",
@@ -988,17 +1054,17 @@
             "category": "Beans",
             "image": "/restaurants/chipotle/ingredients/beans/black-beans.png",
             "nutrition": {
-    "calories": 130,
-    "totalFat": 1.5,
-    "satFat": 0,
-    "transFat": 0,
-    "cholesterol": 0,
-    "sodium": 210,
-    "carbs": 22,
-    "fiber": 7,
-    "sugars": 2,
-    "protein": 8
-}
+                "calories": 130,
+                "totalFat": 1.5,
+                "satFat": 0,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 210,
+                "carbs": 22,
+                "fiber": 7,
+                "sugars": 2,
+                "protein": 8
+            }
         },
         {
             "id": "pinto-beans",
@@ -1006,17 +1072,17 @@
             "category": "Beans",
             "image": "/restaurants/chipotle/ingredients/beans/pinto-beans.png",
             "nutrition": {
-    "calories": 130,
-    "totalFat": 1.5,
-    "satFat": 0,
-    "transFat": 0,
-    "cholesterol": 0,
-    "sodium": 210,
-    "carbs": 21,
-    "fiber": 8,
-    "sugars": 1,
-    "protein": 8
-}
+                "calories": 130,
+                "totalFat": 1.5,
+                "satFat": 0,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 210,
+                "carbs": 21,
+                "fiber": 8,
+                "sugars": 1,
+                "protein": 8
+            }
         }
     ]
 }
