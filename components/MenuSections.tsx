@@ -56,7 +56,6 @@ const CATEGORY_PRIORITY_GROUPS = [
     label: "Kids Drinks",
     aliases: ["kids drink", "kids drinks", "kid's drink", "kid's drinks"],
   },
-  { label: "Kids", aliases: ["kid", "kids"] },
   { label: "Desserts", aliases: ["dessert", "desserts"] },
   { label: "Treats", aliases: ["treat", "treats"] },
   {
@@ -67,6 +66,10 @@ const CATEGORY_PRIORITY_GROUPS = [
     label: "Dressings",
     aliases: ["dressing", "dressings"],
   },
+  { label: "Chips & Dips", aliases: ["chips & dips", "chips and dips"] },
+  { label: "Single Sides", aliases: ["single side", "single sides"] },
+  { label: "Protein Cups", aliases: ["protein cup", "protein cups"] },
+  { label: "Kids", aliases: ["kid", "kids", "kid's"] },
 ] as const;
 
 const INGREDIENT_CATEGORY_PRIORITY_GROUPS = [
@@ -97,7 +100,7 @@ const INGREDIENT_CATEGORY_PRIORITY_GROUPS = [
     aliases: ["parfait topping", "parfait toppings"],
   },
   { label: "Treat Toppings", aliases: ["treat topping", "treat toppings"] },
-{ label: "Condiments", aliases: ["condiment", "condiments"] },
+  { label: "Condiments", aliases: ["condiment", "condiments"] },
 ] as const;
 
 type CategoryMode = "menu" | "ingredients";
