@@ -557,9 +557,15 @@
             "image": "/restaurants/chipotle/menu/sides/tortilla.png",
             "nutrition": {
                 "calories": 320,
-                "protein": 9,
+                "totalFat": 9,
+                "satFat": 0.5,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 600,
                 "carbs": 50,
-                "totalFat": 8
+                "fiber": 3,
+                "sugars": 0,
+                "protein": 8
             }
         },
         {
