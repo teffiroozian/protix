@@ -174,7 +174,7 @@
                 },
                 {
                     "id": "large-chips-large-guacamole",
-                    "label": "Large Chips & Large Guacamole",
+                    "label": "Large",
                     "portionType": "side",
                     "nutrition": {
                         "calories": 1270,
@@ -350,7 +350,7 @@
                 },
                 {
                     "id": "large-chips-large-queso-blanco",
-                    "label": "Large Chips & Large Queso Blanco",
+                    "label": "Large",
                     "portionType": "side",
                     "nutrition": {
                         "calories": 1290,
