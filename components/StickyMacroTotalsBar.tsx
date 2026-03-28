@@ -82,11 +82,7 @@ export default function StickyMacroTotalsBar({
                 {contextLine}
               </p>
             ) : null}
-            <p className={`text-sm font-semibold tracking-tight text-neutral-500 ${contextLine ? "mt-1" : ""} text-center`}>
-              TOTAL MACROS
-            </p>
-
-            <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-4 text-center sm:grid-cols-4 sm:gap-x-6">
+            <div className={`grid grid-cols-2 gap-x-4 gap-y-4 text-center sm:grid-cols-4 sm:gap-x-6 ${contextLine ? "mt-3" : ""}`}>
               {macroRows.map((macro) => (
                 <div key={macro.key}>
                   <p className={`text-2xl font-bold leading-none sm:text-3xl ${macro.valueClassName}`}>
@@ -101,11 +97,11 @@ export default function StickyMacroTotalsBar({
             </div>
           </section>
 
-          <div className="flex w-full flex-col gap-3 sm:w-auto">
+          <div className="flex w-full flex-row gap-3 sm:w-auto">
             <button
               type="button"
               onClick={onSecondaryAction}
-              className="cursor-pointer inline-flex h-11 items-center justify-center gap-2 rounded-xl border-2 border-black/80 bg-transparent px-6 text-base font-semibold text-[#1A1A1A] transition hover:bg-black/5"
+              className="cursor-pointer inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-xl border-2 border-black/80 bg-transparent px-6 text-base font-semibold text-[#1A1A1A] transition hover:bg-black/5 sm:flex-none"
             >
               {detailsOpen && SecondaryActionExpandedIcon ? (
                 <SecondaryActionExpandedIcon className="h-4 w-4" strokeWidth={2.5} aria-hidden="true" />
@@ -117,7 +113,7 @@ export default function StickyMacroTotalsBar({
             <button
               type="button"
               onClick={onPrimaryAction}
-              className="cursor-pointer inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-black bg-black px-6 text-base font-semibold text-white transition hover:bg-neutral-900"
+              className="cursor-pointer inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-xl border border-black bg-black px-6 text-base font-semibold text-white transition hover:bg-neutral-900 sm:flex-none"
             >
               <PrimaryActionIcon className="h-4 w-4" strokeWidth={2.5} aria-hidden="true" />
               <span>{primaryActionLabel}</span>
