@@ -257,6 +257,9 @@ export default function MenuItemCard({
   selectedIngredientPortionModeId,
   onIngredientPortionModeChange,
   onIngredientVariantChange,
+  flattenIngredientListInDetails = false,
+  lockedIngredientIdsInDetails,
+  suppressRemovedIngredientCustomizationsInCart = false,
 }: {
   restaurantId: string;
   item: MenuItem;
@@ -293,6 +296,9 @@ export default function MenuItemCard({
   selectedIngredientPortionModeId?: string;
   onIngredientPortionModeChange?: (modeId: string) => void;
   onIngredientVariantChange?: (variantId: string) => void;
+  flattenIngredientListInDetails?: boolean;
+  lockedIngredientIdsInDetails?: string[];
+  suppressRemovedIngredientCustomizationsInCart?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
@@ -564,12 +570,15 @@ export default function MenuItemCard({
       .filter((ingredient) => !ingredient.isNoneOption && (ingredientCounts[ingredient.id] ?? ingredient.defaultCount) !== ingredient.defaultCount)
       .flatMap((ingredient) => {
         const ingredientCount = ingredientCounts[ingredient.id] ?? ingredient.defaultCount;
+        if (suppressRemovedIngredientCustomizationsInCart && ingredientCount <= 0) {
+          return [];
+        }
         return [formatIngredientCountCustomizationLabel(ingredient.label, ingredientCount)];
       });
 
     const labels = [...modifierLabels, ...ingredientCountLabels];
     return labels.length > 0 ? labels : undefined;
-  }, [ingredientCounts, resolvedIngredients, selectedCommonChanges]);
+  }, [ingredientCounts, resolvedIngredients, selectedCommonChanges, suppressRemovedIngredientCustomizationsInCart]);
 
   const selectedVariantForCart = useMemo(() => {
     if (!variants || variants.length === 0) return undefined;
@@ -687,6 +696,9 @@ export default function MenuItemCard({
       })
       .flatMap((ingredient) => {
         const ingredientCount = nextSelectedIngredientCounts[ingredient.id] ?? ingredient.defaultCount;
+        if (suppressRemovedIngredientCustomizationsInCart && ingredientCount <= 0) {
+          return [];
+        }
         return [formatIngredientCountCustomizationLabel(ingredient.label, ingredientCount)];
       });
     const nextCustomizations = [
@@ -1307,6 +1319,8 @@ export default function MenuItemCard({
             customizationTotals={customizationTotals}
             showCustomizationDeltas={hasActiveCustomization}
             displayMode="full"
+            flattenIngredientList={flattenIngredientListInDetails}
+            lockedIngredientIds={lockedIngredientIdsInDetails}
           />
         </div>
       </div>

@@ -66,6 +66,7 @@ const addonsLookupByRestaurant: Record<string, RestaurantAddons> = {
 
 const ingredientLookupByRestaurant: Partial<Record<string, IngredientItem[]>> = {
   chickfila: chickfilaData.ingredients,
+  chipotle: chipotleData.ingredients,
 };
 
 const commonChangesLookupByRestaurant: Partial<Record<string, CommonChange[]>> = {
@@ -88,6 +89,125 @@ type NutritionTotals = {
   fiber?: number;
   sugars?: number;
 };
+
+function toTitleCase(value: string) {
+  return value
+    .replace(/[-_]+/g, " ")
+    .trim()
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+function normalizeIngredientKey(value: string) {
+  return value.trim().toLowerCase();
+}
+
+function getIncludedIngredientIdsForChipotleBuild(cartItem: ReturnType<typeof useCart>["items"][number]) {
+  if (cartItem.restaurantId !== "chipotle" || !cartItem.buildConfiguration) {
+    return [] as string[];
+  }
+
+  const configuration = cartItem.buildConfiguration;
+
+  if (configuration.selectedEntree === "burrito") {
+    return ["tortilla"];
+  }
+
+  if (configuration.selectedEntree === "quesadilla") {
+    return ["tortilla", "cheese"];
+  }
+
+  if (configuration.selectedEntree === "salad") {
+    return ["romaine-lettuce"];
+  }
+
+  if (configuration.selectedEntree === "tacos") {
+    return [configuration.selectedTacoShell === "crispy" ? "crispy-corn-tortilla" : "soft-flour-tortilla"];
+  }
+
+  if (configuration.selectedEntree === "kids-meal" && configuration.selectedKidsMeal === "quesadilla") {
+    return ["soft-flour-tortilla", "cheese"];
+  }
+
+  return [];
+}
+
+function getBuildIngredientCountCustomizations(
+  cartItem: ReturnType<typeof useCart>["items"][number],
+  ingredientItems?: IngredientItem[]
+) {
+  if (!cartItem.buildConfiguration?.selectedIngredientItems) {
+    return cartItem.customizations;
+  }
+
+  const ingredientNameLookup = new Map<string, string>();
+  (ingredientItems ?? []).forEach((ingredient) => {
+    const ingredientId = ingredient.id ?? ingredient.name;
+    ingredientNameLookup.set(normalizeIngredientKey(ingredientId), ingredient.name);
+  });
+
+  const labels = Object.entries(cartItem.buildConfiguration.selectedIngredientItems)
+    .filter(([, selection]) => selection.quantity > 1)
+    .map(([ingredientId, selection]) => {
+      const ingredientLabel = ingredientNameLookup.get(normalizeIngredientKey(ingredientId)) ?? toTitleCase(ingredientId);
+      return `${ingredientLabel}: ${selection.quantity}x`;
+    });
+
+  return labels.length > 0 ? labels : undefined;
+}
+
+function buildCartBuildYourOwnMenuItem(
+  cartItem: ReturnType<typeof useCart>["items"][number],
+  ingredientItems?: IngredientItem[]
+): MenuItem {
+  const ingredientCatalog = ingredientItems ?? [];
+  const selectedIngredientIds = Object.entries(cartItem.buildConfiguration?.selectedIngredientItems ?? {})
+    .filter(([, selection]) => selection.quantity > 0)
+    .map(([ingredientId]) => ingredientId);
+
+  const ingredientOptionsByTab = ingredientCatalog.reduce<Record<string, string[]>>((acc, ingredient) => {
+    const ingredientId = ingredient.id ?? ingredient.name;
+    const tabName = toTitleCase((ingredient.categories?.[0] ?? ingredient.category ?? "Ingredients").trim());
+
+    if (!acc[tabName]) {
+      acc[tabName] = [];
+    }
+
+    acc[tabName].push(ingredientId);
+    return acc;
+  }, {});
+
+  const tabNames = Object.keys(ingredientOptionsByTab);
+  const ingredientTabMaxQuantities = tabNames.reduce<Record<string, number>>((acc, tabName) => {
+    acc[tabName] = 10;
+    return acc;
+  }, {});
+
+  return {
+    id: cartItem.itemId,
+    name: cartItem.name,
+    image: cartItem.image,
+    categories: ["Cart"],
+    portionType: "single",
+    nutrition: {
+      calories: cartItem.macrosPerItem.calories,
+      protein: cartItem.macrosPerItem.protein,
+      carbs: cartItem.macrosPerItem.carbs,
+      totalFat: cartItem.macrosPerItem.fat,
+    },
+    ingredients: selectedIngredientIds,
+    customization: {
+      ingredientTabs: tabNames,
+      ingredientTabMaxQuantities,
+      ingredientOptionsByTab,
+      singleSelectIngredientTabs: ["Proteins", "Rice", "Beans", "Shell"].filter((tabName) =>
+        tabNames.some((candidate) => normalizeIngredientKey(candidate) === normalizeIngredientKey(tabName))
+      ),
+      tabsWithNoneOption: ["Proteins", "Rice", "Beans", "Shell"].filter((tabName) =>
+        tabNames.some((candidate) => normalizeIngredientKey(candidate) === normalizeIngredientKey(tabName))
+      ),
+    },
+  };
+}
 
 
 function parseOptionLabelCounts(optionsLabel?: string) {
@@ -292,22 +412,32 @@ export default function CartPage() {
         ) : (
           <ul className="grid gap-3">
             {items.map((cartItem) => {
+              const ingredientItemsForRestaurant = ingredientLookupByRestaurant[cartItem.restaurantId];
               const sourceItem =
                 menuLookupByRestaurant[cartItem.restaurantId]?.find((item) => (item.id ?? item.name) === cartItem.itemId) ?? null;
 
-              const menuItem: MenuItem = sourceItem ?? {
-                id: cartItem.itemId,
-                name: cartItem.name,
-                image: cartItem.image,
-                categories: ["Cart"],
-                portionType: "single",
-                nutrition: {
-                  calories: cartItem.macrosPerItem.calories,
-                  protein: cartItem.macrosPerItem.protein,
-                  carbs: cartItem.macrosPerItem.carbs,
-                  totalFat: cartItem.macrosPerItem.fat,
-                },
-              };
+              const initialIngredientCustomizations = getBuildIngredientCountCustomizations(
+                cartItem,
+                ingredientItemsForRestaurant
+              );
+              const includedIngredientIds = getIncludedIngredientIdsForChipotleBuild(cartItem);
+
+              const menuItem: MenuItem = sourceItem
+                ?? (cartItem.buildConfiguration
+                  ? buildCartBuildYourOwnMenuItem(cartItem, ingredientItemsForRestaurant)
+                  : {
+                      id: cartItem.itemId,
+                      name: cartItem.name,
+                      image: cartItem.image,
+                      categories: ["Cart"],
+                      portionType: "single",
+                      nutrition: {
+                        calories: cartItem.macrosPerItem.calories,
+                        protein: cartItem.macrosPerItem.protein,
+                        carbs: cartItem.macrosPerItem.carbs,
+                        totalFat: cartItem.macrosPerItem.fat,
+                      },
+                    });
 
               return (
                 <MenuItemCard
@@ -315,7 +445,7 @@ export default function CartPage() {
                   restaurantId={cartItem.restaurantId}
                   item={menuItem}
                   addons={addonsLookupByRestaurant[cartItem.restaurantId]}
-                  ingredientItems={ingredientLookupByRestaurant[cartItem.restaurantId]}
+                  ingredientItems={ingredientItemsForRestaurant}
                   menuItems={menuLookupByRestaurant[cartItem.restaurantId]}
                   customizationRules={customizationRulesLookupByRestaurant[cartItem.restaurantId]}
                   commonChanges={commonChangesLookupByRestaurant[cartItem.restaurantId]}
@@ -324,7 +454,10 @@ export default function CartPage() {
                   cartItemId={cartItem.id}
                   initialCartVariantId={cartItem.variantId}
                   initialCartOptionsLabel={cartItem.optionsLabel}
-                  initialCartCustomizations={cartItem.customizations}
+                  initialCartCustomizations={initialIngredientCustomizations}
+                  flattenIngredientListInDetails={Boolean(cartItem.buildConfiguration)}
+                  lockedIngredientIdsInDetails={includedIngredientIds}
+                  suppressRemovedIngredientCustomizationsInCart={Boolean(cartItem.buildConfiguration)}
                   cartSummaryLine={summarizeItem(cartItem)}
                   onCartDecrement={() => updateQuantity(cartItem.id, cartItem.quantity - 1)}
                   onCartIncrement={() => updateQuantity(cartItem.id, cartItem.quantity + 1)}

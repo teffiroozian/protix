@@ -480,6 +480,8 @@ export default function ItemDetailsPanel({
   onDecrementIngredient,
   onToggleIngredient,
   onSelectSingleIngredient,
+  flattenIngredientList = false,
+  lockedIngredientIds = [],
 }: {
   item: MenuItem;
   nutrition: Nutrition;
@@ -508,6 +510,8 @@ export default function ItemDetailsPanel({
   onDecrementIngredient?: (ingredientId: string) => void;
   onToggleIngredient?: (ingredientId: string) => void;
   onSelectSingleIngredient?: (ingredientId: string, ingredientIdsInTab: string[]) => void;
+  flattenIngredientList?: boolean;
+  lockedIngredientIds?: string[];
 }) {
   const n = nutrition;
   const addonRefs = item.addonRefs ?? [];
@@ -528,6 +532,10 @@ export default function ItemDetailsPanel({
     );
 
   const activeCustomizationTotals = customizationTotals ?? { calories: 0, protein: 0, carbs: 0, fat: 0 };
+  const normalizedLockedIngredientIds = new Set(
+    lockedIngredientIds.map((ingredientId) => normalizeIngredientToken(ingredientId))
+  );
+  const isLockedIngredient = (ingredientId: string) => normalizedLockedIngredientIds.has(normalizeIngredientToken(ingredientId));
   const ingredientTabs = resolvePanelIngredientTabs(
     item,
     ingredientItems,
@@ -539,7 +547,21 @@ export default function ItemDetailsPanel({
   );
   const [activeIngredientTab, setActiveIngredientTab] = useState(ingredientTabs[0]?.label ?? INCLUDED_INGREDIENT_TAB);
   const availableIngredientTabs = ingredientTabs.filter((tab) => tab.ingredients.length > 0);
+  const flattenedIngredientTab = flattenIngredientList
+    ? {
+        id: "all-ingredients",
+        label: "Ingredients",
+        selectionMode: "quantity" as const,
+        ingredients: ingredientTabs
+          .flatMap((tab) => tab.ingredients)
+          .filter((ingredient, index, list) => {
+            if (ingredient.isNoneOption) return false;
+            return list.findIndex((candidate) => candidate.id === ingredient.id) === index;
+          }),
+      }
+    : undefined;
   const selectedIngredientTab =
+    flattenedIngredientTab ??
     availableIngredientTabs.find((tab) => tab.label === activeIngredientTab) ??
     availableIngredientTabs[0] ??
     ingredientTabs.find((tab) => tab.label === activeIngredientTab) ??
@@ -558,13 +580,42 @@ export default function ItemDetailsPanel({
   };
   const displayIngredients = (() => {
     if (!selectedIngredientTab) return [];
+    const selectedCountFor = (ingredient: ResolvedPanelIngredient) => {
+      return selectedIngredientCounts?.[ingredient.id] ?? ingredient.defaultCount;
+    };
+
+    if (flattenIngredientList) {
+      return selectedIngredientTab.ingredients
+        .filter((ingredient) => selectedCountFor(ingredient) > 0)
+        .sort((left, right) => {
+          const categoryPriority = (ingredient: ResolvedPanelIngredient) => {
+            if (isLockedIngredient(ingredient.id)) return 0;
+            const normalizedCategory = normalizeIngredientCategory(
+              ingredient.ingredientItem?.categories?.[0] ?? ingredient.ingredientItem?.category ?? ""
+            );
+            if (normalizedCategory === "proteins") return 1;
+            if (normalizedCategory === "rice") return 2;
+            if (normalizedCategory === "beans") return 3;
+            if (normalizedCategory === "toppings") return 4;
+            if (normalizedCategory === "side") return 5;
+            return 6;
+          };
+
+          const leftPriority = categoryPriority(left);
+          const rightPriority = categoryPriority(right);
+          if (leftPriority !== rightPriority) return leftPriority - rightPriority;
+
+          const leftOrder = left.ingredientItem?.defaultOrder ?? Number.POSITIVE_INFINITY;
+          const rightOrder = right.ingredientItem?.defaultOrder ?? Number.POSITIVE_INFINITY;
+          if (leftOrder !== rightOrder) return leftOrder - rightOrder;
+
+          return left.label.localeCompare(right.label);
+        });
+    }
     if (selectedIngredientTab.label !== INCLUDED_INGREDIENT_TAB) {
       return selectedIngredientTab.ingredients;
     }
 
-    const selectedCountFor = (ingredient: ResolvedPanelIngredient) => {
-      return selectedIngredientCounts?.[ingredient.id] ?? ingredient.defaultCount;
-    };
     const includedIngredients: ResolvedPanelIngredient[] = [];
     const includedIngredientIds = new Set<string>();
     const seenSingleSelectTabs = new Set<string>();
@@ -638,34 +689,40 @@ export default function ItemDetailsPanel({
 
     return includedIngredients;
   })();
-  const shouldShowIngredientSection =
-    availableIngredientTabs.length > 1 || (availableIngredientTabs[0]?.ingredients.length ?? 0) > 0;
+  const shouldShowIngredientSection = flattenIngredientList
+    ? (flattenedIngredientTab?.ingredients.some((ingredient) => {
+        const ingredientCount = selectedIngredientCounts?.[ingredient.id] ?? ingredient.defaultCount;
+        return ingredientCount > 0;
+      }) ?? false)
+    : availableIngredientTabs.length > 1 || (availableIngredientTabs[0]?.ingredients.length ?? 0) > 0;
 
   return (
     <div className="grid grid-cols-2 gap-3 rounded-[18px] bg-[#e0e0e0] p-3">
       {shouldShowIngredientSection && selectedIngredientTab ? (
         <section className="col-span-2 rounded-[14px] border border-black/12 bg-white p-5">
           <h2 className="mb-6 text-2xl font-bold">Ingredients</h2>
-          <div className="mb-4 flex flex-wrap gap-2">
-            {availableIngredientTabs.map((tab) => {
-              const isActive = tab.label === selectedIngredientTab.label;
+          {!flattenIngredientList ? (
+            <div className="mb-4 flex flex-wrap gap-2">
+              {availableIngredientTabs.map((tab) => {
+                const isActive = tab.label === selectedIngredientTab.label;
 
-              return (
-                <button
-                  key={tab.id}
-                  type="button"
-                  className={`cursor-pointer rounded-full border px-4 py-2 text-sm font-semibold transition ${
-                    isActive
-                      ? "border-black bg-black text-white"
-                      : "border-black/15 bg-[#f7f7f7] text-black/70"
-                  }`}
-                  onClick={() => setActiveIngredientTab(tab.label)}
-                >
-                  {getIngredientTabDisplayLabel(tab.label)}
-                </button>
-              );
-            })}
-          </div>
+                return (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    className={`cursor-pointer rounded-full border px-4 py-2 text-sm font-semibold transition ${
+                      isActive
+                        ? "border-black bg-black text-white"
+                        : "border-black/15 bg-[#f7f7f7] text-black/70"
+                    }`}
+                    onClick={() => setActiveIngredientTab(tab.label)}
+                  >
+                    {getIngredientTabDisplayLabel(tab.label)}
+                  </button>
+                );
+              })}
+            </div>
+          ) : null}
           {displayIngredients.length > 0 ? (
             <ul className="grid list-none grid-cols-2 items-stretch gap-[10px] pl-0">
               {displayIngredients.map((ingredient) => {
@@ -681,7 +738,9 @@ export default function ItemDetailsPanel({
                   selectedIngredientTab.label === INCLUDED_INGREDIENT_TAB && Boolean(linkedSingleSelectTab);
                 const isSingleSelectTab = selectedIngredientTab.selectionMode === "single";
                 const canToggleIngredientFromCard =
-                  !shouldShowSingleSelectNavigator && typeof ingredient.maxQuantity === "number";
+                  !isLockedIngredient(ingredient.id) &&
+                  !shouldShowSingleSelectNavigator &&
+                  typeof ingredient.maxQuantity === "number";
                 const cardClasses = `box-border flex h-full w-full flex-row items-center gap-3 rounded-[10px] border border-[rgba(0,0,0,0.15)] bg-[#f9f9f9] px-3 py-2 ${
                   isSelected
                     ? isSingleSelectTab
@@ -795,9 +854,10 @@ export default function ItemDetailsPanel({
                               <>
                                 <button
                                   type="button"
-                                  className="inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-[rgba(0,0,0,0.35)] bg-white text-[18px] font-bold leading-none"
+                                  className="inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-[rgba(0,0,0,0.35)] bg-white text-[18px] font-bold leading-none disabled:cursor-not-allowed disabled:opacity-40"
                                   aria-label={`Remove one ${ingredient.label}`}
                                   onClick={() => onDecrementIngredient?.(ingredient.id)}
+                                  disabled={isLockedIngredient(ingredient.id)}
                                 >
                                   -
                                 </button>
