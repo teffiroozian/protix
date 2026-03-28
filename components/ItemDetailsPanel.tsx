@@ -475,6 +475,7 @@ export default function ItemDetailsPanel({
   showCustomizationDeltas,
   displayMode = "full",
   showVariantsInDetails = true,
+  showSelectedIngredientsSummary = false,
   selectedIngredientCounts,
   onIncrementIngredient,
   onDecrementIngredient,
@@ -503,6 +504,7 @@ export default function ItemDetailsPanel({
   showCustomizationDeltas?: boolean;
   displayMode?: "full" | "addonsOnly";
   showVariantsInDetails?: boolean;
+  showSelectedIngredientsSummary?: boolean;
   selectedIngredientCounts?: Partial<Record<string, number>>;
   onIncrementIngredient?: (ingredientId: string) => void;
   onDecrementIngredient?: (ingredientId: string) => void;
@@ -640,6 +642,50 @@ export default function ItemDetailsPanel({
   })();
   const shouldShowIngredientSection =
     availableIngredientTabs.length > 1 || (availableIngredientTabs[0]?.ingredients.length ?? 0) > 0;
+  const selectedIngredientsForSummary = (() => {
+    const selectedIngredients: Array<{ ingredient: ResolvedPanelIngredient; count: number }> = [];
+    const seenTabLabels = new Set<string>();
+    const selectedCountFor = (ingredient: ResolvedPanelIngredient) =>
+      selectedIngredientCounts?.[ingredient.id] ?? ingredient.defaultCount;
+
+    availableIngredientTabs.forEach((tab) => {
+      if (tab.label === INCLUDED_INGREDIENT_TAB) return;
+
+      if (tab.selectionMode === "single") {
+        if (seenTabLabels.has(tab.label)) return;
+        seenTabLabels.add(tab.label);
+
+        const selectedIngredient = tab.ingredients.find((ingredient) => selectedCountFor(ingredient) > 0);
+        if (!selectedIngredient || selectedIngredient.isNoneOption) return;
+
+        selectedIngredients.push({
+          ingredient: selectedIngredient,
+          count: Math.max(1, selectedCountFor(selectedIngredient)),
+        });
+        return;
+      }
+
+      tab.ingredients.forEach((ingredient) => {
+        const count = selectedCountFor(ingredient);
+        if (count <= 0 || ingredient.isNoneOption) return;
+        selectedIngredients.push({ ingredient, count });
+      });
+    });
+
+    if (selectedIngredients.length > 0) {
+      return selectedIngredients;
+    }
+
+    const includedTab = availableIngredientTabs.find((tab) => tab.label === INCLUDED_INGREDIENT_TAB);
+    if (!includedTab) return [];
+
+    return includedTab.ingredients
+      .map((ingredient) => ({
+        ingredient,
+        count: selectedCountFor(ingredient),
+      }))
+      .filter(({ ingredient, count }) => count > 0 && !ingredient.isNoneOption);
+  })();
 
   return (
     <div className="grid grid-cols-2 gap-3 rounded-[18px] bg-[#e0e0e0] px-3 py-2">
@@ -1098,6 +1144,71 @@ export default function ItemDetailsPanel({
               })()}
             </div>
           </div>
+        </section>
+      ) : null}
+
+      {displayMode === "full" && showSelectedIngredientsSummary && selectedIngredientsForSummary.length > 0 ? (
+        <section className="col-span-2 rounded-[18px] border border-[rgba(0,0,0,0.15)] bg-white p-5">
+          <h2 className="mb-4 text-2xl font-bold">Selected Ingredients</h2>
+          <ul className="grid list-none grid-cols-2 items-stretch gap-[10px] pl-0">
+            {selectedIngredientsForSummary.map(({ ingredient, count }) => {
+              const maxQuantity = ingredient.maxQuantity;
+              const canAdjustQuantity = typeof maxQuantity === "number";
+
+              return (
+                <li key={`selected-${ingredient.id}`} className="flex">
+                  <div className="box-border flex h-full w-full flex-row items-center gap-3 rounded-[10px] border border-[rgba(0,0,0,0.15)] bg-[#f9f9f9] px-3 py-2">
+                    <div className="grid h-[72px] w-[72px] min-w-[72px] place-items-center rounded-lg bg-cover bg-center" aria-hidden="true">
+                      {isIconImage(ingredient.icon) ? (
+                        <Image
+                          src={ingredient.icon}
+                          alt=""
+                          width={72}
+                          height={72}
+                          className="h-[72px] w-[72px] rounded-lg object-cover"
+                        />
+                      ) : (
+                        ingredient.icon
+                      )}
+                    </div>
+                    <div className="flex min-w-0 flex-col items-start justify-center gap-[6px]">
+                      <div className="line-clamp-2 break-words text-left text-base font-bold leading-[1.2]">
+                        {ingredient.label}
+                      </div>
+                      <div className="text-sm font-bold text-[rgba(0,0,0,0.5)]">
+                        {ingredient.calories !== undefined ? `${ingredient.calories} Cal` : "— Cal"}
+                      </div>
+                    </div>
+
+                    {canAdjustQuantity ? (
+                      <div className="ml-auto inline-flex items-center gap-[6px]">
+                        <button
+                          type="button"
+                          className="inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-[rgba(0,0,0,0.35)] bg-white text-[18px] font-bold leading-none"
+                          aria-label={`Remove one ${ingredient.label}`}
+                          onClick={() => onDecrementIngredient?.(ingredient.id)}
+                        >
+                          -
+                        </button>
+                        <span className="min-w-4 text-center text-base font-bold">{count}</span>
+                        <button
+                          type="button"
+                          className="inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-[rgba(0,0,0,0.35)] bg-white text-[18px] font-bold leading-none disabled:cursor-not-allowed disabled:opacity-40"
+                          aria-label={`Add one more ${ingredient.label}`}
+                          onClick={() => onIncrementIngredient?.(ingredient.id)}
+                          disabled={count >= maxQuantity}
+                        >
+                          +
+                        </button>
+                      </div>
+                    ) : (
+                      <span className="ml-auto min-w-4 text-center text-base font-bold">{count}x</span>
+                    )}
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
         </section>
       ) : null}
 

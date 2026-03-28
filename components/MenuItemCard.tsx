@@ -1306,6 +1306,7 @@ export default function MenuItemCard({
             }
             customizationTotals={customizationTotals}
             showCustomizationDeltas={hasActiveCustomization}
+            showSelectedIngredientsSummary={isCartMode}
             displayMode="full"
           />
         </div>
