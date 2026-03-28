@@ -66,6 +66,7 @@ const addonsLookupByRestaurant: Record<string, RestaurantAddons> = {
 
 const ingredientLookupByRestaurant: Partial<Record<string, IngredientItem[]>> = {
   chickfila: chickfilaData.ingredients,
+  chipotle: chipotleData.ingredients,
 };
 
 const commonChangesLookupByRestaurant: Partial<Record<string, CommonChange[]>> = {
