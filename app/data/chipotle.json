@@ -9,6 +9,10 @@
             "categories": [
                 "Chips & Dips"
             ],
+            "ingredients": [
+                "chips",
+                "guacamole"
+            ],
             "portionType": "side",
             "image": "/restaurants/chipotle/menu/sides/chips.png",
             "nutrition": {
@@ -131,6 +135,10 @@
             "categories": [
                 "Chips & Dips"
             ],
+            "ingredients": [
+                "chips",
+                "guacamole"
+            ],
             "portionType": "side",
             "image": "/restaurants/chipotle/menu/sides/chips-guacamole.png",
             "nutrition": {
@@ -192,6 +200,10 @@
             "categories": [
                 "Chips & Dips"
             ],
+            "ingredients": [
+                "chips",
+                "fresh-tomato-salsa"
+            ],
             "portionType": "side",
             "image": "/restaurants/chipotle/menu/sides/chips-tomato-salsa.png",
             "nutrition": {
@@ -215,6 +227,10 @@
             "description": "Hot",
             "categories": [
                 "Chips & Dips"
+            ],
+            "ingredients": [
+                "chips",
+                "tomatillo-red-chili-salsa"
             ],
             "portionType": "side",
             "image": "/restaurants/chipotle/menu/sides/chips-red-chili-salsa.png",
@@ -240,6 +256,10 @@
             "categories": [
                 "Chips & Dips"
             ],
+            "ingredients": [
+                "chips",
+                "tomatillo-green-chili-salsa"
+            ],
             "portionType": "side",
             "image": "/restaurants/chipotle/menu/sides/chips-green-chili-salsa.png",
             "nutrition": {
@@ -264,6 +284,10 @@
             "categories": [
                 "Chips & Dips"
             ],
+            "ingredients": [
+                "chips",
+                "roasted-chili-corn-salsa"
+            ],
             "portionType": "side",
             "image": "/restaurants/chipotle/menu/sides/chips-chili-corn-salsa.png",
             "nutrition": {
@@ -286,6 +310,10 @@
             "name": "Chips & Queso Blanco",
             "categories": [
                 "Chips & Dips"
+            ],
+            "ingredients": [
+                "chips",
+                "queso-blanco"
             ],
             "portionType": "side",
             "image": "/restaurants/chipotle/menu/sides/chips-queso-blanco.png",
