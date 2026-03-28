@@ -574,16 +574,17 @@ export default function ItemDetailsPanel({
   };
   const displayIngredients = (() => {
     if (!selectedIngredientTab) return [];
+    const selectedCountFor = (ingredient: ResolvedPanelIngredient) => {
+      return selectedIngredientCounts?.[ingredient.id] ?? ingredient.defaultCount;
+    };
+
     if (flattenIngredientList) {
-      return selectedIngredientTab.ingredients;
+      return selectedIngredientTab.ingredients.filter((ingredient) => selectedCountFor(ingredient) > 0);
     }
     if (selectedIngredientTab.label !== INCLUDED_INGREDIENT_TAB) {
       return selectedIngredientTab.ingredients;
     }
 
-    const selectedCountFor = (ingredient: ResolvedPanelIngredient) => {
-      return selectedIngredientCounts?.[ingredient.id] ?? ingredient.defaultCount;
-    };
     const includedIngredients: ResolvedPanelIngredient[] = [];
     const includedIngredientIds = new Set<string>();
     const seenSingleSelectTabs = new Set<string>();
@@ -658,7 +659,10 @@ export default function ItemDetailsPanel({
     return includedIngredients;
   })();
   const shouldShowIngredientSection = flattenIngredientList
-    ? (flattenedIngredientTab?.ingredients.length ?? 0) > 0
+    ? (flattenedIngredientTab?.ingredients.some((ingredient) => {
+        const ingredientCount = selectedIngredientCounts?.[ingredient.id] ?? ingredient.defaultCount;
+        return ingredientCount > 0;
+      }) ?? false)
     : availableIngredientTabs.length > 1 || (availableIngredientTabs[0]?.ingredients.length ?? 0) > 0;
 
   return (
