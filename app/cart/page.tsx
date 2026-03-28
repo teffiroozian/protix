@@ -152,7 +152,7 @@ function getBuildIngredientCountCustomizations(
       return `${ingredientLabel}: ${selection.quantity}x`;
     });
 
-  return labels.length > 0 ? labels : cartItem.customizations;
+  return labels.length > 0 ? labels : undefined;
 }
 
 function buildCartBuildYourOwnMenuItem(
