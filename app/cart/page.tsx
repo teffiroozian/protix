@@ -146,7 +146,7 @@ function getBuildIngredientCountCustomizations(
   });
 
   const labels = Object.entries(cartItem.buildConfiguration.selectedIngredientItems)
-    .filter(([, selection]) => selection.quantity > 0)
+    .filter(([, selection]) => selection.quantity > 1)
     .map(([ingredientId, selection]) => {
       const ingredientLabel = ingredientNameLookup.get(normalizeIngredientKey(ingredientId)) ?? toTitleCase(ingredientId);
       return `${ingredientLabel}: ${selection.quantity}x`;
@@ -157,10 +157,12 @@ function getBuildIngredientCountCustomizations(
 
 function buildCartBuildYourOwnMenuItem(
   cartItem: ReturnType<typeof useCart>["items"][number],
-  ingredientItems?: IngredientItem[],
-  includedIngredientIds: string[] = []
+  ingredientItems?: IngredientItem[]
 ): MenuItem {
   const ingredientCatalog = ingredientItems ?? [];
+  const selectedIngredientIds = Object.entries(cartItem.buildConfiguration?.selectedIngredientItems ?? {})
+    .filter(([, selection]) => selection.quantity > 0)
+    .map(([ingredientId]) => ingredientId);
 
   const ingredientOptionsByTab = ingredientCatalog.reduce<Record<string, string[]>>((acc, ingredient) => {
     const ingredientId = ingredient.id ?? ingredient.name;
@@ -192,7 +194,7 @@ function buildCartBuildYourOwnMenuItem(
       carbs: cartItem.macrosPerItem.carbs,
       totalFat: cartItem.macrosPerItem.fat,
     },
-    ingredients: includedIngredientIds,
+    ingredients: selectedIngredientIds,
     customization: {
       ingredientTabs: tabNames,
       ingredientTabMaxQuantities,
@@ -422,7 +424,7 @@ export default function CartPage() {
 
               const menuItem: MenuItem = sourceItem
                 ?? (cartItem.buildConfiguration
-                  ? buildCartBuildYourOwnMenuItem(cartItem, ingredientItemsForRestaurant, includedIngredientIds)
+                  ? buildCartBuildYourOwnMenuItem(cartItem, ingredientItemsForRestaurant)
                   : {
                       id: cartItem.itemId,
                       name: cartItem.name,
@@ -455,6 +457,7 @@ export default function CartPage() {
                   initialCartCustomizations={initialIngredientCustomizations}
                   flattenIngredientListInDetails={Boolean(cartItem.buildConfiguration)}
                   lockedIngredientIdsInDetails={includedIngredientIds}
+                  suppressRemovedIngredientCustomizationsInCart={Boolean(cartItem.buildConfiguration)}
                   cartSummaryLine={summarizeItem(cartItem)}
                   onCartDecrement={() => updateQuantity(cartItem.id, cartItem.quantity - 1)}
                   onCartIncrement={() => updateQuantity(cartItem.id, cartItem.quantity + 1)}
