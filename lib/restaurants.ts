@@ -1,5 +1,6 @@
 import restaurants from "@/app/data/index.json";
 import { normalizeAddons } from "@/lib/addons";
+import { resolveMenuDataset } from "@/lib/menuResolver";
 import type { CommonChange, IngredientItem, IngredientModifier, MenuItem, RestaurantAddons, RestaurantCustomizationRules, RestaurantMenu } from "@/types/menu";
 
 export type RestaurantData = {
@@ -30,15 +31,17 @@ export async function getRestaurantData(id: string): Promise<RestaurantData | nu
   if (!restaurant) return null;
 
   const menuModule = await import(`@/app/data/${restaurant.menuFile}`);
-  const menu = menuModule.default as RestaurantMenu;
+  const menu = resolveMenuDataset(menuModule.default as RestaurantMenu);
+  const ingredients = menu.ingredients as IngredientItem[];
+  const items = menu.items as MenuItem[];
   return {
     id: restaurant.id,
     name: restaurant.name,
     logo: restaurant.logo,
     menuFile: restaurant.menuFile,
     isBuildYourOwn: menu.isBuildYourOwn ?? false,
-    items: menu.items as MenuItem[],
-    ingredients: (menu.ingredients ?? []) as IngredientItem[],
+    items,
+    ingredients,
     addons: normalizeAddons(menu.addons),
     commonChanges: (menu.commonChanges ?? []) as CommonChange[],
     ingredientModifiers: (menu.ingredientModifiers ?? []) as IngredientModifier[],

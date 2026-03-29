@@ -27,18 +27,19 @@ import starbucksMenu from "@/app/data/starbucks.json";
 import subwayMenu from "@/app/data/subway.json";
 import { useCart } from "@/stores/cartStore";
 import { normalizeAddons } from "@/lib/addons";
+import { resolveMenuDataset } from "@/lib/menuResolver";
 
 type MenuDataset = RestaurantMenu;
 
-const chickfilaData = chickfilaMenu as unknown as MenuDataset;
-const chipotleData = chipotleMenu as unknown as MenuDataset;
-const habitData = habitMenu as unknown as MenuDataset;
-const mcdonaldsData = mcdonaldsMenu as unknown as MenuDataset;
-const modData = modMenu as unknown as MenuDataset;
-const pandaData = pandaMenu as unknown as MenuDataset;
-const paneraData = paneraMenu as unknown as MenuDataset;
-const starbucksData = starbucksMenu as unknown as MenuDataset;
-const subwayData = subwayMenu as unknown as MenuDataset;
+const chickfilaData = resolveMenuDataset(chickfilaMenu as unknown as MenuDataset);
+const chipotleData = resolveMenuDataset(chipotleMenu as unknown as MenuDataset);
+const habitData = resolveMenuDataset(habitMenu as unknown as MenuDataset);
+const mcdonaldsData = resolveMenuDataset(mcdonaldsMenu as unknown as MenuDataset);
+const modData = resolveMenuDataset(modMenu as unknown as MenuDataset);
+const pandaData = resolveMenuDataset(pandaMenu as unknown as MenuDataset);
+const paneraData = resolveMenuDataset(paneraMenu as unknown as MenuDataset);
+const starbucksData = resolveMenuDataset(starbucksMenu as unknown as MenuDataset);
+const subwayData = resolveMenuDataset(subwayMenu as unknown as MenuDataset);
 
 const menuLookupByRestaurant: Record<string, MenuItem[]> = {
   chickfila: chickfilaData.items ?? [],

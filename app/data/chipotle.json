@@ -70,25 +70,13 @@
         {
             "id": "side-of-guacamole",
             "name": "Guacamole",
+            "ingredientRef": "guacamole",
             "categories": [
                 "Toppings",
                 "Single Sides"
             ],
             "portionType": "side",
             "hideVariantSelector": true,
-            "image": "/restaurants/chipotle/ingredients/toppings/gaucamole.png",
-            "nutrition": {
-                "calories": 230,
-                "totalFat": 22,
-                "satFat": 3.5,
-                "transFat": 0,
-                "cholesterol": 0,
-                "sodium": 370,
-                "carbs": 8,
-                "fiber": 6,
-                "sugars": 1,
-                "protein": 2
-            },
             "defaultVariantId": "side-of-guacamole",
             "variants": [
                 {
@@ -372,43 +360,25 @@
         {
             "id": "side-of-cilantro-lime-sauce",
             "name": "Cilantro Lime Sauce",
+            "ingredientRef": "cilantro-lime-sauce",
             "description": "Served on the Side",
             "categories": [
                 "Toppings",
                 "Single Sides"
             ],
             "portionType": "side",
-            "image": "/restaurants/chipotle/ingredients/toppings/cilantro-lime-sauce.png",
-            "nutrition": {
-                "calories": 80,
-                "protein": 2,
-                "carbs": 3,
-                "totalFat": 6
-            },
             "entreeGroup": "chips-sides",
             "defaultOrder": 9
         },
         {
             "id": "side-of-queso-blanco",
             "name": "Side of Queso Blanco",
+            "ingredientRef": "queso-blanco",
             "categories": [
                 "Single Sides"
             ],
             "portionType": "side",
             "hideVariantSelector": true,
-            "image": "/restaurants/chipotle/ingredients/toppings/queso-blanco.png",
-            "nutrition": {
-                "calories": 240,
-                "totalFat": 18,
-                "satFat": 12,
-                "transFat": 1,
-                "cholesterol": 60,
-                "sodium": 490,
-                "carbs": 7,
-                "fiber": 0,
-                "sugars": 2,
-                "protein": 10
-            },
             "defaultVariantId": "side-of-queso-blanco",
             "variants": [
                 {
@@ -542,72 +512,39 @@
         {
             "id": "side-of-chicken-al-pastor-high-protein",
             "name": "Side of Chicken al Pastor",
+            "ingredientRef": "chicken-al-pastor",
             "description": "28g Protein",
             "categories": [
                 "Protein Cups"
             ],
             "portionType": "side",
             "image": "/restaurants/chipotle/menu/high-protein/chicken-al-pastor-cup.png",
-            "nutrition": {
-                "calories": 200,
-                "totalFat": 11,
-                "satFat": 2.5,
-                "transFat": 0,
-                "cholesterol": 110,
-                "sodium": 820,
-                "carbs": 4,
-                "fiber": 0,
-                "sugars": 2,
-                "protein": 23
-            },
             "entreeGroup": "high-protein-menu",
             "defaultOrder": 12
         },
         {
             "id": "side-of-chicken-high-protein",
             "name": "Side of Chicken",
+            "ingredientRef": "chicken",
             "description": "32g Protein",
             "categories": [
                 "Protein Cups"
             ],
             "portionType": "side",
             "image": "/restaurants/chipotle/menu/high-protein/chicken-cup.png",
-            "nutrition": {
-                "calories": 180,
-                "totalFat": 7,
-                "satFat": 3,
-                "transFat": 0,
-                "cholesterol": 125,
-                "sodium": 310,
-                "carbs": 0,
-                "fiber": 0,
-                "sugars": 0,
-                "protein": 32
-            },
             "entreeGroup": "high-protein-menu",
             "defaultOrder": 13
         },
         {
             "id": "side-of-steak-high-protein",
             "name": "Side of Steak",
+            "ingredientRef": "steak",
             "description": "21g Protein",
             "categories": [
                 "Protein Cups"
             ],
             "portionType": "side",
             "image": "/restaurants/chipotle/menu/high-protein/steak-cup.png",
-            "nutrition": {
-                "calories": 150,
-                "totalFat": 6,
-                "satFat": 2.5,
-                "transFat": 0,
-                "cholesterol": 80,
-                "sodium": 330,
-                "carbs": 1,
-                "fiber": 1,
-                "sugars": 0,
-                "protein": 21
-            },
             "entreeGroup": "high-protein-menu",
             "defaultOrder": 14
         },
