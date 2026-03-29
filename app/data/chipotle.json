@@ -549,10 +549,16 @@
             "portionType": "side",
             "image": "/restaurants/chipotle/menu/high-protein/chicken-al-pastor-cup.png",
             "nutrition": {
-                "calories": 250,
-                "protein": 28,
-                "carbs": 5,
-                "totalFat": 14
+                "calories": 200,
+                "totalFat": 11,
+                "satFat": 2.5,
+                "transFat": 0,
+                "cholesterol": 110,
+                "sodium": 820,
+                "carbs": 4,
+                "fiber": 0,
+                "sugars": 2,
+                "protein": 23
             },
             "entreeGroup": "high-protein-menu",
             "defaultOrder": 12
@@ -592,9 +598,15 @@
             "image": "/restaurants/chipotle/menu/high-protein/steak-cup.png",
             "nutrition": {
                 "calories": 150,
-                "protein": 21,
+                "totalFat": 6,
+                "satFat": 2.5,
+                "transFat": 0,
+                "cholesterol": 80,
+                "sodium": 330,
                 "carbs": 1,
-                "totalFat": 6
+                "fiber": 1,
+                "sugars": 0,
+                "protein": 21
             },
             "entreeGroup": "high-protein-menu",
             "defaultOrder": 14
@@ -1104,9 +1116,15 @@
             "image": "/restaurants/chipotle/ingredients/proteins/chicken-al-pastor.png",
             "nutrition": {
                 "calories": 200,
-                "protein": 23,
+                "totalFat": 11,
+                "satFat": 2.5,
+                "transFat": 0,
+                "cholesterol": 110,
+                "sodium": 820,
                 "carbs": 4,
-                "totalFat": 11
+                "fiber": 0,
+                "sugars": 2,
+                "protein": 23
             }
         },
         {
@@ -1116,9 +1134,15 @@
             "image": "/restaurants/chipotle/ingredients/proteins/steak.png",
             "nutrition": {
                 "calories": 150,
-                "protein": 21,
+                "totalFat": 6,
+                "satFat": 2.5,
+                "transFat": 0,
+                "cholesterol": 80,
+                "sodium": 330,
                 "carbs": 1,
-                "totalFat": 6
+                "fiber": 1,
+                "sugars": 0,
+                "protein": 21
             }
         },
         {
