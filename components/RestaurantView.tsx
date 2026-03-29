@@ -197,20 +197,6 @@ const CHIPOTLE_KIDS_QUESADILLA_INCLUDED_INGREDIENT_IDS = [
   "soft-flour-tortilla",
   "cheese",
 ];
-const CHIPOTLE_KIDS_QUESADILLA_NUTRITION_OVERRIDES: Record<string, IngredientItem["nutrition"]> = {
-  "soft-flour-tortilla": {
-    calories: 83,
-    totalFat: 3,
-    protein: 2,
-    carbs: 13,
-  },
-  cheese: {
-    calories: 110,
-    totalFat: 8,
-    protein: 6,
-    carbs: 1,
-  },
-};
 const CHIPOTLE_QUESADILLA_TRIPLE_CHEESE_VARIANT_ID = "quesadilla-triple-cheese";
 const CHIPOTLE_KIDS_MEAL_OPTIONS: Array<{
   id: KidsMealSelection;
@@ -445,7 +431,7 @@ export default function RestaurantView({
       : viewMode;
   const selectedEntreeConfig = selectedEntree ? CHIPOTLE_ENTREE_CONFIGURATIONS[selectedEntree] : null;
   const selectedEntreeNutritionMultiplier = selectedEntreeConfig?.nutritionMultiplier ?? 1;
-  const tacoServingMultiplier = selectedEntree === "tacos" && selectedTacoCount === 1 ? 1 / 3 : 1;
+  const tacoServingMultiplier = selectedEntree === "tacos" ? selectedTacoCount : 1;
   const servingMultiplier = tacoServingMultiplier * selectedEntreeNutritionMultiplier;
   const ingredientDisplayMultiplier = servingMultiplier;
   const tacoShellIngredientIds = CHIPOTLE_TACO_SHELL_INGREDIENT_IDS;
@@ -576,11 +562,10 @@ export default function RestaurantView({
           shouldPinToIncludedCategory &&
           selectedEntree === "quesadilla";
         const hasCustomVariants = Boolean(ingredient.variants?.length);
-        const ingredientBaseNutrition =
-          selectedEntree === "kids-meal" && selectedKidsMeal === "quesadilla"
-            ? CHIPOTLE_KIDS_QUESADILLA_NUTRITION_OVERRIDES[ingredientId] ??
-              scaleNutritionValues(ingredient.nutrition, ingredientDisplayMultiplier)
-            : scaleNutritionValues(ingredient.nutrition, ingredientDisplayMultiplier);
+        const ingredientBaseNutrition = scaleNutritionValues(
+          ingredient.nutrition,
+          ingredientDisplayMultiplier
+        );
         const variants = hasCustomVariants
           ? ingredient.variants?.map((variant) => ({
               ...variant,
@@ -1368,12 +1353,10 @@ export default function RestaurantView({
               return null;
             }
 
-            const fallbackNutrition =
-              context.selectedEntree === "kids-meal" &&
-              context.selectedKidsMeal === "quesadilla"
-                ? CHIPOTLE_KIDS_QUESADILLA_NUTRITION_OVERRIDES[includedIngredientId] ??
-                  scaleNutritionValues(fallbackIngredient.nutrition, ingredientDisplayMultiplier)
-                : scaleNutritionValues(fallbackIngredient.nutrition, ingredientDisplayMultiplier);
+            const fallbackNutrition = scaleNutritionValues(
+              fallbackIngredient.nutrition,
+              ingredientDisplayMultiplier
+            );
 
             return {
               id: includedIngredientId,
