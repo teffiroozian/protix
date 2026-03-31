@@ -185,13 +185,42 @@ function compareNumericWithMissingLast(
   return direction === "asc" ? left - right : right - left;
 }
 
-export function sortItems(items: MenuItem[], sort: SortOption) {
+export function sortItems(
+  items: MenuItem[],
+  sort: SortOption,
+  categoryMode: CategoryMode = "menu"
+) {
   const sorted = [...items];
 
   if (sort === "default-order") {
-    sorted.sort((a, b) =>
-      compareNumericWithMissingLast(a.defaultOrder, b.defaultOrder, "asc")
-    );
+    const groupedByCategory = sorted.reduce<Record<string, MenuItem[]>>((acc, item) => {
+      const primaryCategory = getItemCategories(item)[0] ?? "";
+      if (!acc[primaryCategory]) {
+        acc[primaryCategory] = [];
+      }
+      acc[primaryCategory].push(item);
+      return acc;
+    }, {});
+
+    Object.values(groupedByCategory).forEach((group) => {
+      group.sort((a, b) => {
+        const orderDiff = compareNumericWithMissingLast(
+          a.defaultOrder,
+          b.defaultOrder,
+          "asc"
+        );
+        if (orderDiff !== 0) return orderDiff;
+        return a.name.localeCompare(b.name);
+      });
+    });
+
+    const orderedCategories = getOrderedMenuSections(sorted, categoryMode);
+    const orderedUncategorizedItems = groupedByCategory[""] ?? [];
+
+    return [
+      ...orderedCategories.flatMap((category) => groupedByCategory[category] ?? []),
+      ...orderedUncategorizedItems,
+    ];
   } else if (sort === "highest-protein") {
     sorted.sort((a, b) =>
       compareNumericWithMissingLast(
@@ -329,7 +358,7 @@ export default function MenuSections({
 }) {
 
   if (!groupByCategory) {
-    const sortedItems = sortItems(items, sort);
+    const sortedItems = sortItems(items, sort, categoryMode);
 
     if (!sortedItems.length) {
       return <EmptyFilteredState />;
@@ -410,7 +439,7 @@ export default function MenuSections({
   const sortedGrouped = Object.fromEntries(
     Object.entries(grouped).map(([key, value]) => [
       key,
-      sortItems(value, getSectionSort(key, sort)),
+      sortItems(value, getSectionSort(key, sort), categoryMode),
     ])
   );
 
