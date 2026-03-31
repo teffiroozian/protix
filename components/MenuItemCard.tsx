@@ -242,6 +242,7 @@ export default function MenuItemCard({
   initialCartCustomizations,
   onCartConfigurationChange,
   itemHref,
+  itemActionLabel = "Details",
   displayMode = "default",
   isIngredientSelected: controlledIngredientSelected,
   isIngredientLocked = false,
@@ -281,6 +282,7 @@ export default function MenuItemCard({
   initialCartCustomizations?: string[];
   onCartConfigurationChange?: (next: CartConfigurationPayload) => void;
   itemHref?: string;
+  itemActionLabel?: string;
   displayMode?: "default" | "ingredient-compact";
   isIngredientSelected?: boolean;
   isIngredientLocked?: boolean;
@@ -1020,7 +1022,7 @@ export default function MenuItemCard({
                     router.push(itemHref, { scroll: false });
                   }}
                 >
-                  Details
+                  {itemActionLabel}
                 </button>
               ) : null}
               {isCartMode || matchingCartItem ? (

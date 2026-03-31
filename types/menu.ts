@@ -107,6 +107,30 @@ export type MenuItem = {
   ingredients?: string[];
   customization?: IngredientTabsOverride;
   hideVariantSelector?: boolean;
+  customizable?: boolean;
+  entreeType?: "bowl" | "burrito" | "quesadilla" | "salad" | "tacos";
+  presetSelections?: {
+    proteins?: Array<{
+      ingredientId: string;
+      mode?: "normal" | "double";
+      selected?: boolean;
+    }>;
+    rice?: Array<{
+      ingredientId: string;
+      mode?: "light" | "normal" | "extra";
+      selected?: boolean;
+    }>;
+    beans?: Array<{
+      ingredientId: string;
+      mode?: "light" | "normal" | "extra";
+      selected?: boolean;
+    }>;
+    toppings?: Array<{
+      ingredientId: string;
+      mode?: "light" | "normal" | "extra";
+      selected?: boolean;
+    }>;
+  };
 };
 
 export type IngredientItem = {

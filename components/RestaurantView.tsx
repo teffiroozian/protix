@@ -392,6 +392,7 @@ export default function RestaurantView({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const requestedView = searchParams.get("view");
+  const prebuiltItemId = searchParams.get("prebuiltItemId");
   const defaultView: ViewOption = isBuildYourOwn ? "ingredients" : "menu";
   const viewMode: ViewOption =
     requestedView === "ingredients"
@@ -475,6 +476,7 @@ export default function RestaurantView({
   }, [cartItems, editCartItemId, isChipotleBuildPage, restaurantId]);
   const isEditingBuild = Boolean(editingCartItem);
   const hydratedEditItemIdRef = useRef<string | null>(null);
+  const hydratedPrebuiltItemIdRef = useRef<string | null>(null);
 
   const addonItems = useMemo<MenuItem[]>(() => {
     if (!addons) return [];
@@ -658,6 +660,22 @@ export default function RestaurantView({
       ),
     [ingredientMenuItems]
   );
+  const selectedPrebuiltMenuItem = useMemo(() => {
+    if (!isChipotleBuildPage || !prebuiltItemId) {
+      return null;
+    }
+
+    return (
+      items.find(
+        (item) =>
+          item.id === prebuiltItemId &&
+          item.customizable &&
+          item.entreeGroup === "high-protein-menu" &&
+          item.entreeType &&
+          item.presetSelections
+      ) ?? null
+    );
+  }, [isChipotleBuildPage, items, prebuiltItemId]);
 
   const allItems = useMemo(() => {
     const baseItems = [...items, ...addonItems];
@@ -1661,6 +1679,98 @@ export default function RestaurantView({
       window.clearTimeout(hydrateTimer);
     };
   }, [applyIngredientPortionNutrition, editingCartItem, ingredientItemsById]);
+
+  useEffect(() => {
+    if (!isChipotleBuildPage || isEditingBuild || !selectedPrebuiltMenuItem) {
+      return;
+    }
+
+    if (hydratedPrebuiltItemIdRef.current === selectedPrebuiltMenuItem.id) {
+      return;
+    }
+
+    const presetSelections = selectedPrebuiltMenuItem.presetSelections;
+    if (!presetSelections || !selectedPrebuiltMenuItem.entreeType) {
+      return;
+    }
+
+    hydratedPrebuiltItemIdRef.current = selectedPrebuiltMenuItem.id;
+
+    const hydrateTimer = window.setTimeout(() => {
+      setSelectedEntree(selectedPrebuiltMenuItem.entreeType as EntreeSelection);
+      setSelectedTacoShell("crispy");
+      setSelectedTacoCount(3);
+      setSelectedKidsMeal("build-your-own");
+      setSelectedIngredientVariantIds({});
+
+      const proteinSelections = presetSelections.proteins ?? [];
+      const riceSelections = presetSelections.rice ?? [];
+      const beanSelections = presetSelections.beans ?? [];
+      const toppingSelections = presetSelections.toppings ?? [];
+      const allSelections = [
+        ...proteinSelections,
+        ...riceSelections,
+        ...beanSelections,
+        ...toppingSelections,
+      ];
+
+      const hasDoubleProtein = proteinSelections.some(
+        (selection) => (selection.selected ?? true) && selection.mode === "double"
+      );
+      const splitModes = [...riceSelections, ...beanSelections].reduce<Record<string, SplitPortionMode>>(
+        (acc, selection) => {
+          if (!(selection.selected ?? true)) {
+            return acc;
+          }
+          const mode = selection.mode ?? "normal";
+          if (mode === "light" || mode === "normal" || mode === "extra") {
+            acc[selection.ingredientId] = mode;
+          }
+          return acc;
+        },
+        {}
+      );
+
+      setProteinPortionMode(hasDoubleProtein ? "double" : "normal");
+      setSplitPortionModeById(splitModes);
+
+      setSelectedIngredientItems(() => {
+        const next: Record<string, { item: MenuItem; quantity: number }> = {};
+
+        allSelections.forEach((selection) => {
+          if (!(selection.selected ?? true)) {
+            return;
+          }
+
+          const ingredient = ingredientItemsById.get(selection.ingredientId);
+          if (!ingredient) {
+            return;
+          }
+
+          const quantity = selection.mode === "extra" || selection.mode === "double" ? 2 : 1;
+          next[selection.ingredientId] = {
+            item: ingredient,
+            quantity,
+          };
+        });
+
+        return applyIngredientPortionNutrition(next, {
+          proteinMode: hasDoubleProtein ? "double" : "normal",
+          splitModesById: splitModes,
+        });
+      });
+    }, 0);
+
+    return () => {
+      window.clearTimeout(hydrateTimer);
+    };
+  }, [
+    applyIngredientPortionNutrition,
+    ingredientItemsById,
+    isChipotleBuildPage,
+    isEditingBuild,
+    selectedPrebuiltMenuItem,
+  ]);
 
   const adjustIngredientQuantity = (ingredientId: string, delta: 1 | -1) => {
     if (lockedIngredientIds.has(ingredientId)) return;

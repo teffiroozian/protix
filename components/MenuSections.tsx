@@ -32,6 +32,30 @@ function getVisibleVariants(item: MenuItem, section: string) {
   });
 }
 
+function getItemActionConfig(restaurantId: string, item: MenuItem) {
+  if (
+    restaurantId === "chipotle" &&
+    item.customizable &&
+    item.entreeType &&
+    item.id &&
+    item.entreeGroup === "high-protein-menu"
+  ) {
+    const params = new URLSearchParams({
+      view: "ingredients",
+      prebuiltItemId: item.id,
+    });
+    return {
+      href: `/restaurant/${restaurantId}?${params.toString()}`,
+      label: "Customize",
+    };
+  }
+
+  return {
+    href: `/restaurant/${restaurantId}/items/${toItemSlug(item)}`,
+    label: "Details",
+  };
+}
+
 export function categorySectionId(category: string) {
   return `menu-section-${normalizeCategory(category).replace(/[^a-z0-9]+/g, "-")}`;
 }
@@ -375,7 +399,9 @@ export default function MenuSections({
     return (
       <div className="mt-8 grid gap-3">
         <ul className="mt-0 p-0 grid gap-3">
-          {sortedItems.map((item, index) => (
+          {sortedItems.map((item, index) => {
+            const itemActionConfig = getItemActionConfig(restaurantId, item);
+            return (
             <MenuItemCard
               key={`${item.name}-${index}`}
               restaurantId={restaurantId}
@@ -385,7 +411,8 @@ export default function MenuSections({
               menuItems={items}
               customizationRules={customizationRules}
               commonChanges={commonChanges}
-              itemHref={`/restaurant/${restaurantId}/items/${toItemSlug(item)}`}
+              itemHref={itemActionConfig.href}
+              itemActionLabel={itemActionConfig.label}
               displayMode={
                 categoryMode === "ingredients" && isBuildYourOwn
                   ? "ingredient-compact"
@@ -406,7 +433,8 @@ export default function MenuSections({
               onIngredientPortionModeChange={(modeId) => onIngredientPortionModeChange?.(item, modeId)}
               onIngredientVariantChange={(variantId) => onIngredientVariantChange?.(item, variantId)}
             />
-          ))}
+            );
+          })}
         </ul>
       </div>
     );
@@ -469,7 +497,9 @@ export default function MenuSections({
             {categoryHeading(section, categoryMode)}
           </h2>
           <ul className="mt-3 p-0 grid gap-3">
-            {(sortedGrouped[section] ?? []).map((item, index) => (
+            {(sortedGrouped[section] ?? []).map((item, index) => {
+              const itemActionConfig = getItemActionConfig(restaurantId, item);
+              return (
               <MenuItemCard
                 key={`${item.name}-${index}`}
                 restaurantId={restaurantId}
@@ -479,7 +509,8 @@ export default function MenuSections({
                 menuItems={items}
                 customizationRules={customizationRules}
                 commonChanges={commonChanges}
-                itemHref={`/restaurant/${restaurantId}/items/${toItemSlug(item)}`}
+                itemHref={itemActionConfig.href}
+                itemActionLabel={itemActionConfig.label}
                 displayMode={
                   categoryMode === "ingredients" && isBuildYourOwn
                     ? "ingredient-compact"
@@ -500,7 +531,8 @@ export default function MenuSections({
                 onIngredientPortionModeChange={(modeId) => onIngredientPortionModeChange?.(item, modeId)}
                 onIngredientVariantChange={(variantId) => onIngredientVariantChange?.(item, variantId)}
               />
-            ))}
+              );
+            })}
           </ul>
         </section>
       ))}

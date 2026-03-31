@@ -687,6 +687,25 @@
                 "High Protein Bowls"
             ],
             "portionType": "single",
+            "customizable": true,
+            "entreeType": "bowl",
+            "presetSelections": {
+                "proteins": [
+                    { "ingredientId": "chicken", "mode": "double" }
+                ],
+                "rice": [
+                    { "ingredientId": "white-rice", "mode": "normal" }
+                ],
+                "beans": [
+                    { "ingredientId": "black-beans", "mode": "normal" }
+                ],
+                "toppings": [
+                    { "ingredientId": "fajita-veggies", "selected": true },
+                    { "ingredientId": "tomato-salsa", "selected": true },
+                    { "ingredientId": "cheese", "selected": true },
+                    { "ingredientId": "romaine-lettuce", "mode": "extra" }
+                ]
+            },
             "image": "/restaurants/chipotle/menu/high-protein/double-high-protein-bowl.jpg",
             "nutrition": {
                 "calories": 760,
