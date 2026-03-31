@@ -1218,6 +1218,13 @@ export default function RestaurantView({
 
   const getIngredientCategoryMaxSelections = (item: MenuItem) => {
     const category = normalizeIngredientCategory(item.categories[0]);
+    if (
+      category === "side" &&
+      selectedEntree === "kids-meal" &&
+      selectedKidsMeal === "build-your-own"
+    ) {
+      return 1;
+    }
     return CHIPOTLE_CATEGORY_MAX_SELECTIONS[category];
   };
 
@@ -1797,7 +1804,15 @@ export default function RestaurantView({
   const proteinBadgeLabel =
     selectedProteinCount > 0 ? getProteinBadgeLabel(proteinPortionMode, selectedProteinCount) : undefined;
   const ingredientPortionLabelById = (() => {
-    const labelById: Record<string, string> = {};
+    const labelById: Record<string, string> =
+      selectedEntree === "kids-meal" && selectedKidsMeal === "build-your-own"
+        ? Object.fromEntries(
+            Array.from(CHIPOTLE_KIDS_BUILD_YOUR_OWN_DOUBLE_SIDE_IDS).map((ingredientId) => [
+              ingredientId,
+              "2x",
+            ])
+          )
+        : {};
 
     Object.entries(selectedIngredientItems).forEach(([ingredientId, selectedIngredient]) => {
       if (isProteinIngredientItem(selectedIngredient.item)) {
