@@ -781,10 +781,15 @@
             "image": "/restaurants/chipotle/menu/drinks/coke-zero.png",
             "nutrition": {
                 "calories": 0,
-                "protein": 0,
+                "totalFat": 0,
+                "sodium": 70,
                 "carbs": 0,
-                "totalFat": 0
+                "fiber": 0,
+                "sugars": 0,
+                "addedSugars": 0,
+                "protein": 0
             },
+            "source": "third party",
             "entreeGroup": "drinks",
             "defaultOrder": 18
         },
@@ -798,10 +803,15 @@
             "image": "/restaurants/chipotle/menu/drinks/poppi-strawberry-lemon.png",
             "nutrition": {
                 "calories": 30,
-                "protein": 0,
+                "totalFat": 0,
+                "sodium": 0,
                 "carbs": 9,
-                "totalFat": 0
+                "fiber": 3,
+                "sugars": 5,
+                "addedSugars": 4,
+                "protein": 0
             },
+            "source": "third party",
             "entreeGroup": "drinks",
             "defaultOrder": 19
         },
@@ -814,11 +824,16 @@
             "portionType": "drink",
             "image": "/restaurants/chipotle/menu/drinks/poppi-orange.png",
             "nutrition": {
-                "calories": 25,
-                "protein": 0,
+                "calories": 30,
+                "totalFat": 0,
+                "sodium": 0,
                 "carbs": 9,
-                "totalFat": 0
+                "fiber": 3,
+                "sugars": 5,
+                "addedSugars": 3,
+                "protein": 0
             },
+            "source": "third party",
             "entreeGroup": "drinks",
             "defaultOrder": 20
         },
@@ -883,10 +898,15 @@
             "image": "/restaurants/chipotle/menu/drinks/open-still-water.png",
             "nutrition": {
                 "calories": 0,
-                "protein": 0,
+                "totalFat": 0,
+                "sodium": 0,
                 "carbs": 0,
-                "totalFat": 0
+                "fiber": 0,
+                "sugars": 0,
+                "addedSugars": 0,
+                "protein": 0
             },
+            "source": "third party",
             "entreeGroup": "drinks",
             "defaultOrder": 24
         },
