@@ -944,6 +944,7 @@
         {
             "id": "organic-watermelon-limeade",
             "name": "Organic Watermelon Limeade",
+            "image": "/restaurants/chipotle/menu/drinks/organic-watermelon-limeade.webp",
             "categories": [
                 "Tractor Beverages"
             ],
@@ -1003,6 +1004,7 @@
         {
             "id": "organic-lemonade",
             "name": "Organic Lemonade",
+            "image": "/restaurants/chipotle/menu/drinks/organic-lemonade.webp",
             "categories": [
                 "Tractor Beverages"
             ],
@@ -1062,6 +1064,7 @@
         {
             "id": "organic-mandarin-agua-fresca",
             "name": "Organic Mandarin Agua Fresca",
+            "image": "/restaurants/chipotle/menu/drinks/organic-mandarin-agua-fresca.webp",
             "categories": [
                 "Tractor Beverages"
             ],
@@ -1121,6 +1124,7 @@
         {
             "id": "organic-berry-agua-fresca",
             "name": "Organic Berry Agua Fresca",
+            "image": "/restaurants/chipotle/menu/drinks/organic-berry-agua-fresca.webp",
             "categories": [
                 "Tractor Beverages"
             ],
