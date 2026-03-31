@@ -680,6 +680,24 @@
             "defaultOrder": 18
         },
         {
+            "id": "double-high-protein-bowl",
+            "name": "Double High Protein Bowl",
+            "description": "81g Protein",
+            "categories": [
+                "High Protein Bowls"
+            ],
+            "portionType": "single",
+            "image": "/restaurants/chipotle/menu/high-protein/double-high-protein-bowl.jpg",
+            "nutrition": {
+                "calories": 760,
+                "totalFat": 26,
+                "carbs": 54,
+                "protein": 81
+            },
+            "entreeGroup": "high-protein-menu",
+            "defaultOrder": 11
+        },
+        {
             "id": "side-of-chicken-al-pastor-high-protein",
             "name": "Side of Chicken al Pastor",
             "ingredientRef": "chicken-al-pastor",
