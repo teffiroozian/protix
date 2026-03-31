@@ -950,7 +950,7 @@
             "portionType": "drink",
             "image": "/restaurants/chipotle/menu/drinks/organic-milk.png",
             "nutrition": {
-                "calories": 110,
+                "calories": 106,
                 "totalFat": 2.5,
                 "satFat": 1.5,
                 "transFat": 0,
@@ -959,8 +959,10 @@
                 "carbs": 12,
                 "fiber": 0,
                 "sugars": 12,
+                "addedSugars": 0,
                 "protein": 8
             },
+            "source": "third party",
             "entreeGroup": "drinks",
             "defaultOrder": 25
         },
@@ -973,17 +975,19 @@
             "portionType": "drink",
             "image": "/restaurants/chipotle/menu/drinks/organic-chocolate-milk.png",
             "nutrition": {
-                "calories": 160,
-                "totalFat": 3,
-                "satFat": 2,
+                "calories": 147,
+                "totalFat": 2.5,
+                "satFat": 1.5,
                 "transFat": 0,
-                "cholesterol": 15,
-                "sodium": 220,
-                "carbs": 24,
-                "fiber": 1,
-                "sugars": 22,
-                "protein": 9
+                "cholesterol": 10,
+                "sodium": 200,
+                "carbs": 22,
+                "fiber": 0,
+                "sugars": 21,
+                "addedSugars": 10,
+                "protein": 8
             },
+            "source": "third party",
             "entreeGroup": "drinks",
             "defaultOrder": 26
         },
@@ -1001,12 +1005,14 @@
                 "satFat": 0,
                 "transFat": 0,
                 "cholesterol": 0,
-                "sodium": 10,
-                "carbs": 25,
+                "sodium": 5,
+                "carbs": 24,
                 "fiber": 0,
-                "sugars": 22,
+                "sugars": 23,
+                "addedSugars": 0,
                 "protein": 0
             },
+            "source": "third party",
             "entreeGroup": "drinks",
             "defaultOrder": 27
         }
