@@ -76,7 +76,6 @@
                 "Single Sides"
             ],
             "portionType": "side",
-            "hideVariantSelector": true,
             "defaultVariantId": "side-of-guacamole",
             "variants": [
                 {
@@ -378,7 +377,6 @@
                 "Single Sides"
             ],
             "portionType": "side",
-            "hideVariantSelector": true,
             "defaultVariantId": "side-of-queso-blanco",
             "variants": [
                 {
