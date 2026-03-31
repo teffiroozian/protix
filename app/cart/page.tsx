@@ -459,6 +459,9 @@ export default function CartPage() {
                   flattenIngredientListInDetails={Boolean(cartItem.buildConfiguration)}
                   lockedIngredientIdsInDetails={includedIngredientIds}
                   suppressRemovedIngredientCustomizationsInCart={Boolean(cartItem.buildConfiguration)}
+                  cartCustomizeHref={cartItem.buildConfiguration
+                    ? `/restaurant/${cartItem.restaurantId}?view=ingredients&editCartItem=${cartItem.id}`
+                    : undefined}
                   cartSummaryLine={summarizeItem(cartItem)}
                   onCartDecrement={() => updateQuantity(cartItem.id, cartItem.quantity - 1)}
                   onCartIncrement={() => updateQuantity(cartItem.id, cartItem.quantity + 1)}

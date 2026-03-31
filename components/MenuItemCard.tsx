@@ -241,6 +241,7 @@ export default function MenuItemCard({
   initialCartOptionsLabel,
   initialCartCustomizations,
   onCartConfigurationChange,
+  cartCustomizeHref,
   itemHref,
   displayMode = "default",
   isIngredientSelected: controlledIngredientSelected,
@@ -280,6 +281,7 @@ export default function MenuItemCard({
   initialCartOptionsLabel?: string;
   initialCartCustomizations?: string[];
   onCartConfigurationChange?: (next: CartConfigurationPayload) => void;
+  cartCustomizeHref?: string;
   itemHref?: string;
   displayMode?: "default" | "ingredient-compact";
   isIngredientSelected?: boolean;
@@ -1031,10 +1033,16 @@ export default function MenuItemCard({
                       className="cursor-pointer rounded-xl border border-black/20 bg-white px-3 py-2 text-sm font-bold"
                       onClick={(event) => {
                         event.stopPropagation();
+
+                        if (cartCustomizeHref) {
+                          router.push(cartCustomizeHref);
+                          return;
+                        }
+
                         setOpen(true);
                       }}
                     >
-                      Modify
+                      {cartCustomizeHref ? "Customize" : "Modify"}
                     </button>
                   ) : null}
                   <div className="inline-flex items-center gap-2 rounded-xl border border-black/15 bg-white/90 px-2 py-1">
