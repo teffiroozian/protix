@@ -683,7 +683,7 @@
             "id": "high-protein-high-fiber-bowl",
             "name": "High Protein-High Fiber Bowl",
             "categories": [
-                "High Protein"
+                "Protein Meals"
             ],
             "portionType": "entree",
             "image": "/restaurants/chipotle/menu/high-protein/high-protein-high-fiber-bowl.jpg",
@@ -700,7 +700,7 @@
             "id": "high-protein-low-calorie-bowl",
             "name": "High Protein-Low Calorie Bowl",
             "categories": [
-                "High Protein"
+                "Protein Meals"
             ],
             "portionType": "entree",
             "image": "/restaurants/chipotle/menu/high-protein/high-protein-low-calorie-bowl.jpg",
@@ -717,7 +717,7 @@
             "id": "double-high-protein-burrito",
             "name": "Double High Protein Burrito",
             "categories": [
-                "High Protein"
+                "Protein Meals"
             ],
             "portionType": "entree",
             "image": "/restaurants/chipotle/menu/high-protein/double-high-protein-burrito.jpg",
@@ -734,7 +734,7 @@
             "id": "high-protein-taco",
             "name": "High Protein Taco",
             "categories": [
-                "High Protein"
+                "Protein Meals"
             ],
             "portionType": "entree",
             "image": "/restaurants/chipotle/menu/high-protein/high-protein-taco.jpg",
@@ -751,7 +751,7 @@
             "id": "double-high-protein-bowl",
             "name": "Double High Protein Bowl",
             "categories": [
-                "High Protein"
+                "Protein Meals"
             ],
             "portionType": "entree",
             "image": "/restaurants/chipotle/menu/high-protein/double-high-protein-bowl.jpg",
