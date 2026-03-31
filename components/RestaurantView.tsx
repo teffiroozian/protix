@@ -587,6 +587,7 @@ export default function RestaurantView({
           id: ingredientId,
           name: ingredient.name,
           nutrition: ingredientBaseNutrition,
+          defaultOrder: ingredient.defaultOrder,
           variants: tripleCheeseVariant ? [...(variants ?? []), tripleCheeseVariant] : variants,
           defaultVariantId,
           hideVariantSelector:
