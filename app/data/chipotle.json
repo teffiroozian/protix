@@ -728,10 +728,19 @@
             "image": "/restaurants/chipotle/menu/drinks/mexican-coca-cola.png",
             "nutrition": {
                 "calories": 150,
-                "protein": 0,
+                "totalFat": 0,
+                "satFat": 0,
+                "transFat": 0,
+                "polyunsaturatedFat": 0,
+                "cholesterol": 0,
+                "sodium": 85,
                 "carbs": 39,
-                "totalFat": 0
+                "fiber": 0,
+                "sugars": 39,
+                "addedSugars": 39,
+                "protein": 0
             },
+            "source": "third party",
             "entreeGroup": "drinks",
             "defaultOrder": 15
         },
@@ -744,11 +753,16 @@
             "portionType": "drink",
             "image": "/restaurants/chipotle/menu/drinks/mexican-sprite.png",
             "nutrition": {
-                "calories": 160,
-                "protein": 0,
-                "carbs": 40,
-                "totalFat": 0
+                "calories": 140,
+                "totalFat": 0,
+                "sodium": 95,
+                "carbs": 37,
+                "fiber": 0,
+                "sugars": 36,
+                "addedSugars": 36,
+                "protein": 0
             },
+            "source": "third party",
             "entreeGroup": "drinks",
             "defaultOrder": 16
         },
@@ -846,11 +860,16 @@
             "portionType": "drink",
             "image": "/restaurants/chipotle/menu/drinks/grapefruit-izze.png",
             "nutrition": {
-                "calories": 160,
-                "protein": 0,
-                "carbs": 41,
-                "totalFat": 0
+                "calories": 100,
+                "totalFat": 0,
+                "sodium": 15,
+                "carbs": 22,
+                "fiber": 0,
+                "sugars": 21,
+                "addedSugars": 0,
+                "protein": 0
             },
+            "source": "third party",
             "entreeGroup": "drinks",
             "defaultOrder": 21
         },
@@ -863,11 +882,16 @@
             "portionType": "drink",
             "image": "/restaurants/chipotle/menu/drinks/blackberry-izze.png",
             "nutrition": {
-                "calories": 170,
-                "protein": 0,
-                "carbs": 41,
-                "totalFat": 0
+                "calories": 100,
+                "totalFat": 0,
+                "sodium": 10,
+                "carbs": 22,
+                "fiber": 0,
+                "sugars": 21,
+                "addedSugars": 0,
+                "protein": 0
             },
+            "source": "third party",
             "entreeGroup": "drinks",
             "defaultOrder": 22
         },
@@ -881,10 +905,17 @@
             "image": "/restaurants/chipotle/menu/drinks/apple-juice.png",
             "nutrition": {
                 "calories": 240,
-                "protein": 0,
-                "carbs": 60,
-                "totalFat": 0
+                "totalFat": 0,
+                "satFat": 0,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 25,
+                "carbs": 59,
+                "fiber": 0,
+                "sugars": 50,
+                "protein": 0
             },
+            "source": "third party",
             "entreeGroup": "drinks",
             "defaultOrder": 23
         },
