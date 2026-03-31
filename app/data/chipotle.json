@@ -942,6 +942,66 @@
             "defaultOrder": 24
         },
         {
+            "id": "organic-watermelon-limeade",
+            "name": "Organic Watermelon Limeade",
+            "categories": [
+                "Tractor Beverages"
+            ],
+            "portionType": "drink",
+            "nutrition": {
+                "calories": 230,
+                "totalFat": 0,
+                "satFat": 0,
+                "transFat": 0,
+                "cholesterol": 0,
+                "sodium": 5,
+                "carbs": 56,
+                "fiber": 0,
+                "sugars": 50,
+                "protein": 0
+            },
+            "defaultVariantId": "organic-watermelon-limeade-22-fl-oz",
+            "variants": [
+                {
+                    "id": "organic-watermelon-limeade-22-fl-oz",
+                    "label": "22 fl oz",
+                    "portionType": "drink",
+                    "nutrition": {
+                        "calories": 230,
+                        "totalFat": 0,
+                        "satFat": 0,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 5,
+                        "carbs": 56,
+                        "fiber": 0,
+                        "sugars": 50,
+                        "protein": 0
+                    }
+                },
+                {
+                    "id": "organic-watermelon-limeade-32-fl-oz",
+                    "label": "32 fl oz",
+                    "portionType": "drink",
+                    "nutrition": {
+                        "calories": 330,
+                        "totalFat": 0,
+                        "satFat": 0,
+                        "transFat": 0,
+                        "cholesterol": 0,
+                        "sodium": 10,
+                        "carbs": 82,
+                        "fiber": 0,
+                        "sugars": 72,
+                        "protein": 0
+                    }
+                }
+            ],
+            "source": "third party",
+            "entreeGroup": "drinks",
+            "defaultOrder": 25
+        },
+        {
             "id": "organic-milk-8-oz",
             "name": "Organic Milk 8 oz",
             "categories": [
@@ -964,7 +1024,7 @@
             },
             "source": "third party",
             "entreeGroup": "drinks",
-            "defaultOrder": 25
+            "defaultOrder": 26
         },
         {
             "id": "organic-chocolate-milk-8-oz",
@@ -989,7 +1049,7 @@
             },
             "source": "third party",
             "entreeGroup": "drinks",
-            "defaultOrder": 26
+            "defaultOrder": 27
         },
         {
             "id": "organic-apple-juice-6-75-oz",
@@ -1014,7 +1074,7 @@
             },
             "source": "third party",
             "entreeGroup": "drinks",
-            "defaultOrder": 27
+            "defaultOrder": 28
         }
     ],
     "ingredients": [
