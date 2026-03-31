@@ -461,7 +461,9 @@ export default function CartPage() {
                   lockedIngredientIdsInDetails={includedIngredientIds}
                   suppressRemovedIngredientCustomizationsInCart={Boolean(cartItem.buildConfiguration)}
                   cartCustomizeHref={cartItem.buildConfiguration
-                    ? `/restaurant/${cartItem.restaurantId}/items/${toItemSlug(menuItem)}?view=ingredients&editCartItem=${cartItem.id}`
+                    ? sourceItem
+                      ? `/restaurant/${cartItem.restaurantId}/items/${toItemSlug(sourceItem)}?view=ingredients&editCartItem=${cartItem.id}`
+                      : `/restaurant/${cartItem.restaurantId}?view=ingredients&editCartItem=${cartItem.id}`
                     : undefined}
                   cartSummaryLine={summarizeItem(cartItem)}
                   onCartDecrement={() => updateQuantity(cartItem.id, cartItem.quantity - 1)}
