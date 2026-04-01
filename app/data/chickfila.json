@@ -1739,7 +1739,7 @@
                 "sugars": 44,
                 "protein": 7
             },
-            "defaultOrder": 40
+            "defaultOrder": 41
         },
         {
             "id": "frosted_soda",
@@ -1761,7 +1761,7 @@
                 "sugars": 59,
                 "protein": 7
             },
-            "defaultOrder": 41
+            "defaultOrder": 40
         },
         {
             "id": "vanilla_milkshake",
@@ -2712,7 +2712,7 @@
                     "label": "Vanilla Iced Coffee"
                 }
             ],
-            "defaultOrder": 58
+            "defaultOrder": 60
         },
         {
             "id": "coca_cola",
@@ -2788,7 +2788,7 @@
                     "label": "Large"
                 }
             ],
-            "defaultOrder": 59
+            "defaultOrder": 58
         },
         {
             "id": "dasani_bottled_water",
@@ -2810,7 +2810,7 @@
                 "sugars": 0,
                 "protein": 0
             },
-            "defaultOrder": 60
+            "defaultOrder": 61
         },
         {
             "id": "honest_kids_apple_juice",
@@ -2832,7 +2832,7 @@
                 "sugars": 8,
                 "protein": 0
             },
-            "defaultOrder": 61
+            "defaultOrder": 62
         },
         {
             "id": "simply_orange",
@@ -2854,7 +2854,7 @@
                 "sugars": 30,
                 "protein": 2
             },
-            "defaultOrder": 62
+            "defaultOrder": 63
         },
         {
             "id": "1_chocolate_milk",
@@ -2876,7 +2876,7 @@
                 "sugars": 21,
                 "protein": 7
             },
-            "defaultOrder": 63
+            "defaultOrder": 64
         },
         {
             "id": "1_milk",
@@ -2898,7 +2898,7 @@
                 "sugars": 10,
                 "protein": 7
             },
-            "defaultOrder": 64
+            "defaultOrder": 65
         },
         {
             "id": "dr_pepper",
@@ -2983,7 +2983,7 @@
                     "label": "Large"
                 }
             ],
-            "defaultOrder": 65
+            "defaultOrder": 59
         },
         {
             "id": "coffee",
