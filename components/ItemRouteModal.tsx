@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { GlassWater, Sandwich } from "lucide-react";
 import ItemDetailsPanel, { PortionSelector, type ResolvedPanelIngredient, resolvePanelIngredients } from "@/components/ItemDetailsPanel";
 import type {
   AddonOption,
@@ -50,6 +51,10 @@ function formatCalories(value?: number) {
 
 function addonFat(addon?: AddonOption) {
   return addon?.totalFat ?? addon?.fat ?? 0;
+}
+
+function menuItemFat(item?: MenuItem) {
+  return item?.nutrition.totalFat ?? 0;
 }
 
 function deltaFat(change: CommonChange) {
@@ -233,39 +238,6 @@ export default function ItemRouteModal({
     [ingredientCounts, ingredientLookup]
   );
 
-  const customizationTotals = useMemo(
-    () => ({
-      calories: addonTotals.calories + commonChangeTotals.calories + ingredientCountTotals.calories,
-      protein: addonTotals.protein + commonChangeTotals.protein + ingredientCountTotals.protein,
-      carbs: addonTotals.carbs + commonChangeTotals.carbs + ingredientCountTotals.carbs,
-      fat: addonTotals.fat + commonChangeTotals.fat + ingredientCountTotals.fat,
-    }),
-    [addonTotals, commonChangeTotals, ingredientCountTotals]
-  );
-
-  const hasActiveCustomization = useMemo(
-    () =>
-      customizationTotals.calories !== 0 ||
-      customizationTotals.protein !== 0 ||
-      customizationTotals.carbs !== 0 ||
-      customizationTotals.fat !== 0,
-    [customizationTotals]
-  );
-
-  const nutrition = {
-    ...baseNutrition,
-    calories: sumNutritionWithFallback(baseNutrition.calories, customizationTotals.calories),
-    protein: sumNutritionWithFallback(baseNutrition.protein, customizationTotals.protein),
-    carbs: sumNutritionWithFallback(baseNutrition.carbs, customizationTotals.carbs),
-    totalFat: sumNutritionWithFallback(baseNutrition.totalFat, customizationTotals.fat),
-    satFat: sumNutritionWithFallback(baseNutrition.satFat, addonTotals.satFat),
-    transFat: sumNutritionWithFallback(baseNutrition.transFat, addonTotals.transFat),
-    cholesterol: sumNutritionWithFallback(baseNutrition.cholesterol, addonTotals.cholesterol),
-    sodium: sumNutritionWithFallback(baseNutrition.sodium, addonTotals.sodium),
-    fiber: sumNutritionWithFallback(baseNutrition.fiber, addonTotals.fiber),
-    sugars: sumNutritionWithFallback(baseNutrition.sugars, addonTotals.sugars),
-  };
-
   const optionsLabel = useMemo(() => {
     const dressingSegments = Object.values(selectedAddons)
       .filter((addon): addon is AddonOption => Boolean(addon && addon.name !== "None"))
@@ -312,9 +284,93 @@ export default function ItemRouteModal({
     [menuItems]
   );
   const comboTypeOptions = [
-    { id: "just-item" as const, label: "Just Sandwich" },
-    { id: "combo-meal" as const, label: "Combo Meal" },
+    { id: "just-item" as const, label: "Just Sandwich", icon: Sandwich },
+    { id: "combo-meal" as const, label: "Combo Meal", icon: GlassWater },
   ];
+  const selectedComboSide = useMemo(
+    () => comboSides.find((side) => (side.id ?? side.name) === selectedComboSideId),
+    [comboSides, selectedComboSideId]
+  );
+  const selectedComboDrink = useMemo(
+    () => comboDrinks.find((drink) => (drink.id ?? drink.name) === selectedComboDrinkId),
+    [comboDrinks, selectedComboDrinkId]
+  );
+  const comboNutritionTotals = useMemo(() => {
+    if (!isComboEligibleCategory || comboType !== "combo-meal") {
+      return {
+        calories: 0,
+        protein: 0,
+        carbs: 0,
+        fat: 0,
+        satFat: 0,
+        transFat: 0,
+        cholesterol: 0,
+        sodium: 0,
+        fiber: 0,
+        sugars: 0,
+      };
+    }
+
+    return [selectedComboSide, selectedComboDrink].reduce(
+      (sum, comboItem) => ({
+        calories: sum.calories + (comboItem?.nutrition.calories ?? 0),
+        protein: sum.protein + (comboItem?.nutrition.protein ?? 0),
+        carbs: sum.carbs + (comboItem?.nutrition.carbs ?? 0),
+        fat: sum.fat + menuItemFat(comboItem),
+        satFat: sum.satFat + (comboItem?.nutrition.satFat ?? 0),
+        transFat: sum.transFat + (comboItem?.nutrition.transFat ?? 0),
+        cholesterol: sum.cholesterol + (comboItem?.nutrition.cholesterol ?? 0),
+        sodium: sum.sodium + (comboItem?.nutrition.sodium ?? 0),
+        fiber: sum.fiber + (comboItem?.nutrition.fiber ?? 0),
+        sugars: sum.sugars + (comboItem?.nutrition.sugars ?? 0),
+      }),
+      {
+        calories: 0,
+        protein: 0,
+        carbs: 0,
+        fat: 0,
+        satFat: 0,
+        transFat: 0,
+        cholesterol: 0,
+        sodium: 0,
+        fiber: 0,
+        sugars: 0,
+      }
+    );
+  }, [comboType, isComboEligibleCategory, selectedComboDrink, selectedComboSide]);
+
+  const customizationTotals = useMemo(
+    () => ({
+      calories: addonTotals.calories + commonChangeTotals.calories + ingredientCountTotals.calories + comboNutritionTotals.calories,
+      protein: addonTotals.protein + commonChangeTotals.protein + ingredientCountTotals.protein + comboNutritionTotals.protein,
+      carbs: addonTotals.carbs + commonChangeTotals.carbs + ingredientCountTotals.carbs + comboNutritionTotals.carbs,
+      fat: addonTotals.fat + commonChangeTotals.fat + ingredientCountTotals.fat + comboNutritionTotals.fat,
+    }),
+    [addonTotals, comboNutritionTotals, commonChangeTotals, ingredientCountTotals]
+  );
+
+  const hasActiveCustomization = useMemo(
+    () =>
+      customizationTotals.calories !== 0 ||
+      customizationTotals.protein !== 0 ||
+      customizationTotals.carbs !== 0 ||
+      customizationTotals.fat !== 0,
+    [customizationTotals]
+  );
+
+  const nutrition = {
+    ...baseNutrition,
+    calories: sumNutritionWithFallback(baseNutrition.calories, customizationTotals.calories),
+    protein: sumNutritionWithFallback(baseNutrition.protein, customizationTotals.protein),
+    carbs: sumNutritionWithFallback(baseNutrition.carbs, customizationTotals.carbs),
+    totalFat: sumNutritionWithFallback(baseNutrition.totalFat, customizationTotals.fat),
+    satFat: sumNutritionWithFallback(baseNutrition.satFat, addonTotals.satFat + comboNutritionTotals.satFat),
+    transFat: sumNutritionWithFallback(baseNutrition.transFat, addonTotals.transFat + comboNutritionTotals.transFat),
+    cholesterol: sumNutritionWithFallback(baseNutrition.cholesterol, addonTotals.cholesterol + comboNutritionTotals.cholesterol),
+    sodium: sumNutritionWithFallback(baseNutrition.sodium, addonTotals.sodium + comboNutritionTotals.sodium),
+    fiber: sumNutritionWithFallback(baseNutrition.fiber, addonTotals.fiber + comboNutritionTotals.fiber),
+    sugars: sumNutritionWithFallback(baseNutrition.sugars, addonTotals.sugars + comboNutritionTotals.sugars),
+  };
 
   const handleClose = () => {
     if (window.history.length > 1) {
@@ -325,14 +381,12 @@ export default function ItemRouteModal({
   };
 
   const handleAddToCart = () => {
-    const comboSide = comboSides.find((side) => (side.id ?? side.name) === selectedComboSideId);
-    const comboDrink = comboDrinks.find((drink) => (drink.id ?? drink.name) === selectedComboDrinkId);
     const comboCustomizations =
       isComboEligibleCategory && comboType === "combo-meal"
         ? [
             "Combo Meal",
-            comboSide ? `Side: ${comboSide.name}` : undefined,
-            comboDrink ? `Drink: ${comboDrink.name}` : undefined,
+            selectedComboSide ? `Side: ${selectedComboSide.name}` : undefined,
+            selectedComboDrink ? `Drink: ${selectedComboDrink.name}` : undefined,
           ].filter((entry): entry is string => Boolean(entry))
         : [];
     const customizations = [...selectedCommonChanges, ...selectedIngredientCustomizations, ...comboCustomizations];
@@ -448,6 +502,9 @@ export default function ItemRouteModal({
           ) : null}
           {isComboEligibleCategory ? (
             <>
+              {(!variants || variants.length === 0 || item.hideVariantSelector) ? (
+                <div className="h-px w-[min(720px,100%)] bg-black/16" />
+              ) : null}
               <div className="w-[min(720px,100%)]">
                 <div className="mt-0 my-3 flex flex-col items-center justify-between gap-4">
                   <div className="w-full text-center text-lg font-semibold text-[rgba(0,0,0,0.8)]">
@@ -456,6 +513,7 @@ export default function ItemRouteModal({
                   <div className="flex w-full flex-wrap justify-center gap-2">
                     {comboTypeOptions.map((option) => {
                       const isActive = comboType === option.id;
+                      const Icon = option.icon;
                       const variantColorClasses = isActive
                         ? "bg-black text-white"
                         : "bg-transparent text-[rgba(0,0,0,0.6)]";
@@ -464,9 +522,10 @@ export default function ItemRouteModal({
                         <button
                           key={option.id}
                           type="button"
-                          className={`min-w-[140px] cursor-pointer rounded-lg border-2 border-[rgba(0,0,0,0.6)] px-3 py-1.5 text-center text-[18px] font-bold ${variantColorClasses}`}
+                          className={`inline-flex min-w-[140px] cursor-pointer items-center justify-center gap-2 rounded-lg border-2 border-[rgba(0,0,0,0.6)] px-3 py-1.5 text-center text-[15px] font-semibold ${variantColorClasses}`}
                           onClick={() => setComboType(option.id)}
                         >
+                          <Icon size={15} />
                           {option.label}
                         </button>
                       );
