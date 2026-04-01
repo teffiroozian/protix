@@ -1545,18 +1545,22 @@ export default function MenuItemCard({
             selectedComboSideVariantId={selectedComboSideVariantId}
             selectedComboDrinkVariantId={selectedComboDrinkVariantId}
             onSelectComboSide={(sideId) => {
-              const nextSide = comboSides.find((side) => (side.id ?? side.name) === sideId);
-              const nextSideVariantId = getDefaultVariantId(nextSide);
-              setSelectedComboSideId(sideId);
+              const isDeselecting = selectedComboSideId === sideId;
+              const nextSideId = isDeselecting ? undefined : sideId;
+              const nextSide = comboSides.find((side) => (side.id ?? side.name) === nextSideId);
+              const nextSideVariantId = isDeselecting ? undefined : getDefaultVariantId(nextSide);
+              setSelectedComboSideId(nextSideId);
               setSelectedComboSideVariantId(nextSideVariantId);
-              emitCartConfiguration(selectedVariantId, selectedAddons, selectedSauceCounts, selectedCommonChangeIds, ingredientCounts, comboType, sideId, selectedComboDrinkId, nextSideVariantId, selectedComboDrinkVariantId);
+              emitCartConfiguration(selectedVariantId, selectedAddons, selectedSauceCounts, selectedCommonChangeIds, ingredientCounts, comboType, nextSideId, selectedComboDrinkId, nextSideVariantId, selectedComboDrinkVariantId);
             }}
             onSelectComboDrink={(drinkId) => {
-              const nextDrink = comboDrinks.find((drink) => (drink.id ?? drink.name) === drinkId);
-              const nextDrinkVariantId = getDefaultVariantId(nextDrink);
-              setSelectedComboDrinkId(drinkId);
+              const isDeselecting = selectedComboDrinkId === drinkId;
+              const nextDrinkId = isDeselecting ? undefined : drinkId;
+              const nextDrink = comboDrinks.find((drink) => (drink.id ?? drink.name) === nextDrinkId);
+              const nextDrinkVariantId = isDeselecting ? undefined : getDefaultVariantId(nextDrink);
+              setSelectedComboDrinkId(nextDrinkId);
               setSelectedComboDrinkVariantId(nextDrinkVariantId);
-              emitCartConfiguration(selectedVariantId, selectedAddons, selectedSauceCounts, selectedCommonChangeIds, ingredientCounts, comboType, selectedComboSideId, drinkId, selectedComboSideVariantId, nextDrinkVariantId);
+              emitCartConfiguration(selectedVariantId, selectedAddons, selectedSauceCounts, selectedCommonChangeIds, ingredientCounts, comboType, selectedComboSideId, nextDrinkId, selectedComboSideVariantId, nextDrinkVariantId);
             }}
             onSelectComboSideVariant={(variantId) => {
               setSelectedComboSideVariantId(variantId);
