@@ -260,6 +260,7 @@ export default function MenuItemCard({
   flattenIngredientListInDetails = false,
   lockedIngredientIdsInDetails,
   suppressRemovedIngredientCustomizationsInCart = false,
+  showDetailsButton = true,
 }: {
   restaurantId: string;
   item: MenuItem;
@@ -299,6 +300,7 @@ export default function MenuItemCard({
   flattenIngredientListInDetails?: boolean;
   lockedIngredientIdsInDetails?: string[];
   suppressRemovedIngredientCustomizationsInCart?: boolean;
+  showDetailsButton?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
@@ -1011,7 +1013,7 @@ export default function MenuItemCard({
             </div>
 
             <div className="ml-auto inline-flex flex-row items-end gap-2">
-              {!isCartMode && itemHref ? (
+              {!isCartMode && itemHref && showDetailsButton ? (
                 <button
                   type="button"
                   className="cursor-pointer rounded-xl border border-black/20 bg-white px-4 py-2 text-[15px] font-bold text-black/85"

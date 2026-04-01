@@ -389,6 +389,7 @@ export default function MenuSections({
               selectedIngredientPortionModeId={selectedIngredientPortionModeIdById?.[item.id ?? ""]}
               onIngredientPortionModeChange={(modeId) => onIngredientPortionModeChange?.(item, modeId)}
               onIngredientVariantChange={(variantId) => onIngredientVariantChange?.(item, variantId)}
+              showDetailsButton={categoryMode !== "ingredients"}
             />
           ))}
         </ul>
@@ -483,6 +484,7 @@ export default function MenuSections({
                 selectedIngredientPortionModeId={selectedIngredientPortionModeIdById?.[item.id ?? ""]}
                 onIngredientPortionModeChange={(modeId) => onIngredientPortionModeChange?.(item, modeId)}
                 onIngredientVariantChange={(variantId) => onIngredientVariantChange?.(item, variantId)}
+                showDetailsButton={categoryMode !== "ingredients"}
               />
             ))}
           </ul>
