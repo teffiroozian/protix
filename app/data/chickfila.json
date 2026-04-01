@@ -3362,7 +3362,7 @@
                 "sugars": 0,
                 "protein": 2
             },
-            "defaultOrder": 11
+            "defaultOrder": 3
         },
         {
             "id": "crispy-bell-peppers",
@@ -3560,7 +3560,7 @@
                 "carbs": 0,
                 "protein": 3
             },
-            "defaultOrder": 6
+            "defaultOrder": 7
         },
         {
             "id": "grape-tomato",
@@ -3572,7 +3572,7 @@
             "nutrition": {
                 "calories": 15
             },
-            "defaultOrder": 7
+            "defaultOrder": 8
         },
         {
             "id": "roasted-corn",
@@ -3584,7 +3584,7 @@
             "nutrition": {
                 "calories": 10
             },
-            "defaultOrder": 8
+            "defaultOrder": 9
         },
         {
             "id": "black-beans-corn",
@@ -3596,7 +3596,7 @@
             "nutrition": {
                 "calories": 45
             },
-            "defaultOrder": 9
+            "defaultOrder": 10
         },
         {
             "id": "jalapenos",
@@ -3608,7 +3608,7 @@
             "nutrition": {
                 "calories": 5
             },
-            "defaultOrder": 10
+            "defaultOrder": 11
         },
         {
             "id": "blueberries",
@@ -3620,7 +3620,7 @@
             "nutrition": {
                 "calories": 5
             },
-            "defaultOrder": 3
+            "defaultOrder": 4
         },
         {
             "id": "apples",
@@ -3632,7 +3632,7 @@
             "nutrition": {
                 "calories": 15
             },
-            "defaultOrder": 4
+            "defaultOrder": 5
         },
         {
             "id": "strawberries",
@@ -3644,7 +3644,7 @@
             "nutrition": {
                 "calories": 5
             },
-            "defaultOrder": 5
+            "defaultOrder": 6
         },
         {
             "id": "bacon-crumbles",
@@ -4121,6 +4121,12 @@
                 "calories": 5
             },
             {
+                "id": "salsa",
+                "name": "Salsa",
+                "image": "/restaurants/chickfila/menu/condiments/salsa.webp",
+                "calories": 5
+            },
+            {
                 "id": "hot_sauce",
                 "name": "Hot Sauce",
                 "image": "/restaurants/chickfila/menu/condiments/hot-sauce.webp",
@@ -4131,18 +4137,6 @@
                 "name": "Honey",
                 "image": "/restaurants/chickfila/menu/condiments/honey.webp",
                 "calories": 25
-            },
-            {
-                "id": "salt_packet",
-                "name": "Salt Packet",
-                "image": "/restaurants/chickfila/menu/condiments/salt-packet.webp",
-                "calories": 0
-            },
-            {
-                "id": "pepper",
-                "name": "Pepper",
-                "image": "/restaurants/chickfila/menu/condiments/pepper.webp",
-                "calories": 5
             },
             {
                 "id": "grape_jam",
@@ -4157,9 +4151,15 @@
                 "calories": 35
             },
             {
-                "id": "salsa",
-                "name": "Salsa",
-                "image": "/restaurants/chickfila/menu/condiments/salsa.webp",
+                "id": "salt_packet",
+                "name": "Salt Packet",
+                "image": "/restaurants/chickfila/menu/condiments/salt-packet.webp",
+                "calories": 0
+            },
+            {
+                "id": "pepper",
+                "name": "Pepper",
+                "image": "/restaurants/chickfila/menu/condiments/pepper.webp",
                 "calories": 5
             }
         ]
