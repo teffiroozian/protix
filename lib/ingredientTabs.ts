@@ -7,6 +7,28 @@ export function normalizeTabName(value: string) {
   return value.trim().toLowerCase();
 }
 
+export function normalizeRuleLookupKey(value: string) {
+  return value.trim().toLowerCase();
+}
+
+export function resolvePrimaryCategory(categories?: string[]) {
+  return categories?.map((category) => category.trim()).find(Boolean);
+}
+
+function resolveRuleValueByCategoryKey<T>(
+  rules: Partial<Record<string, T>> | undefined,
+  categoryKey: string | undefined
+) {
+  if (!categoryKey) {
+    return undefined;
+  }
+
+  const normalizedCategoryKey = normalizeRuleLookupKey(categoryKey);
+  return Object.entries(rules ?? {}).find(
+    ([candidateKey]) => normalizeRuleLookupKey(candidateKey) === normalizedCategoryKey
+  )?.[1];
+}
+
 export function getIngredientTabDisplayLabel(tabName: string) {
   const normalized = normalizeTabName(tabName);
     if (normalized.endsWith(" toppings") || normalized === "toppings") {
@@ -25,11 +47,11 @@ export function resolveIngredientTabs(
   customizationRules?: RestaurantCustomizationRules
 ) {
   const itemLevelTabs = item.customization?.ingredientTabs?.filter(Boolean) ?? [];
-  const primaryCategory = item.categories?.[0];
-  const restaurantLevelTabs =
+  const primaryCategory = resolvePrimaryCategory(item.categories);
+  const restaurantLevelTabs = (resolveRuleValueByCategoryKey(
+    customizationRules?.ingredientTabsByItemCategory,
     primaryCategory
-      ? customizationRules?.ingredientTabsByItemCategory?.[primaryCategory]?.filter(Boolean) ?? []
-      : [];
+  ) ?? []).filter(Boolean);
 
   const configuredTabs = itemLevelTabs.length > 0 ? itemLevelTabs : restaurantLevelTabs;
   const dedupedConfiguredTabs = configuredTabs.filter((tab, index) => {
@@ -74,9 +96,9 @@ export function resolveIngredientTabMaxQuantity(
     return restaurantLevelMax;
   }
 
-  const primaryCategory = item.categories?.[0];
+  const primaryCategory = resolvePrimaryCategory(item.categories);
   const restaurantLevelMaxQuantitiesByCategory =
-    primaryCategory ? customizationRules?.ingredientTabMaxQuantitiesByItemCategory?.[primaryCategory] : undefined;
+    resolveRuleValueByCategoryKey(customizationRules?.ingredientTabMaxQuantitiesByItemCategory, primaryCategory);
 
   return Object.entries(restaurantLevelMaxQuantitiesByCategory ?? {}).find(
     ([candidateTab]) => normalizeTabName(candidateTab) === normalizedTabName
@@ -88,11 +110,11 @@ export function resolveSingleSelectIngredientTabs(
   customizationRules?: RestaurantCustomizationRules
 ) {
   const itemLevelSingleSelectTabs = item.customization?.singleSelectIngredientTabs?.filter(Boolean) ?? [];
-  const primaryCategory = item.categories?.[0];
-  const restaurantLevelSingleSelectTabs =
+  const primaryCategory = resolvePrimaryCategory(item.categories);
+  const restaurantLevelSingleSelectTabs = (resolveRuleValueByCategoryKey(
+    customizationRules?.singleSelectIngredientTabsByItemCategory,
     primaryCategory
-      ? customizationRules?.singleSelectIngredientTabsByItemCategory?.[primaryCategory]?.filter(Boolean) ?? []
-      : [];
+  ) ?? []).filter(Boolean);
 
   const configuredTabs = itemLevelSingleSelectTabs.length > 0 ? itemLevelSingleSelectTabs : restaurantLevelSingleSelectTabs;
 
@@ -104,11 +126,7 @@ export function resolveSingleSelectIngredientTabs(
 }
 
 export function ingredientMatchesTab(ingredient: IngredientItem, tabName: string) {
-  const ingredientCategories = ingredient.categories?.length
-    ? ingredient.categories
-    : ingredient.category
-      ? [ingredient.category]
-      : [];
+  const ingredientCategories = ingredient.categories?.length ? ingredient.categories : [];
 
   return ingredientCategories.some((category) => normalizeTabName(category) === normalizeTabName(tabName));
 }

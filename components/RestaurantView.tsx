@@ -82,6 +82,7 @@ import {
   resolveIncludedIngredientIds,
   scaleNutritionValues,
 } from "@/lib/chipotleBuild";
+import { resolvePrimaryCategory } from "@/lib/ingredientTabs";
 
 const CATEGORY_ICONS: Record<string, LucideIcon> = {
   sandwiches: Sandwich,
@@ -143,15 +144,15 @@ function titleCase(text: string) {
 }
 
 function isProteinIngredientItem(item: Pick<MenuItem, "categories">) {
-  return normalizeIngredientCategory(item.categories?.[0]) === "proteins";
+  return normalizeIngredientCategory(resolvePrimaryCategory(item.categories)) === "proteins";
 }
 
 function isRiceIngredientItem(item: Pick<MenuItem, "categories">) {
-  return normalizeIngredientCategory(item.categories?.[0]) === "rice";
+  return normalizeIngredientCategory(resolvePrimaryCategory(item.categories)) === "rice";
 }
 
 function isBeanIngredientItem(item: Pick<MenuItem, "categories">) {
-  return normalizeIngredientCategory(item.categories?.[0]) === "beans";
+  return normalizeIngredientCategory(resolvePrimaryCategory(item.categories)) === "beans";
 }
 
 function isSplitPortionIngredientItem(item: Pick<MenuItem, "categories">) {
@@ -336,20 +337,20 @@ export default function RestaurantView({
   }, [addons, restaurantId]);
 
   const ingredientMenuItems = useMemo<MenuItem[]>(() => {
+    const normalizeIngredientCategories = (ingredient: IngredientItem) => {
+      const normalizedCategories =
+        ingredient.categories?.map((category) => category.trim()).filter(Boolean) ?? [];
+      if (normalizedCategories.length > 0) {
+        return normalizedCategories;
+      }
+
+      const normalizedLegacyCategory = ingredient.category?.trim();
+      return normalizedLegacyCategory ? [normalizedLegacyCategory] : ["Other"];
+    };
+
     const resolveIngredientCategory = (ingredient: IngredientItem) => {
-      if (ingredient.category) {
-        return ingredient.category;
-      }
-
-      if (ingredient.categories?.length) {
-        return (
-          ingredient.categories.find(
-            (category) => category.toLowerCase() !== "ingredients"
-          ) ?? ingredient.categories[0]
-        );
-      }
-
-      return "Other";
+      const categories = normalizeIngredientCategories(ingredient);
+      return categories.find((category) => category.toLowerCase() !== "ingredients") ?? categories[0];
     };
 
     const mappedIngredientItems = ingredients
@@ -992,7 +993,7 @@ export default function RestaurantView({
         const selectedSplitIds = Object.entries(itemsById)
           .filter(
             ([, selectedIngredient]) =>
-              normalizeIngredientCategory(selectedIngredient.item.categories?.[0]) === splitCategory
+              normalizeIngredientCategory(resolvePrimaryCategory(selectedIngredient.item.categories)) === splitCategory
           )
           .map(([ingredientId]) => ingredientId);
 
@@ -1060,7 +1061,7 @@ export default function RestaurantView({
   ) =>
     Object.values(itemsById).reduce((total, selectedIngredient) => {
       const selectedCategory = normalizeIngredientCategory(
-        selectedIngredient.item.categories[0]
+        resolvePrimaryCategory(selectedIngredient.item.categories)
       );
       return selectedCategory === category ? total + selectedIngredient.quantity : total;
     }, 0);
@@ -1081,12 +1082,12 @@ export default function RestaurantView({
 
     if (lockedIngredientIds.has(itemId)) return;
 
-    const splitCategory = normalizeIngredientCategory(item.categories?.[0]);
+    const splitCategory = normalizeIngredientCategory(resolvePrimaryCategory(item.categories));
     const isSplitItem = isSplitPortionIngredientItem(item);
     const currentSelectedSplitIds = Object.entries(selectedIngredientItems)
       .filter(
         ([, selectedIngredient]) =>
-          normalizeIngredientCategory(selectedIngredient.item.categories?.[0]) === splitCategory
+          normalizeIngredientCategory(resolvePrimaryCategory(selectedIngredient.item.categories)) === splitCategory
       )
       .map(([ingredientId]) => ingredientId);
     const nextSplitPortionModes = (() => {
@@ -1122,7 +1123,7 @@ export default function RestaurantView({
         return applyIngredientPortionNutrition(next, { splitModesById: nextSplitPortionModes });
       }
 
-      const category = normalizeIngredientCategory(item.categories[0]);
+      const category = normalizeIngredientCategory(resolvePrimaryCategory(item.categories));
       const categoryMaxSelections = getIngredientCategoryMaxSelections({
         category,
         selectedEntree,
@@ -1479,7 +1480,7 @@ export default function RestaurantView({
 
       const ingredient = ingredients.find((candidate) => candidate.id === ingredientId);
       const ingredientMaxQuantity = ingredient?.maxQuantity ?? 2;
-      const category = normalizeIngredientCategory(existing.item.categories[0]);
+      const category = normalizeIngredientCategory(resolvePrimaryCategory(existing.item.categories));
       const categoryMaxSelections = getIngredientCategoryMaxSelections({
         category,
         selectedEntree,
@@ -1564,10 +1565,10 @@ export default function RestaurantView({
     return [...selectedEntries].sort(([leftId, leftIngredient], [rightId, rightIngredient]) => {
       const leftCategory = selectedIncludedIngredientIdSet.has(leftId)
         ? "included ingredient"
-        : normalizeIngredientCategory(leftIngredient.item.categories?.[0]);
+        : normalizeIngredientCategory(resolvePrimaryCategory(leftIngredient.item.categories));
       const rightCategory = selectedIncludedIngredientIdSet.has(rightId)
         ? "included ingredient"
-        : normalizeIngredientCategory(rightIngredient.item.categories?.[0]);
+        : normalizeIngredientCategory(resolvePrimaryCategory(rightIngredient.item.categories));
       const leftCategoryPriority = categoryPriority.get(leftCategory) ?? Number.POSITIVE_INFINITY;
       const rightCategoryPriority = categoryPriority.get(rightCategory) ?? Number.POSITIVE_INFINITY;
 
@@ -1596,7 +1597,7 @@ export default function RestaurantView({
       const [ingredientId, selectedIngredient] = entry;
       const categoryKey = selectedIncludedIngredientIdSet.has(ingredientId)
         ? "included ingredient"
-        : normalizeIngredientCategory(selectedIngredient.item.categories?.[0]);
+        : normalizeIngredientCategory(resolvePrimaryCategory(selectedIngredient.item.categories));
       const existingGroup = groupedEntries.find((group) => group.categoryKey === categoryKey);
       if (existingGroup) {
         existingGroup.entries.push(entry);
@@ -1636,7 +1637,7 @@ export default function RestaurantView({
         return;
       }
 
-      const category = normalizeIngredientCategory(selectedIngredient.item.categories?.[0]);
+      const category = normalizeIngredientCategory(resolvePrimaryCategory(selectedIngredient.item.categories));
       const shouldUseKidsBuildYourOwnDoubleLabel =
         selectedEntree === "kids-meal" &&
         selectedKidsMeal === "build-your-own" &&
@@ -1653,7 +1654,7 @@ export default function RestaurantView({
       const selectedSplitIds = Object.entries(selectedIngredientItems)
         .filter(
           ([, splitSelectedIngredient]) =>
-            normalizeIngredientCategory(splitSelectedIngredient.item.categories?.[0]) === category
+            normalizeIngredientCategory(resolvePrimaryCategory(splitSelectedIngredient.item.categories)) === category
         )
         .map(([id]) => id);
 
@@ -1676,7 +1677,7 @@ export default function RestaurantView({
     const selectedCategoryQuantities = Object.values(selectedIngredientItems).reduce<Record<string, number>>(
       (acc, selectedIngredient) => {
         const category = normalizeIngredientCategory(
-          selectedIngredient.item.categories[0]
+          resolvePrimaryCategory(selectedIngredient.item.categories)
         );
         if (!category) return acc;
         acc[category] = (acc[category] ?? 0) + selectedIngredient.quantity;
@@ -1692,7 +1693,7 @@ export default function RestaurantView({
       if (itemId in selectedIngredientItems) return;
       if (lockedIngredientIds.has(itemId)) return;
 
-      const category = normalizeIngredientCategory(item.categories[0]);
+      const category = normalizeIngredientCategory(resolvePrimaryCategory(item.categories));
       const categoryCap = category
         ? getIngredientCategoryMaxSelections({
             category,
@@ -1992,7 +1993,7 @@ export default function RestaurantView({
                     (["rice", "beans"] as const).forEach((splitCategory) => {
                       const selectedSplitCount = Object.values(selectedIngredientItems).filter(
                         (selectedIngredient) =>
-                          normalizeIngredientCategory(selectedIngredient.item.categories?.[0]) === splitCategory
+                          normalizeIngredientCategory(resolvePrimaryCategory(selectedIngredient.item.categories)) === splitCategory
                       ).length;
                       const splitModeOptions =
                         selectedSplitCount === 2
@@ -2010,7 +2011,7 @@ export default function RestaurantView({
                         .filter(
                           (item) =>
                             item.id &&
-                            normalizeIngredientCategory(item.categories?.[0]) === splitCategory
+                            normalizeIngredientCategory(resolvePrimaryCategory(item.categories)) === splitCategory
                         )
                         .forEach((item) => {
                           optionsById[item.id as string] = splitModeOptions;
@@ -2031,7 +2032,7 @@ export default function RestaurantView({
                       const selectedSplitIds = Object.entries(selectedIngredientItems)
                         .filter(
                           ([, selectedIngredient]) =>
-                            normalizeIngredientCategory(selectedIngredient.item.categories?.[0]) === splitCategory
+                            normalizeIngredientCategory(resolvePrimaryCategory(selectedIngredient.item.categories)) === splitCategory
                         )
                         .map(([ingredientId]) => ingredientId);
                       const isSplitSelection = selectedSplitIds.length === 2;
@@ -2040,7 +2041,7 @@ export default function RestaurantView({
                         .filter(
                           (item) =>
                             item.id &&
-                            normalizeIngredientCategory(item.categories?.[0]) === splitCategory
+                            normalizeIngredientCategory(resolvePrimaryCategory(item.categories)) === splitCategory
                         )
                         .forEach((item) => {
                           const itemId = item.id as string;
@@ -2066,10 +2067,10 @@ export default function RestaurantView({
                   if (!isSplitPortionIngredientItem(item) || !item.id) return;
                   if (modeId !== "light" && modeId !== "normal" && modeId !== "extra") return;
 
-                  const splitCategory = normalizeIngredientCategory(item.categories?.[0]);
+                  const splitCategory = normalizeIngredientCategory(resolvePrimaryCategory(item.categories));
                   const selectedSplitCount = Object.values(selectedIngredientItems).filter(
                     (selectedIngredient) =>
-                      normalizeIngredientCategory(selectedIngredient.item.categories?.[0]) === splitCategory
+                      normalizeIngredientCategory(resolvePrimaryCategory(selectedIngredient.item.categories)) === splitCategory
                   ).length;
                   if (selectedSplitCount >= 2) return;
 
