@@ -43,8 +43,7 @@ function isWaffleFries(menuItem: MenuItem) {
 }
 
 function isHashBrowns(menuItem: MenuItem) {
-  const normalizedName = menuItem.name.trim().toLowerCase();
-  return menuItem.id === "hash-browns" || normalizedName.includes("hash brown");
+  return menuItem.id === "hash-browns";
 }
 
 function formatDelta(value: number) {
