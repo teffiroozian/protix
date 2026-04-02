@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Drumstick, EggFried, Salad, Sandwich, Shell, Utensils } from "lucide-react";
+import { Utensils } from "lucide-react";
 import type {
   AddonOption,
   AddonRef,
@@ -16,26 +16,28 @@ import type {
 import { useCart } from "@/stores/cartStore";
 import ItemDetailsPanel, { type ResolvedPanelIngredient, resolvePanelIngredients } from "./ItemDetailsPanel";
 import VariantSelector from "./VariantSelector";
+import {
+  addonFat,
+  deltaFat,
+  formatCalories,
+  formatDelta,
+  formatMacro,
+  getApplicableCommonChanges,
+  getDefaultIngredientCounts,
+  getDefaultVariantId,
+  isChickfilaBreakfastItem,
+  isHashBrowns,
+  isWaffleFries,
+  menuItemFatWithFallback,
+  normalizeCategory,
+  resolveJustItemIcon,
+  resolveJustItemLabel,
+  sortComboSides,
+  sumNutrition,
+} from "@/lib/menuItemCalculations";
 
 function pad2(n: number) {
   return String(n).padStart(2, "0");
-}
-
-function formatDelta(value: number) {
-  return `${value >= 0 ? "+" : ""}${value}`;
-}
-
-function formatMacro(value?: number) {
-  return value === undefined || Number.isNaN(value) ? "—g" : `${value}g`;
-}
-
-function formatCalories(value?: number) {
-  return value === undefined || Number.isNaN(value) ? "—" : String(value);
-}
-
-function sumNutrition(base?: number, delta = 0) {
-  if (base === undefined) return undefined;
-  return base + delta;
 }
 
 function formatCommonChangeForCart(label: string) {
@@ -49,98 +51,6 @@ function formatCommonChangeForCart(label: string) {
   return normalized.charAt(0).toUpperCase() + normalized.slice(1);
 }
 
-
-function normalizeCategory(category: string) {
-  return category.trim().toLowerCase();
-}
-
-function isChickfilaBreakfastItem(restaurantId: string, menuItem: MenuItem) {
-  if (restaurantId !== "chickfila") return false;
-  return menuItem.categories.some((category) => normalizeCategory(category) === "breakfast");
-}
-
-function isWaffleFries(menuItem: MenuItem) {
-  const normalizedName = menuItem.name.trim().toLowerCase();
-  return menuItem.id === "chick_fil_a_waffle_potato_fries" || normalizedName.includes("waffle potato fries");
-}
-
-function isHashBrowns(menuItem: MenuItem) {
-  return menuItem.id === "hash-browns";
-}
-
-function compareByDefaultOrder(left: MenuItem, right: MenuItem) {
-  const leftOrder = left.defaultOrder ?? Number.POSITIVE_INFINITY;
-  const rightOrder = right.defaultOrder ?? Number.POSITIVE_INFINITY;
-  if (leftOrder !== rightOrder) return leftOrder - rightOrder;
-  return left.name.localeCompare(right.name);
-}
-
-function sortComboSides(sides: MenuItem[], prioritizeHashBrowns: boolean) {
-  if (!prioritizeHashBrowns) {
-    return [...sides].sort(compareByDefaultOrder);
-  }
-
-  return [...sides].sort((left, right) => {
-    if (isHashBrowns(left) && !isHashBrowns(right)) return -1;
-    if (!isHashBrowns(left) && isHashBrowns(right)) return 1;
-    return compareByDefaultOrder(left, right);
-  });
-}
-
-function resolveJustItemLabel(item: MenuItem) {
-  const categories = (item.categories ?? []).map((category) => normalizeCategory(category));
-  if (categories.some((category) => category.includes("sandwich"))) return "Sandwich Only";
-  if (categories.some((category) => category.includes("salad"))) return "Salad Only";
-  if (categories.some((category) => category.includes("wrap"))) return "Wrap Only";
-  if (categories.some((category) => category.includes("nugget") || category.includes("chicken"))) return "Chicken Only";
-  if (categories.some((category) => category.includes("breakfast"))) return "Breakfast Only";
-  return "Item Only";
-}
-
-function resolveJustItemIcon(item: MenuItem) {
-  const categories = (item.categories ?? []).map((category) => normalizeCategory(category));
-  if (categories.some((category) => category.includes("sandwich"))) return Sandwich;
-  if (categories.some((category) => category.includes("salad"))) return Salad;
-  if (categories.some((category) => category.includes("wrap"))) return Shell;
-  if (categories.some((category) => category.includes("nugget") || category.includes("chicken"))) return Drumstick;
-  if (categories.some((category) => category.includes("breakfast"))) return EggFried;
-  return Sandwich;
-}
-
-function menuItemFat(item?: MenuItem) {
-  return item?.nutrition.totalFat ?? item?.nutrition.fat ?? 0;
-}
-
-function getDefaultVariantId(item?: MenuItem) {
-  if (!item) return undefined;
-  const variants = item.variants ?? [];
-  if (variants.length === 0) return undefined;
-  if (item.defaultVariantId && variants.some((variant) => variant.id === item.defaultVariantId)) {
-    return item.defaultVariantId;
-  }
-  const flaggedDefault = variants.find((variant) => variant.isDefault);
-  return flaggedDefault?.id ?? variants[0]?.id;
-}
-
-function addonFat(addon?: AddonOption) {
-  return addon?.totalFat ?? addon?.fat ?? 0;
-}
-
-function deltaFat(change: CommonChange) {
-  return change.delta.totalFat ?? change.delta.fat ?? 0;
-}
-
-function getApplicableCommonChanges(item: MenuItem, commonChanges?: CommonChange[]) {
-  if (!commonChanges || commonChanges.length === 0) return [];
-  const itemCategories = new Set(
-    (item.categories ?? []).map((category) => normalizeCategory(category))
-  );
-  return commonChanges.filter((change) => {
-    const categories = change.appliesTo?.categories;
-    if (!categories || categories.length === 0) return false;
-    return categories.some((category) => itemCategories.has(normalizeCategory(category)));
-  });
-}
 
 const emptyAddon: AddonOption = {
   name: "None",
@@ -240,15 +150,6 @@ function getSelectedCommonChangeIdsFromCustomizations(
 
 function formatIngredientCountCustomizationLabel(ingredientName: string, count: number) {
   return count === 0 ? `${ingredientName}: Removed` : `${ingredientName}: ${count}x`;
-}
-
-function getDefaultIngredientCounts(
-  resolvedIngredients: ResolvedPanelIngredient[]
-) {
-  return resolvedIngredients.reduce<Record<string, number>>((acc, ingredient) => {
-    acc[ingredient.id] = ingredient.defaultCount;
-    return acc;
-  }, {});
 }
 
 function getSelectedIngredientCountsFromCustomizations(
@@ -654,7 +555,7 @@ export default function MenuItemCard({
       calories: (drinkNutrition?.calories ?? 0) + (sideNutrition?.calories ?? 0),
       protein: (drinkNutrition?.protein ?? 0) + (sideNutrition?.protein ?? 0),
       carbs: (drinkNutrition?.carbs ?? 0) + (sideNutrition?.carbs ?? 0),
-      fat: (drinkNutrition?.totalFat ?? menuItemFat(selectedComboDrink)) + (sideNutrition?.totalFat ?? menuItemFat(selectedComboSide)),
+      fat: (drinkNutrition?.totalFat ?? menuItemFatWithFallback(selectedComboDrink)) + (sideNutrition?.totalFat ?? menuItemFatWithFallback(selectedComboSide)),
     };
   }, [comboType, isComboEligibleCategory, selectedComboDrink, selectedComboDrinkVariant, selectedComboSide, selectedComboSideVariant]);
 
@@ -946,8 +847,8 @@ export default function MenuItemCard({
               + (nextComboSideVariant?.nutrition.protein ?? nextComboSide?.nutrition.protein ?? 0),
             carbs: (nextComboDrinkVariant?.nutrition.carbs ?? nextComboDrink?.nutrition.carbs ?? 0)
               + (nextComboSideVariant?.nutrition.carbs ?? nextComboSide?.nutrition.carbs ?? 0),
-            fat: (nextComboDrinkVariant?.nutrition.totalFat ?? menuItemFat(nextComboDrink))
-              + (nextComboSideVariant?.nutrition.totalFat ?? menuItemFat(nextComboSide)),
+            fat: (nextComboDrinkVariant?.nutrition.totalFat ?? menuItemFatWithFallback(nextComboDrink))
+              + (nextComboSideVariant?.nutrition.totalFat ?? menuItemFatWithFallback(nextComboSide)),
           }
         : { calories: 0, protein: 0, carbs: 0, fat: 0 };
 
