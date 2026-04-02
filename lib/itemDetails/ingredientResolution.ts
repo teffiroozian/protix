@@ -159,6 +159,7 @@ export function resolvePanelIngredientTabs(
   selectedVariantId?: string,
   customizationRules?: RestaurantCustomizationRules
 ): ResolvedIngredientTab[] {
+  const selectedParentVariantLabel = variants?.find((variant) => variant.id === selectedVariantId)?.label;
   const ingredientIds = item.ingredients ?? [];
   const includedIngredientIds = new Set(ingredientIds.map((ingredientId) => ingredientId.toLowerCase()));
   const resolvedTabs = resolveIngredientTabs(item, customizationRules);
@@ -213,6 +214,12 @@ export function resolvePanelIngredientTabs(
         : undefined;
     const matchedVariantNutrition =
       menuItemMatch?.variants?.find((variant) => variant.id === selectedVariantId)?.nutrition ??
+      (selectedParentVariantLabel
+        ? menuItemMatch?.variants?.find(
+            (variant) =>
+              normalizeIngredientToken(variant.label) === normalizeIngredientToken(selectedParentVariantLabel)
+          )?.nutrition
+        : undefined) ??
       menuItemMatch?.variants?.find((variant) => variant.id === menuItemMatch.defaultVariantId)?.nutrition ??
       menuItemMatch?.variants?.[0]?.nutrition;
     const menuItemNutrition =
