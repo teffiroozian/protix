@@ -43,8 +43,6 @@ body {
     --shadow-elevation-1: 0 4px 12px rgba(15, 23, 42, 0.12);
     --shadow-elevation-2: 0 8px 20px rgba(15, 23, 42, 0.14);
     --shadow-elevation-3: 0 16px 40px rgba(15, 23, 42, 0.2);
-    --shadow-elevation-topbar: 0 -6px 16px rgba(15, 23, 42, 0.12);
-    --shadow-elevation-underbar: 0 6px 16px rgba(15, 23, 42, 0.12);
 }
 
 .card-surface {
@@ -74,8 +72,6 @@ body {
 .elevation-1 { box-shadow: var(--shadow-elevation-1); }
 .elevation-2 { box-shadow: var(--shadow-elevation-2); }
 .elevation-3 { box-shadow: var(--shadow-elevation-3); }
-.elevation-topbar { box-shadow: var(--shadow-elevation-topbar); }
-.elevation-underbar { box-shadow: var(--shadow-elevation-underbar); }
 
 .inset-sm { padding: var(--space-sm); }
 .inset-md { padding: var(--space-md); }
