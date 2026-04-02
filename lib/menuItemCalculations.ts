@@ -86,7 +86,7 @@ export function sumNutritionWithFallback(base?: number, delta = 0) {
 }
 
 export function addonFat(addon?: AddonOption) {
-  return addon?.totalFat ?? addon?.fat ?? 0;
+  return addon?.totalFat ?? 0;
 }
 
 export function menuItemFat(item?: MenuItem) {
@@ -94,7 +94,7 @@ export function menuItemFat(item?: MenuItem) {
 }
 
 export function menuItemFatWithFallback(item?: MenuItem) {
-  return item?.nutrition.totalFat ?? item?.nutrition.fat ?? 0;
+  return menuItemFat(item);
 }
 
 export function deltaFat(change: CommonChange) {

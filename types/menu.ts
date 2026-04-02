@@ -13,10 +13,10 @@ export const PORTION_TYPES = [
 export type PortionType = (typeof PORTION_TYPES)[number];
 
 export type Nutrition = {
-  calories?: number;
-  protein?: number;
-  totalFat?: number;
-  carbs?: number;
+  calories: number;
+  protein: number;
+  totalFat: number;
+  carbs: number;
 
   satFat?: number;
   transFat?: number;
@@ -24,6 +24,7 @@ export type Nutrition = {
   sodium?: number;
   fiber?: number;
   sugars?: number;
+  extraNutrition?: Record<string, number>;
 };
 
 export type ItemVariant = {
@@ -40,17 +41,17 @@ export type AddonRef = "sauces" | "dressings" | "condiments";
 
 export type AddonOption = {
   name: string;
-  calories?: number;
-  protein?: number;
-  carbs?: number;
-  fat?: number;
-  totalFat?: number;
+  calories: number;
+  protein: number;
+  carbs: number;
+  totalFat: number;
   satFat?: number;
   transFat?: number;
   cholesterol?: number;
   sodium?: number;
   fiber?: number;
   sugars?: number;
+  extraNutrition?: Record<string, number>;
   image?: string;
 };
 
