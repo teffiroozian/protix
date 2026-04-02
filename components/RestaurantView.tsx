@@ -514,6 +514,9 @@ export default function RestaurantView({
     ): RankedAllFilterKey | null => {
       switch (portionType) {
         case "single":
+        case "combo":
+        case "kids":
+        case "entree":
           return "main-entrees";
         case "shareable":
           return "shareables";
@@ -521,6 +524,10 @@ export default function RestaurantView({
           return "drinks";
         case "side":
           return "sides";
+        case "addon":
+        case "dessert":
+        case undefined:
+          return null;
         default:
           return null;
       }

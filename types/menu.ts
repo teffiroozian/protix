@@ -1,11 +1,16 @@
-export type PortionType =
-  | "single"
-  | "combo"
-  | "shareable"
-  | "addon"
-  | "drink"
-  | "side"
-  | "dessert";
+export const PORTION_TYPES = [
+  "single",
+  "combo",
+  "shareable",
+  "addon",
+  "drink",
+  "side",
+  "dessert",
+  "kids",
+  "entree",
+] as const;
+
+export type PortionType = (typeof PORTION_TYPES)[number];
 
 export type Nutrition = {
   calories?: number;
