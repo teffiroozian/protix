@@ -617,6 +617,7 @@ export default function ItemRouteModal({
               carbs: Math.round(nutrition.carbs ?? 0),
               fat: Math.round(nutrition.totalFat ?? 0),
             }}
+            size="panel"
             className="w-full max-w-[720px] gap-6 sm:gap-10"
             valueExtras={
               hasActiveCustomization

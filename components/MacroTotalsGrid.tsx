@@ -39,7 +39,7 @@ export const macroDisplayConfig: Record<MacroKey, MacroDisplayConfig> = {
     unit: "g",
     valueClassNameByVariant: {
       default: "text-[#2563eb]",
-      bar: "text-[#3B8EDB]",
+      bar: "text-[#2563eb]",
     },
   },
 };
@@ -48,7 +48,7 @@ const macroOrder: MacroKey[] = ["calories", "protein", "carbs", "fat"];
 
 type MacroTotalsGridProps = {
   macros: MacroTotalsInput;
-  size?: "compact" | "full";
+  size?: "compact" | "full" | "panel";
   variant?: "default" | "bar";
   className?: string;
   itemClassName?: string;
@@ -68,8 +68,13 @@ export default function MacroTotalsGrid({
   valueExtras,
 }: MacroTotalsGridProps) {
   const sizeClassNames = {
-    value: size === "compact" ? "text-xl" : "text-2xl sm:text-3xl",
-    label: size === "compact" ? "mt-2 text-[10px]" : "mt-2 text-xs",
+    value:
+      size === "compact"
+        ? "text-xl"
+        : size === "panel"
+          ? "text-2xl"
+          : "text-2xl sm:text-3xl",
+    label: size === "full" ? "mt-2 text-xs" : "mt-2 text-[10px]",
   };
 
   return (

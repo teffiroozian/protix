@@ -255,7 +255,7 @@ export default function CartPreviewDrawer() {
               <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-500">
                 Total Macros
               </p>
-              <MacroTotalsGrid macros={totals} className="mt-3" />
+              <MacroTotalsGrid macros={totals} size="panel" className="mt-3" />
             </div>
 
             <div className="mt-4 grid grid-cols-2 gap-2 border-t border-slate-200 pt-4">
