@@ -22,6 +22,7 @@ import {
   normalizeIngredientToken,
   sortByCalories,
   formatSummaryDetail,
+  toNumber,
 } from "@/lib/itemDetails/helpers";
 import {
   type ResolvedIngredientTab,

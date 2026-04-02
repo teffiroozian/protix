@@ -15,7 +15,7 @@ export function normalizeIngredientCategory(value: string) {
   return value.trim().toLowerCase();
 }
 
-const toNumber = (value?: number) => value ?? 0;
+export const toNumber = (value?: number) => value ?? 0;
 
 export function sortByCalories(addons: AddonOption[]) {
   return [...addons].sort((a, b) => toNumber(a.calories) - toNumber(b.calories));
