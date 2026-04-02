@@ -35,6 +35,7 @@ import {
   sortComboSides,
   sumNutrition,
 } from "@/lib/menuItemCalculations";
+import { formatOptionLabelCounts, parseOptionLabelCounts, type OptionLabelCountMap } from "@/lib/cartOptionLabels";
 
 function pad2(n: number) {
   return String(n).padStart(2, "0");
@@ -78,24 +79,6 @@ type CartConfigurationPayload = {
   };
 };
 
-function parseOptionLabelCounts(optionsLabel?: string) {
-  const counts: Record<string, number> = {};
-
-  for (const rawSegment of (optionsLabel ?? "").split("+")) {
-    const segment = rawSegment.trim();
-    if (!segment) continue;
-
-    const match = segment.match(/^(.*?)(?:\s*x(\d+))?$/i);
-    const name = match?.[1]?.trim() ?? segment;
-    const quantity = Number(match?.[2] ?? "1");
-    if (!name) continue;
-
-    counts[name] = (counts[name] ?? 0) + (Number.isFinite(quantity) && quantity > 0 ? quantity : 1);
-  }
-
-  return counts;
-}
-
 function getSelectedAddonsFromLabel(item: MenuItem, addons: RestaurantAddons | undefined, optionsLabel?: string) {
   if (!optionsLabel) return {} as Partial<Record<AddonRef, AddonOption>>;
 
@@ -127,6 +110,27 @@ function getSelectedSauceCountsFromLabel(item: MenuItem, addons: RestaurantAddon
     if (quantity > 0) acc[addon.name] = quantity;
     return acc;
   }, {});
+}
+
+function buildOptionLabelCounts(
+  selectedAddons: Partial<Record<AddonRef, AddonOption>>,
+  selectedSauceCounts: Record<string, number>
+): OptionLabelCountMap {
+  const counts: OptionLabelCountMap = {};
+
+  Object.values(selectedAddons)
+    .filter((addon): addon is AddonOption => Boolean(addon && addon.name !== "None"))
+    .forEach((addon) => {
+      counts[addon.name] = (counts[addon.name] ?? 0) + 1;
+    });
+
+  Object.entries(selectedSauceCounts)
+    .filter(([, count]) => count > 0)
+    .forEach(([name, count]) => {
+      counts[name] = (counts[name] ?? 0) + count;
+    });
+
+  return counts;
 }
 
 function getSelectedCommonChangeIdsFromCustomizations(
@@ -668,15 +672,7 @@ export default function MenuItemCard({
   }, [addons, commonChanges, initialCartCustomizations, item.addonRefs, resolvedIngredients]);
 
   const optionsLabel = useMemo(() => {
-    const dressingSegments = Object.values(selectedAddons)
-      .filter((addon): addon is AddonOption => Boolean(addon && addon.name !== "None"))
-      .map((addon) => addon.name);
-    const sauceSegments = Object.entries(selectedSauceCounts)
-      .filter(([, count]) => count > 0)
-      .map(([name, count]) => (count === 1 ? name : `${name} x${count}`));
-
-    const segments = [...dressingSegments, ...sauceSegments];
-    return segments.length > 0 ? segments.join(" + ") : undefined;
+    return formatOptionLabelCounts(buildOptionLabelCounts(selectedAddons, selectedSauceCounts));
   }, [selectedAddons, selectedSauceCounts]);
 
   const customizations = useMemo(() => {
@@ -810,15 +806,7 @@ export default function MenuItemCard({
       { calories: 0, protein: 0, carbs: 0, fat: 0 }
     );
 
-    const dressingSegments = Object.values(nextAddons)
-      .filter((addon): addon is AddonOption => Boolean(addon && addon.name !== "None"))
-      .map((addon) => addon.name);
-    const sauceSegments = Object.entries(nextSauceCounts)
-      .filter(([, count]) => count > 0)
-      .map(([name, count]) => (count === 1 ? name : `${name} x${count}`));
-    const nextOptionsLabel = [...dressingSegments, ...sauceSegments].length > 0
-      ? [...dressingSegments, ...sauceSegments].join(" + ")
-      : undefined;
+    const nextOptionsLabel = formatOptionLabelCounts(buildOptionLabelCounts(nextAddons, nextSauceCounts));
     const selectedCommonChangesForCart = applicableCommonChanges
       .filter((change) => nextSelectedCommonChangeIds.includes(change.id))
       .map((change) => formatCommonChangeForCart(change.label));

@@ -27,6 +27,7 @@ import starbucksMenu from "@/app/data/starbucks.json";
 import subwayMenu from "@/app/data/subway.json";
 import { useCart } from "@/stores/cartStore";
 import { normalizeAddons } from "@/lib/addons";
+import { parseOptionLabelCounts } from "@/lib/cartOptionLabels";
 import { resolveMenuDataset } from "@/lib/menuResolver";
 
 type MenuDataset = RestaurantMenu;
@@ -210,24 +211,6 @@ function buildCartBuildYourOwnMenuItem(
   };
 }
 
-
-function parseOptionLabelCounts(optionsLabel?: string) {
-  const counts: Record<string, number> = {};
-
-  for (const rawSegment of (optionsLabel ?? "").split("+")) {
-    const segment = rawSegment.trim();
-    if (!segment) continue;
-
-    const match = segment.match(/^(.*?)(?:\s*x(\d+))?$/i);
-    const name = match?.[1]?.trim() ?? segment;
-    const quantity = Number(match?.[2] ?? "1");
-    if (!name) continue;
-
-    counts[name] = (counts[name] ?? 0) + (Number.isFinite(quantity) && quantity > 0 ? quantity : 1);
-  }
-
-  return counts;
-}
 
 function summarizeItem(item: { variantLabel?: string; optionsLabel?: string; customizations?: string[] }) {
   const addonNames = new Set(Object.keys(parseOptionLabelCounts(item.optionsLabel)));
