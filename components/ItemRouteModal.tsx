@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Sandwich, Utensils } from "lucide-react";
+import { Salad, Sandwich, Utensils } from "lucide-react";
 import ItemDetailsPanel, { PortionSelector, type ResolvedPanelIngredient, resolvePanelIngredients } from "@/components/ItemDetailsPanel";
 import type {
   AddonOption,
@@ -97,6 +97,14 @@ function resolveJustItemLabel(item: MenuItem) {
   }
 
   return "Item Only";
+}
+
+function resolveJustItemIcon(item: MenuItem) {
+  const normalizedCategories = (item.categories ?? []).map((category) => normalizeCategory(category));
+  if (normalizedCategories.some((category) => category.includes("salad"))) {
+    return Salad;
+  }
+  return Sandwich;
 }
 
 function deltaFat(change: CommonChange) {
@@ -339,7 +347,7 @@ export default function ItemRouteModal({
   );
   const comboTypeOptions = useMemo(
     () => [
-      { id: "just-item" as const, label: resolveJustItemLabel(item), icon: Sandwich },
+      { id: "just-item" as const, label: resolveJustItemLabel(item), icon: resolveJustItemIcon(item) },
       { id: "combo-meal" as const, label: "Combo Meal", icon: Utensils },
     ],
     [item]

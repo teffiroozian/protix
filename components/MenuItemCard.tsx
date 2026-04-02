@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Sandwich, Utensils } from "lucide-react";
+import { Salad, Sandwich, Utensils } from "lucide-react";
 import type {
   AddonOption,
   AddonRef,
@@ -73,6 +73,12 @@ function resolveJustItemLabel(item: MenuItem) {
   if (categories.some((category) => category.includes("salad"))) return "Just Salad";
   if (categories.some((category) => category.includes("nugget"))) return "Nuggets Only";
   return "Item Only";
+}
+
+function resolveJustItemIcon(item: MenuItem) {
+  const categories = (item.categories ?? []).map((category) => normalizeCategory(category));
+  if (categories.some((category) => category.includes("salad"))) return Salad;
+  return Sandwich;
 }
 
 function menuItemFat(item?: MenuItem) {
@@ -546,7 +552,7 @@ export default function MenuItemCard({
   }, [item.categories, restaurantId]);
   const comboTypeOptions = useMemo(
     () => [
-      { id: "just-item" as const, label: resolveJustItemLabel(item), icon: Sandwich },
+      { id: "just-item" as const, label: resolveJustItemLabel(item), icon: resolveJustItemIcon(item) },
       { id: "combo-meal" as const, label: "Combo Meal", icon: Utensils },
     ],
     [item]
