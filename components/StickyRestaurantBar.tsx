@@ -83,7 +83,7 @@ export default function StickyRestaurantBar({
   return (
     <div className="fixed left-0 right-0 top-0 z-50" data-sticky-nav="true">
       <div
-        className={`relative z-[110] mx-auto mt-1 flex max-w-6xl items-center border border-subtle card-surface elevation-1 backdrop-blur mx-2 ${
+        className={`relative z-[110] mx-auto mt-1 flex max-w-6xl items-center border border-subtle card-surface elevation-topbar backdrop-blur mx-2 ${
           hideSecondaryNav ? "rounded-2xl" : "rounded-t-2xl"
         }`}
       >
@@ -160,7 +160,7 @@ export default function StickyRestaurantBar({
 
       {hideSecondaryNav ? null : (
         <div
-          className="relative z-[100] mx-auto flex w-full max-w-6xl items-center rounded-b-2xl border border-subtle card-surface elevation-1 backdrop-blur"
+          className="relative z-[100] mx-auto flex w-full max-w-6xl items-center rounded-b-2xl border border-subtle card-surface elevation-underbar backdrop-blur"
         >
           <div className="mx-auto flex w-full max-w-5xl items-center gap-3 px-4 py-2 sm:px-6">
             {secondaryNavLeading ? (
@@ -186,7 +186,7 @@ export default function StickyRestaurantBar({
       )}
 
       {hasActiveFilters && !hideSecondaryNav ? (
-        <div className="relative z-[100] mx-2 mx-auto mt-0.5 max-w-6xl rounded-2xl border border-subtle bg-white/95 elevation-1 backdrop-blur">
+        <div className="relative z-[100] mx-2 mx-auto mt-0.5 max-w-6xl rounded-2xl border border-subtle bg-white/95 elevation-underbar backdrop-blur">
           <div className="mx-auto flex w-full max-w-5xl flex-wrap items-center gap-2 px-4 py-2 text-sm sm:flex-nowrap sm:px-6">
             <FilterChips
               filters={filters}
