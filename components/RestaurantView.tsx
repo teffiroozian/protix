@@ -35,6 +35,7 @@ import {
   Cylinder,
   Shrink,
   ShoppingCart,
+  Utensils,
   UtensilsCrossed,
   Waves,
 } from "lucide-react";
