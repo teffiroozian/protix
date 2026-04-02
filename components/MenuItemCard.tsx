@@ -13,8 +13,7 @@ import type {
   RestaurantAddons,
   RestaurantCustomizationRules,
 } from "@/types/menu";
-import { useCart } from "@/stores/cartStore";
-import ItemDetailsPanel, { type ResolvedPanelIngredient, resolvePanelIngredients } from "./ItemDetailsPanel";
+import ItemDetailsPanel, { resolvePanelIngredients } from "./ItemDetailsPanel";
 import VariantSelector from "./VariantSelector";
 import {
   addonFat,
@@ -35,22 +34,19 @@ import {
   sortComboSides,
   sumNutrition,
 } from "@/lib/menuItemCalculations";
-import { formatOptionLabelCounts, parseOptionLabelCounts, type OptionLabelCountMap } from "@/lib/cartOptionLabels";
+import { formatOptionLabelCounts } from "@/lib/cartOptionLabels";
+import { buildOptionLabelCounts, formatCommonChangeForCart } from "@/lib/menuItemCard/cartLabelUtils";
+import { formatIngredientCountCustomizationLabel } from "@/lib/menuItemCard/ingredientCountCustomization";
+import IngredientCompactCard from "./menu-item-card/IngredientCompactCard";
+import MenuCardActions from "./menu-item-card/MenuCardActions";
+import CartCardActions from "./menu-item-card/CartCardActions";
+import { useMenuItemCartAdapter } from "./menu-item-card/useMenuItemCartAdapter";
+import { useMenuItemConfiguration } from "./menu-item-card/useMenuItemConfiguration";
 
 function pad2(n: number) {
   return String(n).padStart(2, "0");
 }
 
-function formatCommonChangeForCart(label: string) {
-  const [firstSegment] = label.split("→");
-  const normalized = firstSegment.trim();
-
-  if (!normalized) {
-    return label;
-  }
-
-  return normalized.charAt(0).toUpperCase() + normalized.slice(1);
-}
 
 
 const emptyAddon: AddonOption = {
@@ -79,153 +75,6 @@ type CartConfigurationPayload = {
   };
 };
 
-function getSelectedAddonsFromLabel(item: MenuItem, addons: RestaurantAddons | undefined, optionsLabel?: string) {
-  if (!optionsLabel) return {} as Partial<Record<AddonRef, AddonOption>>;
-
-  const selectedCounts = parseOptionLabelCounts(optionsLabel);
-  const selectedMap: Partial<Record<AddonRef, AddonOption>> = {};
-
-  for (const ref of item.addonRefs ?? []) {
-    if (ref === sauceRef) continue;
-    const options = addons?.[ref] ?? [];
-    const matched = options.find((addon) => (selectedCounts[addon.name] ?? 0) > 0);
-    if (matched) {
-      selectedMap[ref] = matched;
-    }
-  }
-
-  return selectedMap;
-}
-
-function getSelectedSauceCountsFromLabel(item: MenuItem, addons: RestaurantAddons | undefined, optionsLabel?: string) {
-  const selectedCounts = parseOptionLabelCounts(optionsLabel);
-  const sauceOptions = addons?.[sauceRef] ?? [];
-
-  if (!(item.addonRefs ?? []).includes(sauceRef) || sauceOptions.length === 0) {
-    return {} as Record<string, number>;
-  }
-
-  return sauceOptions.reduce<Record<string, number>>((acc, addon) => {
-    const quantity = selectedCounts[addon.name] ?? 0;
-    if (quantity > 0) acc[addon.name] = quantity;
-    return acc;
-  }, {});
-}
-
-function buildOptionLabelCounts(
-  selectedAddons: Partial<Record<AddonRef, AddonOption>>,
-  selectedSauceCounts: Record<string, number>
-): OptionLabelCountMap {
-  const counts: OptionLabelCountMap = {};
-
-  Object.values(selectedAddons)
-    .filter((addon): addon is AddonOption => Boolean(addon && addon.name !== "None"))
-    .forEach((addon) => {
-      counts[addon.name] = (counts[addon.name] ?? 0) + 1;
-    });
-
-  Object.entries(selectedSauceCounts)
-    .filter(([, count]) => count > 0)
-    .forEach(([name, count]) => {
-      counts[name] = (counts[name] ?? 0) + count;
-    });
-
-  return counts;
-}
-
-function getSelectedCommonChangeIdsFromCustomizations(
-  commonChanges: CommonChange[] | undefined,
-  customizations: string[] | undefined
-) {
-  if (!commonChanges || commonChanges.length === 0 || !customizations || customizations.length === 0) {
-    return [];
-  }
-
-  const normalizedCustomizations = new Set(customizations.map((label) => label.replace(/^\+\s*/, "").trim().toLowerCase()));
-
-  return commonChanges
-    .filter((change) => {
-      const normalizedLabel = change.label.trim().toLowerCase();
-      const normalizedCartLabel = formatCommonChangeForCart(change.label).trim().toLowerCase();
-      return normalizedCustomizations.has(normalizedLabel) || normalizedCustomizations.has(normalizedCartLabel);
-    })
-    .map((change) => change.id);
-}
-
-function formatIngredientCountCustomizationLabel(ingredientName: string, count: number) {
-  return count === 0 ? `${ingredientName}: Removed` : `${ingredientName}: ${count}x`;
-}
-
-function getSelectedIngredientCountsFromCustomizations(
-  resolvedIngredients: ResolvedPanelIngredient[],
-  customizations: string[] | undefined
-) {
-  const baseCounts = getDefaultIngredientCounts(resolvedIngredients);
-
-  if (!customizations || customizations.length === 0) {
-    return baseCounts;
-  }
-
-  const ingredientLookup = new Map<string, string>();
-  resolvedIngredients.forEach((ingredient) => {
-    ingredientLookup.set(ingredient.id.trim().toLowerCase(), ingredient.id);
-    ingredientLookup.set(ingredient.label.trim().toLowerCase(), ingredient.id);
-  });
-
-  return customizations.reduce<Record<string, number>>((acc, label) => {
-    const match = label.match(/^(.*?):\s*(Removed|(\d+)x|Remove|Extra)$/i);
-    if (!match) return acc;
-
-    const ingredientKey = match[1].trim().toLowerCase();
-    const ingredientId = ingredientLookup.get(ingredientKey);
-    if (!ingredientId || !(ingredientId in baseCounts)) return acc;
-
-    const rawValue = match[2].trim().toLowerCase();
-    const nextCount =
-      rawValue === "removed" || rawValue === "remove"
-        ? 0
-        : rawValue === "extra"
-          ? 2
-          : Number.parseInt(match[3] ?? "", 10);
-
-    if (!Number.isFinite(nextCount)) return acc;
-
-    acc[ingredientId] = nextCount;
-    return acc;
-  }, { ...baseCounts });
-}
-
-function parseComboCustomization(customizations?: string[]) {
-  const parsed = {
-    comboType: "just-item" as "just-item" | "combo-meal",
-    sideName: undefined as string | undefined,
-    sideVariantLabel: undefined as string | undefined,
-    drinkName: undefined as string | undefined,
-    drinkVariantLabel: undefined as string | undefined,
-  };
-
-  if (!customizations || customizations.length === 0) return parsed;
-
-  customizations.forEach((entry) => {
-    if (entry === "Combo Meal") {
-      parsed.comboType = "combo-meal";
-      return;
-    }
-    const sideMatch = entry.match(/^Side:\s*(.+?)(?:\s+\((.+)\))?$/i);
-    if (sideMatch) {
-      parsed.sideName = sideMatch[1]?.trim();
-      parsed.sideVariantLabel = sideMatch[2]?.trim();
-      return;
-    }
-    const drinkMatch = entry.match(/^Drink:\s*(.+?)(?:\s+\((.+)\))?$/i);
-    if (drinkMatch) {
-      parsed.drinkName = drinkMatch[1]?.trim();
-      parsed.drinkVariantLabel = drinkMatch[2]?.trim();
-    }
-  });
-
-  return parsed;
-}
 
 
 export default function MenuItemCard({
@@ -323,23 +172,9 @@ export default function MenuItemCard({
     return flaggedDefault?.id ?? variants[0]?.id ?? "";
   }, [item.defaultVariantId, variants]);
   const [selectedVariantId, setSelectedVariantId] = useState(initialCartVariantId ?? defaultVariantId);
-  const [selectedAddons, setSelectedAddons] = useState<Partial<Record<AddonRef, AddonOption>>>(() =>
-    mode === "cart" ? getSelectedAddonsFromLabel(item, addons, initialCartOptionsLabel) : {}
-  );
-  const [selectedSauceCounts, setSelectedSauceCounts] = useState<Record<string, number>>(() =>
-    mode === "cart" ? getSelectedSauceCountsFromLabel(item, addons, initialCartOptionsLabel) : {}
-  );
-  const [selectedCommonChangeIds, setSelectedCommonChangeIds] = useState<string[]>(() =>
-    mode === "cart" ? getSelectedCommonChangeIdsFromCustomizations(commonChanges, initialCartCustomizations) : []
-  );
-  const parsedInitialComboCustomization = useMemo(
-    () => parseComboCustomization(mode === "cart" ? initialCartCustomizations : undefined),
-    [initialCartCustomizations, mode]
-  );
-  const [comboType, setComboType] = useState<"just-item" | "combo-meal">(parsedInitialComboCustomization.comboType);
   const [isAddFeedbackVisible, setIsAddFeedbackVisible] = useState(false);
   const [isIngredientSelected, setIsIngredientSelected] = useState(controlledIngredientSelected ?? false);
-  const { items, addItem, updateQuantity } = useCart();
+  const { addItem, updateQuantity, getMatchingItem } = useMenuItemCartAdapter();
   const effectiveSelectedVariantId =
     displayMode === "ingredient-compact" && selectedIngredientVariantId
       ? selectedIngredientVariantId
@@ -357,12 +192,29 @@ export default function MenuItemCard({
     () => resolvePanelIngredients(item, ingredientItems, addons, menuItems ?? [], variants, selectedVariantId, customizationRules),
     [addons, customizationRules, ingredientItems, item, menuItems, selectedVariantId, variants]
   );
-  const [selectedIngredientCounts, setSelectedIngredientCounts] = useState<Record<string, number>>(() =>
-    getSelectedIngredientCountsFromCustomizations(
-      resolvedIngredients,
-      mode === "cart" ? initialCartCustomizations : undefined
-    )
-  );
+
+  const {
+    selectedAddons,
+    setSelectedAddons,
+    selectedSauceCounts,
+    setSelectedSauceCounts,
+    selectedCommonChangeIds,
+    setSelectedCommonChangeIds,
+    selectedIngredientCounts,
+    setSelectedIngredientCounts,
+    comboType,
+    setComboType,
+    parsedInitialComboCustomization,
+    resetConfiguration,
+  } = useMenuItemConfiguration({
+    mode,
+    item,
+    addons,
+    commonChanges,
+    initialCartOptionsLabel,
+    initialCartCustomizations,
+    resolvedIngredients,
+  });
 
   const ingredientLookup = useMemo(() => {
     const lookup = new Map<string, (typeof resolvedIngredients)[number]>();
@@ -603,10 +455,7 @@ export default function MenuItemCard({
   );
 
   function resetMods() {
-    setSelectedAddons({});
-    setSelectedSauceCounts({});
-    setSelectedCommonChangeIds([]);
-    setSelectedIngredientCounts(getDefaultIngredientCounts(resolvedIngredients));
+    resetConfiguration();
   }
 
   function addNutritionValue(baseValue?: number, deltaValue?: number) {
@@ -719,25 +568,14 @@ export default function MenuItemCard({
   const matchingCartItem = useMemo(() => {
     if (isCartMode) return undefined;
 
-    const customizationSignature = (customizations ?? []).join("|");
-
-    return items.find((cartItem) => {
-      if (cartItem.restaurantId !== restaurantId) return false;
-      if (cartItem.itemId !== (item.id ?? item.name)) return false;
-      if ((cartItem.variantId ?? "") !== (selectedVariantForCart?.id ?? "")) return false;
-      if ((cartItem.optionsLabel ?? "") !== (optionsLabel ?? "")) return false;
-      return (cartItem.customizations ?? []).join("|") === customizationSignature;
+    return getMatchingItem({
+      restaurantId,
+      itemId: item.id ?? item.name,
+      variantId: selectedVariantForCart?.id,
+      optionsLabel,
+      customizations,
     });
-  }, [
-    customizations,
-    isCartMode,
-    item.id,
-    item.name,
-    items,
-    optionsLabel,
-    restaurantId,
-    selectedVariantForCart?.id,
-  ]);
+  }, [customizations, getMatchingItem, isCartMode, item.id, item.name, optionsLabel, restaurantId, selectedVariantForCart?.id]);
 
   const emitCartConfiguration = (
     nextVariantId: string,
@@ -964,126 +802,44 @@ export default function MenuItemCard({
       : selectedIngredientVariantId;
 
     return (
-      <li
-        className={`list-none overflow-hidden rounded-2xl bg-white transition ${
-          ingredientSelectionState
-            ? "border-2 border-lime-500 shadow-[0_4px_12px_rgba(132,204,22,0.25)]"
-            : "border border-black/15 shadow-[0_4px_12px_rgba(0,0,0,0.12)]"
-        }`}
-      >
-        <label
-          className={`flex items-center gap-4 px-4 py-3 ${isIngredientSelectionDisabled ? "cursor-not-allowed opacity-95" : "cursor-pointer"}`}
-        >
-          <span
-            className={`flex h-6 w-6 items-center justify-center border text-sm font-bold transition ${
-              ingredientSelectionState
-                ? "border-lime-500 bg-lime-500 text-black"
-                : "border-black/40 bg-white text-transparent"
-            } ${ingredientSelectionControl === "radio" ? "rounded-full" : "rounded-md"}`}
-            aria-hidden="true"
-          >
-            {ingredientSelectionControl === "radio" ? "●" : "✓"}
-          </span>
-          <input
-            type={ingredientSelectionControl}
-            className="sr-only"
-            checked={ingredientSelectionState}
-            name={ingredientSelectionControl === "radio" ? ingredientRadioGroupName : undefined}
-            disabled={isIngredientSelectionDisabled}
-            onChange={(event) => {
-              const nextSelected = event.target.checked;
-              if (ingredientSelectionControl === "radio" && !nextSelected) {
-                return;
-              }
-              if (isIngredientSelectionDisabled && nextSelected) {
-                return;
-              }
-              setIsIngredientSelected(nextSelected);
-              onIngredientSelectionChange?.(item, nextSelected);
-            }}
-            aria-label={`${isIngredientSelectionDisabled ? ingredientDisabledReason ?? "Unavailable" : "Select"} ${item.name}`}
-          />
-
-          {selectedItemImage ? (
-            <img
-              className="h-24 w-24 shrink-0 rounded-xl bg-[#efefef] object-cover"
-              src={selectedItemImage}
-              alt={item.name}
-            />
-          ) : (
-            <div className="h-24 w-24 shrink-0 rounded-xl bg-[#efefef]" />
-          )}
-
-          <div className="min-w-0 flex-1">
-            {ingredientPortionBadge ? (
-              <div className="mb-1">
-                <span className="inline-flex rounded-full bg-lime-500 px-2 py-0.5 text-xs font-bold text-black">
-                  {ingredientPortionBadge}
-                </span>
-              </div>
-            ) : null}
-            <div className="truncate text-xl font-semibold text-black">{item.name}</div>
-            {isIngredientUnavailable && ingredientUnavailableReason ? (
-              <div className="mt-1 inline-flex rounded-full border border-amber-300 bg-amber-50 px-2 py-0.5 text-[11px] font-semibold text-amber-700">
-                {ingredientUnavailableReason}
-              </div>
-            ) : null}
-            {ingredientSelectionState && activeCompactOptions && activeCompactOptions.length > 1 ? (
-              <div className="mt-2 flex gap-2">
-                {activeCompactOptions.map((variantOption) => (
-                  <button
-                    key={variantOption.id}
-                    type="button"
-                    disabled={Boolean(variantOption.disabled)}
-                    onClick={(event) => {
-                      event.preventDefault();
-                      event.stopPropagation();
-                      if (variantOption.disabled) {
-                        return;
-                      }
-                      if (ingredientPortionModeOptions) {
-                        onIngredientPortionModeChange?.(variantOption.id);
-                      } else {
-                        onIngredientVariantChange?.(variantOption.id);
-                      }
-                    }}
-                    className={`cursor-pointer rounded-full border px-3 py-1 text-xs font-semibold ${
-                      selectedCompactOptionId === variantOption.id
-                        ? "border-slate-900 bg-slate-900 text-white"
-                        : "border-black/20 bg-white text-slate-700 hover:border-black/35"
-                    } ${
-                      variantOption.disabled ? "cursor-not-allowed opacity-55 hover:border-black/20" : ""
-                    }`}
-                  >
-                    {variantOption.label}
-                  </button>
-                ))}
-              </div>
-            ) : null}
-          </div>
-
-          <div className="flex items-center gap-8 text-center">
-            <div className="flex min-w-[54px] flex-col items-center gap-1">
-              <div className="text-2xl leading-none font-bold text-black">{formatCalories(calories)}</div>
-              <div className="text-[10px] font-semibold uppercase tracking-wide text-black/80">cal</div>
-            </div>
-            <div className="flex min-w-[54px] flex-col items-center gap-1">
-              <div className="text-2xl leading-none font-bold text-[#c2410c]">{formatMacro(protein)}</div>
-              <div className="text-[10px] font-semibold uppercase tracking-wide text-black/80">protein</div>
-            </div>
-            <div className="flex min-w-[54px] flex-col items-center gap-1">
-              <div className="text-2xl leading-none font-bold text-[#ca8a04]">{formatMacro(carbs)}</div>
-              <div className="text-[10px] font-semibold uppercase tracking-wide text-black/80">carbs</div>
-            </div>
-            <div className="flex min-w-[54px] flex-col items-center gap-1">
-              <div className="text-2xl leading-none font-bold text-[#2563eb]">{formatMacro(fat)}</div>
-              <div className="text-[10px] font-semibold uppercase tracking-wide text-black/80">fat</div>
-            </div>
-          </div>
-        </label>
-      </li>
+      <IngredientCompactCard
+        item={item}
+        selectedItemImage={selectedItemImage}
+        ingredientSelectionState={ingredientSelectionState}
+        isIngredientSelectionDisabled={isIngredientSelectionDisabled}
+        ingredientSelectionControl={ingredientSelectionControl}
+        ingredientRadioGroupName={ingredientRadioGroupName}
+        ingredientDisabledReason={ingredientDisabledReason}
+        ingredientPortionBadge={ingredientPortionBadge}
+        isIngredientUnavailable={isIngredientUnavailable}
+        ingredientUnavailableReason={ingredientUnavailableReason}
+        activeCompactOptions={activeCompactOptions}
+        selectedCompactOptionId={selectedCompactOptionId}
+        calories={calories}
+        protein={protein}
+        carbs={carbs}
+        fat={fat}
+        onSelectionChange={(nextSelected) => {
+          if (ingredientSelectionControl === "radio" && !nextSelected) {
+            return;
+          }
+          if (isIngredientSelectionDisabled && nextSelected) {
+            return;
+          }
+          setIsIngredientSelected(nextSelected);
+          onIngredientSelectionChange?.(item, nextSelected);
+        }}
+        onCompactOptionSelect={(optionId) => {
+          if (ingredientPortionModeOptions) {
+            onIngredientPortionModeChange?.(optionId);
+          } else {
+            onIngredientVariantChange?.(optionId);
+          }
+        }}
+      />
     );
   }
+
 
   return (
     <li
@@ -1206,78 +962,31 @@ export default function MenuItemCard({
                   Details
                 </button>
               ) : null}
-              {isCartMode || matchingCartItem ? (
-                <div className="inline-flex items-center gap-2">
-                  {isCartMode ? (
-                    <button
-                      type="button"
-                      className="cursor-pointer rounded-xl border border-black/20 bg-white px-3 py-2 text-sm font-bold"
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        setOpen(true);
-                      }}
-                    >
-                      Modify
-                    </button>
-                  ) : null}
-                  <div className="inline-flex items-center gap-2 rounded-xl border border-black/15 bg-white/90 px-2 py-1">
-                    <button
-                      type="button"
-                      className="h-7 w-7 cursor-pointer rounded-lg border border-black/15 bg-white text-lg leading-none"
-                      onClick={(event) => {
-                        event.stopPropagation();
-
-                        if (isCartMode) {
-                          onCartDecrement?.();
-                          return;
-                        }
-
-                        if (!matchingCartItem) return;
-                        updateQuantity(matchingCartItem.id, matchingCartItem.quantity - 1);
-                      }}
-                      aria-label={`Decrease quantity of ${item.name}`}
-                    >
-                      -
-                    </button>
-                    <span className="min-w-6 text-center text-base font-bold">
-                      {isCartMode ? cartQuantity : (matchingCartItem?.quantity ?? 0)}
-                    </span>
-                    <button
-                      type="button"
-                      className="h-7 w-7 cursor-pointer rounded-lg border border-black/15 bg-white text-lg leading-none"
-                      onClick={(event) => {
-                        event.stopPropagation();
-
-                        if (isCartMode) {
-                          onCartIncrement?.();
-                          return;
-                        }
-
-                        if (!matchingCartItem) return;
-                        updateQuantity(matchingCartItem.id, matchingCartItem.quantity + 1);
-                      }}
-                      aria-label={`Increase quantity of ${item.name}`}
-                    >
-                      +
-                    </button>
-                  </div>
-                </div>
+              {isCartMode ? (
+                <CartCardActions
+                  itemName={item.name}
+                  quantity={cartQuantity}
+                  onModify={() => setOpen(true)}
+                  onIncrement={() => onCartIncrement?.()}
+                  onDecrement={() => onCartDecrement?.()}
+                />
               ) : (
-                <button
-                  type="button"
-                  className={`cursor-pointer rounded-xl border px-[18px] py-2 text-base font-bold text-white transition ${
-                    isAddFeedbackVisible
-                      ? "border-green-700 bg-green-600 -translate-y-px"
-                      : "border-black/20 bg-black/90"
-                  } disabled:cursor-not-allowed`}
-                  disabled={isAddFeedbackVisible}
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    handleAddToCart();
+                <MenuCardActions
+                  itemName={item.name}
+                  quantity={matchingCartItem?.quantity}
+                  isAddFeedbackVisible={isAddFeedbackVisible}
+                  onAddToCart={handleAddToCart}
+                  onIncrement={() => {
+                    if (!matchingCartItem) return;
+                    updateQuantity(matchingCartItem.id, matchingCartItem.quantity + 1);
                   }}
-                >
-                  {isAddFeedbackVisible ? "Added ✓" : "Add to Cart"}
-                </button>
+                  onDecrement={() => {
+                    if (!matchingCartItem) return;
+                    updateQuantity(matchingCartItem.id, matchingCartItem.quantity - 1);
+                  }}
+                  showDetailsButton={false}
+                  onDetails={itemHref ? () => router.push(itemHref, { scroll: false }) : undefined}
+                />
               )}
             </div>
           </div>
