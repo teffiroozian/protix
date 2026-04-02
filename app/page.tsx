@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import restaurants from "./data/index.json";
+import { pageContainerClassNames } from "@/lib/layoutPrimitives";
 
 const RECENT_RESTAURANTS_KEY = "recentlySearchedRestaurants";
 
@@ -119,7 +120,7 @@ export default function Home() {
   };
 
   return (
-    <main className="mx-auto flex max-w-5xl flex-col gap-12 px-4 py-24 sm:px-6">
+    <main className={`${pageContainerClassNames.max5} flex flex-col gap-12 py-24`}>
       <header className="mx-auto max-w-3xl text-center">
         <h1 className="text-center text-4xl font-semibold tracking-tight leading-tight text-neutral-900">
           High-Protein Fast Food Orders

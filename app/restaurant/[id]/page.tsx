@@ -7,6 +7,7 @@ import { RestaurantSearchProvider } from "@/components/RestaurantSearchContext";
 import { RestaurantUiProvider } from "@/components/RestaurantUiContext";
 import CartPreviewDrawer from "@/components/CartPreviewDrawer";
 import { getRestaurantData } from "@/lib/restaurants";
+import { pageContainerClassNames } from "@/lib/layoutPrimitives";
 
 export default async function RestaurantPage({
   params,
@@ -36,7 +37,7 @@ export default async function RestaurantPage({
           <RecentRestaurantTracker restaurantId={restaurant.id} />
           <ScrollToTopOnMount />
 
-          <main className="mx-auto w-full max-w-6xl px-6 pb-12">
+          <main className={`${pageContainerClassNames.max6} pb-12`}>
             <RestaurantView
               restaurantId={restaurant.id}
               restaurantName={restaurant.name}

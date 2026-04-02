@@ -12,6 +12,7 @@ import ControlsRow, {
   type ViewOption,
 } from "./ControlsRow";
 import { Search } from "lucide-react";
+import { stickyBarInnerContainerClassName } from "@/lib/layoutPrimitives";
 
 type StickyRestaurantBarProps = {
   restaurantName: string;
@@ -94,7 +95,7 @@ export default function StickyRestaurantBar({
           hideSecondaryNav ? "rounded-2xl" : "rounded-t-2xl"
         }`}
       >
-        <div className="mx-auto flex w-full max-w-5xl items-center gap-3 px-4 py-2 sm:px-6">
+        <div className={stickyBarInnerContainerClassName}>
           <button
             type="button"
             onClick={() => router.back()}
@@ -169,7 +170,7 @@ export default function StickyRestaurantBar({
         <div
           className="relative z-[100] mx-auto flex w-full max-w-6xl items-center rounded-b-2xl border border-slate-200/70 bg-white shadow-[0_6px_16px_rgba(15,23,42,0.12)] backdrop-blur"
         >
-          <div className="mx-auto flex w-full max-w-5xl items-center gap-3 px-4 py-2 sm:px-6">
+          <div className={stickyBarInnerContainerClassName}>
             {secondaryNavLeading ? (
               <div className="shrink-0">
                 {secondaryNavLeading}
@@ -194,7 +195,7 @@ export default function StickyRestaurantBar({
 
       {hasActiveFilters && !hideSecondaryNav ? (
         <div className="relative z-[100] mx-auto mx-2 mt-0.5 max-w-6xl rounded-2xl border border-slate-200/70 bg-white/95 shadow-[0_6px_16px_rgba(15,23,42,0.12)] backdrop-blur">
-          <div className="mx-auto flex w-full max-w-5xl flex-wrap items-center gap-2 px-4 py-2 text-sm sm:flex-nowrap sm:px-6">
+          <div className={`${stickyBarInnerContainerClassName} flex-wrap gap-2 text-sm sm:flex-nowrap`}>
             <FilterChips
               filters={filters}
               onClearProtein={clearProteinFilter}

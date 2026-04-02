@@ -29,6 +29,7 @@ import { useCart } from "@/stores/cartStore";
 import { normalizeAddons } from "@/lib/addons";
 import { parseOptionLabelCounts } from "@/lib/cartOptionLabels";
 import { resolveMenuDataset } from "@/lib/menuResolver";
+import { elevatedPanelShellClassName, pageContainerClassNames } from "@/lib/layoutPrimitives";
 
 type MenuDataset = RestaurantMenu;
 
@@ -359,7 +360,7 @@ export default function CartPage() {
   const proteinPer100Calories = totals.calories > 0 ? Math.round((totals.protein / totals.calories) * 100) : 0;
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-6 px-4 pb-10 pt-8 sm:px-6 sm:pt-10">
+    <main className={`${pageContainerClassNames.max5} flex min-h-screen flex-col gap-6 pb-10 pt-8 sm:pt-10`}>
       <header className="rounded-3xl border border-black/10 bg-white px-5 py-5 shadow-sm sm:px-6">
         <div className="mb-4">
           <Link
@@ -389,7 +390,7 @@ export default function CartPage() {
 
       <section className="w-full space-y-3">
         {items.length === 0 ? (
-          <div className="rounded-2xl border border-black/10 bg-white px-5 py-8 text-center shadow-sm">
+          <div className={`${elevatedPanelShellClassName} px-5 py-8 text-center`}>
             <p className="text-lg font-medium text-neutral-900">Your cart is empty.</p>
             <p className="mt-2 text-sm text-neutral-600">Add items from a restaurant to start meal finalization.</p>
           </div>

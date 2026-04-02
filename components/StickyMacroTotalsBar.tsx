@@ -5,6 +5,7 @@ import MacroTotalsGrid from "@/components/MacroTotalsGrid";
 import type { LucideIcon } from "lucide-react";
 import { Bookmark, Camera } from "lucide-react";
 import type { ReactNode } from "react";
+import { elevatedPanelShellClassName, pageContainerClassNames } from "@/lib/layoutPrimitives";
 
 type StickyMacroTotalsBarProps = {
   totals: CartMacros;
@@ -45,7 +46,7 @@ export default function StickyMacroTotalsBar({
 
   const wrapperClassName = inline
     ? "w-full"
-    : `fixed left-0 right-0 ${isCartLayout ? "bottom-4 max-w-5xl px-4 sm:px-6" : "bottom-1 max-w-6xl px-2"} mx-auto z-[120] transition-all duration-300 ease-out ${
+    : `fixed left-0 right-0 ${isCartLayout ? `bottom-4 ${pageContainerClassNames.max5}` : "bottom-1 mx-auto max-w-6xl px-2"} z-[120] transition-all duration-300 ease-out ${
         visible
           ? "pointer-events-none translate-y-0 opacity-100"
           : "pointer-events-none translate-y-4 opacity-0"
@@ -53,7 +54,7 @@ export default function StickyMacroTotalsBar({
 
   const panelClassName = inline
     ? `w-full rounded-3xl border border-black/10 bg-white px-4 ${isCartLayout ? "py-4" : "py-3"}`
-    : `mx-auto w-full ${isCartLayout ? "rounded-[2.25rem] border-black/10 px-6 py-6" : "rounded-2xl border-slate-200/70 px-4 py-6"} border bg-white shadow-[0_10px_30px_rgba(0,0,0,0.24)] transition-all duration-300 ${
+    : `mx-auto w-full ${isCartLayout ? "rounded-[2.25rem] border-black/10 px-6 py-6" : `border-slate-200/70 px-4 py-6 ${elevatedPanelShellClassName}`} border shadow-[0_10px_30px_rgba(0,0,0,0.24)] transition-all duration-300 ${
         visible ? "pointer-events-auto" : "pointer-events-none"
       } ${detailsOpen && detailsContent ? "flex max-h-[calc(100vh-0.5rem)] flex-col" : ""}`;
 
