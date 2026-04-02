@@ -2,8 +2,8 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Drumstick, EggFried, Salad, Sandwich, Shell, Utensils } from "lucide-react";
-import ItemDetailsPanel, { PortionSelector, type ResolvedPanelIngredient, resolvePanelIngredients } from "@/components/ItemDetailsPanel";
+import { Utensils } from "lucide-react";
+import ItemDetailsPanel, { PortionSelector, resolvePanelIngredients } from "@/components/ItemDetailsPanel";
 import MacroTotalsGrid from "@/components/MacroTotalsGrid";
 import type {
   AddonOption,
@@ -16,6 +16,23 @@ import type {
   RestaurantCustomizationRules,
 } from "@/types/menu";
 import { useCart } from "@/stores/cartStore";
+import {
+  addonFat,
+  deltaFat,
+  formatDelta,
+  getApplicableCommonChanges,
+  getDefaultIngredientCounts,
+  getDefaultVariantId,
+  isChickfilaBreakfastItem,
+  isHashBrowns,
+  isWaffleFries,
+  menuItemFat,
+  normalizeCategory,
+  resolveJustItemIcon,
+  resolveJustItemLabel,
+  sortComboSides,
+  sumNutritionWithFallback,
+} from "@/lib/menuItemCalculations";
 
 const emptyAddon: AddonOption = {
   name: "None",
@@ -28,137 +45,6 @@ const emptyAddon: AddonOption = {
 
 const sauceRef: AddonRef = "sauces";
 const maxSauceSelections = 5;
-
-function normalizeCategory(category: string) {
-  return category.trim().toLowerCase();
-}
-
-function isChickfilaBreakfastItem(restaurantId: string, menuItem: MenuItem) {
-  if (restaurantId !== "chickfila") return false;
-  return menuItem.categories.some((category) => normalizeCategory(category) === "breakfast");
-}
-
-function isWaffleFries(menuItem: MenuItem) {
-  const normalizedName = menuItem.name.trim().toLowerCase();
-  return menuItem.id === "chick_fil_a_waffle_potato_fries" || normalizedName.includes("waffle potato fries");
-}
-
-function isHashBrowns(menuItem: MenuItem) {
-  return menuItem.id === "hash-browns";
-}
-
-function compareByDefaultOrder(left: MenuItem, right: MenuItem) {
-  const leftOrder = left.defaultOrder ?? Number.POSITIVE_INFINITY;
-  const rightOrder = right.defaultOrder ?? Number.POSITIVE_INFINITY;
-  if (leftOrder !== rightOrder) return leftOrder - rightOrder;
-  return left.name.localeCompare(right.name);
-}
-
-function sortComboSides(sides: MenuItem[], prioritizeHashBrowns: boolean) {
-  if (!prioritizeHashBrowns) {
-    return [...sides].sort(compareByDefaultOrder);
-  }
-
-  return [...sides].sort((left, right) => {
-    if (isHashBrowns(left) && !isHashBrowns(right)) return -1;
-    if (!isHashBrowns(left) && isHashBrowns(right)) return 1;
-    return compareByDefaultOrder(left, right);
-  });
-}
-
-function formatDelta(value: number) {
-  return `${value >= 0 ? "+" : ""}${value}`;
-}
-
-function sumNutritionWithFallback(base?: number, delta = 0) {
-  if (delta === 0) return base;
-  return (base ?? 0) + delta;
-}
-
-function addonFat(addon?: AddonOption) {
-  return addon?.totalFat ?? addon?.fat ?? 0;
-}
-
-function menuItemFat(item?: MenuItem) {
-  return item?.nutrition.totalFat ?? 0;
-}
-
-function resolveDefaultVariantId(item?: MenuItem) {
-  if (!item?.variants || item.variants.length === 0) return undefined;
-  if (item.defaultVariantId && item.variants.some((variant) => variant.id === item.defaultVariantId)) {
-    return item.defaultVariantId;
-  }
-  const flaggedDefault = item.variants.find((variant) => variant.isDefault);
-  return flaggedDefault?.id ?? item.variants[0]?.id;
-}
-
-function resolveJustItemLabel(item: MenuItem) {
-  const normalizedCategories = (item.categories ?? []).map((category) => normalizeCategory(category));
-
-  if (normalizedCategories.some((category) => category.includes("sandwich"))) {
-    return "Sandwich Only";
-  }
-  if (normalizedCategories.some((category) => category.includes("salad"))) {
-    return "Salad Only";
-  }
-  if (normalizedCategories.some((category) => category.includes("wrap"))) {
-    return "Wrap Only";
-  }
-  if (normalizedCategories.some((category) => category.includes("nugget") || category.includes("chicken"))) {
-    return "Chicken Only";
-  }
-  if (normalizedCategories.some((category) => category.includes("breakfast"))) {
-    return "Breakfast Only";
-  }
-
-  return "Item Only";
-}
-
-function resolveJustItemIcon(item: MenuItem) {
-  const normalizedCategories = (item.categories ?? []).map((category) => normalizeCategory(category));
-  if (normalizedCategories.some((category) => category.includes("sandwich"))) {
-    return Sandwich;
-  }
-  if (normalizedCategories.some((category) => category.includes("salad"))) {
-    return Salad;
-  }
-  if (normalizedCategories.some((category) => category.includes("wrap"))) {
-    return Shell;
-  }
-  if (normalizedCategories.some((category) => category.includes("nugget") || category.includes("chicken"))) {
-    return Drumstick;
-  }
-  if (normalizedCategories.some((category) => category.includes("breakfast"))) {
-    return EggFried;
-  }
-  return Sandwich;
-}
-
-function deltaFat(change: CommonChange) {
-  return change.delta.totalFat ?? change.delta.fat ?? 0;
-}
-
-function getDefaultIngredientCounts(
-  resolvedIngredients: ResolvedPanelIngredient[]
-) {
-  return resolvedIngredients.reduce<Record<string, number>>((acc, ingredient) => {
-    acc[ingredient.id] = ingredient.defaultCount;
-    return acc;
-  }, {});
-}
-
-function getApplicableCommonChanges(item: MenuItem, commonChanges?: CommonChange[]) {
-  if (!commonChanges || commonChanges.length === 0) return [];
-  const itemCategories = new Set(
-    (item.categories ?? []).map((category) => normalizeCategory(category))
-  );
-
-  return commonChanges.filter((change) => {
-    const categories = change.appliesTo?.categories;
-    if (!categories || categories.length === 0) return false;
-    return categories.some((category) => itemCategories.has(normalizeCategory(category)));
-  });
-}
 
 export default function ItemRouteModal({
   restaurantId,
@@ -809,7 +695,7 @@ export default function ItemRouteModal({
               }
               const nextSide = comboSides.find((side) => (side.id ?? side.name) === sideId);
               setSelectedComboSideId(sideId);
-              setSelectedComboSideVariantId(resolveDefaultVariantId(nextSide));
+              setSelectedComboSideVariantId(getDefaultVariantId(nextSide));
             }}
             onSelectComboDrink={(drinkId) => {
               if (selectedComboDrinkId === drinkId) {
@@ -819,7 +705,7 @@ export default function ItemRouteModal({
               }
               const nextDrink = comboDrinks.find((drink) => (drink.id ?? drink.name) === drinkId);
               setSelectedComboDrinkId(drinkId);
-              setSelectedComboDrinkVariantId(resolveDefaultVariantId(nextDrink));
+              setSelectedComboDrinkVariantId(getDefaultVariantId(nextDrink));
             }}
             selectedComboSideVariantId={selectedComboSideVariantId}
             onSelectComboSideVariant={setSelectedComboSideVariantId}
