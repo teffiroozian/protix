@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Sandwich, Utensils } from "lucide-react";
+import { Drumstick, EggFried, Salad, Sandwich, Shell, Utensils } from "lucide-react";
 import type {
   AddonOption,
   AddonRef,
@@ -54,11 +54,57 @@ function normalizeCategory(category: string) {
   return category.trim().toLowerCase();
 }
 
+function isChickfilaBreakfastItem(restaurantId: string, menuItem: MenuItem) {
+  if (restaurantId !== "chickfila") return false;
+  return menuItem.categories.some((category) => normalizeCategory(category) === "breakfast");
+}
+
+function isWaffleFries(menuItem: MenuItem) {
+  const normalizedName = menuItem.name.trim().toLowerCase();
+  return menuItem.id === "chick_fil_a_waffle_potato_fries" || normalizedName.includes("waffle potato fries");
+}
+
+function isHashBrowns(menuItem: MenuItem) {
+  return menuItem.id === "hash-browns";
+}
+
+function compareByDefaultOrder(left: MenuItem, right: MenuItem) {
+  const leftOrder = left.defaultOrder ?? Number.POSITIVE_INFINITY;
+  const rightOrder = right.defaultOrder ?? Number.POSITIVE_INFINITY;
+  if (leftOrder !== rightOrder) return leftOrder - rightOrder;
+  return left.name.localeCompare(right.name);
+}
+
+function sortComboSides(sides: MenuItem[], prioritizeHashBrowns: boolean) {
+  if (!prioritizeHashBrowns) {
+    return [...sides].sort(compareByDefaultOrder);
+  }
+
+  return [...sides].sort((left, right) => {
+    if (isHashBrowns(left) && !isHashBrowns(right)) return -1;
+    if (!isHashBrowns(left) && isHashBrowns(right)) return 1;
+    return compareByDefaultOrder(left, right);
+  });
+}
+
 function resolveJustItemLabel(item: MenuItem) {
   const categories = (item.categories ?? []).map((category) => normalizeCategory(category));
-  if (categories.some((category) => category.includes("salad"))) return "Just Salad";
-  if (categories.some((category) => category.includes("nugget"))) return "Nuggets Only";
+  if (categories.some((category) => category.includes("sandwich"))) return "Sandwich Only";
+  if (categories.some((category) => category.includes("salad"))) return "Salad Only";
+  if (categories.some((category) => category.includes("wrap"))) return "Wrap Only";
+  if (categories.some((category) => category.includes("nugget") || category.includes("chicken"))) return "Chicken Only";
+  if (categories.some((category) => category.includes("breakfast"))) return "Breakfast Only";
   return "Item Only";
+}
+
+function resolveJustItemIcon(item: MenuItem) {
+  const categories = (item.categories ?? []).map((category) => normalizeCategory(category));
+  if (categories.some((category) => category.includes("sandwich"))) return Sandwich;
+  if (categories.some((category) => category.includes("salad"))) return Salad;
+  if (categories.some((category) => category.includes("wrap"))) return Shell;
+  if (categories.some((category) => category.includes("nugget") || category.includes("chicken"))) return Drumstick;
+  if (categories.some((category) => category.includes("breakfast"))) return EggFried;
+  return Sandwich;
 }
 
 function menuItemFat(item?: MenuItem) {
@@ -527,22 +573,32 @@ export default function MenuItemCard({
 
   const isComboEligibleCategory = useMemo(() => {
     if (restaurantId !== "chickfila") return false;
-    const allowed = new Set(["sandwich", "nuggets", "chicken", "salad", "wrap"]);
+    const allowed = new Set(["sandwich", "nuggets", "chicken", "salad", "wrap", "breakfast"]);
     return item.categories.some((category) => allowed.has(normalizeCategory(category)));
   }, [item.categories, restaurantId]);
   const comboTypeOptions = useMemo(
     () => [
-      { id: "just-item" as const, label: resolveJustItemLabel(item), icon: Sandwich },
+      { id: "just-item" as const, label: resolveJustItemLabel(item), icon: resolveJustItemIcon(item) },
       { id: "combo-meal" as const, label: "Combo Meal", icon: Utensils },
     ],
     [item]
   );
   const comboSides = useMemo(
-    () =>
-      (menuItems ?? []).filter((menuItem) =>
-        menuItem.categories.some((category) => normalizeCategory(category) === "side")
-      ),
-    [menuItems]
+    () => {
+      const breakfastComboItem = isChickfilaBreakfastItem(restaurantId, item);
+      const sides = (menuItems ?? []).filter((menuItem) => {
+        const normalizedCategories = menuItem.categories.map((category) => normalizeCategory(category));
+        if (!breakfastComboItem) {
+          return normalizedCategories.includes("side");
+        }
+
+        if (isWaffleFries(menuItem)) return false;
+        return normalizedCategories.includes("side") || isHashBrowns(menuItem);
+      });
+
+      return sortComboSides(sides, breakfastComboItem);
+    },
+    [item, menuItems, restaurantId]
   );
   const comboDrinks = useMemo(
     () =>
@@ -1415,7 +1471,7 @@ export default function MenuItemCard({
                       );
                     }}
                   >
-                    <Icon size={16} />
+                    <Icon size={16} strokeWidth={2.5} />
                     {option.label}
                   </button>
                 );
