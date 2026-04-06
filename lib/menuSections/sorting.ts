@@ -91,17 +91,17 @@ function titleCase(text: string) {
     .join(" ");
 }
 
-function caloriesPerProtein(item: MenuItem) {
+function proteinScore(item: MenuItem) {
   const nutrition = getSortNutrition(item);
   if (
     nutrition.calories === undefined ||
     nutrition.protein === undefined ||
-    nutrition.protein <= 0
+    nutrition.calories <= 0
   ) {
     return undefined;
   }
 
-  return nutrition.calories / nutrition.protein;
+  return (nutrition.protein / nutrition.calories) * 100;
 }
 
 function getSortNutrition(item: MenuItem) {
@@ -181,7 +181,7 @@ export function sortItems(
     );
   } else if (sort === "best-ratio") {
     sorted.sort((a, b) =>
-      compareNumericWithMissingLast(caloriesPerProtein(a), caloriesPerProtein(b), "asc")
+      compareNumericWithMissingLast(proteinScore(a), proteinScore(b), "desc")
     );
   } else {
     sorted.sort((a, b) =>

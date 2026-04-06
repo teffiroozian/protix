@@ -44,11 +44,6 @@ function format(n?: number, suffix = "") {
   return n === undefined || n === null || Number.isNaN(n) ? `—${suffix}` : `${n}${suffix}`;
 }
 
-function calToProteinRatio(calories?: number, protein?: number) {
-  if (calories === undefined || protein === undefined || protein === 0) return "—";
-  return `${Math.round(calories / protein)}:1`;
-}
-
 function formatDelta(value: number, suffix = "") {
   return `${value >= 0 ? "+" : ""}${value}${suffix}`;
 }
@@ -81,11 +76,11 @@ export function PortionSelector({
   const isTopLayout = layout === "top";
   const wrapperClasses = isTopLayout
     ? `${className} my-3 flex flex-col items-center justify-between gap-4`
-    : `${className} flex flex-col items-start justify-between gap-4`;
+    : `${className} space-y-2`;
 
   return (
     <div className={wrapperClasses}>
-      <div className={`text-lg font-semibold text-[rgba(0,0,0,0.8)] ${isTopLayout ? "w-full text-center" : ""}`}>
+      <div className={`${isTopLayout ? "w-full text-center text-lg font-semibold text-[rgba(0,0,0,0.8)]" : "text-base font-semibold uppercase tracking-wide text-neutral-500"}`}>
         Portion
       </div>
       <div
@@ -99,13 +94,13 @@ export function PortionSelector({
               : "border-black/12 bg-slate-50 text-black/60 hover:bg-slate-100"
             : isActive
               ? "border-black bg-black text-white"
-              : "border-[rgba(0,0,0,0.6)] bg-transparent text-[rgba(0,0,0,0.6)]";
+              : "border-black/10 bg-neutral-100 text-neutral-700 hover:bg-neutral-200";
 
           return (
             <button
               key={variant.id}
               type="button"
-              className={`${isTopLayout ? "min-w-[140px]" : "w-full"} cursor-pointer rounded-lg px-3 py-1.5 text-center ${isTopLayout ? "border text-[15px] font-bold transition" : "border-2 text-[18px] font-bold"} ${variantColorClasses}`}
+              className={`${isTopLayout ? "min-w-[140px]" : "w-full"} cursor-pointer rounded-xl px-3 py-2 text-center ${isTopLayout ? "border text-[15px] font-bold transition" : "border text-[18px] font-semibold transition-colors duration-150"} ${variantColorClasses}`}
               onClick={() => onSelectVariant?.(variant.id)}
             >
               {variant.label}
@@ -201,6 +196,27 @@ export default function ItemDetailsPanel({
   onSelectComboDrinkVariant?: (variantId: string) => void;
 }) {
   const n = nutrition;
+  const proteinGrams = n.protein ?? 0;
+  const carbsGrams = n.carbs ?? 0;
+  const fatGrams = n.fat ?? n.totalFat ?? 0;
+  const macroTotalGrams = proteinGrams + carbsGrams + fatGrams;
+  const macroSegments = [
+    {
+      label: "Protein",
+      percent: macroTotalGrams > 0 ? (proteinGrams / macroTotalGrams) * 100 : 0,
+      color: "bg-[#c2410c] text-white",
+    },
+    {
+      label: "Carbs",
+      percent: macroTotalGrams > 0 ? (carbsGrams / macroTotalGrams) * 100 : 0,
+      color: "bg-[#ca8a04] text-white",
+    },
+    {
+      label: "Fat",
+      percent: macroTotalGrams > 0 ? (fatGrams / macroTotalGrams) * 100 : 0,
+      color: "bg-[#2563eb] text-white",
+    },
+  ];
   const addonRefs = item.addonRefs ?? [];
   const [sectionOpenState, setSectionOpenState] = useState<Record<string, boolean>>({});
 
@@ -1102,32 +1118,49 @@ export default function ItemDetailsPanel({
       <section className="rounded-2xl border border-[rgba(0,0,0,0.15)] bg-white p-5">
         <h2 className="mb-4 text-2xl font-bold">Details</h2>
 
-        <div className="mb-4 flex items-center justify-between gap-3">
-          <div className="text-lg font-semibold text-[rgba(0,0,0,0.8)]">Category</div>
-          <div className="rounded-full border-2 border-[rgba(0,0,0,0.8)] px-3 py-1 text-lg font-extrabold">{item.categories?.join(", ") ?? "—"}</div>
-        </div>
-
-        <div className="mt-3 h-px bg-[rgba(0,0,0,0.2)]" />
-
-        <div className="mt-4 flex items-center justify-between gap-[14px]">
-          <div className="text-lg font-semibold text-[rgba(0,0,0,0.8)]">Cal to Protein Ratio</div>
-          <div className="text-lg font-semibold">
-            {calToProteinRatio(n.calories, n.protein)}
-          </div>
-        </div>
-
         {showVariantsInDetails ? (
           <>
-            <div className="mt-3 h-px bg-[rgba(0,0,0,0.2)]" />
             <PortionSelector
               variants={variants}
               selectedVariantId={selectedVariantId}
               onSelectVariant={onSelectVariant}
               layout="details"
+              className="mt-0"
             />
+            <div className="mt-3 h-px bg-[rgba(0,0,0,0.2)]" />
           </>
         ) : null}
 
+        <div className="mt-4 space-y-2">
+          <p className="text-base font-semibold uppercase tracking-wide text-neutral-500">Protein Score</p>
+          <div className="rounded-xl bg-[#efefef] px-3 py-2">
+            <p className="mt-1 text-sm text-neutral-900">
+              {n.calories === undefined || n.protein === undefined || n.calories <= 0 ? (
+                "—"
+              ) : (
+                <>
+                  <span className="font-bold">{Math.round((n.protein / n.calories) * 100)}g</span> of protein in{" "}
+                  <span className="font-semibold">100 calories</span>
+                </>
+              )}
+            </p>
+          </div>
+        </div>
+
+        <div className="space-y-2 pt-4">
+          <p className="text-base font-semibold uppercase tracking-wide text-neutral-500">Macro Split</p>
+          <div className="flex h-11 w-full overflow-hidden gap-1 rounded-xl border border-black/10 bg-neutral-100 p-1">
+            {macroSegments.map((segment) => (
+              <div
+                key={segment.label}
+                className={`flex min-w-0 items-center justify-center rounded-xl px-1 text-[11px] font-semibold text-neutral-900 ${segment.color}`}
+                style={{ width: `${segment.percent}%` }}
+              >
+                {segment.percent >= 18 ? `${segment.label} ${Math.round(segment.percent)}%` : ""}
+              </div>
+            ))}
+          </div>
+        </div>
 
         {item.restaurant ? (
           <>
