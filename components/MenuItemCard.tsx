@@ -955,18 +955,6 @@ export default function MenuItemCard({
             </div>
 
             <div className="ml-auto inline-flex flex-row items-end gap-2">
-              {!isCartMode && itemHref && showDetailsButton ? (
-                <button
-                  type="button"
-                  className="cursor-pointer rounded-xl border border-black/20 bg-white px-4 py-2 text-[15px] font-bold text-black/85"
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    router.push(itemHref, { scroll: false });
-                  }}
-                >
-                  Details
-                </button>
-              ) : null}
               {isCartMode ? (
                 <CartCardActions
                   itemName={item.name}
@@ -980,7 +968,13 @@ export default function MenuItemCard({
                   itemName={item.name}
                   quantity={matchingCartItem?.quantity}
                   isAddFeedbackVisible={isAddFeedbackVisible}
-                  onAddToCart={handleAddToCart}
+                  onAddToCart={() => {
+                    if (itemHref && showDetailsButton) {
+                      router.push(itemHref, { scroll: false });
+                      return;
+                    }
+                    handleAddToCart();
+                  }}
                   onIncrement={() => {
                     if (!matchingCartItem) return;
                     updateQuantity(matchingCartItem.id, matchingCartItem.quantity + 1);
@@ -989,8 +983,6 @@ export default function MenuItemCard({
                     if (!matchingCartItem) return;
                     updateQuantity(matchingCartItem.id, matchingCartItem.quantity - 1);
                   }}
-                  showDetailsButton={false}
-                  onDetails={itemHref ? () => router.push(itemHref, { scroll: false }) : undefined}
                 />
               )}
             </div>
