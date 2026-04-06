@@ -44,9 +44,10 @@ function format(n?: number, suffix = "") {
   return n === undefined || n === null || Number.isNaN(n) ? `—${suffix}` : `${n}${suffix}`;
 }
 
-function calToProteinRatio(calories?: number, protein?: number) {
-  if (calories === undefined || protein === undefined || protein === 0) return "—";
-  return `${Math.round(calories / protein)}:1`;
+function proteinScoreLabel(calories?: number, protein?: number) {
+  if (calories === undefined || protein === undefined || calories <= 0) return "—";
+  const proteinScore = Math.round((protein / calories) * 100);
+  return `${proteinScore}g of protein in 100 calories`;
 }
 
 function formatDelta(value: number, suffix = "") {
@@ -1110,9 +1111,9 @@ export default function ItemDetailsPanel({
         <div className="mt-3 h-px bg-[rgba(0,0,0,0.2)]" />
 
         <div className="mt-4 flex items-center justify-between gap-[14px]">
-          <div className="text-lg font-semibold text-[rgba(0,0,0,0.8)]">Cal to Protein Ratio</div>
+          <div className="text-lg font-semibold text-[rgba(0,0,0,0.8)]">Protein Score</div>
           <div className="text-lg font-semibold">
-            {calToProteinRatio(n.calories, n.protein)}
+            {proteinScoreLabel(n.calories, n.protein)}
           </div>
         </div>
 

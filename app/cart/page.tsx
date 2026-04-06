@@ -233,10 +233,10 @@ export default function CartPage() {
                 )}
 
                 <div className="space-y-2 pt-4">
-                  <p className="text-md font-semibold uppercase tracking-wide text-neutral-500">Protein Efficiency</p>
+                  <p className="text-md font-semibold uppercase tracking-wide text-neutral-500">Protein Score</p>
                   <div className="rounded-xl bg-[#efefef] px-3 py-2">
                     <p className="mt-1 text-sm text-neutral-900">
-                      <span className="font-bold">{proteinPer100Calories}g</span> of Protein in <span className="font-semibold">100cals</span>
+                      <span className="font-bold">{proteinPer100Calories}g</span> of protein in <span className="font-semibold">100 calories</span>
                     </p>
                   </div>
                 </div>

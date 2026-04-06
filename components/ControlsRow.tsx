@@ -41,7 +41,7 @@ const SORT_OPTIONS: Array<{ label: string; value: SortOption; icon: typeof Flame
   { label: "Default Order", value: "default-order", icon: ListOrdered },
   { label: "Highest Protein", value: "highest-protein", icon: Flame },
   { label: "Lowest Calories", value: "lowest-calories", icon: Leaf },
-  { label: "Best Ratio", value: "best-ratio", icon: Scale },
+  { label: "Best Protein Score", value: "best-ratio", icon: Scale },
 ];
 
 export function FilterChips({
