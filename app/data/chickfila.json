@@ -1680,7 +1680,7 @@
                     "categories": [
                         "Treats"
                     ],
-                    "portionType": "single",
+                    "portionType": "side",
                     "nutrition": {
                         "calories": 350,
                         "totalFat": 7,
@@ -1700,7 +1700,7 @@
                     "categories": [
                         "Treats"
                     ],
-                    "portionType": "single",
+                    "portionType": "side",
                     "nutrition": {
                         "calories": 280,
                         "totalFat": 7,
