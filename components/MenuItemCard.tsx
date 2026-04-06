@@ -163,6 +163,7 @@ export default function MenuItemCard({
   const id = useId();
   const variants = item.variants?.length ? item.variants : null;
   const hasVariantDropdown = Boolean(variants && variants.length > 1 && !item.hideVariantSelector);
+  const variantSelectorDisabled = Boolean(item.disableVariantSelector);
   const defaultVariantId = useMemo(() => {
     if (!variants) return "";
     if (item.defaultVariantId && variants.some((variant) => variant.id === item.defaultVariantId)) {
@@ -901,7 +902,11 @@ export default function MenuItemCard({
                     <VariantSelector
                       variants={variants}
                       selectedId={selectedVariantId}
+                      disabled={variantSelectorDisabled}
                       onChange={(nextVariantId) => {
+                        if (variantSelectorDisabled) {
+                          return;
+                        }
                         setSelectedVariantId(nextVariantId);
                         emitCartConfiguration(nextVariantId, selectedAddons, selectedSauceCounts);
                       }}

@@ -26,19 +26,32 @@ function splitItemsByVariantForRanking(items: MenuItem[]) {
       return [item];
     }
 
+    const shareableVariants = variants.filter((variant) => variant.portionType === "shareable");
     const splitVariants = variants.filter((variant) => variant.portionType !== "shareable");
-    if (splitVariants.length === 0) {
+    if (splitVariants.length === 0 && shareableVariants.length === 0) {
       return [item];
     }
 
-    return splitVariants.map((variant) => ({
+    const splitItems = splitVariants.map((variant) => ({
       ...item,
-      name: variant.label,
-      variants: [variant],
       defaultVariantId: variant.id,
-      hideVariantSelector: true,
+      disableVariantSelector: true,
       nutrition: variant.nutrition,
     }));
+
+    if (shareableVariants.length === 0) {
+      return splitItems;
+    }
+
+    return [
+      ...splitItems,
+      {
+        ...item,
+        variants: shareableVariants,
+        defaultVariantId: shareableVariants[0]?.id,
+        nutrition: shareableVariants[0]?.nutrition ?? item.nutrition,
+      },
+    ];
   });
 }
 

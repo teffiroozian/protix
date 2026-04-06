@@ -114,6 +114,7 @@ export type MenuItem = {
   ingredients?: string[];
   customization?: IngredientTabsOverride;
   hideVariantSelector?: boolean;
+  disableVariantSelector?: boolean;
 };
 
 export type IngredientItem = {
