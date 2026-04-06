@@ -1564,9 +1564,9 @@
             "id": "hash-browns",
             "name": "Hash Browns",
             "categories": [
-                "Breakfast"
+                "Breakfast Sides"
             ],
-            "portionType": "breakfast",
+            "portionType": "side",
             "image": "/restaurants/chickfila/menu/breakfast/hash-browns.webp",
             "ingredients": [
                 "hash-browns"
@@ -1587,7 +1587,7 @@
             "variants": [
                 {
                     "id": "small",
-                    "portionType": "single",
+                    "portionType": "side",
                     "nutrition": {
                         "calories": 270,
                         "totalFat": 18,
@@ -1604,7 +1604,7 @@
                 },
                 {
                     "id": "large",
-                    "portionType": "single",
+                    "portionType": "side",
                     "nutrition": {
                         "calories": 420,
                         "totalFat": 29,

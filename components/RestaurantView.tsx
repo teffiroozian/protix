@@ -104,6 +104,7 @@ const CATEGORY_ICONS: Record<string, LucideIcon> = {
   "tractor beverages": Tractor,
   "kids drinks": SquareUser,
   breakfast: EggFried,
+  "breakfast sides": SquarePlus,
   kids: SquareUser,
   sides: SquarePlus,
   side: CircleDashed,
