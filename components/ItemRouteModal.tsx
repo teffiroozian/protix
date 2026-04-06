@@ -712,33 +712,39 @@ export default function ItemRouteModal({
         </div>
         </div>
 
-        <div className="sticky bottom-0 -mx-6 z-10 flex h-fit items-center justify-center gap-3 border-t border-black/10 bg-white px-4 py-3 shadow-[0_-4px_10px_rgba(0,0,0,0.08)]">
-          <div className="inline-flex items-center rounded-xl border border-slate-200 bg-slate-50 p-1">
+        <div className="sticky bottom-0 -mx-6 z-10 flex h-fit flex-wrap items-center justify-between gap-3 border-t border-black/10 bg-white px-4 py-3 shadow-[0_-4px_10px_rgba(0,0,0,0.08)]">
+          <div className="rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-700">
+            {Math.round(nutrition.calories ?? 0)} cal • {Math.round(nutrition.protein ?? 0)}g protein • {Math.round(nutrition.carbs ?? 0)}g carbs •{" "}
+            {Math.round(nutrition.totalFat ?? 0)}g fat
+          </div>
+          <div className="ml-auto flex items-center gap-3">
+            <div className="inline-flex items-center rounded-xl border border-slate-200 bg-slate-50 p-1">
+              <button
+                type="button"
+                onClick={handleDecrementQuantity}
+                className="cursor-pointer inline-flex size-8 items-center justify-center rounded-lg text-base font-semibold text-slate-700 transition hover:bg-white"
+                aria-label={`Decrease quantity of ${item.name}`}
+              >
+                -
+              </button>
+              <span className="min-w-8 text-center text-sm font-semibold text-slate-900">{quantity}</span>
+              <button
+                type="button"
+                onClick={handleIncrementQuantity}
+                className="cursor-pointer inline-flex size-8 items-center justify-center rounded-lg text-base font-semibold text-slate-700 transition hover:bg-white"
+                aria-label={`Increase quantity of ${item.name}`}
+              >
+                +
+              </button>
+            </div>
             <button
               type="button"
-              onClick={handleDecrementQuantity}
-              className="cursor-pointer inline-flex size-8 items-center justify-center rounded-lg text-base font-semibold text-slate-700 transition hover:bg-white"
-              aria-label={`Decrease quantity of ${item.name}`}
+              className="cursor-pointer rounded-xl border border-black/20 bg-black/90 px-6 py-2.5 text-base font-bold text-white"
+              onClick={handleAddToCart}
             >
-              -
-            </button>
-            <span className="min-w-8 text-center text-sm font-semibold text-slate-900">{quantity}</span>
-            <button
-              type="button"
-              onClick={handleIncrementQuantity}
-              className="cursor-pointer inline-flex size-8 items-center justify-center rounded-lg text-base font-semibold text-slate-700 transition hover:bg-white"
-              aria-label={`Increase quantity of ${item.name}`}
-            >
-              +
+              Add to Cart
             </button>
           </div>
-          <button
-            type="button"
-            className="cursor-pointer rounded-xl border border-black/20 bg-black/90 px-6 py-2.5 text-base font-bold text-white"
-            onClick={handleAddToCart}
-          >
-            Add to Cart
-          </button>
         </div>
       </div>
     </div>
