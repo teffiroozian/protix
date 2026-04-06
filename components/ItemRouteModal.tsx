@@ -712,7 +712,7 @@ export default function ItemRouteModal({
         </div>
         </div>
 
-        <div className="sticky bottom-0 -mx-6 z-10 flex h-fit flex-wrap items-center justify-between gap-3 border-t border-black/10 bg-white px-4 py-3 shadow-[0_-4px_10px_rgba(0,0,0,0.08)]">
+        <div className="sticky bottom-0 -mx-6 z-10 flex h-fit flex-wrap items-center justify-between gap-3 border-t border-black/10 bg-white p-4 shadow-[0_-4px_10px_rgba(0,0,0,0.08)]">
           <MacroTotalsGrid
             macros={{
               calories: Math.round(nutrition.calories ?? 0),
@@ -720,9 +720,9 @@ export default function ItemRouteModal({
               carbs: Math.round(nutrition.carbs ?? 0),
               fat: Math.round(nutrition.totalFat ?? 0),
             }}
-            size="compact"
-            className="gap-1 sm:gap-3"
-            itemClassName="px-1 py-0.5"
+            size="panel"
+            className="gap-3 sm:gap-6"
+            itemClassName="px-2 py-0.5"
             labelClassName="text-[#64748b]"
           />
           <div className="ml-auto flex items-center gap-3">
