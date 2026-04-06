@@ -76,11 +76,11 @@ export function PortionSelector({
   const isTopLayout = layout === "top";
   const wrapperClasses = isTopLayout
     ? `${className} my-3 flex flex-col items-center justify-between gap-4`
-    : `${className} flex flex-col items-start justify-between gap-4`;
+    : `${className} space-y-2`;
 
   return (
     <div className={wrapperClasses}>
-      <div className={`text-lg font-semibold text-[rgba(0,0,0,0.8)] ${isTopLayout ? "w-full text-center" : ""}`}>
+      <div className={`${isTopLayout ? "w-full text-center text-lg font-semibold text-[rgba(0,0,0,0.8)]" : "text-base font-semibold uppercase tracking-wide text-neutral-500"}`}>
         Portion
       </div>
       <div
@@ -94,13 +94,13 @@ export function PortionSelector({
               : "border-black/12 bg-slate-50 text-black/60 hover:bg-slate-100"
             : isActive
               ? "border-black bg-black text-white"
-              : "border-[rgba(0,0,0,0.6)] bg-transparent text-[rgba(0,0,0,0.6)]";
+              : "border-black/10 bg-neutral-100 text-neutral-700 hover:bg-neutral-200";
 
           return (
             <button
               key={variant.id}
               type="button"
-              className={`${isTopLayout ? "min-w-[140px]" : "w-full"} cursor-pointer rounded-lg px-3 py-1.5 text-center ${isTopLayout ? "border text-[15px] font-bold transition" : "border-2 text-[18px] font-bold"} ${variantColorClasses}`}
+              className={`${isTopLayout ? "min-w-[140px]" : "w-full"} cursor-pointer rounded-xl px-3 py-2 text-center ${isTopLayout ? "border text-[15px] font-bold transition" : "border text-[18px] font-semibold transition-colors duration-150"} ${variantColorClasses}`}
               onClick={() => onSelectVariant?.(variant.id)}
             >
               {variant.label}
@@ -1118,6 +1118,19 @@ export default function ItemDetailsPanel({
       <section className="rounded-2xl border border-[rgba(0,0,0,0.15)] bg-white p-5">
         <h2 className="mb-4 text-2xl font-bold">Details</h2>
 
+        {showVariantsInDetails ? (
+          <>
+            <PortionSelector
+              variants={variants}
+              selectedVariantId={selectedVariantId}
+              onSelectVariant={onSelectVariant}
+              layout="details"
+              className="mt-0"
+            />
+            <div className="mt-3 h-px bg-[rgba(0,0,0,0.2)]" />
+          </>
+        ) : null}
+
         <div className="mt-4 space-y-2">
           <p className="text-base font-semibold uppercase tracking-wide text-neutral-500">Protein Score</p>
           <div className="rounded-xl bg-[#efefef] px-3 py-2">
@@ -1148,19 +1161,6 @@ export default function ItemDetailsPanel({
             ))}
           </div>
         </div>
-
-        {showVariantsInDetails ? (
-          <>
-            <div className="mt-3 h-px bg-[rgba(0,0,0,0.2)]" />
-            <PortionSelector
-              variants={variants}
-              selectedVariantId={selectedVariantId}
-              onSelectVariant={onSelectVariant}
-              layout="details"
-            />
-          </>
-        ) : null}
-
 
         {item.restaurant ? (
           <>
