@@ -490,8 +490,8 @@ export default function ItemRouteModal({
           ×
         </button>
 
-        <div className="h-[calc(100%-52px-56px)] overflow-y-auto pr-2 pb-4">
-        <div className="grid justify-items-center gap-8">
+        <div className="h-[calc(100%-52px-56px)] overflow-y-auto pr-2 pb-6">
+        <div className="grid justify-items-center gap-12">
           <h1 className="text-center text-[32px] font-extrabold">{item.name}</h1>
           {selectedItemImage ? (
             <img className="max-h-[300px] w-[300px] bg-[#efefef] shadow-[0_0_5px_rgba(0,0,0,0.25)] rounded-[14px] object-contain" src={selectedItemImage} alt={item.name} />
@@ -504,7 +504,7 @@ export default function ItemRouteModal({
               fat: Math.round(nutrition.totalFat ?? 0),
             }}
             size="panel"
-            className="w-full max-w-[720px] gap-6 sm:gap-10"
+            className="w-full max-w-[640px] gap-6 sm:gap-10"
             valueExtras={
               hasActiveCustomization
                 ? {
@@ -517,10 +517,9 @@ export default function ItemRouteModal({
             }
           />
 
+          <div className="w-[min(720px,100%)] grid gap-6">
           {variants && variants.length > 0 && !item.hideVariantSelector ? (
-            <>
-              <div className="h-px w-[min(720px,100%)] bg-black/16" />
-              <div className="w-[min(720px,100%)]">
+              <div className="w-full">
                 <PortionSelector
                   variants={variants}
                   selectedVariantId={selectedVariantId}
@@ -529,15 +528,10 @@ export default function ItemRouteModal({
                   layout="top"
                 />
               </div>
-              <div className="h-px w-[min(720px,100%)] bg-black/16" />
-            </>
           ) : null}
           {isComboEligibleCategory ? (
             <>
-              {(!variants || variants.length === 0 || item.hideVariantSelector) ? (
-                <div className="h-px w-[min(720px,100%)] bg-black/16" />
-              ) : null}
-              <div className="w-[min(720px,100%)]">
+              <div className="w-full">
                 <div className="mt-0 my-3 flex flex-col items-center justify-between gap-4">
                   <div className="w-full text-center text-lg font-semibold text-[rgba(0,0,0,0.8)]">
                     Combo Type
@@ -547,14 +541,14 @@ export default function ItemRouteModal({
                       const isActive = comboType === option.id;
                       const Icon = option.icon;
                       const variantColorClasses = isActive
-                        ? "bg-black text-white"
-                        : "bg-transparent text-[rgba(0,0,0,0.6)]";
+                        ? "border-black bg-black text-white"
+                        : "border-black/15 bg-slate-100 text-black/55 hover:bg-slate-200";
 
                       return (
                         <button
                           key={option.id}
                           type="button"
-                          className={`inline-flex min-w-[140px] cursor-pointer items-center justify-center gap-2 rounded-lg border-2 border-[rgba(0,0,0,0.6)] px-3 py-1.5 text-center text-[15px] font-semibold ${variantColorClasses}`}
+                          className={`inline-flex min-w-[140px] cursor-pointer items-center justify-center gap-2 rounded-lg border px-3 py-1.5 text-center text-[15px] font-medium transition ${variantColorClasses}`}
                           onClick={() => setComboType(option.id)}
                         >
                           <Icon size={15} strokeWidth={2.5} />
@@ -565,12 +559,12 @@ export default function ItemRouteModal({
                   </div>
                 </div>
               </div>
-              <div className="h-px w-[min(720px,100%)] bg-black/16" />
             </>
           ) : null}
+          </div>
         </div>
 
-        <div className="mt-[18px] grid gap-3">
+        <div className="mt-[28px] grid gap-3">
           <ItemDetailsPanel
             item={item}
             nutrition={nutrition}
