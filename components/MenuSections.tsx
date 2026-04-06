@@ -19,6 +19,42 @@ function getSectionSort(_section: string, sort: SortOption): SortOption {
   return sort;
 }
 
+function splitItemsByVariantForRanking(items: MenuItem[]) {
+  return items.flatMap((item) => {
+    const variants = item.variants ?? [];
+    if (variants.length <= 1) {
+      return [item];
+    }
+
+    const shareableVariants = variants.filter((variant) => variant.portionType === "shareable");
+    const splitVariants = variants.filter((variant) => variant.portionType !== "shareable");
+    if (splitVariants.length === 0 && shareableVariants.length === 0) {
+      return [item];
+    }
+
+    const splitItems = splitVariants.map((variant) => ({
+      ...item,
+      defaultVariantId: variant.id,
+      disableVariantSelector: true,
+      nutrition: variant.nutrition,
+    }));
+
+    if (shareableVariants.length === 0) {
+      return splitItems;
+    }
+
+    return [
+      ...splitItems,
+      {
+        ...item,
+        variants: shareableVariants,
+        defaultVariantId: shareableVariants[0]?.id,
+        nutrition: shareableVariants[0]?.nutrition ?? item.nutrition,
+      },
+    ];
+  });
+}
+
 function EmptyFilteredState() {
   return (
     <div className="mt-8 border border-black/10 rounded-2xl px-4 py-[18px] text-black/70 font-medium">
@@ -83,7 +119,11 @@ export default function MenuSections({
 }) {
 
   if (!groupByCategory) {
-    const sortedItems = sortItems(items, sort, categoryMode);
+    const displayItems =
+      categoryMode === "menu" && (sort === "highest-protein" || sort === "lowest-calorie")
+        ? splitItemsByVariantForRanking(items)
+        : items;
+    const sortedItems = sortItems(displayItems, sort, categoryMode);
 
     if (!sortedItems.length) {
       return <EmptyFilteredState />;

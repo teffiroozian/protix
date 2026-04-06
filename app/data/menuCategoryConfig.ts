@@ -13,6 +13,7 @@ export const CATEGORY_PRIORITY_GROUPS = [
   { label: "Wraps", aliases: ["wrap", "wraps"] },
   { label: "Breakfast", aliases: ["breakfast"] },
   { label: "Sides", aliases: ["side", "sides"] },
+  { label: "Breakfast Sides", aliases: ["breakfast side", "breakfast sides"] },
   { label: "Drinks", aliases: ["drink", "drinks", "beverage", "beverages"] },
   {
     label: "Fountain Drinks",
