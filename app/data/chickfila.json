@@ -706,7 +706,7 @@
             "categories": [
                 "Side"
             ],
-            "portionType": "single",
+            "portionType": "side",
             "image": "/restaurants/chickfila/menu/sides/kale-crunch-side.webp",
             "ingredients": [
                 "roasted-nut-blend"
@@ -731,7 +731,7 @@
             "categories": [
                 "Side"
             ],
-            "portionType": "single",
+            "portionType": "side",
             "image": "/restaurants/chickfila/menu/sides/waffle-fries.webp",
             "nutrition": {
                 "calories": 420,
@@ -752,7 +752,7 @@
             "variants": [
                 {
                     "id": "small",
-                    "portionType": "single",
+                    "portionType": "side",
                     "nutrition": {
                         "calories": 320,
                         "totalFat": 19,
@@ -769,7 +769,7 @@
                 },
                 {
                     "id": "medium",
-                    "portionType": "single",
+                    "portionType": "side",
                     "nutrition": {
                         "calories": 420,
                         "totalFat": 24,
@@ -786,7 +786,7 @@
                 },
                 {
                     "id": "large",
-                    "portionType": "single",
+                    "portionType": "side",
                     "nutrition": {
                         "calories": 600,
                         "totalFat": 35,
@@ -815,7 +815,7 @@
             "categories": [
                 "Side"
             ],
-            "portionType": "single",
+            "portionType": "side",
             "image": "/restaurants/chickfila/menu/sides/berry-parfait-granola.webp",
             "ingredients": [
                 "harvest-nut-granola",
@@ -837,7 +837,7 @@
             "variants": [
                 {
                     "id": "cookie_crumbs",
-                    "portionType": "single",
+                    "portionType": "side",
                     "image": "/restaurants/chickfila/menu/sides/berry-parfait-cookie-crumbs.webp",
                     "nutrition": {
                         "calories": 240,
@@ -855,7 +855,7 @@
                 },
                 {
                     "id": "granola",
-                    "portionType": "single",
+                    "portionType": "side",
                     "nutrition": {
                         "calories": 270,
                         "totalFat": 9,
@@ -893,7 +893,7 @@
             "categories": [
                 "Side"
             ],
-            "portionType": "single",
+            "portionType": "side",
             "image": "/restaurants/chickfila/menu/sides/fruit-cup.webp",
             "nutrition": {
                 "calories": 70,
@@ -920,7 +920,7 @@
             "categories": [
                 "Side"
             ],
-            "portionType": "single",
+            "portionType": "side",
             "image": "/restaurants/chickfila/menu/sides/mac-n-cheese.webp",
             "nutrition": {
                 "calories": 450,
@@ -938,7 +938,7 @@
             "variants": [
                 {
                     "id": "small",
-                    "portionType": "single",
+                    "portionType": "side",
                     "nutrition": {
                         "calories": 270,
                         "totalFat": 17,
@@ -955,7 +955,7 @@
                 },
                 {
                     "id": "medium",
-                    "portionType": "single",
+                    "portionType": "side",
                     "nutrition": {
                         "calories": 450,
                         "totalFat": 29,
@@ -998,7 +998,7 @@
             "categories": [
                 "Side"
             ],
-            "portionType": "single",
+            "portionType": "side",
             "image": "/restaurants/chickfila/menu/sides/chicken-noodle-soup.webp",
             "ingredients": [
                 "saltines"
@@ -1019,7 +1019,7 @@
             "variants": [
                 {
                     "id": "cup",
-                    "portionType": "single",
+                    "portionType": "side",
                     "nutrition": {
                         "calories": 190,
                         "totalFat": 4.5,
@@ -1036,7 +1036,7 @@
                 },
                 {
                     "id": "bowl",
-                    "portionType": "single",
+                    "portionType": "side",
                     "nutrition": {
                         "calories": 320,
                         "totalFat": 8,
@@ -1073,7 +1073,7 @@
             "categories": [
                 "Side"
             ],
-            "portionType": "single",
+            "portionType": "side",
             "image": "/restaurants/chickfila/menu/sides/side-salad.webp",
             "ingredients": [
                 "crispy-bell-peppers",
@@ -1103,7 +1103,7 @@
             "categories": [
                 "Side"
             ],
-            "portionType": "single",
+            "portionType": "side",
             "image": "/restaurants/chickfila/menu/sides/chicken-tortilla-soup.webp",
             "ingredients": [
                 "seasoned-tortilla-strips"
@@ -1146,7 +1146,7 @@
             "categories": [
                 "Side"
             ],
-            "portionType": "single",
+            "portionType": "side",
             "image": "/restaurants/chickfila/menu/sides/waffle-chips-original.webp",
             "nutrition": {
                 "calories": 220,
@@ -1173,7 +1173,7 @@
             "categories": [
                 "Side"
             ],
-            "portionType": "single",
+            "portionType": "side",
             "image": "/restaurants/chickfila/menu/sides/apple-sauce.webp",
             "nutrition": {
                 "calories": 45,
@@ -1200,7 +1200,7 @@
             "categories": [
                 "Side"
             ],
-            "portionType": "single",
+            "portionType": "side",
             "image": "/restaurants/chickfila/menu/sides/waffle-chips-cfa-sauce.webp",
             "nutrition": {
                 "calories": 210,
