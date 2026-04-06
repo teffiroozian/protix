@@ -531,6 +531,9 @@ export default function ItemRouteModal({
                 />
               </div>
             ) : null}
+            {variants && variants.length > 0 && !item.hideVariantSelector && isComboEligibleCategory ? (
+              <div className="mx-auto h-px w-[min(520px,100%)] bg-black/12" />
+            ) : null}
             {isComboEligibleCategory ? (
               <div className="w-full">
                 <div className="mt-0 my-3 flex flex-col items-center justify-between gap-4">
@@ -549,10 +552,10 @@ export default function ItemRouteModal({
                         <button
                           key={option.id}
                           type="button"
-                          className={`inline-flex min-w-[140px] cursor-pointer items-center justify-center gap-2 rounded-lg border px-3 py-1.5 text-center text-[15px] font-bold transition ${variantColorClasses}`}
+                          className={`inline-flex min-w-[210px] cursor-pointer items-center justify-center gap-2 rounded-lg border-[1.5px] px-4 py-2 text-center text-[15px] font-bold transition ${variantColorClasses}`}
                           onClick={() => setComboType(option.id)}
                         >
-                          <Icon size={15} strokeWidth={2.5} />
+                          <Icon size={15} strokeWidth={3} />
                           {option.label}
                         </button>
                       );
