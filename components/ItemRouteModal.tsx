@@ -546,13 +546,13 @@ export default function ItemRouteModal({
                       const Icon = option.icon;
                       const variantColorClasses = isActive
                         ? "border-black bg-black text-white"
-                        : "border-black/12 bg-slate-50 text-black/60 hover:bg-slate-100";
+                        : "border-black/10 bg-neutral-100 text-neutral-700 hover:bg-neutral-200";
 
                       return (
                         <button
                           key={option.id}
                           type="button"
-                          className={`inline-flex min-w-[210px] cursor-pointer items-center justify-center gap-2 rounded-lg border-[1.5px] px-4 py-2 text-center text-[15px] font-bold transition ${variantColorClasses}`}
+                          className={`inline-flex min-w-[210px] cursor-pointer items-center justify-center gap-2 rounded-xl border px-4 py-2 text-center text-[18px] font-semibold transition-colors duration-150 ${variantColorClasses}`}
                           onClick={() => setComboType(option.id)}
                         >
                           <Icon size={15} strokeWidth={3} />

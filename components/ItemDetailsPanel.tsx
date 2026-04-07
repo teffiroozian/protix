@@ -88,19 +88,15 @@ export function PortionSelector({
       >
         {variants.map((variant) => {
           const isActive = variant.id === selectedVariantId;
-          const variantColorClasses = isTopLayout
-            ? isActive
-              ? "border-black bg-black text-white"
-              : "border-black/12 bg-slate-50 text-black/60 hover:bg-slate-100"
-            : isActive
-              ? "border-black bg-black text-white"
-              : "border-black/10 bg-neutral-100 text-neutral-700 hover:bg-neutral-200";
+          const variantColorClasses = isActive
+            ? "border-black bg-black text-white"
+            : "border-black/10 bg-neutral-100 text-neutral-700 hover:bg-neutral-200";
 
           return (
             <button
               key={variant.id}
               type="button"
-              className={`${isTopLayout ? "min-w-[140px]" : "w-full"} cursor-pointer rounded-xl px-3 py-2 text-center ${isTopLayout ? "border text-[15px] font-bold transition" : "border text-[18px] font-semibold transition-colors duration-150"} ${variantColorClasses}`}
+              className={`${isTopLayout ? "min-w-[140px]" : "w-full"} cursor-pointer rounded-xl border px-3 py-2 text-center text-[18px] font-semibold transition-colors duration-150 ${variantColorClasses}`}
               onClick={() => onSelectVariant?.(variant.id)}
             >
               {variant.label}
