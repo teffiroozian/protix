@@ -453,11 +453,11 @@ export default function ItemRouteModal({
     return nonEmptyTabs.length > 1 || (nonEmptyTabs[0]?.ingredients.length ?? 0) > 0;
   }, [ingredientTabs]);
   const addonNavigationRef = useMemo<AddonRef | null>(() => {
-    if ((addons?.sauces?.length ?? 0) > 0) return "sauces";
-    if ((addons?.dressings?.length ?? 0) > 0) return "dressings";
-    if ((addons?.condiments?.length ?? 0) > 0) return "condiments";
+    const itemAddonRefs = new Set(item.addonRefs ?? []);
+    if (itemAddonRefs.has("dressings") && (addons?.dressings?.length ?? 0) > 0) return "dressings";
+    if (itemAddonRefs.has("sauces") && (addons?.sauces?.length ?? 0) > 0) return "sauces";
     return null;
-  }, [addons]);
+  }, [addons, item.addonRefs]);
   const addonSectionLabel = addonNavigationRef
     ? addonNavigationRef.charAt(0).toUpperCase() + addonNavigationRef.slice(1)
     : null;
