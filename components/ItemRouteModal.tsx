@@ -708,7 +708,7 @@ export default function ItemRouteModal({
                           <span className={`inline-flex h-9 w-9 items-center justify-center rounded-full border ${iconClasses}`}>
                             <Icon size={16} strokeWidth={2.4} />
                           </span>
-                          <span className={`text-xs font-medium uppercase tracking-[0.08em] ${labelClasses}`}>{option.label}</span>
+                          <span className={`text-xs font-bold uppercase tracking-[0.08em] ${labelClasses}`}>{option.label}</span>
                         </button>
                       );
                     })}
