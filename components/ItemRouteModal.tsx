@@ -696,8 +696,7 @@ export default function ItemRouteModal({
                       const iconClasses = isActive
                         ? "border-blue-500/60 bg-white text-blue-600"
                         : "border-slate-300 bg-slate-50 text-slate-500";
-                      const labelClasses = isActive ? "text-neutral-900" : "text-slate-700";
-                      const helperClasses = isActive ? "text-blue-700" : "text-slate-500";
+                      const labelClasses = isActive ? "text-slate-700" : "text-slate-500";
 
                       return (
                         <button
@@ -709,12 +708,7 @@ export default function ItemRouteModal({
                           <span className={`inline-flex h-9 w-9 items-center justify-center rounded-full border ${iconClasses}`}>
                             <Icon size={16} strokeWidth={2.4} />
                           </span>
-                          <span className="flex flex-col leading-tight">
-                            <span className={`text-[18px] font-semibold ${labelClasses}`}>{option.label}</span>
-                            <span className={`text-[11px] font-semibold uppercase tracking-wide ${helperClasses}`}>
-                              {isActive ? "Selected option" : "Tap to select"}
-                            </span>
-                          </span>
+                          <span className={`text-xs font-medium uppercase tracking-[0.08em] ${labelClasses}`}>{option.label}</span>
                         </button>
                       );
                     })}
