@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Utensils } from "lucide-react";
 import type {
   AddonOption,
@@ -174,6 +174,7 @@ export default function MenuItemCard({
 }) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
   const id = useId();
   const variants = item.variants?.length ? item.variants : null;
   const hasVariantDropdown = Boolean(variants && variants.length > 1 && !item.hideVariantSelector);
@@ -499,6 +500,8 @@ export default function MenuItemCard({
 
   const rankText = typeof rankIndex === "number" ? pad2(rankIndex + 1) : null;
   const isCartMode = mode === "cart";
+  const isCartPage = pathname === "/cart";
+  const useCartQuickEditPanel = isCartMode && isCartPage;
 
   const selectedCommonChanges = useMemo(
     () => applicableCommonChanges.filter((change) => selectedCommonChangeIds.includes(change.id)),
@@ -1062,7 +1065,7 @@ export default function MenuItemCard({
         }`}
       >
         <div className="p-3">
-          {isCartMode ? (
+          {useCartQuickEditPanel ? (
             <div className="rounded-2xl border border-black/10 bg-[#f8fafc] p-3">
               {isComboEligibleCategory ? (
                 <div className="mb-3 flex flex-wrap gap-2">
