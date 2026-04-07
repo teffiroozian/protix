@@ -704,7 +704,7 @@ export default function ItemDetailsPanel({
                         </span>
                       </div>
                       {isSelected && sideVariants.length > 0 ? (
-                      <div className="mt-2 flex w-full flex-wrap gap-1.5 pl-[84px]">
+                      <div className="mt-1.5 flex w-full flex-wrap gap-1.5">
                         {sideVariants.map((variant) => {
                           const isVariantSelected = (selectedComboSideVariantId ?? side.defaultVariantId ?? sideVariants[0]?.id) === variant.id;
                           return (
@@ -781,7 +781,7 @@ export default function ItemDetailsPanel({
                         </span>
                       </div>
                       {isSelected && drinkVariants.length > 0 ? (
-                        <div className="mt-2 flex w-full flex-wrap gap-1.5 pl-[84px]">
+                        <div className="mt-1.5 flex w-full flex-wrap gap-1.5">
                           {drinkVariants.map((variant) => {
                             const isVariantSelected = (selectedComboDrinkVariantId ?? drink.defaultVariantId ?? drinkVariants[0]?.id) === variant.id;
                             return (
