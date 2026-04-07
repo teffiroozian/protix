@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { CupSoda, Droplets, Leaf, Sandwich, Utensils } from "lucide-react";
+import { CupSoda, Droplets, Salad, SquareStack, Utensils } from "lucide-react";
 import ItemDetailsPanel, {
   PortionSelector,
   resolvePanelIngredientTabs,
@@ -452,19 +452,28 @@ export default function ItemRouteModal({
     const nonEmptyTabs = ingredientTabs.filter((tab) => tab.ingredients.length > 0);
     return nonEmptyTabs.length > 1 || (nonEmptyTabs[0]?.ingredients.length ?? 0) > 0;
   }, [ingredientTabs]);
-  const hasSauceSection = (addons?.[sauceRef]?.length ?? 0) > 0;
+  const addonNavigationRef = useMemo<AddonRef | null>(() => {
+    if ((addons?.sauces?.length ?? 0) > 0) return "sauces";
+    if ((addons?.dressings?.length ?? 0) > 0) return "dressings";
+    if ((addons?.condiments?.length ?? 0) > 0) return "condiments";
+    return null;
+  }, [addons]);
+  const addonSectionLabel = addonNavigationRef
+    ? addonNavigationRef.charAt(0).toUpperCase() + addonNavigationRef.slice(1)
+    : null;
+  const hasAddonSection = Boolean(addonNavigationRef);
   const hasComboSections = isComboEligibleCategory && comboType === "combo-meal";
   const visibleSections = useMemo(
     () =>
       [
         hasIngredientSection
-          ? { id: "ingredients" as const, label: "Ingredients", icon: Leaf }
+          ? { id: "ingredients" as const, label: "Ingredients", icon: Salad }
           : null,
-        hasComboSections ? { id: "sides" as const, label: "Sides", icon: Sandwich } : null,
+        hasComboSections ? { id: "sides" as const, label: "Sides", icon: SquareStack } : null,
         hasComboSections ? { id: "drinks" as const, label: "Drinks", icon: CupSoda } : null,
-        hasSauceSection ? { id: "sauces" as const, label: "Sauces", icon: Droplets } : null,
-      ].filter((section): section is { id: ModalSectionId; label: string; icon: typeof Leaf } => Boolean(section)),
-    [hasComboSections, hasIngredientSection, hasSauceSection]
+        hasAddonSection && addonSectionLabel ? { id: "sauces" as const, label: addonSectionLabel, icon: Droplets } : null,
+      ].filter((section): section is { id: ModalSectionId; label: string; icon: typeof Salad } => Boolean(section)),
+    [addonSectionLabel, hasAddonSection, hasComboSections, hasIngredientSection]
   );
   const [activeSectionId, setActiveSectionId] = useState<ModalSectionId | null>(visibleSections[0]?.id ?? null);
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
@@ -703,34 +712,6 @@ export default function ItemRouteModal({
             ) : null}
           </div>
 
-          {visibleSections.length > 0 ? (
-            <div className="sticky top-0 z-20 w-[min(720px,100%)] rounded-2xl border border-blue-100 bg-white/95 px-2 py-1.5 shadow-[0_3px_10px_rgba(15,23,42,0.08)] backdrop-blur">
-              <div className="flex items-stretch justify-between">
-                {visibleSections.map((section, index) => {
-                  const isActive = activeSectionId === section.id;
-                  const Icon = section.icon;
-                  return (
-                    <div key={section.id} className="flex flex-1 items-center">
-                      <button
-                        type="button"
-                        className="cursor-pointer flex w-full flex-col items-center gap-1 px-2 py-1.5 text-center"
-                        onClick={() => scrollToSection(section.id)}
-                      >
-                        <span className={`inline-flex h-8 w-8 items-center justify-center rounded-full border text-[13px] ${isActive ? "border-blue-500 bg-blue-50 text-blue-600" : "border-slate-200 bg-slate-50 text-slate-500"}`}>
-                          <Icon size={15} />
-                        </span>
-                        <span className={`text-[11px] font-semibold uppercase tracking-wide ${isActive ? "text-blue-600" : "text-slate-500"}`}>
-                          {section.label}
-                        </span>
-                      </button>
-                      {index < visibleSections.length - 1 ? <span className="h-8 w-px bg-slate-200/80" /> : null}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          ) : null}
-
           <div className="w-full">
           <ItemDetailsPanel
             item={item}
@@ -881,9 +862,13 @@ export default function ItemRouteModal({
             drinksSectionRef={(element) => {
               sectionElementRefs.current.drinks = element;
             }}
-            saucesSectionRef={(element) => {
+            addonSectionRef={(element) => {
               sectionElementRefs.current.sauces = element;
             }}
+            addonSectionRefType={addonNavigationRef ?? undefined}
+            sectionNavItems={visibleSections}
+            activeSectionId={activeSectionId}
+            onSelectSection={scrollToSection}
           />
           </div>
         </div>
