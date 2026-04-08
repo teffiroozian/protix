@@ -212,6 +212,8 @@ export default function ItemDetailsPanel({
   onSelectSection?: (sectionId: "ingredients" | "sides" | "drinks" | "sauces") => void;
 }) {
   const n = nutrition;
+  const selectedMainVariant = variants?.find((variant) => variant.id === selectedVariantId);
+  const selectedMainItemImage = selectedMainVariant?.image ?? item.image;
   const proteinGrams = n.protein ?? 0;
   const carbsGrams = n.carbs ?? 0;
   const fatGrams = n.fat ?? n.totalFat ?? 0;
@@ -249,6 +251,70 @@ export default function ItemDetailsPanel({
     .filter((section): section is { ref: AddonRef; title: string; addons: AddonOption[] } =>
       section !== null
     );
+  const selectedComboSide = comboSides.find((side) => (side.id ?? side.name) === selectedComboSideId);
+  const selectedComboDrink = comboDrinks.find((drink) => (drink.id ?? drink.name) === selectedComboDrinkId);
+  const selectedComboSideVariant = selectedComboSide?.variants?.find(
+    (variant) =>
+      (selectedComboSideVariantId ?? selectedComboSide.defaultVariantId ?? selectedComboSide.variants?.[0]?.id) === variant.id
+  );
+  const selectedComboDrinkVariant = selectedComboDrink?.variants?.find(
+    (variant) =>
+      (selectedComboDrinkVariantId ?? selectedComboDrink.defaultVariantId ?? selectedComboDrink.variants?.[0]?.id) === variant.id
+  );
+  const selectedAddonItems = (Object.entries(selectedAddons ?? {}) as Array<[AddonRef, AddonOption | undefined]>)
+    .filter(([, addon]) => Boolean(addon && addon.name !== "None"))
+    .map(([ref, addon]) => ({
+      id: `${ref}-${addon?.name}`,
+      name: addon?.name ?? "",
+      quantity: 1,
+      image: addon?.image,
+      detail: ref === "dressings" ? "Dressing" : ref === "sauces" ? "Sauce" : "Addon",
+    }));
+  const selectedSauceItems = Object.entries(sauceSelectionCounts ?? {})
+    .filter(([name, count]) => name !== "None" && count > 0)
+    .map(([name, count]) => {
+      const matchedSauce = addons?.sauces?.find((addon) => addon.name === name);
+      return {
+        id: `sauce-${name}`,
+        name,
+        quantity: count,
+        image: matchedSauce?.image,
+        detail: "Sauce",
+      };
+    });
+  const detailItems = [
+    {
+      id: `main-${item.id ?? item.name}`,
+      name: selectedMainVariant ? `${item.name} (${selectedMainVariant.label})` : item.name,
+      quantity: 1,
+      image: selectedMainItemImage,
+      detail: "Main Item",
+    },
+    ...(comboType === "combo-meal" && selectedComboSide
+      ? [
+          {
+            id: `combo-side-${selectedComboSide.id ?? selectedComboSide.name}`,
+            name: selectedComboSideVariant ? `${selectedComboSide.name} (${selectedComboSideVariant.label})` : selectedComboSide.name,
+            quantity: 1,
+            image: selectedComboSide.image,
+            detail: "Side",
+          },
+        ]
+      : []),
+    ...(comboType === "combo-meal" && selectedComboDrink
+      ? [
+          {
+            id: `combo-drink-${selectedComboDrink.id ?? selectedComboDrink.name}`,
+            name: selectedComboDrinkVariant ? `${selectedComboDrink.name} (${selectedComboDrinkVariant.label})` : selectedComboDrink.name,
+            quantity: 1,
+            image: selectedComboDrink.image,
+            detail: "Drink",
+          },
+        ]
+      : []),
+    ...selectedAddonItems,
+    ...selectedSauceItems,
+  ];
 
   const activeCustomizationTotals = customizationTotals ?? { calories: 0, protein: 0, carbs: 0, fat: 0 };
   const normalizedLockedIngredientIds = new Set(
@@ -1179,6 +1245,31 @@ export default function ItemDetailsPanel({
         ) : null}
 
         <div className="mt-4 space-y-2">
+          <p className="text-base font-semibold uppercase tracking-wide text-neutral-500">Items</p>
+          <ul className="max-h-[220px] min-h-0 flex-1 space-y-2 overflow-y-auto rounded-xl bg-[#efefef] p-2">
+            {detailItems.map((detailItem) => (
+              <li
+                key={detailItem.id}
+                className="flex items-center gap-3 rounded-xl border border-black/10 bg-neutral-50 px-3 py-2"
+              >
+                <div className="h-11 w-11 shrink-0 overflow-hidden rounded-lg border border-black/10 bg-white">
+                  {detailItem.image && detailItem.image !== "none" ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={detailItem.image} alt={detailItem.name} className="h-full w-full object-contain p-1" />
+                  ) : null}
+                </div>
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-medium text-neutral-900">
+                    {detailItem.quantity}x {detailItem.name}
+                  </p>
+                  <p className="truncate text-xs text-neutral-500">{detailItem.detail}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="space-y-2 pt-4">
           <p className="text-base font-semibold uppercase tracking-wide text-neutral-500">Protein Score</p>
           <div className="rounded-xl bg-[#efefef] px-3 py-2">
             <p className="mt-1 text-sm text-neutral-900">
