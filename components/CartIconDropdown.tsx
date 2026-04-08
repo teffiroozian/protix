@@ -85,7 +85,7 @@ export default function CartIconDropdown({
           className={`ml-1 leading-none font-bold tabular-nums ${
             countFormat === "parenthesized"
               ? "text-[13px]"
-              : "inline-flex min-w-[1.15rem] items-center justify-center rounded-full bg-slate-900 px-1.5 py-0.5 text-[11px] text-white"
+              : "inline-flex min-w-[1.15rem] items-center justify-center rounded-full border border-slate-300 bg-white px-1.5 py-0.5 text-[11px] text-slate-900"
           }`}
         >
           {countFormat === "parenthesized" ? `(${cartCount})` : cartCount}
