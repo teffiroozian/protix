@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { ChevronDown, Utensils } from "lucide-react";
+import { ChevronDown, Pencil } from "lucide-react";
 import type {
   AddonOption,
   AddonRef,
@@ -29,8 +29,6 @@ import {
   isWaffleFries,
   menuItemFatWithFallback,
   normalizeCategory,
-  resolveJustItemIcon,
-  resolveJustItemLabel,
   sortComboSides,
   sumNutrition,
 } from "@/lib/menuItemCalculations";
@@ -83,13 +81,11 @@ function QuickVariantDropdown({
   options,
   ariaLabel,
   onChange,
-  minWidthClass = "min-w-[122px]",
 }: {
   value?: string;
   options: Array<{ id: string; label: string }>;
   ariaLabel: string;
   onChange: (id: string) => void;
-  minWidthClass?: string;
 }) {
   const [open, setOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement | null>(null);
@@ -112,14 +108,14 @@ function QuickVariantDropdown({
         type="button"
         aria-label={ariaLabel}
         onClick={() => setOpen((prev) => !prev)}
-        className={`${minWidthClass} inline-flex h-8 items-center justify-between gap-2 rounded-full border border-slate-300 bg-slate-50 px-3 text-xs font-semibold text-slate-700 transition hover:bg-white`}
+        className="inline-flex h-8 max-w-[180px] items-center justify-between gap-2 rounded-full border border-slate-300 bg-slate-50 px-3 text-xs font-semibold text-slate-700 transition hover:bg-white"
       >
         <span className="truncate">{selectedLabel}</span>
         <ChevronDown className={`h-3.5 w-3.5 text-slate-500 transition ${open ? "rotate-180" : ""}`} />
       </button>
 
       {open ? (
-        <div className="absolute left-0 top-[calc(100%+6px)] z-20 w-full min-w-[150px] overflow-hidden rounded-xl border border-black/15 bg-white p-1.5 shadow-[0_12px_28px_rgba(0,0,0,0.14)]">
+        <div className="absolute left-0 top-[calc(100%+6px)] z-40 w-max min-w-full overflow-hidden rounded-xl border border-black/15 bg-white p-1.5 shadow-[0_12px_28px_rgba(0,0,0,0.14)]">
           {options.map((option) => {
             const active = option.id === value;
             return (
@@ -304,7 +300,6 @@ export default function MenuItemCard({
     selectedIngredientCounts,
     setSelectedIngredientCounts,
     comboType,
-    setComboType,
     parsedInitialComboCustomization,
     resetConfiguration,
   } = useMenuItemConfiguration({
@@ -434,13 +429,6 @@ export default function MenuItemCard({
     const allowed = new Set(["sandwich", "nuggets", "chicken", "salad", "wrap", "breakfast"]);
     return item.categories.some((category) => allowed.has(normalizeCategory(category)));
   }, [item.categories, restaurantId]);
-  const comboTypeOptions = useMemo(
-    () => [
-      { id: "just-item" as const, label: resolveJustItemLabel(item), icon: resolveJustItemIcon(item) },
-      { id: "combo-meal" as const, label: "Combo Meal", icon: Utensils },
-    ],
-    [item]
-  );
   const comboSides = useMemo(
     () => {
       const breakfastComboItem = isChickfilaBreakfastItem(restaurantId, item);
@@ -1145,50 +1133,18 @@ export default function MenuItemCard({
 
       <div
         id={`${id}-details`}
-        className={`overflow-hidden bg-white transition-[max-height] duration-300 ease-in-out ${
+        className={`${open && useCartQuickEditPanel ? "overflow-visible" : "overflow-hidden"} bg-white transition-[max-height] duration-300 ease-in-out ${
           open ? "max-h-[5000px]" : "max-h-0"
         }`}
       >
         <div className="p-3">
           {useCartQuickEditPanel ? (
             <div className="rounded-2xl border border-black/10 bg-[#efefef] p-3">
-              {isComboEligibleCategory ? (
-                <div className="mb-3 flex flex-wrap gap-2">
-                  {comboTypeOptions.map((option) => {
-                    const Icon = option.icon;
-                    const isActive = comboType === option.id;
-                    return (
-                      <button
-                        key={option.id}
-                        type="button"
-                        className={`inline-flex cursor-pointer items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
-                          isActive ? "border-black bg-black text-white" : "border-black/15 bg-white text-black/70"
-                        }`}
-                        onClick={() => {
-                          setComboType(option.id);
-                          emitCartConfiguration(
-                            selectedVariantId,
-                            selectedAddons,
-                            selectedSauceCounts,
-                            selectedCommonChangeIds,
-                            ingredientCounts,
-                            option.id
-                          );
-                        }}
-                      >
-                        <Icon size={14} strokeWidth={2.5} />
-                        {option.label}
-                      </button>
-                    );
-                  })}
-                </div>
-              ) : null}
-
               <div className="space-y-3">
                 <section>
                   <p className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-600">Main</p>
-                  <div className="grid grid-cols-[60px_minmax(0,1fr)_auto] items-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2.5">
-                    <div className="h-[60px] w-[60px] overflow-hidden rounded-lg border border-black/10 bg-white">
+                  <div className="grid grid-cols-[72px_minmax(0,1fr)_auto] items-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2.5">
+                    <div className="h-[72px] w-[72px] overflow-hidden rounded-lg border border-black/10 bg-white">
                       {selectedItemImage ? (
                         <img src={selectedItemImage} alt={item.name} className="h-full w-full object-contain p-1" />
                       ) : null}
@@ -1221,8 +1177,8 @@ export default function MenuItemCard({
                 {comboType === "combo-meal" && selectedComboSide ? (
                   <section>
                     <p className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-600">Side</p>
-                    <div className="grid grid-cols-[60px_minmax(0,1fr)_auto] items-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2.5">
-                      <div className="h-[60px] w-[60px] overflow-hidden rounded-lg border border-black/10 bg-white">
+                    <div className="grid grid-cols-[72px_minmax(0,1fr)_auto] items-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2.5">
+                      <div className="h-[72px] w-[72px] overflow-hidden rounded-lg border border-black/10 bg-white">
                         {selectedComboSide.image ? (
                           <img src={selectedComboSide.image} alt={selectedComboSide.name} className="h-full w-full object-contain p-1" />
                         ) : null}
@@ -1256,8 +1212,8 @@ export default function MenuItemCard({
                 {comboType === "combo-meal" && selectedComboDrink ? (
                   <section>
                     <p className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-600">Drink</p>
-                    <div className="grid grid-cols-[60px_minmax(0,1fr)_auto] items-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2.5">
-                      <div className="h-[60px] w-[60px] overflow-hidden rounded-lg border border-black/10 bg-white">
+                    <div className="grid grid-cols-[72px_minmax(0,1fr)_auto] items-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2.5">
+                      <div className="h-[72px] w-[72px] overflow-hidden rounded-lg border border-black/10 bg-white">
                         {selectedComboDrink.image ? (
                           <img src={selectedComboDrink.image} alt={selectedComboDrink.name} className="h-full w-full object-contain p-1" />
                         ) : null}
@@ -1297,9 +1253,9 @@ export default function MenuItemCard({
                         return (
                           <div
                             key={addon.name}
-                            className="grid grid-cols-[60px_minmax(0,1fr)_auto_auto] items-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2.5"
+                            className="grid grid-cols-[72px_minmax(0,1fr)_auto_auto] items-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2.5"
                           >
-                            <div className="h-[60px] w-[60px] overflow-hidden rounded-lg border border-black/10 bg-white">
+                            <div className="h-[72px] w-[72px] overflow-hidden rounded-lg border border-black/10 bg-white">
                               {addon.image ? (
                                 <img src={addon.image} alt={addon.name} className="h-full w-full object-contain p-1" />
                               ) : null}
@@ -1375,7 +1331,7 @@ export default function MenuItemCard({
                             }}
                             className="grid w-full grid-cols-[60px_minmax(0,1fr)_auto] items-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-left"
                           >
-                            <div className="h-[60px] w-[60px] overflow-hidden rounded-lg border border-black/10 bg-white">
+                            <div className="h-[72px] w-[72px] overflow-hidden rounded-lg border border-black/10 bg-white">
                               {addon.image ? (
                                 <img src={addon.image} alt={addon.name} className="h-full w-full object-contain p-1" />
                               ) : null}
@@ -1401,10 +1357,10 @@ export default function MenuItemCard({
                   <button
                     type="button"
                     onClick={() => onCartModify?.()}
-                    className="cursor-pointer inline-flex items-center rounded-lg border border-black/15 bg-white px-3 py-2 text-sm font-semibold text-slate-800 transition hover:bg-slate-100"
+                    aria-label="Customize fully"
+                    className="cursor-pointer inline-flex h-10 w-10 items-center justify-center rounded-lg border border-black bg-black text-white transition hover:bg-slate-800"
                   >
-                    <Utensils className="mr-1.5 h-4 w-4" />
-                    Customize Fully
+                    <Pencil className="h-4 w-4" />
                   </button>
                 </div>
               </div>
