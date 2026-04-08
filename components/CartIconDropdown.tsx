@@ -10,14 +10,12 @@ import { ShoppingCart } from "lucide-react";
 
 type CartIconDropdownProps = {
   buttonClassName: string;
-  countFormat?: "compact" | "parenthesized";
 };
 
 const SCROLL_CLOSE_THRESHOLD = 90;
 
 export default function CartIconDropdown({
   buttonClassName,
-  countFormat = "compact",
 }: CartIconDropdownProps) {
   const { openCart } = useRestaurantUi();
   const { items, totals, lastAddedItem, lastAddedAt } = useCart();
@@ -77,17 +75,16 @@ export default function CartIconDropdown({
     };
   }, [isOpen, lastAddedAt]);
 
-  const countValue = cartCount > 0
-    ? countFormat === "parenthesized"
-      ? ` (${cartCount})`
-      : ` ${cartCount}`
-    : "";
-
   const countLabel = (
     <>
       <ShoppingCart className="h-4 w-4" strokeWidth={2.5} />
-      
-      {countValue ? <span className="ml-1">({countValue})</span> : null}
+      {cartCount > 0 ? (
+        <span
+          className="ml-1 text-[13px] leading-none font-bold tabular-nums text-slate-900"
+        >
+          ({cartCount})
+        </span>
+      ) : null}
     </>
   );
 
