@@ -312,6 +312,7 @@ export default function RestaurantView({
   }, [cartItems, editCartItemId, isChipotleBuildPage, restaurantId]);
   const isEditingBuild = Boolean(editingCartItem);
   const hydratedEditItemIdRef = useRef<string | null>(null);
+  const shouldRenderBuildEditModal = isEditingBuild && selectedEntree !== null;
 
   const addonItems = useMemo<MenuItem[]>(() => {
     if (!addons) return [];
@@ -2248,7 +2249,7 @@ export default function RestaurantView({
         </div>
       ) : null}
 
-      {isEditingBuild ? (
+      {shouldRenderBuildEditModal ? (
         <div className="fixed inset-0 z-[100] flex items-center justify-center" role="dialog" aria-modal="true" aria-label={selectedBuildName}>
           <button
             type="button"
