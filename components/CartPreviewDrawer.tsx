@@ -161,7 +161,7 @@ export default function CartPreviewDrawer() {
                                 onClick={() => {
                                   closeCart();
                                   router.push(
-                                    `/restaurant/${item.restaurantId}/items/build-your-own?editCartItem=${item.id}`,
+                                    `/restaurant/${item.restaurantId}/items/chipotle-build?editCartItem=${item.id}`,
                                     { scroll: false }
                                   );
                                 }}

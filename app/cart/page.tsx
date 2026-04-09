@@ -228,7 +228,7 @@ export default function CartPage() {
                 : undefined;
               const buildEditHref =
                 cartItem.restaurantId === "chipotle" && cartItem.buildConfiguration
-                  ? `/restaurant/${cartItem.restaurantId}/items/build-your-own?editCartItem=${cartItem.id}`
+                  ? `/restaurant/${cartItem.restaurantId}/items/chipotle-build?editCartItem=${cartItem.id}`
                   : undefined;
 
               const initialIngredientCustomizations = getBuildIngredientCountCustomizations(
