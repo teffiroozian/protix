@@ -62,6 +62,7 @@ import {
 import MenuSections from "./MenuSections";
 import StickyRestaurantBar from "./StickyRestaurantBar";
 import StickyMacroTotalsBar from "./StickyMacroTotalsBar";
+import MacroTotalsGrid from "./MacroTotalsGrid";
 import { useCart } from "@/stores/cartStore";
 import BuildSummaryDrawer from "./restaurant-view/BuildSummaryDrawer";
 import EntreeSelectionHero from "./restaurant-view/EntreeSelectionHero";
@@ -272,6 +273,7 @@ export default function RestaurantView({
   const [selectedTacoShell, setSelectedTacoShell] = useState<TacoShellSelection>("crispy");
   const [selectedTacoCount, setSelectedTacoCount] = useState<TacoCountSelection>(3);
   const [selectedKidsMeal, setSelectedKidsMeal] = useState<KidsMealSelection>("build-your-own");
+  const [buildEditQuantity, setBuildEditQuantity] = useState(1);
   const isChipotleChipsSidesSelection = isChipotleBuildPage && selectedEntree === "chips-sides";
   const isChipotleHighProteinSelection =
     isChipotleBuildPage && selectedEntree === "high-protein-menu";
@@ -1433,7 +1435,7 @@ export default function RestaurantView({
       name: editingCartItem?.name ?? buildName,
       image: editingCartItem?.image ?? selectedBuildImageSrc,
       customizations: nextCustomizations,
-      quantity: 1,
+      quantity: buildEditQuantity,
       macrosPerItem: adjustedSelectedIngredientTotals,
       nutritionPerItem: {
         calories: adjustedNutritionLabelTotals.calories,
@@ -1462,12 +1464,14 @@ export default function RestaurantView({
     hydratedEditItemIdRef.current = editingCartItem ? editingCartItem.id : null;
     const nextParams = new URLSearchParams(searchParams.toString());
     nextParams.delete("editCartItem");
+    nextParams.delete("editMode");
     const nextQuery = nextParams.toString();
     router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname, { scroll: false });
     setIsBuildSummaryExpanded(false);
     setProteinPortionMode("normal");
     setSplitPortionModeById({});
     setSelectedIngredientVariantIds({});
+    setBuildEditQuantity(1);
     const nextIncludedIngredientIds = resolveIncludedIngredientIds({
       selectedEntree,
       selectedKidsMeal,
@@ -1513,6 +1517,7 @@ export default function RestaurantView({
       setSelectedTacoShell(configuration.selectedTacoShell);
       setSelectedTacoCount(configuration.selectedTacoCount);
       setSelectedKidsMeal(configuration.selectedKidsMeal);
+      setBuildEditQuantity(editingCartItem.quantity);
       setSelectedEntree((configuration.selectedEntree as EntreeSelection) ?? null);
       setProteinPortionMode(configuration.proteinPortionMode);
       setSplitPortionModeById(configuration.splitPortionModeById);
@@ -2176,21 +2181,31 @@ export default function RestaurantView({
             ×
           </button>
 
-          <div className="h-[calc(100%-52px)] overflow-y-auto pb-6 pr-2">
-            <div className="grid gap-8">
-              <div className="grid justify-items-center gap-6">
+          <div className="h-[calc(100%-52px-106px)] overflow-y-auto pb-8 pr-2">
+            <div className="grid gap-10">
+              <div className="grid justify-items-center gap-8">
                 <h1 className="text-center text-[32px] font-extrabold">{modalBuildName}</h1>
                 {modalBuildImage ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
-                    className="max-h-[280px] w-[300px] rounded-[14px] bg-[#efefef] object-contain shadow-[0_0_5px_rgba(0,0,0,0.25)]"
+                    className="aspect-square w-[300px] rounded-[14px] bg-[#efefef] object-contain shadow-[0_0_5px_rgba(0,0,0,0.25)]"
                     src={modalBuildImage}
                     alt={modalBuildName}
                   />
                 ) : null}
+                <MacroTotalsGrid
+                  macros={{
+                    calories: Math.round(adjustedSelectedIngredientTotals.calories ?? 0),
+                    protein: Math.round(adjustedSelectedIngredientTotals.protein ?? 0),
+                    carbs: Math.round(adjustedSelectedIngredientTotals.carbs ?? 0),
+                    fat: Math.round(adjustedSelectedIngredientTotals.fat ?? 0),
+                  }}
+                  size="panel"
+                  className="w-full max-w-[560px] gap-6 sm:gap-10"
+                />
               </div>
 
-              <div className="mx-auto w-full max-w-[900px]">
+              <div className="mx-auto w-full max-w-[900px] rounded-3xl bg-[#e0e0e0] p-4">
                 {selectedEntree === "kids-meal" ? (
                   <KidsMealSelector
                     selectedKidsMeal={selectedKidsMeal}
@@ -2201,7 +2216,7 @@ export default function RestaurantView({
                 {menuSectionsContent}
               </div>
 
-              <div className="mx-auto w-full max-w-[1400px] border-t border-black/10 pt-4">
+              <div className="mx-auto w-full max-w-[1400px] rounded-3xl bg-[#e0e0e0] p-4">
                 <BuildSummaryDrawer
                   adjustedNutritionLabelTotals={adjustedNutritionLabelTotals}
                   selectedBuildName={modalBuildName}
@@ -2215,16 +2230,57 @@ export default function RestaurantView({
                   onAdjustIngredientQuantity={adjustIngredientQuantity}
                   showOrderActions={false}
                 />
-                <div className="mt-3 flex justify-end">
-                  <button
-                    type="button"
-                    className="cursor-pointer rounded-xl border border-black/20 bg-black/90 px-6 py-2.5 text-base font-bold text-white"
-                    onClick={handleAddBuildToCart}
-                  >
-                    Done
-                  </button>
-                </div>
               </div>
+            </div>
+          </div>
+
+          <div className="sticky bottom-0 -mx-6 z-10 flex h-fit flex-wrap items-center justify-between gap-3 border-t border-black/10 bg-white p-4 shadow-[0_-4px_10px_rgba(0,0,0,0.08)]">
+            <MacroTotalsGrid
+              macros={{
+                calories: Math.round(adjustedSelectedIngredientTotals.calories ?? 0),
+                protein: Math.round(adjustedSelectedIngredientTotals.protein ?? 0),
+                carbs: Math.round(adjustedSelectedIngredientTotals.carbs ?? 0),
+                fat: Math.round(adjustedSelectedIngredientTotals.fat ?? 0),
+              }}
+              size="panel"
+              className="gap-3 sm:gap-6"
+              itemClassName="px-2 py-0.5"
+              labelClassName="text-[#64748b]"
+            />
+            <div className="ml-auto flex items-center gap-3">
+              <div className="inline-flex items-center rounded-xl border border-slate-200 bg-slate-50 p-1">
+                <button
+                  type="button"
+                  onClick={() => setBuildEditQuantity((previous) => Math.max(1, previous - 1))}
+                  className="cursor-pointer inline-flex size-8 items-center justify-center rounded-lg text-base font-semibold text-slate-700 transition hover:bg-white"
+                  aria-label={`Decrease quantity of ${modalBuildName}`}
+                >
+                  -
+                </button>
+                <span className="min-w-8 text-center text-sm font-semibold text-slate-900">{buildEditQuantity}</span>
+                <button
+                  type="button"
+                  onClick={() => setBuildEditQuantity((previous) => previous + 1)}
+                  className="cursor-pointer inline-flex size-8 items-center justify-center rounded-lg text-base font-semibold text-slate-700 transition hover:bg-white"
+                  aria-label={`Increase quantity of ${modalBuildName}`}
+                >
+                  +
+                </button>
+              </div>
+              <button
+                type="button"
+                className="cursor-pointer rounded-xl border border-black/20 bg-white px-6 py-2.5 text-base font-bold text-black/80"
+                onClick={handleCloseBuildEditModal}
+              >
+                Reset
+              </button>
+              <button
+                type="button"
+                className="cursor-pointer rounded-xl border border-black/20 bg-black/90 px-6 py-2.5 text-base font-bold text-white"
+                onClick={handleAddBuildToCart}
+              >
+                Done
+              </button>
             </div>
           </div>
         </div>
