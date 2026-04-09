@@ -142,7 +142,11 @@ export default function MenuSections({
               menuItems={items}
               customizationRules={customizationRules}
               commonChanges={commonChanges}
-              itemHref={`/restaurant/${restaurantId}/items/${toItemSlug(item)}`}
+              itemHref={
+                categoryMode === "ingredients" && isBuildYourOwn
+                  ? undefined
+                  : `/restaurant/${restaurantId}/items/${toItemSlug(item)}`
+              }
               displayMode={
                 categoryMode === "ingredients" && isBuildYourOwn
                   ? "ingredient-compact"
@@ -237,7 +241,11 @@ export default function MenuSections({
                 menuItems={items}
                 customizationRules={customizationRules}
                 commonChanges={commonChanges}
-                itemHref={`/restaurant/${restaurantId}/items/${toItemSlug(item)}`}
+                itemHref={
+                  categoryMode === "ingredients" && isBuildYourOwn
+                    ? undefined
+                    : `/restaurant/${restaurantId}/items/${toItemSlug(item)}`
+                }
                 displayMode={
                   categoryMode === "ingredients" && isBuildYourOwn
                     ? "ingredient-compact"
