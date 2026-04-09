@@ -262,6 +262,7 @@ export default function RestaurantView({
   const [splitPortionModeById, setSplitPortionModeById] = useState<Record<string, SplitPortionMode>>({});
   const [isBuildSummaryExpanded, setIsBuildSummaryExpanded] = useState(false);
   const buildStickyContainerRef = useRef<HTMLDivElement | null>(null);
+  const buildCustomizationModalScrollRef = useRef<HTMLDivElement | null>(null);
   const entreeMenuRef = useRef<HTMLDivElement | null>(null);
   const requestedEntree = searchParams.get("entree");
   const initialSelectedEntree =
@@ -1493,38 +1494,60 @@ export default function RestaurantView({
     nextParams.delete("editCartItem");
     const nextQuery = nextParams.toString();
     router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname, { scroll: false });
-    setIsBuildSummaryExpanded(false);
-    setProteinPortionMode("normal");
-    setSplitPortionModeById({});
-    setSelectedIngredientVariantIds({});
-    const nextIncludedIngredientIds = resolveIncludedIngredientIds({
-      selectedEntree,
-      selectedKidsMeal,
-      selectedTacoShell,
-    });
-    setSelectedIngredientItems(() => {
-      const resetSelections: Record<string, { item: MenuItem; quantity: number }> = {};
-      nextIncludedIngredientIds.forEach((ingredientId) => {
-        const ingredientItem = ingredientItemsById.get(ingredientId);
-        if (!ingredientItem) return;
-        resetSelections[ingredientId] = { item: ingredientItem, quantity: 1 };
+    window.setTimeout(() => {
+      setIsBuildSummaryExpanded(false);
+      setProteinPortionMode("normal");
+      setSplitPortionModeById({});
+      setSelectedIngredientVariantIds({});
+      const nextIncludedIngredientIds = resolveIncludedIngredientIds({
+        selectedEntree,
+        selectedKidsMeal,
+        selectedTacoShell,
       });
-      return applyIngredientPortionNutrition(resetSelections);
-    });
+      setSelectedIngredientItems(() => {
+        const resetSelections: Record<string, { item: MenuItem; quantity: number }> = {};
+        nextIncludedIngredientIds.forEach((ingredientId) => {
+          const ingredientItem = ingredientItemsById.get(ingredientId);
+          if (!ingredientItem) return;
+          resetSelections[ingredientId] = { item: ingredientItem, quantity: 1 };
+        });
+        return applyIngredientPortionNutrition(resetSelections);
+      });
+    }, 0);
   };
 
   const handleCloseBuildCustomizationModal = useCallback(() => {
-    setSelectedIngredientItems({});
-    setSelectedIngredientVariantIds({});
-    setProteinPortionMode("normal");
-    setSplitPortionModeById({});
     editingBuildBaselineConfigRef.current = null;
 
     const nextParams = new URLSearchParams(searchParams.toString());
     nextParams.delete("editCartItem");
     const nextQuery = nextParams.toString();
     router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname, { scroll: false });
+    window.setTimeout(() => {
+      setSelectedIngredientItems({});
+      setSelectedIngredientVariantIds({});
+      setProteinPortionMode("normal");
+      setSplitPortionModeById({});
+    }, 0);
   }, [pathname, router, searchParams]);
+
+  useEffect(() => {
+    if (!isChipotleBuildPage || !isEditingBuild) {
+      return;
+    }
+
+    const resetScrollTimer = window.setTimeout(() => {
+      buildCustomizationModalScrollRef.current?.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "auto",
+      });
+    }, 0);
+
+    return () => {
+      window.clearTimeout(resetScrollTimer);
+    };
+  }, [editingCartItem?.id, isChipotleBuildPage, isEditingBuild]);
 
   useEffect(() => {
     if (!editingCartItem?.buildConfiguration) {
@@ -1882,7 +1905,7 @@ export default function RestaurantView({
             ×
           </button>
 
-          <div className="min-h-0 flex-1 overflow-y-auto pr-2 pb-10 [overflow-anchor:none]">
+          <div ref={buildCustomizationModalScrollRef} className="min-h-0 flex-1 overflow-y-auto pr-2 pb-10 [overflow-anchor:none]">
             <div className="grid justify-items-center gap-8">
               <div className="grid justify-items-center gap-5">
                 <h1 className="text-center text-[32px] font-extrabold">{editingCartItem.name}</h1>
