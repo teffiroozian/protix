@@ -155,13 +155,14 @@ export default function CartPreviewDrawer() {
                         customizationsLineClamp={1}
                         actions={
                           <>
-                            {item.buildConfiguration ? (
+                            {item.restaurantId === "chipotle" && item.buildConfiguration ? (
                               <button
                                 type="button"
                                 onClick={() => {
                                   closeCart();
                                   router.push(
-                                    `/restaurant/${item.restaurantId}?view=ingredients&editCartItem=${item.id}`
+                                    `/restaurant/${item.restaurantId}/items/build-your-own?editCartItem=${item.id}`,
+                                    { scroll: false }
                                   );
                                 }}
                                 className="cursor-pointer inline-flex size-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 transition hover:bg-slate-100"

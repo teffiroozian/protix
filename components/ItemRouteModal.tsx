@@ -104,7 +104,10 @@ export default function ItemRouteModal({
         (cartItem) =>
           cartItem.id === editCartItemId &&
           cartItem.restaurantId === restaurantId &&
-          cartItem.itemId === (item.id ?? item.name)
+          (
+            cartItem.itemId === (item.id ?? item.name) ||
+            (restaurantId === "chipotle" && Boolean(cartItem.buildConfiguration))
+          )
       ) ?? null
     );
   }, [editCartItemId, item.id, item.name, items, restaurantId]);
@@ -128,6 +131,10 @@ export default function ItemRouteModal({
   );
   const selectedVariant = variants?.find((variant) => variant.id === selectedVariantId);
   const selectedItemImage = selectedVariant?.image ?? item.image;
+  const displayItemName = editingCartItem?.buildConfiguration ? editingCartItem.name : item.name;
+  const displayItemImage = editingCartItem?.buildConfiguration
+    ? (editingCartItem.image ?? selectedItemImage)
+    : selectedItemImage;
   const baseNutrition = selectedVariant?.nutrition ?? item.nutrition;
   const resolvedIngredients = useMemo(
     () => resolvePanelIngredients(item, ingredients, addons, menuItems ?? [], variants, selectedVariantId, customizationRules),
@@ -582,8 +589,8 @@ export default function ItemRouteModal({
     const customizations = [...selectedCommonChanges, ...selectedIngredientCustomizations, ...comboCustomizations];
 
     const nextCartItemPayload = {
-      name: item.name,
-      image: selectedVariant?.image ?? item.image,
+      name: displayItemName,
+      image: displayItemImage,
       variantId: selectedVariant?.id,
       variantLabel: selectedVariant?.label,
       optionsLabel,
@@ -630,7 +637,7 @@ export default function ItemRouteModal({
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center" role="dialog" aria-modal="true" aria-label={item.name}>
+    <div className="fixed inset-0 z-[100] flex items-center justify-center" role="dialog" aria-modal="true" aria-label={displayItemName}>
       <button
         type="button"
         className="cursor-pointer absolute inset-0 border-0 bg-slate-900/66"
@@ -650,9 +657,9 @@ export default function ItemRouteModal({
         <div ref={scrollContainerRef} className="h-[calc(100%-52px-56px)] overflow-y-auto pr-2 pb-6">
         <div className="grid justify-items-center gap-16">
           <div className="grid justify-items-center gap-8">
-            <h1 className="text-center text-[32px] font-extrabold">{item.name}</h1>
-            {selectedItemImage ? (
-              <img className="max-h-[300px] w-[300px] bg-[#efefef] shadow-[0_0_5px_rgba(0,0,0,0.25)] rounded-[14px] object-contain" src={selectedItemImage} alt={item.name} />
+            <h1 className="text-center text-[32px] font-extrabold">{displayItemName}</h1>
+            {displayItemImage ? (
+              <img className="max-h-[300px] w-[300px] bg-[#efefef] shadow-[0_0_5px_rgba(0,0,0,0.25)] rounded-[14px] object-contain" src={displayItemImage} alt={displayItemName} />
             ) : null}
             <MacroTotalsGrid
               macros={{
@@ -920,7 +927,7 @@ export default function ItemRouteModal({
                 type="button"
                 onClick={handleDecrementQuantity}
                 className="cursor-pointer inline-flex size-8 items-center justify-center rounded-lg text-base font-semibold text-slate-700 transition hover:bg-white"
-                aria-label={`Decrease quantity of ${item.name}`}
+                aria-label={`Decrease quantity of ${displayItemName}`}
               >
                 -
               </button>
@@ -929,7 +936,7 @@ export default function ItemRouteModal({
                 type="button"
                 onClick={handleIncrementQuantity}
                 className="cursor-pointer inline-flex size-8 items-center justify-center rounded-lg text-base font-semibold text-slate-700 transition hover:bg-white"
-                aria-label={`Increase quantity of ${item.name}`}
+                aria-label={`Increase quantity of ${displayItemName}`}
               >
                 +
               </button>
