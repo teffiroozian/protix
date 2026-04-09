@@ -9,7 +9,6 @@ export default function IngredientCompactCard({
   ingredientSelectionState,
   isIngredientSelectionDisabled,
   ingredientSelectionControl,
-  ingredientRadioGroupName,
   ingredientDisabledReason,
   ingredientPortionBadge,
   isIngredientUnavailable,
@@ -28,7 +27,6 @@ export default function IngredientCompactCard({
   ingredientSelectionState: boolean;
   isIngredientSelectionDisabled: boolean;
   ingredientSelectionControl: "checkbox" | "radio";
-  ingredientRadioGroupName?: string;
   ingredientDisabledReason?: string;
   ingredientPortionBadge?: string;
   isIngredientUnavailable?: boolean;
@@ -50,8 +48,26 @@ export default function IngredientCompactCard({
           : "border border-black/15 shadow-[0_4px_12px_rgba(0,0,0,0.12)]"
       }`}
     >
-      <label
+      <div
+        role={ingredientSelectionControl}
+        aria-checked={ingredientSelectionState}
+        aria-label={`${isIngredientSelectionDisabled ? ingredientDisabledReason ?? "Unavailable" : "Select"} ${item.name}`}
+        tabIndex={isIngredientSelectionDisabled ? -1 : 0}
         className={`flex items-center gap-4 px-4 py-3 ${isIngredientSelectionDisabled ? "cursor-not-allowed opacity-95" : "cursor-pointer"}`}
+        onClick={() => {
+          if (isIngredientSelectionDisabled) return;
+          const nextSelected =
+            ingredientSelectionControl === "radio" ? true : !ingredientSelectionState;
+          onSelectionChange(nextSelected);
+        }}
+        onKeyDown={(event) => {
+          if (isIngredientSelectionDisabled) return;
+          if (event.key !== "Enter" && event.key !== " ") return;
+          event.preventDefault();
+          const nextSelected =
+            ingredientSelectionControl === "radio" ? true : !ingredientSelectionState;
+          onSelectionChange(nextSelected);
+        }}
       >
         <span
           className={`flex h-6 w-6 items-center justify-center border text-sm font-bold transition ${
@@ -63,15 +79,6 @@ export default function IngredientCompactCard({
         >
           {ingredientSelectionControl === "radio" ? "●" : "✓"}
         </span>
-        <input
-          type={ingredientSelectionControl}
-          className="sr-only"
-          checked={ingredientSelectionState}
-          name={ingredientSelectionControl === "radio" ? ingredientRadioGroupName : undefined}
-          disabled={isIngredientSelectionDisabled}
-          onChange={(event) => onSelectionChange(event.target.checked)}
-          aria-label={`${isIngredientSelectionDisabled ? ingredientDisabledReason ?? "Unavailable" : "Select"} ${item.name}`}
-        />
 
         {selectedItemImage ? (
           <img className="h-24 w-24 shrink-0 rounded-xl bg-[#efefef] object-cover" src={selectedItemImage} alt={item.name} />
@@ -132,7 +139,7 @@ export default function IngredientCompactCard({
             </div>
           ))}
         </div>
-      </label>
+      </div>
     </li>
   );
 }
