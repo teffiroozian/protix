@@ -64,19 +64,12 @@ export function getNutritionMultiplier(
   return 1;
 }
 
-export function getSplitExtraMultiplier(item: MenuItem) {
-  const extraVariant = item.variants?.find((variant) => {
-    const label = variant.label?.trim().toLowerCase() ?? "";
-    const id = variant.id?.trim().toLowerCase() ?? "";
-    return label === "extra" || id === "extra";
-  });
-
-  if (!extraVariant) return 1.5;
-  return getNutritionMultiplier(item.nutrition, extraVariant.nutrition);
+export function getSplitExtraMultiplier() {
+  return 2;
 }
 
-export function getSplitPortionLabel(item: MenuItem, mode: SplitPortionMode) {
-  const multiplier = mode === "light" ? 0.5 : mode === "extra" ? getSplitExtraMultiplier(item) : 1;
+export function getSplitPortionLabel(mode: SplitPortionMode) {
+  const multiplier = mode === "light" ? 0.5 : mode === "extra" ? getSplitExtraMultiplier() : 1;
   return formatMultiplierLabel(multiplier);
 }
 
