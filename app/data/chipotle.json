@@ -757,14 +757,17 @@
             ],
             "portionType": "entree",
             "image": "/restaurants/chipotle/menu/high-protein/double-high-protein-bowl.jpg",
-            "nutrition": {
-                "calories": 760,
-                "totalFat": 26,
-                "carbs": 54,
-                "protein": 81
-            },
             "entreeGroup": "high-protein-menu",
-            "defaultOrder": 11
+            "defaultOrder": 11,
+            "ingredients": [
+                "chicken",
+                "white-rice:light",
+                "black-beans",
+                "fresh-tomato-salsa",
+                "fajita-veggies",
+                "cheese",
+                "romaine-lettuce"
+            ]
         },
         {
             "id": "side-of-chicken-al-pastor-high-protein",
