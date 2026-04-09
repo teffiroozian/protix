@@ -1921,7 +1921,7 @@ export default function RestaurantView({
       </div>
     ) : null;
 
-  const menuSectionsContent = (
+  const renderMenuSections = (categoryModeOverride?: ViewOption) => (
     <MenuSections
       restaurantId={restaurantId}
       items={visibleMenuItems}
@@ -1931,7 +1931,10 @@ export default function RestaurantView({
       commonChanges={commonChanges}
       customizationRules={customizationRules}
       groupByCategory={effectiveViewMode !== "ranking"}
-      categoryMode={effectiveViewMode === "ranking" ? "menu" : effectiveViewMode}
+      categoryMode={
+        categoryModeOverride ??
+        (effectiveViewMode === "ranking" ? "menu" : effectiveViewMode)
+      }
       isBuildYourOwn={isBuildYourOwn}
       selectedIngredientIds={new Set(Object.keys(selectedIngredientItems))}
       lockedIngredientIds={lockedIngredientIds}
@@ -2167,14 +2170,14 @@ export default function RestaurantView({
       <div className="fixed inset-0 z-[100] flex items-center justify-center" role="dialog" aria-modal="true" aria-label={`Customize ${modalBuildName}`}>
         <button
           type="button"
-          className="absolute inset-0 cursor-pointer border-0 bg-slate-900/66"
+          className="absolute inset-0 z-0 cursor-pointer border-0 bg-slate-900/66"
           onClick={handleCloseBuildEditModal}
           aria-label="Close customization modal"
         />
-        <div className="relative m-4 h-[calc(100%-32px)] w-[min(1200px,calc(100%-32px))] overflow-hidden rounded-2xl bg-white px-6 pt-6">
+        <div className="relative z-10 m-4 h-[calc(100%-32px)] w-[min(1200px,calc(100%-32px))] overflow-hidden rounded-2xl bg-white px-6 pt-6">
           <button
             type="button"
-            className="sticky top-0 z-20 ml-auto h-9 w-9 cursor-pointer rounded-full border border-black/12 bg-white/95 text-2xl"
+            className="absolute right-6 top-6 z-20 h-9 w-9 cursor-pointer rounded-full border border-black/12 bg-white/95 text-2xl"
             onClick={handleCloseBuildEditModal}
             aria-label="Close customization modal"
           >
@@ -2205,7 +2208,7 @@ export default function RestaurantView({
                 />
               </div>
 
-              <div className="mx-auto w-full max-w-[900px] rounded-3xl bg-[#e0e0e0] p-4">
+              <div className="mx-auto w-full max-w-[900px] rounded-3xl bg-[#efefef] p-4">
                 {selectedEntree === "kids-meal" ? (
                   <KidsMealSelector
                     selectedKidsMeal={selectedKidsMeal}
@@ -2213,10 +2216,10 @@ export default function RestaurantView({
                     options={kidsMealOptions}
                   />
                 ) : null}
-                {menuSectionsContent}
+                {renderMenuSections("ingredients")}
               </div>
 
-              <div className="mx-auto w-full max-w-[1400px] rounded-3xl bg-[#e0e0e0] p-4">
+              <div className="mx-auto w-full max-w-[1400px] rounded-3xl bg-[#efefef] p-4">
                 <BuildSummaryDrawer
                   adjustedNutritionLabelTotals={adjustedNutritionLabelTotals}
                   selectedBuildName={modalBuildName}
@@ -2344,7 +2347,7 @@ export default function RestaurantView({
                   options={kidsMealOptions}
                 />
               ) : null}
-              {menuSectionsContent}
+              {renderMenuSections()}
             </div>
           </div>
         </div>
