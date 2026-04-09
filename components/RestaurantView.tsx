@@ -312,6 +312,7 @@ export default function RestaurantView({
   }, [cartItems, editCartItemId, isChipotleBuildPage, restaurantId]);
   const isEditingBuild = Boolean(editingCartItem);
   const hydratedEditItemIdRef = useRef<string | null>(null);
+  const editingBuildBaselineConfigRef = useRef<typeof editingCartItem extends null ? null : NonNullable<typeof editingCartItem>["buildConfiguration"] | null>(null);
 
   const addonItems = useMemo<MenuItem[]>(() => {
     if (!addons) return [];
@@ -1404,6 +1405,34 @@ export default function RestaurantView({
     router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname, { scroll: false });
   }, [isChipotleBuildPage, pathname, router, searchParams, selectedEntree]);
 
+  const buildSelectedItemsFromConfiguration = useCallback((configuration: NonNullable<NonNullable<typeof editingCartItem>["buildConfiguration"]>) => {
+    const next: Record<string, { item: MenuItem; quantity: number }> = {};
+
+    Object.entries(configuration.selectedIngredientItems).forEach(([ingredientId, { quantity }]) => {
+      const ingredient = ingredientItemsById.get(ingredientId);
+      if (!ingredient || quantity <= 0) {
+        return;
+      }
+
+      const selectedVariantId =
+        configuration.selectedIngredientVariantIds[ingredientId] ?? ingredient.defaultVariantId;
+      const selectedVariant = ingredient.variants?.find((variant) => variant.id === selectedVariantId);
+
+      next[ingredientId] = {
+        item: {
+          ...ingredient,
+          nutrition: selectedVariant?.nutrition ?? ingredient.nutrition,
+        },
+        quantity,
+      };
+    });
+
+    return applyIngredientPortionNutrition(next, {
+      proteinMode: configuration.proteinPortionMode,
+      splitModesById: configuration.splitPortionModeById,
+    });
+  }, [applyIngredientPortionNutrition, ingredientItemsById]);
+
   const handleAddBuildToCart = () => {
     if (selectedIngredientCount === 0) return;
     const nextCustomizations = Object.entries(selectedIngredientItems).flatMap(([ingredientId, { item, quantity }]) => {
@@ -1484,8 +1513,16 @@ export default function RestaurantView({
   };
 
   const handleCloseBuildCustomizationModal = useCallback(() => {
+    setSelectedIngredientItems({});
+    setSelectedIngredientVariantIds({});
+    setProteinPortionMode("normal");
+    setSplitPortionModeById({});
+    setSelectedEntree(null);
+    editingBuildBaselineConfigRef.current = null;
+
     const nextParams = new URLSearchParams(searchParams.toString());
     nextParams.delete("editCartItem");
+    nextParams.delete("entree");
     const nextQuery = nextParams.toString();
     router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname, { scroll: false });
   }, [pathname, router, searchParams]);
@@ -1501,6 +1538,7 @@ export default function RestaurantView({
     }
 
     const configuration = editingCartItem.buildConfiguration;
+    editingBuildBaselineConfigRef.current = configuration;
     hydratedEditItemIdRef.current = editingCartItem.id;
     const hydrateTimer = window.setTimeout(() => {
       setSelectedTacoShell(configuration.selectedTacoShell);
@@ -1510,39 +1548,13 @@ export default function RestaurantView({
       setProteinPortionMode(configuration.proteinPortionMode);
       setSplitPortionModeById(configuration.splitPortionModeById);
       setSelectedIngredientVariantIds(configuration.selectedIngredientVariantIds);
-      setSelectedIngredientItems(() => {
-        const next: Record<string, { item: MenuItem; quantity: number }> = {};
-
-        Object.entries(configuration.selectedIngredientItems).forEach(([ingredientId, { quantity }]) => {
-          const ingredient = ingredientItemsById.get(ingredientId);
-          if (!ingredient || quantity <= 0) {
-            return;
-          }
-
-          const selectedVariantId =
-            configuration.selectedIngredientVariantIds[ingredientId] ?? ingredient.defaultVariantId;
-          const selectedVariant = ingredient.variants?.find((variant) => variant.id === selectedVariantId);
-
-          next[ingredientId] = {
-            item: {
-              ...ingredient,
-              nutrition: selectedVariant?.nutrition ?? ingredient.nutrition,
-            },
-            quantity,
-          };
-        });
-
-        return applyIngredientPortionNutrition(next, {
-          proteinMode: configuration.proteinPortionMode,
-          splitModesById: configuration.splitPortionModeById,
-        });
-      });
+      setSelectedIngredientItems(() => buildSelectedItemsFromConfiguration(configuration));
     }, 0);
 
     return () => {
       window.clearTimeout(hydrateTimer);
     };
-  }, [applyIngredientPortionNutrition, editingCartItem, ingredientItemsById]);
+  }, [buildSelectedItemsFromConfiguration, editingCartItem]);
 
   const adjustIngredientQuantity = (ingredientId: string, delta: 1 | -1) => {
     if (lockedIngredientIds.has(ingredientId)) return;
@@ -1599,6 +1611,19 @@ export default function RestaurantView({
   };
 
   const handleResetSelectedIngredientOrder = () => {
+    if (isEditingBuild && editingBuildBaselineConfigRef.current) {
+      const baselineConfiguration = editingBuildBaselineConfigRef.current;
+      setSelectedTacoShell(baselineConfiguration.selectedTacoShell);
+      setSelectedTacoCount(baselineConfiguration.selectedTacoCount);
+      setSelectedKidsMeal(baselineConfiguration.selectedKidsMeal);
+      setSelectedEntree((baselineConfiguration.selectedEntree as EntreeSelection) ?? null);
+      setProteinPortionMode(baselineConfiguration.proteinPortionMode);
+      setSplitPortionModeById(baselineConfiguration.splitPortionModeById);
+      setSelectedIngredientVariantIds(baselineConfiguration.selectedIngredientVariantIds);
+      setSelectedIngredientItems(() => buildSelectedItemsFromConfiguration(baselineConfiguration));
+      return;
+    }
+
     setSelectedIngredientItems(() => {
       const lockedSelections: Record<string, { item: MenuItem; quantity: number }> = {};
 
