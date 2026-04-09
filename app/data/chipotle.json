@@ -687,7 +687,7 @@
             "portionType": "entree",
             "image": "/restaurants/chipotle/menu/high-protein/high-protein-high-fiber-bowl.jpg",
             "entreeGroup": "high-protein-menu",
-            "defaultOrder": 7,
+            "defaultOrder": 8,
             "ingredients": [
                 "chicken",
                 "brown-rice:light",
@@ -706,14 +706,15 @@
             ],
             "portionType": "entree",
             "image": "/restaurants/chipotle/menu/high-protein/high-protein-low-calorie-bowl.jpg",
-            "nutrition": {
-                "calories": 460,
-                "totalFat": 29,
-                "carbs": 18,
-                "protein": 35
-            },
             "entreeGroup": "high-protein-menu",
-            "defaultOrder": 8
+            "defaultOrder": 9,
+            "ingredients": [
+                "chicken",
+                "romaine-lettuce",
+                "fajita-veggies",
+                "fresh-tomato-salsa",
+                "guacamole"
+            ]
         },
         {
             "id": "double-high-protein-burrito",
@@ -723,14 +724,16 @@
             ],
             "portionType": "entree",
             "image": "/restaurants/chipotle/menu/high-protein/double-high-protein-burrito.jpg",
-            "nutrition": {
-                "calories": 840,
-                "totalFat": 31,
-                "carbs": 61,
-                "protein": 79
-            },
             "entreeGroup": "high-protein-menu",
-            "defaultOrder": 9
+            "defaultOrder": 10,
+            "ingredients": [
+                "tortilla",
+                "chicken:extra",
+                "fajita-veggies",
+                "fresh-tomato-salsa",
+                "cheese",
+                "romaine-lettuce"
+            ]
         },
         {
             "id": "high-protein-taco",
@@ -740,14 +743,16 @@
             ],
             "portionType": "entree",
             "image": "/restaurants/chipotle/menu/high-protein/high-protein-taco.jpg",
-            "nutrition": {
-                "calories": 197,
-                "totalFat": 8,
-                "carbs": 17,
-                "protein": 15
-            },
             "entreeGroup": "high-protein-menu",
-            "defaultOrder": 10
+            "defaultOrder": 11,
+            "ingredients": [
+                "soft-flour-tortilla",
+                "chicken:extra",
+                "fajita-veggies",
+                "fresh-tomato-salsa",
+                "cheese",
+                "romaine-lettuce"
+            ]
         },
         {
             "id": "double-high-protein-bowl",
@@ -758,7 +763,7 @@
             "portionType": "entree",
             "image": "/restaurants/chipotle/menu/high-protein/double-high-protein-bowl.jpg",
             "entreeGroup": "high-protein-menu",
-            "defaultOrder": 11,
+            "defaultOrder": 7,
             "ingredients": [
                 "chicken:extra",
                 "white-rice:light",
