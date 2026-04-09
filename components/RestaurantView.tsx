@@ -1926,6 +1926,16 @@ export default function RestaurantView({
                 />
               </div>
 
+              {selectedEntree === "kids-meal" ? (
+                <div className="w-full max-w-[900px]">
+                  <KidsMealSelector
+                    selectedKidsMeal={selectedKidsMeal}
+                    onSelectKidsMeal={handleKidsMealSelection}
+                    options={kidsMealOptions}
+                  />
+                </div>
+              ) : null}
+
               <div className="w-full rounded-3xl border border-black/10 bg-[#e0e0e0] p-4">
                 <MenuSections
                   restaurantId={restaurantId}
