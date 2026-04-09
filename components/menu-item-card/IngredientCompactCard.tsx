@@ -87,7 +87,7 @@ export default function IngredientCompactCard({
           ) : null}
           <div className="truncate text-xl font-semibold text-black">{item.name}</div>
           {isIngredientUnavailable && ingredientUnavailableReason ? (
-            <div className="mt-1 inline-flex rounded-full border border-amber-300 bg-amber-50 px-2 py-0.5 text-[11px] font-semibold text-amber-700">
+            <div className="mt-1 inline-flex rounded-full border border-black/20 bg-black/5 px-2 py-0.5 text-[11px] font-semibold text-black/60">
               {ingredientUnavailableReason}
             </div>
           ) : null}

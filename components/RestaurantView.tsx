@@ -1043,8 +1043,7 @@ export default function RestaurantView({
         }
 
         const mode = portionModesById[splitId] ?? "normal";
-        const multiplier =
-          mode === "light" ? 0.5 : mode === "extra" ? getSplitExtraMultiplier(baseIngredient) : 1;
+        const multiplier = mode === "light" ? 0.5 : mode === "extra" ? getSplitExtraMultiplier() : 1;
         nextItems[splitId] = {
           ...selectedIngredient,
           item: {
@@ -1699,7 +1698,7 @@ export default function RestaurantView({
       }
 
       const portionMode = splitPortionModeById[ingredientId] ?? "normal";
-      labelById[ingredientId] = getSplitPortionLabel(selectedIngredient.item, portionMode);
+      labelById[ingredientId] = getSplitPortionLabel(portionMode);
     });
 
     return labelById;
