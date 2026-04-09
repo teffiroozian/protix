@@ -110,6 +110,22 @@ function tabSupportsNoneOption(item: MenuItem, tabName: string) {
   return normalized === "cheese" || normalized === "cheeses";
 }
 
+function resolveIncludedIngredientDefaults(ingredientEntries: string[] = []) {
+  const defaultCounts = new Map<string, number>();
+
+  ingredientEntries.forEach((entry) => {
+    const [rawId, rawPortion] = entry.split(":");
+    const ingredientId = rawId?.trim();
+    if (!ingredientId) return;
+
+    const portion = rawPortion?.trim().toLowerCase();
+    const defaultCount = portion === "light" ? 0.5 : portion === "extra" ? 2 : 1;
+    defaultCounts.set(ingredientId.toLowerCase(), defaultCount);
+  });
+
+  return defaultCounts;
+}
+
 export function resolvePanelIngredients(
   item: MenuItem,
   ingredientItems: IngredientItem[] = [],
@@ -160,8 +176,8 @@ export function resolvePanelIngredientTabs(
   customizationRules?: RestaurantCustomizationRules
 ): ResolvedIngredientTab[] {
   const selectedParentVariantLabel = variants?.find((variant) => variant.id === selectedVariantId)?.label;
-  const ingredientIds = item.ingredients ?? [];
-  const includedIngredientIds = new Set(ingredientIds.map((ingredientId) => ingredientId.toLowerCase()));
+  const ingredientDefaultsById = resolveIncludedIngredientDefaults(item.ingredients);
+  const ingredientIds = [...ingredientDefaultsById.keys()];
   const resolvedTabs = resolveIngredientTabs(item, customizationRules);
   const singleSelectTabs = resolveSingleSelectIngredientTabs(item, customizationRules);
   const primaryCategory = item.categories?.[0];
@@ -259,7 +275,7 @@ export function resolvePanelIngredientTabs(
         ingredientTabLabel ? resolveIngredientTabMaxQuantity(item, ingredientTabLabel, customizationRules) : undefined,
       nutrition,
       calories: nutrition.calories,
-      defaultCount: includedIngredientIds.has(normalizedId) ? 1 : 0,
+      defaultCount: ingredientDefaultsById.get(normalizedId) ?? 0,
     };
 
     resolvedIngredientLookup.set(normalizedId, resolvedIngredient);
