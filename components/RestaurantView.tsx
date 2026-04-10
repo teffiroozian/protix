@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import type { LucideIcon } from "lucide-react";
@@ -262,6 +262,15 @@ export default function RestaurantView({
   const [splitPortionModeById, setSplitPortionModeById] = useState<Record<string, SplitPortionMode>>({});
   const [isBuildSummaryExpanded, setIsBuildSummaryExpanded] = useState(false);
   const buildStickyContainerRef = useRef<HTMLDivElement | null>(null);
+  const buildCustomizationModalScrollRef = useRef<HTMLDivElement | null>(null);
+  const pendingBuildCustomizationResetRef = useRef<
+    | { type: "none" }
+    | {
+        type: "included";
+        context: IncludedIngredientContext;
+      }
+    | { type: "empty" }
+  >({ type: "none" });
   const entreeMenuRef = useRef<HTMLDivElement | null>(null);
   const requestedEntree = searchParams.get("entree");
   const initialSelectedEntree =
@@ -935,6 +944,17 @@ export default function RestaurantView({
     return entreeOptions[selectedEntree]?.label ?? titleCase(selectedEntree);
   }, [selectedEntree, selectedKidsMeal, entreeOptions]);
   const selectedBuildName = useMemo(() => {
+    if (selectedEntree === "kids-meal") {
+      const kidsMealLabel = selectedKidsMeal === "quesadilla" ? "Quesadilla" : "Build Your Own";
+      const proteinLabel =
+        selectedBuildProteinNames.length === 0
+          ? "Veggie"
+          : selectedBuildProteinNames.length === 1
+            ? selectedBuildProteinNames[0]
+            : `${selectedBuildProteinNames[0]} and ${selectedBuildProteinNames[1]}`;
+      return `Kid's ${proteinLabel} ${kidsMealLabel}`;
+    }
+
     if (selectedBuildProteinNames.length === 0) {
       return `Veggie ${selectedBuildEntreeLabel}`;
     }
@@ -942,7 +962,7 @@ export default function RestaurantView({
       return `${selectedBuildProteinNames[0]} ${selectedBuildEntreeLabel}`;
     }
     return `${selectedBuildProteinNames[0]} and ${selectedBuildProteinNames[1]} ${selectedBuildEntreeLabel}`;
-  }, [selectedBuildEntreeLabel, selectedBuildProteinNames]);
+  }, [selectedBuildEntreeLabel, selectedBuildProteinNames, selectedEntree, selectedKidsMeal]);
   const selectedBuildImageSrc = useMemo(() => {
     if (!selectedEntree) {
       return entreeOptions.bowl?.imageSrc ?? "";
@@ -1459,7 +1479,7 @@ export default function RestaurantView({
     const nextItemPayload = {
       restaurantId,
       itemId: editingCartItem?.itemId ?? `${restaurantId}-build`,
-      name: editingCartItem?.name ?? buildName,
+      name: editingCartItem?.name && selectedEntree !== "kids-meal" ? editingCartItem.name : buildName,
       image: editingCartItem?.image ?? selectedBuildImageSrc,
       customizations: nextCustomizations,
       quantity: 1,
@@ -1489,42 +1509,84 @@ export default function RestaurantView({
     }
 
     hydratedEditItemIdRef.current = editingCartItem ? editingCartItem.id : null;
+    pendingBuildCustomizationResetRef.current = {
+      type: "included",
+      context: {
+        selectedEntree,
+        selectedKidsMeal,
+        selectedTacoShell,
+      },
+    };
     const nextParams = new URLSearchParams(searchParams.toString());
     nextParams.delete("editCartItem");
     const nextQuery = nextParams.toString();
     router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname, { scroll: false });
-    setIsBuildSummaryExpanded(false);
-    setProteinPortionMode("normal");
-    setSplitPortionModeById({});
-    setSelectedIngredientVariantIds({});
-    const nextIncludedIngredientIds = resolveIncludedIngredientIds({
-      selectedEntree,
-      selectedKidsMeal,
-      selectedTacoShell,
-    });
-    setSelectedIngredientItems(() => {
-      const resetSelections: Record<string, { item: MenuItem; quantity: number }> = {};
-      nextIncludedIngredientIds.forEach((ingredientId) => {
-        const ingredientItem = ingredientItemsById.get(ingredientId);
-        if (!ingredientItem) return;
-        resetSelections[ingredientId] = { item: ingredientItem, quantity: 1 };
-      });
-      return applyIngredientPortionNutrition(resetSelections);
-    });
   };
 
   const handleCloseBuildCustomizationModal = useCallback(() => {
-    setSelectedIngredientItems({});
-    setSelectedIngredientVariantIds({});
-    setProteinPortionMode("normal");
-    setSplitPortionModeById({});
     editingBuildBaselineConfigRef.current = null;
+    pendingBuildCustomizationResetRef.current = { type: "empty" };
 
     const nextParams = new URLSearchParams(searchParams.toString());
     nextParams.delete("editCartItem");
     const nextQuery = nextParams.toString();
     router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname, { scroll: false });
   }, [pathname, router, searchParams]);
+
+  useLayoutEffect(() => {
+    if (!isChipotleBuildPage || !isEditingBuild) {
+      return;
+    }
+
+    if (!buildCustomizationModalScrollRef.current) return;
+    buildCustomizationModalScrollRef.current.scrollTop = 0;
+    buildCustomizationModalScrollRef.current.scrollLeft = 0;
+  }, [editingCartItem?.id, isChipotleBuildPage, isEditingBuild]);
+
+  useEffect(() => {
+    if (!isChipotleBuildPage || isEditingBuild) {
+      return;
+    }
+
+    const pendingReset = pendingBuildCustomizationResetRef.current;
+    if (pendingReset.type === "none") {
+      return;
+    }
+
+    const resetTimer = window.setTimeout(() => {
+      setIsBuildSummaryExpanded(false);
+      setProteinPortionMode("normal");
+      setSplitPortionModeById({});
+      setSelectedIngredientVariantIds({});
+
+      if (pendingReset.type === "empty") {
+        setSelectedIngredientItems({});
+        pendingBuildCustomizationResetRef.current = { type: "none" };
+        return;
+      }
+
+      const nextIncludedIngredientIds = resolveIncludedIngredientIds(pendingReset.context);
+      setSelectedIngredientItems(() => {
+        const resetSelections: Record<string, { item: MenuItem; quantity: number }> = {};
+        nextIncludedIngredientIds.forEach((ingredientId) => {
+          const ingredientItem = ingredientItemsById.get(ingredientId);
+          if (!ingredientItem) return;
+          resetSelections[ingredientId] = { item: ingredientItem, quantity: 1 };
+        });
+        return applyIngredientPortionNutrition(resetSelections);
+      });
+      pendingBuildCustomizationResetRef.current = { type: "none" };
+    }, 0);
+
+    return () => {
+      window.clearTimeout(resetTimer);
+    };
+  }, [
+    applyIngredientPortionNutrition,
+    ingredientItemsById,
+    isChipotleBuildPage,
+    isEditingBuild,
+  ]);
 
   useEffect(() => {
     if (!editingCartItem?.buildConfiguration) {
@@ -1882,7 +1944,7 @@ export default function RestaurantView({
             ×
           </button>
 
-          <div className="min-h-0 flex-1 overflow-y-auto pr-2 pb-10 [overflow-anchor:none]">
+          <div ref={buildCustomizationModalScrollRef} className="min-h-0 flex-1 overflow-y-auto pr-2 pb-10 [overflow-anchor:none]">
             <div className="grid justify-items-center gap-8">
               <div className="grid justify-items-center gap-5">
                 <h1 className="text-center text-[32px] font-extrabold">{editingCartItem.name}</h1>
@@ -1902,6 +1964,16 @@ export default function RestaurantView({
                   className="w-full max-w-[560px] gap-6 sm:gap-10"
                 />
               </div>
+
+              {selectedEntree === "kids-meal" ? (
+                <div className="w-full max-w-[900px]">
+                  <KidsMealSelector
+                    selectedKidsMeal={selectedKidsMeal}
+                    onSelectKidsMeal={handleKidsMealSelection}
+                    options={kidsMealOptions}
+                  />
+                </div>
+              ) : null}
 
               <div className="w-full rounded-3xl border border-black/10 bg-[#e0e0e0] p-4">
                 <MenuSections
