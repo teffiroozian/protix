@@ -293,8 +293,26 @@ export default function RestaurantView({
   const selectedEntreeConfig = selectedEntree ? entreeOptions[selectedEntree] : null;
   const selectedEntreeNutritionMultiplier = selectedEntreeConfig?.nutritionMultiplier ?? 1;
   const tacoServingMultiplier = selectedEntree === "tacos" ? selectedTacoCount : 1;
-  const servingMultiplier = tacoServingMultiplier * selectedEntreeNutritionMultiplier;
-  const ingredientDisplayMultiplier = servingMultiplier;
+  const servingMultiplier =
+    selectedEntree === "tacos" ? selectedEntreeNutritionMultiplier : tacoServingMultiplier * selectedEntreeNutritionMultiplier;
+  const ingredientDisplayMultiplier = selectedEntreeNutritionMultiplier;
+  const tacoBaseServingCount = 3;
+  const tacoSharedIngredientMultiplier =
+    selectedEntree === "tacos" ? selectedTacoCount / tacoBaseServingCount : 1;
+  const getIngredientNutritionMultiplier = useCallback(
+    (ingredientId?: string) => {
+      if (!ingredientId) return ingredientDisplayMultiplier;
+      if (selectedEntree !== "tacos") return ingredientDisplayMultiplier;
+      return ingredientDisplayMultiplier * (tacoShellIngredientIds.includes(ingredientId) ? selectedTacoCount : tacoSharedIngredientMultiplier);
+    },
+    [
+      ingredientDisplayMultiplier,
+      selectedEntree,
+      selectedTacoCount,
+      tacoSharedIngredientMultiplier,
+      tacoShellIngredientIds,
+    ]
+  );
   const selectedIncludedIngredientIds = useMemo(
     () =>
       resolveIncludedIngredientIds({
@@ -446,12 +464,15 @@ export default function RestaurantView({
             : 1;
         const ingredientBaseNutrition = scaleNutritionValues(
           ingredient.nutrition,
-          ingredientDisplayMultiplier * kidsBuildYourOwnDoubleSideMultiplier
+          getIngredientNutritionMultiplier(ingredient.id) * kidsBuildYourOwnDoubleSideMultiplier
         );
         const variants = hasCustomVariants
           ? ingredient.variants?.map((variant) => ({
               ...variant,
-              nutrition: scaleNutritionValues(variant.nutrition, ingredientDisplayMultiplier),
+              nutrition: scaleNutritionValues(
+                variant.nutrition,
+                getIngredientNutritionMultiplier(ingredient.id)
+              ),
             }))
           : undefined;
         const tripleCheeseVariant = isQuesadillaCheeseIncludedIngredient
@@ -470,7 +491,9 @@ export default function RestaurantView({
           name: ingredient.name,
           nutrition: ingredientBaseNutrition,
           defaultOrder:
-            shouldPinToIncludedCategory && typeof includedIngredientOrder === "number"
+            shouldPinToIncludedCategory &&
+            selectedEntree !== "tacos" &&
+            typeof includedIngredientOrder === "number"
               ? includedIngredientOrder
               : ingredient.defaultOrder,
           variants: tripleCheeseVariant ? [...(variants ?? []), tripleCheeseVariant] : variants,
@@ -503,7 +526,7 @@ export default function RestaurantView({
       },
     ];
   }, [
-    ingredientDisplayMultiplier,
+    getIngredientNutritionMultiplier,
     ingredients,
     restaurantId,
     selectedEntree,
@@ -823,12 +846,13 @@ export default function RestaurantView({
     () =>
       Object.entries(selectedIngredientItems).reduce(
         (acc, [ingredientId, selectedIngredient]) => {
+          const baseIngredient = ingredientItemsById.get(ingredientId) ?? selectedIngredient.item;
           const selectedVariantId =
-            selectedIngredientVariantIds[ingredientId] ?? selectedIngredient.item.defaultVariantId;
-          const selectedVariant = selectedIngredient.item.variants?.find(
+            selectedIngredientVariantIds[ingredientId] ?? baseIngredient.defaultVariantId;
+          const selectedVariant = baseIngredient.variants?.find(
             (variant) => variant.id === selectedVariantId
           );
-          const nutrition = selectedVariant?.nutrition ?? selectedIngredient.item.nutrition;
+          const nutrition = selectedVariant?.nutrition ?? baseIngredient.nutrition;
 
           return {
             calories: acc.calories + (nutrition.calories ?? 0) * selectedIngredient.quantity,
@@ -839,7 +863,7 @@ export default function RestaurantView({
         },
         { calories: 0, protein: 0, carbs: 0, fat: 0 }
       ),
-    [selectedIngredientItems, selectedIngredientVariantIds]
+    [ingredientItemsById, selectedIngredientItems, selectedIngredientVariantIds]
   );
   const adjustedSelectedIngredientTotals = useMemo(
     () => {
@@ -863,12 +887,13 @@ export default function RestaurantView({
     () =>
       Object.entries(selectedIngredientItems).reduce(
         (acc, [ingredientId, selectedIngredient]) => {
+          const baseIngredient = ingredientItemsById.get(ingredientId) ?? selectedIngredient.item;
           const selectedVariantId =
-            selectedIngredientVariantIds[ingredientId] ?? selectedIngredient.item.defaultVariantId;
-          const selectedVariant = selectedIngredient.item.variants?.find(
+            selectedIngredientVariantIds[ingredientId] ?? baseIngredient.defaultVariantId;
+          const selectedVariant = baseIngredient.variants?.find(
             (variant) => variant.id === selectedVariantId
           );
-          const nutrition = selectedVariant?.nutrition ?? selectedIngredient.item.nutrition;
+          const nutrition = selectedVariant?.nutrition ?? baseIngredient.nutrition;
           const { quantity } = selectedIngredient;
           return {
             calories: acc.calories + (nutrition.calories ?? 0) * quantity,
@@ -896,7 +921,7 @@ export default function RestaurantView({
           protein: 0,
         }
       ),
-    [selectedIngredientItems, selectedIngredientVariantIds]
+    [ingredientItemsById, selectedIngredientItems, selectedIngredientVariantIds]
   );
   const adjustedNutritionLabelTotals = useMemo(
     () => {
@@ -926,6 +951,16 @@ export default function RestaurantView({
     (acc, selectedIngredient) => acc + selectedIngredient.quantity,
     0
   );
+  const selectedIngredientIdsForMenu = useMemo(() => {
+    const selectedIds = new Set(Object.keys(selectedIngredientItems));
+    if (selectedEntree !== "tacos") {
+      return selectedIds;
+    }
+
+    tacoShellIngredientIds.forEach((ingredientId) => selectedIds.delete(ingredientId));
+    selectedIds.add(selectedTacoShell === "soft" ? "soft-flour-tortilla" : "crispy-corn-tortilla");
+    return selectedIds;
+  }, [selectedEntree, selectedIngredientItems, selectedTacoShell, tacoShellIngredientIds]);
   const selectedBuildProteinNames = useMemo(
     () =>
       Object.values(selectedIngredientItems)
@@ -1257,7 +1292,7 @@ export default function RestaurantView({
 
             const fallbackNutrition = scaleNutritionValues(
               fallbackIngredient.nutrition,
-              ingredientDisplayMultiplier
+              getIngredientNutritionMultiplier(includedIngredientId)
             );
 
             return {
@@ -1266,7 +1301,10 @@ export default function RestaurantView({
               nutrition: fallbackNutrition,
               variants: fallbackIngredient.variants?.map((variant) => ({
                 ...variant,
-                nutrition: scaleNutritionValues(variant.nutrition, ingredientDisplayMultiplier),
+                nutrition: scaleNutritionValues(
+                  variant.nutrition,
+                  getIngredientNutritionMultiplier(includedIngredientId)
+                ),
               })),
               defaultVariantId: fallbackIngredient.defaultVariantId,
               hideVariantSelector: fallbackIngredient.hideVariantSelector,
@@ -1320,10 +1358,16 @@ export default function RestaurantView({
             return {
               id: includedIngredientId,
               name: fallbackIngredient.name,
-              nutrition: scaleNutritionValues(fallbackIngredient.nutrition, ingredientDisplayMultiplier),
+              nutrition: scaleNutritionValues(
+                fallbackIngredient.nutrition,
+                getIngredientNutritionMultiplier(includedIngredientId)
+              ),
               variants: fallbackIngredient.variants?.map((variant) => ({
                 ...variant,
-                nutrition: scaleNutritionValues(variant.nutrition, ingredientDisplayMultiplier),
+                nutrition: scaleNutritionValues(
+                  variant.nutrition,
+                  getIngredientNutritionMultiplier(includedIngredientId)
+                ),
               })),
               defaultVariantId: fallbackIngredient.defaultVariantId,
               hideVariantSelector: fallbackIngredient.hideVariantSelector,
@@ -1352,7 +1396,7 @@ export default function RestaurantView({
     });
   }, [
     applyIngredientPortionNutrition,
-    ingredientDisplayMultiplier,
+    getIngredientNutritionMultiplier,
     ingredients,
     ingredientItemsById,
     selectedEntree,
@@ -1987,7 +2031,7 @@ export default function RestaurantView({
                   groupByCategory
                   categoryMode="ingredients"
                   isBuildYourOwn={isBuildYourOwn}
-                  selectedIngredientIds={new Set(Object.keys(selectedIngredientItems))}
+                  selectedIngredientIds={selectedIngredientIdsForMenu}
                   lockedIngredientIds={lockedIngredientIds}
                   unavailableIngredientIds={unavailableIngredientIds}
                   unavailableIngredientReasonById={unavailableIngredientReasonById}
@@ -2246,16 +2290,16 @@ export default function RestaurantView({
               <button
                 type="button"
                 className="cursor-pointer rounded-xl border border-black/20 bg-white px-6 py-2.5 text-base font-bold text-black/80"
-                onClick={handleResetSelectedIngredientOrder}
+                onClick={handleCloseBuildCustomizationModal}
               >
-                Reset
+                Cancel
               </button>
               <button
                 type="button"
                 className="cursor-pointer rounded-xl border border-black/20 bg-black/90 px-6 py-2.5 text-base font-bold text-white"
                 onClick={handleAddBuildToCart}
               >
-                Done
+                Update
               </button>
             </div>
           </div>
@@ -2402,7 +2446,7 @@ export default function RestaurantView({
                 groupByCategory={effectiveViewMode !== "ranking"}
                 categoryMode={effectiveViewMode === "ranking" ? "menu" : effectiveViewMode}
                 isBuildYourOwn={isBuildYourOwn}
-                selectedIngredientIds={new Set(Object.keys(selectedIngredientItems))}
+                selectedIngredientIds={selectedIngredientIdsForMenu}
                 lockedIngredientIds={lockedIngredientIds}
                 unavailableIngredientIds={unavailableIngredientIds}
                 unavailableIngredientReasonById={unavailableIngredientReasonById}
