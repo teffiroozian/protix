@@ -9,6 +9,8 @@ import ItemDetailsPanel, {
   resolvePanelIngredients,
 } from "@/components/ItemDetailsPanel";
 import MacroTotalsGrid from "@/components/MacroTotalsGrid";
+import MenuSections from "@/components/MenuSections";
+import BuildSummaryDrawer from "@/components/restaurant-view/BuildSummaryDrawer";
 import type {
   AddonOption,
   AddonRef,
@@ -48,6 +50,15 @@ import {
   buildHighProteinBuildConfiguration,
   isChipotleHighProteinMenuItem,
 } from "@/lib/chipotleBuild/highProtein";
+import {
+  getProteinBadgeLabel,
+  getProteinMultiplier,
+  getSplitPortionLabel,
+  normalizeIngredientCategory,
+  type ProteinPortionMode,
+  type SplitPortionMode,
+} from "@/lib/chipotleBuild";
+import { resolvePrimaryCategory } from "@/lib/ingredientTabs";
 
 const emptyAddon: AddonOption = {
   name: "None",
@@ -109,8 +120,21 @@ export default function ItemRouteModal({
     );
   }, [editCartItemId, item.id, item.name, items, restaurantId]);
   const isCustomizeMode = Boolean(editingCartItem);
+  const isChipotlePrebuiltBuilderItem = isChipotleHighProteinMenuItem(item, restaurantId);
   const canCustomizeViaBuildPage =
     isChipotleHighProteinMenuItem(item, restaurantId) && Boolean(editingCartItem);
+  const chipotleBuildConfiguration = useMemo(
+    () =>
+      (editingCartItem?.buildConfiguration as
+        | {
+            selectedIngredientItems?: Record<string, { quantity: number }>;
+            selectedIngredientVariantIds?: Record<string, string>;
+            proteinPortionMode?: ProteinPortionMode;
+            splitPortionModeById?: Record<string, SplitPortionMode>;
+          }
+        | undefined) ?? buildHighProteinBuildConfiguration(item, ingredients),
+    [editingCartItem?.buildConfiguration, ingredients, item]
+  );
   const parsedInitialComboCustomization = useMemo(
     () => parseComboCustomization(editingCartItem?.customizations),
     [editingCartItem?.customizations]
@@ -135,6 +159,47 @@ export default function ItemRouteModal({
   );
   const [selectedIngredientCounts, setSelectedIngredientCounts] = useState<Record<string, number>>(() =>
     getSelectedIngredientCountsFromCustomizations(resolvedIngredients, editingCartItem?.customizations)
+  );
+  const chipotleIngredientMenuItems = useMemo<MenuItem[]>(
+    () =>
+      (ingredients ?? [])
+        .filter((ingredient) => !ingredient.hideFromIngredientView)
+        .map((ingredient) => ({
+          id: ingredient.id ?? ingredient.name,
+          name: ingredient.name,
+          image: ingredient.image,
+          nutrition: ingredient.nutrition,
+          categories: ingredient.categories ?? (ingredient.category ? [ingredient.category] : []),
+          variants: ingredient.variants,
+          defaultVariantId: ingredient.defaultVariantId,
+        })),
+    [ingredients]
+  );
+  const chipotleIngredientById = useMemo(
+    () =>
+      new Map(
+        chipotleIngredientMenuItems.map((ingredientItem) => [ingredientItem.id ?? ingredientItem.name, ingredientItem])
+      ),
+    [chipotleIngredientMenuItems]
+  );
+  const [selectedChipotleIngredientItems, setSelectedChipotleIngredientItems] = useState<
+    Record<string, { item: MenuItem; quantity: number }>
+  >(() =>
+    Object.entries(chipotleBuildConfiguration.selectedIngredientItems ?? {}).reduce<
+      Record<string, { item: MenuItem; quantity: number }>
+    >((acc, [ingredientId, selectedEntry]) => {
+      const ingredient = chipotleIngredientById.get(ingredientId);
+      if (!ingredient || selectedEntry.quantity <= 0) return acc;
+      acc[ingredientId] = { item: ingredient, quantity: selectedEntry.quantity };
+      return acc;
+    }, {})
+  );
+  const selectedChipotleIngredientVariantIds = chipotleBuildConfiguration.selectedIngredientVariantIds ?? {};
+  const [chipotleProteinPortionMode, setChipotleProteinPortionMode] = useState<ProteinPortionMode>(
+    chipotleBuildConfiguration.proteinPortionMode ?? "normal"
+  );
+  const [chipotleSplitPortionModeById, setChipotleSplitPortionModeById] = useState<Record<string, SplitPortionMode>>(
+    chipotleBuildConfiguration.splitPortionModeById ?? {}
   );
 
   const applicableCommonChanges = useMemo(
@@ -525,6 +590,89 @@ export default function ItemRouteModal({
     });
   };
 
+  const chipotleSelectedProteinCount = useMemo(
+    () =>
+      Object.values(selectedChipotleIngredientItems).filter(
+        (selectedIngredient) =>
+          normalizeIngredientCategory(resolvePrimaryCategory(selectedIngredient.item.categories)) === "proteins"
+      ).length,
+    [selectedChipotleIngredientItems]
+  );
+  const chipotleIngredientPortionLabelById = useMemo(
+    () =>
+      Object.entries(selectedChipotleIngredientItems).reduce<Record<string, string>>((acc, [ingredientId, entry]) => {
+        const category = normalizeIngredientCategory(resolvePrimaryCategory(entry.item.categories));
+        if (category === "proteins") {
+          acc[ingredientId] = getProteinBadgeLabel(chipotleProteinPortionMode, chipotleSelectedProteinCount);
+        } else if (category === "rice" || category === "beans") {
+          acc[ingredientId] = getSplitPortionLabel(chipotleSplitPortionModeById[ingredientId] ?? "normal");
+        }
+        return acc;
+      }, {}),
+    [chipotleProteinPortionMode, chipotleSelectedProteinCount, chipotleSplitPortionModeById, selectedChipotleIngredientItems]
+  );
+  const chipotleAdjustedTotals = useMemo(
+    () =>
+      Object.entries(selectedChipotleIngredientItems).reduce(
+        (sum, [ingredientId, selectedIngredient]) => {
+          const baseMultiplier = selectedIngredient.quantity;
+          const category = normalizeIngredientCategory(resolvePrimaryCategory(selectedIngredient.item.categories));
+          const multiplier =
+            category === "proteins"
+              ? getProteinMultiplier(chipotleProteinPortionMode, chipotleSelectedProteinCount) * baseMultiplier
+              : category === "rice" || category === "beans"
+                ? (chipotleSplitPortionModeById[ingredientId] === "light"
+                    ? 0.5
+                    : chipotleSplitPortionModeById[ingredientId] === "extra"
+                      ? 2
+                      : 1) * baseMultiplier
+                : baseMultiplier;
+          const ingredientNutrition = selectedIngredient.item.nutrition;
+          return {
+            calories: sum.calories + Math.round((ingredientNutrition.calories ?? 0) * multiplier),
+            protein: sum.protein + Math.round((ingredientNutrition.protein ?? 0) * multiplier),
+            carbs: sum.carbs + Math.round((ingredientNutrition.carbs ?? 0) * multiplier),
+            fat: sum.fat + Math.round((ingredientNutrition.totalFat ?? 0) * multiplier),
+            satFat: sum.satFat + Math.round((ingredientNutrition.satFat ?? 0) * multiplier),
+            transFat: sum.transFat + Math.round((ingredientNutrition.transFat ?? 0) * multiplier),
+            cholesterol: sum.cholesterol + Math.round((ingredientNutrition.cholesterol ?? 0) * multiplier),
+            sodium: sum.sodium + Math.round((ingredientNutrition.sodium ?? 0) * multiplier),
+            fiber: sum.fiber + Math.round((ingredientNutrition.fiber ?? 0) * multiplier),
+            sugars: sum.sugars + Math.round((ingredientNutrition.sugars ?? 0) * multiplier),
+          };
+        },
+        { calories: 0, protein: 0, carbs: 0, fat: 0, satFat: 0, transFat: 0, cholesterol: 0, sodium: 0, fiber: 0, sugars: 0 }
+      ),
+    [chipotleProteinPortionMode, chipotleSelectedProteinCount, chipotleSplitPortionModeById, selectedChipotleIngredientItems]
+  );
+  const chipotleGroupedSelectedIngredientEntries = useMemo(() => {
+    const categoryOrder = ["proteins", "rice", "beans", "toppings", "side", "other"];
+    const categoryLabels: Record<string, string> = {
+      proteins: "Protein",
+      rice: "Rice",
+      beans: "Beans",
+      toppings: "Toppings",
+      side: "Side",
+      other: "Other",
+    };
+    const grouped = Object.entries(selectedChipotleIngredientItems).reduce<Record<string, Array<[string, { item: MenuItem; quantity: number }]>>>(
+      (acc, [ingredientId, selectedIngredient]) => {
+        const category = normalizeIngredientCategory(resolvePrimaryCategory(selectedIngredient.item.categories)) || "other";
+        if (!acc[category]) acc[category] = [];
+        acc[category].push([ingredientId, selectedIngredient]);
+        return acc;
+      },
+      {}
+    );
+    return categoryOrder
+      .filter((categoryKey) => (grouped[categoryKey] ?? []).length > 0)
+      .map((categoryKey) => ({
+        categoryKey,
+        categoryLabel: categoryLabels[categoryKey] ?? categoryKey,
+        entries: grouped[categoryKey] ?? [],
+      }));
+  }, [selectedChipotleIngredientItems]);
+
   const customizationTotals = useMemo(
     () => ({
       calories: addonTotals.calories + commonChangeTotals.calories + ingredientCountTotals.calories + activeComboNutritionTotals.calories,
@@ -567,6 +715,57 @@ export default function ItemRouteModal({
   };
 
   const handleSaveItem = () => {
+    if (isChipotlePrebuiltBuilderItem) {
+      const nextBuildConfiguration = {
+        ...chipotleBuildConfiguration,
+        selectedIngredientItems: Object.fromEntries(
+          Object.entries(selectedChipotleIngredientItems).map(([ingredientId, selectedIngredient]) => [
+            ingredientId,
+            { quantity: selectedIngredient.quantity },
+          ])
+        ),
+        selectedIngredientVariantIds: selectedChipotleIngredientVariantIds,
+        proteinPortionMode: chipotleProteinPortionMode,
+        splitPortionModeById: chipotleSplitPortionModeById,
+      };
+
+      const customizations = Object.entries(selectedChipotleIngredientItems).map(
+        ([ingredientId, selectedIngredient]) =>
+          `${selectedIngredient.item.name}: ${selectedIngredient.quantity}x${
+            chipotleIngredientPortionLabelById[ingredientId] ? ` (${chipotleIngredientPortionLabelById[ingredientId]})` : ""
+          }`
+      );
+
+      const payload = {
+        name: item.name,
+        image: item.image,
+        quantity,
+        customizations: customizations.length ? customizations : undefined,
+        macrosPerItem: {
+          calories: chipotleAdjustedTotals.calories,
+          protein: chipotleAdjustedTotals.protein,
+          carbs: chipotleAdjustedTotals.carbs,
+          fat: chipotleAdjustedTotals.fat,
+        },
+        buildConfiguration: nextBuildConfiguration,
+      };
+
+      handleClose();
+      window.setTimeout(() => {
+        if (editingCartItem) {
+          updateItem(editingCartItem.id, payload);
+        } else {
+          addItem({
+            id: crypto.randomUUID(),
+            restaurantId,
+            itemId: item.id ?? item.name,
+            ...payload,
+          });
+        }
+      }, 0);
+      return;
+    }
+
     const comboCustomizations =
       isComboEligibleCategory && comboType === "combo-meal"
         ? [
@@ -652,10 +851,10 @@ export default function ItemRouteModal({
             ) : null}
             <MacroTotalsGrid
               macros={{
-                calories: Math.round(nutrition.calories ?? 0),
-                protein: Math.round(nutrition.protein ?? 0),
-                carbs: Math.round(nutrition.carbs ?? 0),
-                fat: Math.round(nutrition.totalFat ?? 0),
+                calories: Math.round(isChipotlePrebuiltBuilderItem ? chipotleAdjustedTotals.calories : (nutrition.calories ?? 0)),
+                protein: Math.round(isChipotlePrebuiltBuilderItem ? chipotleAdjustedTotals.protein : (nutrition.protein ?? 0)),
+                carbs: Math.round(isChipotlePrebuiltBuilderItem ? chipotleAdjustedTotals.carbs : (nutrition.carbs ?? 0)),
+                fat: Math.round(isChipotlePrebuiltBuilderItem ? chipotleAdjustedTotals.fat : (nutrition.totalFat ?? 0)),
               }}
               size="panel"
               className="w-full max-w-[560px] gap-6 sm:gap-10"
@@ -726,6 +925,130 @@ export default function ItemRouteModal({
           </div>
 
           <div className="w-full">
+          {isChipotlePrebuiltBuilderItem ? (
+            <div className="grid gap-7">
+              <div className="w-full rounded-3xl border border-black/10 bg-[#e0e0e0] p-4">
+                <MenuSections
+                  restaurantId={restaurantId}
+                  items={chipotleIngredientMenuItems}
+                  sort="default"
+                  groupByCategory
+                  categoryMode="ingredients"
+                  isBuildYourOwn
+                  selectedIngredientIds={new Set(Object.keys(selectedChipotleIngredientItems))}
+                  onIngredientSelectionChange={(nextItem, selected) =>
+                    setSelectedChipotleIngredientItems((prev) => {
+                      const ingredientId = nextItem.id ?? nextItem.name;
+                      if (!selected) {
+                        const next = { ...prev };
+                        delete next[ingredientId];
+                        return next;
+                      }
+                      return { ...prev, [ingredientId]: { item: nextItem, quantity: 1 } };
+                    })
+                  }
+                  ingredientPortionBadgeById={chipotleIngredientPortionLabelById}
+                  ingredientPortionModeOptionsById={Object.fromEntries(
+                    chipotleIngredientMenuItems
+                      .filter((menuIngredientItem) => {
+                        const category = normalizeIngredientCategory(
+                          resolvePrimaryCategory(menuIngredientItem.categories)
+                        );
+                        return category === "proteins" || category === "rice" || category === "beans";
+                      })
+                      .map((menuIngredientItem) => {
+                        const ingredientId = menuIngredientItem.id ?? menuIngredientItem.name;
+                        const category = normalizeIngredientCategory(
+                          resolvePrimaryCategory(menuIngredientItem.categories)
+                        );
+                        return [
+                          ingredientId,
+                          category === "proteins"
+                            ? [
+                                { id: "normal", label: "Normal" },
+                                { id: "double", label: "Double" },
+                              ]
+                            : [
+                                { id: "light", label: "Light" },
+                                { id: "normal", label: "Normal" },
+                                { id: "extra", label: "Extra" },
+                              ],
+                        ];
+                      })
+                  )}
+                  selectedIngredientPortionModeIdById={Object.fromEntries(
+                    chipotleIngredientMenuItems.map((menuIngredientItem) => {
+                      const ingredientId = menuIngredientItem.id ?? menuIngredientItem.name;
+                      const category = normalizeIngredientCategory(
+                        resolvePrimaryCategory(menuIngredientItem.categories)
+                      );
+                      const modeId =
+                        category === "proteins"
+                          ? chipotleProteinPortionMode
+                          : chipotleSplitPortionModeById[ingredientId] ?? "normal";
+                      return [ingredientId, modeId];
+                    })
+                  )}
+                  onIngredientPortionModeChange={(menuIngredientItem, modeId) => {
+                    const ingredientId = menuIngredientItem.id ?? menuIngredientItem.name;
+                    const category = normalizeIngredientCategory(
+                      resolvePrimaryCategory(menuIngredientItem.categories)
+                    );
+                    if (category === "proteins" && (modeId === "normal" || modeId === "double")) {
+                      setChipotleProteinPortionMode(modeId);
+                    } else if (
+                      (category === "rice" || category === "beans") &&
+                      (modeId === "light" || modeId === "normal" || modeId === "extra")
+                    ) {
+                      setChipotleSplitPortionModeById((prev) => ({ ...prev, [ingredientId]: modeId }));
+                    }
+                  }}
+                />
+              </div>
+
+              <div className="w-full rounded-3xl border border-black/10 bg-[#e0e0e0] p-4">
+                <BuildSummaryDrawer
+                  adjustedNutritionLabelTotals={{
+                    calories: chipotleAdjustedTotals.calories,
+                    totalFat: chipotleAdjustedTotals.fat,
+                    satFat: chipotleAdjustedTotals.satFat,
+                    transFat: chipotleAdjustedTotals.transFat,
+                    cholesterol: chipotleAdjustedTotals.cholesterol,
+                    sodium: chipotleAdjustedTotals.sodium,
+                    carbs: chipotleAdjustedTotals.carbs,
+                    fiber: chipotleAdjustedTotals.fiber,
+                    sugars: chipotleAdjustedTotals.sugars,
+                    protein: chipotleAdjustedTotals.protein,
+                  }}
+                  selectedBuildName={item.name}
+                  selectedIngredientCount={Object.values(selectedChipotleIngredientItems).reduce((sum, entry) => sum + entry.quantity, 0)}
+                  groupedSelectedIngredientEntries={chipotleGroupedSelectedIngredientEntries}
+                  ingredientPortionLabelById={chipotleIngredientPortionLabelById}
+                  lockedIngredientIds={new Set<string>()}
+                  restaurantLogo={item.image ?? ""}
+                  onResetOrder={() => {}}
+                  onSaveOrder={() => {}}
+                  onAdjustIngredientQuantity={(ingredientId, delta) =>
+                    setSelectedChipotleIngredientItems((prev) => {
+                      const selectedIngredient = prev[ingredientId];
+                      if (!selectedIngredient) return prev;
+                      const nextQuantity = selectedIngredient.quantity + delta;
+                      if (nextQuantity <= 0) {
+                        const next = { ...prev };
+                        delete next[ingredientId];
+                        return next;
+                      }
+                      return {
+                        ...prev,
+                        [ingredientId]: { ...selectedIngredient, quantity: nextQuantity },
+                      };
+                    })
+                  }
+                  hideActionButtons
+                />
+              </div>
+            </div>
+          ) : (
           <ItemDetailsPanel
             item={item}
             nutrition={nutrition}
@@ -893,6 +1216,7 @@ export default function ItemRouteModal({
                 : undefined
             }
           />
+          )}
           </div>
         </div>
         </div>
@@ -900,10 +1224,10 @@ export default function ItemRouteModal({
         <div className="sticky bottom-0 -mx-6 z-10 flex h-fit flex-wrap items-center justify-between gap-3 border-t border-black/10 bg-white p-4 shadow-[0_-4px_10px_rgba(0,0,0,0.08)]">
           <MacroTotalsGrid
             macros={{
-              calories: Math.round(nutrition.calories ?? 0),
-              protein: Math.round(nutrition.protein ?? 0),
-              carbs: Math.round(nutrition.carbs ?? 0),
-              fat: Math.round(nutrition.totalFat ?? 0),
+              calories: Math.round(isChipotlePrebuiltBuilderItem ? chipotleAdjustedTotals.calories : (nutrition.calories ?? 0)),
+              protein: Math.round(isChipotlePrebuiltBuilderItem ? chipotleAdjustedTotals.protein : (nutrition.protein ?? 0)),
+              carbs: Math.round(isChipotlePrebuiltBuilderItem ? chipotleAdjustedTotals.carbs : (nutrition.carbs ?? 0)),
+              fat: Math.round(isChipotlePrebuiltBuilderItem ? chipotleAdjustedTotals.fat : (nutrition.totalFat ?? 0)),
             }}
             size="panel"
             className="gap-3 sm:gap-6"
@@ -934,7 +1258,7 @@ export default function ItemRouteModal({
               <button
                 type="button"
                 className="cursor-pointer rounded-xl border border-black/20 bg-white px-6 py-2.5 text-base font-bold text-black/80"
-                onClick={onClose}
+                onClick={handleClose}
               >
                 Cancel
               </button>
