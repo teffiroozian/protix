@@ -121,9 +121,12 @@ export default function ItemRouteModal({
     );
   }, [editCartItemId, item.id, item.name, items, restaurantId]);
   const isCustomizeMode = Boolean(editingCartItem);
-  const isChipotlePrebuiltBuilderItem = isChipotleHighProteinMenuItem(item, restaurantId);
+  const isChipotlePrebuiltBuilderItem =
+    isChipotleHighProteinMenuItem(item, restaurantId) &&
+    item.categories.some((category) => category.toLowerCase() !== "protein cups") &&
+    (item.ingredients?.length ?? 0) > 0;
   const canCustomizeViaBuildPage =
-    isChipotleHighProteinMenuItem(item, restaurantId) && Boolean(editingCartItem);
+    isChipotlePrebuiltBuilderItem && Boolean(editingCartItem);
   const chipotleBuildConfiguration = useMemo(
     () =>
       (editingCartItem?.buildConfiguration as
