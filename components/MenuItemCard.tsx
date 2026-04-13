@@ -608,6 +608,31 @@ export default function MenuItemCard({
   }, [ingredientItems, item, restaurantId]);
   const isCartPage = pathname === "/cart";
   const useCartQuickEditPanel = isCartMode && isCartPage;
+  const showBuildIngredientListInQuickPanel = useCartQuickEditPanel && flattenIngredientListInDetails;
+
+  const quickPanelSelectedIngredients = useMemo(() => {
+    if (!showBuildIngredientListInQuickPanel) return [] as Array<{
+      id: string;
+      label: string;
+      icon?: string;
+      quantity: number;
+      calories?: number;
+    }>;
+
+    return resolvedIngredients
+      .filter((ingredient) => !ingredient.isNoneOption)
+      .map((ingredient) => {
+        const quantity = ingredientCounts[ingredient.id] ?? ingredient.defaultCount;
+        return {
+          id: ingredient.id,
+          label: ingredient.label,
+          icon: typeof ingredient.icon === "string" ? ingredient.icon : undefined,
+          quantity,
+          calories: ingredient.calories,
+        };
+      })
+      .filter((ingredient) => ingredient.quantity > 0);
+  }, [ingredientCounts, resolvedIngredients, showBuildIngredientListInQuickPanel]);
 
   const selectedCommonChanges = useMemo(
     () => applicableCommonChanges.filter((change) => selectedCommonChangeIds.includes(change.id)),
@@ -1221,6 +1246,40 @@ export default function MenuItemCard({
                       <QuickMacro value={displayFat} label="Fat" tone="fat" />
                     </div>
                   </div>
+
+                  {quickPanelSelectedIngredients.length > 0 ? (
+                    <div className="mt-2 rounded-xl bg-[#efefef] p-2">
+                      <ul className="grid gap-2">
+                        {quickPanelSelectedIngredients.map((ingredient) => (
+                          <li
+                            key={`quick-panel-ingredient-${ingredient.id}`}
+                            className="flex items-center gap-2 rounded-xl border border-black/10 bg-white px-3 py-2"
+                          >
+                            <div className="h-8 w-8 shrink-0 overflow-hidden rounded-md border border-black/10 bg-neutral-100">
+                              {ingredient.icon ? (
+                                <img
+                                  src={ingredient.icon}
+                                  alt={ingredient.label}
+                                  className="h-full w-full object-cover"
+                                />
+                              ) : null}
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <p className="truncate text-sm font-medium text-slate-900">
+                                {ingredient.label}
+                                {ingredient.quantity > 1 ? ` (x${ingredient.quantity})` : ""}
+                              </p>
+                            </div>
+                            <p className="text-xs font-semibold text-slate-500">
+                              {ingredient.calories !== undefined
+                                ? `${Math.round(ingredient.calories * ingredient.quantity)} Cal`
+                                : "— Cal"}
+                            </p>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : null}
                 </section>
 
                 {comboType === "combo-meal" && selectedComboSide ? (
