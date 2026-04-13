@@ -110,6 +110,21 @@ export default function ItemRouteModal({
   }, [editCartItemId, item.id, item.name, items, restaurantId]);
   const isCustomizeMode = Boolean(editingCartItem);
   const canCustomizeViaBuildPage = isChipotleHighProteinMenuItem(item, restaurantId);
+  const shouldRedirectToBuildCustomization = canCustomizeViaBuildPage;
+  useEffect(() => {
+    if (!shouldRedirectToBuildCustomization) return;
+
+    const nextSearch = new URLSearchParams({
+      view: "ingredients",
+      entree: "high-protein-menu",
+    });
+    if (editCartItemId) {
+      nextSearch.set("editCartItem", editCartItemId);
+    }
+
+    router.replace(`/restaurant/${restaurantId}?${nextSearch.toString()}`, { scroll: false });
+  }, [editCartItemId, restaurantId, router, shouldRedirectToBuildCustomization]);
+
   const parsedInitialComboCustomization = useMemo(
     () => parseComboCustomization(editingCartItem?.customizations),
     [editingCartItem?.customizations]
@@ -635,6 +650,10 @@ export default function ItemRouteModal({
   const handleIncrementQuantity = () => {
     setQuantity((prev) => prev + 1);
   };
+
+  if (shouldRedirectToBuildCustomization) {
+    return null;
+  }
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center" role="dialog" aria-modal="true" aria-label={item.name}>
