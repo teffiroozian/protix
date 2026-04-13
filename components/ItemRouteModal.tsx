@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { CupSoda, Droplets, Salad, SquareStack, Utensils } from "lucide-react";
 import ItemDetailsPanel, {

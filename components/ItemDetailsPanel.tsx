@@ -586,10 +586,16 @@ export default function ItemDetailsPanel({
                 const shouldShowSingleSelectNavigator =
                   selectedIngredientTab.label === INCLUDED_INGREDIENT_TAB && Boolean(linkedSingleSelectTab);
                 const isSingleSelectTab = selectedIngredientTab.selectionMode === "single";
+                const effectiveMaxQuantity =
+                  typeof ingredient.maxQuantity === "number"
+                    ? ingredient.maxQuantity
+                    : useCompactIngredientCards
+                      ? 1
+                      : undefined;
                 const canToggleIngredientFromCard =
                   !isLockedIngredient(ingredient.id) &&
                   !shouldShowSingleSelectNavigator &&
-                  (typeof ingredient.maxQuantity === "number" || useCompactIngredientCards);
+                  typeof effectiveMaxQuantity === "number";
                 const cardClasses = `box-border flex h-full w-full flex-row items-center ${
                   useCompactIngredientCards ? "gap-2 rounded-xl px-2.5 py-2.5" : "gap-3 rounded-[10px] px-3 py-2"
                 } border border-[rgba(0,0,0,0.15)] bg-[#f9f9f9] ${
@@ -704,7 +710,7 @@ export default function ItemDetailsPanel({
                           >
                             <ChevronRight size={18} />
                           </button>
-                        ) : typeof ingredient.maxQuantity === "number" || useCompactIngredientCards ? (
+                        ) : typeof effectiveMaxQuantity === "number" ? (
                           <div
                             className="ml-auto inline-flex items-center gap-[6px]"
                             onClick={(event) => event.stopPropagation()}
@@ -727,7 +733,7 @@ export default function ItemDetailsPanel({
                                   className="inline-flex h-7 w-7 cursor-pointer items-center justify-center rounded-md border border-[rgba(0,0,0,0.35)] bg-white text-[18px] font-bold leading-none disabled:cursor-not-allowed disabled:opacity-40"
                                   aria-label={`Add one more ${ingredient.label}`}
                                   onClick={() => onIncrementIngredient?.(ingredient.id)}
-                                  disabled={ingredientCount >= ingredient.maxQuantity}
+                                  disabled={ingredientCount >= effectiveMaxQuantity}
                                 >
                                   +
                                 </button>
