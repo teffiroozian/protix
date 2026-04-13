@@ -109,8 +109,7 @@ export default function ItemRouteModal({
     );
   }, [editCartItemId, item.id, item.name, items, restaurantId]);
   const isCustomizeMode = Boolean(editingCartItem);
-  const canCustomizeViaBuildPage =
-    isChipotleHighProteinMenuItem(item, restaurantId) && Boolean(editingCartItem);
+  const canCustomizeViaBuildPage = isChipotleHighProteinMenuItem(item, restaurantId);
   const parsedInitialComboCustomization = useMemo(
     () => parseComboCustomization(editingCartItem?.customizations),
     [editingCartItem?.customizations]
@@ -885,10 +884,14 @@ export default function ItemRouteModal({
             onCustomizeIngredients={
               canCustomizeViaBuildPage
                 ? () => {
-                    router.push(
-                      `/restaurant/${restaurantId}?view=ingredients&editCartItem=${editingCartItem!.id}`,
-                      { scroll: false }
-                    );
+                    const search = new URLSearchParams({
+                      view: "ingredients",
+                      entree: "high-protein-menu",
+                    });
+                    if (editingCartItem?.id) {
+                      search.set("editCartItem", editingCartItem.id);
+                    }
+                    router.push(`/restaurant/${restaurantId}?${search.toString()}`, { scroll: false });
                   }
                 : undefined
             }
