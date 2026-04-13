@@ -561,7 +561,7 @@ export default function ItemRouteModal({
 
   const handleClose = () => {
     if (returnToCart) {
-      router.replace("/cart", { scroll: false });
+      window.location.assign("/cart");
       return;
     }
 

@@ -1573,7 +1573,7 @@ export default function RestaurantView({
     pendingBuildCustomizationResetRef.current = { type: "empty" };
 
     if (returnToCart) {
-      router.replace("/cart", { scroll: false });
+      window.location.assign("/cart");
       return;
     }
 
