@@ -324,6 +324,7 @@ export default function RestaurantView({
     [selectedEntree, selectedKidsMeal, selectedTacoShell, chipotleBuilderConfig]
   );
   const editCartItemId = searchParams.get("editCartItem");
+  const returnToCart = searchParams.get("returnTo") === "cart";
   const editingCartItem = useMemo(() => {
     if (!isChipotleBuildPage || !editCartItemId) {
       return null;
@@ -1571,11 +1572,16 @@ export default function RestaurantView({
     editingBuildBaselineConfigRef.current = null;
     pendingBuildCustomizationResetRef.current = { type: "empty" };
 
+    if (returnToCart) {
+      router.replace("/cart", { scroll: false });
+      return;
+    }
+
     const nextParams = new URLSearchParams(searchParams.toString());
     nextParams.delete("editCartItem");
     const nextQuery = nextParams.toString();
     router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname, { scroll: false });
-  }, [pathname, router, searchParams]);
+  }, [pathname, returnToCart, router, searchParams]);
 
   useLayoutEffect(() => {
     if (!isChipotleBuildPage || !isEditingBuild) {

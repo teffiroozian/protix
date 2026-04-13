@@ -86,6 +86,7 @@ export default function ItemRouteModal({
   const router = useRouter();
   const searchParams = useSearchParams();
   const editCartItemId = searchParams.get("editCartItem");
+  const returnToCart = searchParams.get("returnTo") === "cart";
   const variants = item.variants?.length ? item.variants : null;
   const defaultVariantId = useMemo(() => {
     if (!variants) return "";
@@ -559,6 +560,11 @@ export default function ItemRouteModal({
   };
 
   const handleClose = () => {
+    if (returnToCart) {
+      router.replace("/cart", { scroll: false });
+      return;
+    }
+
     if (window.history.length > 1) {
       router.back();
       return;
@@ -886,7 +892,7 @@ export default function ItemRouteModal({
               canCustomizeViaBuildPage
                 ? () => {
                     router.push(
-                      `/restaurant/${restaurantId}?view=ingredients&editCartItem=${editingCartItem!.id}`,
+                      `/restaurant/${restaurantId}?view=ingredients&editCartItem=${editingCartItem!.id}&returnTo=cart`,
                       { scroll: false }
                     );
                   }
