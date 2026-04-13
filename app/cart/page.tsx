@@ -223,7 +223,7 @@ export default function CartPage() {
               const ingredientItemsForRestaurant = ingredientLookupByRestaurant[cartItem.restaurantId];
               const sourceItem =
                 menuLookupByRestaurant[cartItem.restaurantId]?.find((item) => (item.id ?? item.name) === cartItem.itemId) ?? null;
-              const modifyHref = getCartItemModifyHref(cartItem, sourceItem);
+              const modifyHref = getCartItemModifyHref(cartItem, sourceItem, { editOrigin: "cart" });
 
               const initialIngredientCustomizations = getBuildIngredientCountCustomizations(
                 cartItem,
