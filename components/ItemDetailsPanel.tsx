@@ -493,6 +493,48 @@ export default function ItemDetailsPanel({
     (displayMode === "full" && (commonChanges?.length ?? 0) > 0);
   const shouldShowInfoSection = displayMode === "full";
   const useCompactIngredientCards = item.entreeGroup === "high-protein-menu";
+  const groupedCompactIngredients = (() => {
+    if (!useCompactIngredientCards) return [];
+
+    const categoryPriority: Record<string, number> = {
+      proteins: 0,
+      rice: 1,
+      beans: 2,
+      toppings: 3,
+      salsa: 4,
+    };
+    const formatCategoryLabel = (value: string) =>
+      value
+        .split(/[\s-]+/)
+        .filter(Boolean)
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(" ");
+
+    const groups = new Map<string, { label: string; order: number; names: string[] }>();
+    displayIngredients.forEach((ingredient) => {
+      const ingredientCount = selectedIngredientCounts?.[ingredient.id] ?? ingredient.defaultCount;
+      if (ingredientCount <= 0) return;
+
+      const rawCategory =
+        ingredient.ingredientItem?.categories?.[0] ??
+        ingredient.ingredientItem?.category ??
+        "ingredients";
+      const normalizedCategory = rawCategory.trim().toLowerCase();
+      const existing = groups.get(normalizedCategory);
+      if (existing) {
+        existing.names.push(ingredient.label);
+        return;
+      }
+
+      groups.set(normalizedCategory, {
+        label: formatCategoryLabel(rawCategory),
+        order: categoryPriority[normalizedCategory] ?? 99,
+        names: [ingredient.label],
+      });
+    });
+
+    return [...groups.values()].sort((left, right) => left.order - right.order);
+  })();
 
   return (
     <div className="grid gap-16">
@@ -563,6 +605,20 @@ export default function ItemDetailsPanel({
             </div>
           ) : null}
           {displayIngredients.length > 0 ? (
+            useCompactIngredientCards ? (
+              <div className="space-y-4">
+                {groupedCompactIngredients.map((group) => (
+                  <div key={group.label}>
+                    <h3 className="text-lg font-bold">{group.label}</h3>
+                    <ul className="mt-1 list-disc pl-5 text-base font-semibold text-black/80">
+                      {group.names.map((name) => (
+                        <li key={`${group.label}-${name}`}>{name}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            ) : (
             <ul
               className={`grid list-none items-stretch gap-[10px] pl-0 ${
                 useCompactIngredientCards ? "grid-cols-1" : "grid-cols-2"
@@ -756,6 +812,7 @@ export default function ItemDetailsPanel({
                 );
               })}
             </ul>
+            )
           ) : (
             <div className="rounded-[10px] border border-dashed border-black/12 bg-[#f9f9f9] px-4 py-6 text-sm font-medium text-black/55">
               No ingredients available in this tab.
