@@ -163,6 +163,16 @@ function isSplitPortionIngredientItem(item: Pick<MenuItem, "categories">) {
   return isRiceIngredientItem(item) || isBeanIngredientItem(item);
 }
 
+function normalizeIngredientLookupKey(value: string) {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/\s*\((?:\d+\/\d+|\d+(?:\.\d+)?)x\)\s*$/g, "")
+    .replace(/:(light|extra|normal|regular)\s*$/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 export default function RestaurantView({
   restaurantId,
   restaurantName,
@@ -548,19 +558,13 @@ export default function RestaurantView({
     [ingredientMenuItems]
   );
   const ingredientItemsByLookupKey = useMemo(() => {
-    const normalizeLookupKey = (value: string) =>
-      value
-        .trim()
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-+|-+$/g, "");
     const lookup = new Map<string, MenuItem & { id: string }>();
 
     ingredientMenuItems
       .filter((ingredient): ingredient is MenuItem & { id: string } => Boolean(ingredient.id))
       .forEach((ingredient) => {
-        lookup.set(normalizeLookupKey(ingredient.id), ingredient);
-        lookup.set(normalizeLookupKey(ingredient.name), ingredient);
+        lookup.set(normalizeIngredientLookupKey(ingredient.id), ingredient);
+        lookup.set(normalizeIngredientLookupKey(ingredient.name), ingredient);
       });
 
     return lookup;
@@ -1490,18 +1494,12 @@ export default function RestaurantView({
   }, [isChipotleBuildPage, pathname, router, searchParams, selectedEntree]);
 
   const buildSelectedItemsFromConfiguration = useCallback((configuration: BuildConfigurationSnapshot) => {
-    const normalizeLookupKey = (value: string) =>
-      value
-        .trim()
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-+|-+$/g, "");
     const next: Record<string, { item: MenuItem; quantity: number }> = {};
 
     Object.entries(configuration.selectedIngredientItems).forEach(([rawIngredientId, { quantity }]) => {
       const ingredient =
         ingredientItemsById.get(rawIngredientId) ??
-        ingredientItemsByLookupKey.get(normalizeLookupKey(rawIngredientId));
+        ingredientItemsByLookupKey.get(normalizeIngredientLookupKey(rawIngredientId));
       if (!ingredient || quantity <= 0) {
         return;
       }
@@ -1686,15 +1684,9 @@ export default function RestaurantView({
     editingBuildBaselineConfigRef.current = configuration;
     hydratedEditItemIdRef.current = editingCartItem.id;
     const hydrateTimer = window.setTimeout(() => {
-      const normalizeLookupKey = (value: string) =>
-        value
-          .trim()
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, "-")
-          .replace(/^-+|-+$/g, "");
       const resolveIngredientId = (rawIngredientId: string) =>
         ingredientItemsById.get(rawIngredientId)?.id ??
-        ingredientItemsByLookupKey.get(normalizeLookupKey(rawIngredientId))?.id ??
+        ingredientItemsByLookupKey.get(normalizeIngredientLookupKey(rawIngredientId))?.id ??
         rawIngredientId;
       const normalizedSplitPortionModeById = Object.fromEntries(
         Object.entries(configuration.splitPortionModeById).map(([rawIngredientId, splitMode]) => [
