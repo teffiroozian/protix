@@ -22,8 +22,8 @@ import {
   getBuildIngredientCountCustomizations,
   getIncludedIngredientIdsForChipotleBuild,
 } from "@/lib/cart/buildItemAdapters";
+import { getCartItemModifyHref } from "@/lib/cart/editNavigation";
 import { parseOptionLabelCounts } from "@/lib/cartOptionLabels";
-import { toItemSlug } from "@/lib/restaurants";
 
 function isIngredientCustomizationLabel(label: string) {
   return /:\s*(Removed|(\d+)x|Remove|Extra)\s*$/i.test(label);
@@ -223,13 +223,7 @@ export default function CartPage() {
               const ingredientItemsForRestaurant = ingredientLookupByRestaurant[cartItem.restaurantId];
               const sourceItem =
                 menuLookupByRestaurant[cartItem.restaurantId]?.find((item) => (item.id ?? item.name) === cartItem.itemId) ?? null;
-              const itemEditHref = sourceItem
-                ? `/restaurant/${cartItem.restaurantId}/items/${toItemSlug(sourceItem)}?editCartItem=${cartItem.id}&editOrigin=cart`
-                : undefined;
-              const buildEditHref =
-                cartItem.buildConfiguration
-                  ? `/restaurant/${cartItem.restaurantId}?view=ingredients&editCartItem=${cartItem.id}&editOrigin=cart`
-                  : undefined;
+              const modifyHref = getCartItemModifyHref(cartItem, sourceItem);
 
               const initialIngredientCustomizations = getBuildIngredientCountCustomizations(
                 cartItem,
@@ -283,9 +277,9 @@ export default function CartPage() {
                     });
                   }}
                   onCartModify={
-                    (buildEditHref ?? itemEditHref)
+                    modifyHref
                       ? () => {
-                          router.push(buildEditHref ?? itemEditHref!, { scroll: false });
+                          router.push(modifyHref, { scroll: false });
                         }
                       : undefined
                   }

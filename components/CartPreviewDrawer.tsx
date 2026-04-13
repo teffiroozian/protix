@@ -9,8 +9,8 @@ import restaurants from "@/app/data/index.json";
 import { useRestaurantUi } from "@/components/RestaurantUiContext";
 import MacroTotalsGrid from "@/components/MacroTotalsGrid";
 import CartItemPreviewRow from "@/components/CartItemPreviewRow";
+import { getCartItemModifyHref } from "@/lib/cart/editNavigation";
 import { menuLookupByRestaurant } from "@/lib/cart/menuRegistry";
-import { toItemSlug } from "@/lib/restaurants";
 import { useCart } from "@/stores/cartStore";
 
 const getCustomizationDisplayList = (item: {
@@ -137,9 +137,7 @@ export default function CartPreviewDrawer() {
                     menuLookupByRestaurant[item.restaurantId]?.find(
                       (menuItem) => (menuItem.id ?? menuItem.name) === item.itemId
                     ) ?? null;
-                  const itemEditHref = sourceItem
-                    ? `/restaurant/${item.restaurantId}/items/${toItemSlug(sourceItem)}?editCartItem=${item.id}`
-                    : null;
+                  const modifyHref = getCartItemModifyHref(item, sourceItem);
                   return (
                     <li
                       key={item.id}
@@ -155,26 +153,24 @@ export default function CartPreviewDrawer() {
                         customizationsLineClamp={1}
                         actions={
                           <>
-                            {item.buildConfiguration ? (
+                            {item.buildConfiguration && modifyHref ? (
                               <button
                                 type="button"
                                 onClick={() => {
                                   closeCart();
-                                  router.push(
-                                    `/restaurant/${item.restaurantId}?view=ingredients&editCartItem=${item.id}`
-                                  );
+                                  router.push(modifyHref);
                                 }}
                                 className="cursor-pointer inline-flex size-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 transition hover:bg-slate-100"
                                 aria-label={`Edit ${item.name}`}
                               >
                                 <Pencil className="size-4" />
                               </button>
-                            ) : itemEditHref ? (
+                            ) : modifyHref ? (
                               <button
                                 type="button"
                                 onClick={() => {
                                   closeCart();
-                                  router.push(itemEditHref, { scroll: false });
+                                  router.push(modifyHref, { scroll: false });
                                 }}
                                 className="cursor-pointer inline-flex size-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 transition hover:bg-slate-100"
                                 aria-label={`Customize ${item.name}`}
