@@ -1524,6 +1524,30 @@ export default function RestaurantView({
       splitModesById: configuration.splitPortionModeById,
     });
   }, [applyIngredientPortionNutrition, ingredientItemsById, ingredientItemsByLookupKey]);
+  const deriveSelectedIngredientsFromCustomizations = useCallback(
+    (customizations?: string[]) => {
+      const nextSelections: BuildConfigurationSnapshot["selectedIngredientItems"] = {};
+      (customizations ?? []).forEach((customization) => {
+        const normalizedLabel = customization
+          .replace(/\s*\((?:\d+\/\d+|\d+(?:\.\d+)?)x\)\s*$/i, "")
+          .replace(/:(light|extra|normal|regular)\s*$/i, "")
+          .trim();
+        if (!normalizedLabel) return;
+
+        const lookupKey = normalizeIngredientLookupKey(normalizedLabel);
+        const ingredient =
+          ingredientItemsByLookupKey.get(lookupKey) ??
+          ingredientItemsById.get(normalizedLabel) ??
+          ingredientItemsById.get(lookupKey);
+        if (!ingredient) return;
+
+        nextSelections[ingredient.id] = { quantity: 1 };
+      });
+
+      return nextSelections;
+    },
+    [ingredientItemsById, ingredientItemsByLookupKey]
+  );
 
   const handleAddBuildToCart = () => {
     if (selectedIngredientCount === 0) return;
@@ -1681,7 +1705,15 @@ export default function RestaurantView({
     }
 
     const configuration = editingCartItem.buildConfiguration;
-    editingBuildBaselineConfigRef.current = configuration;
+    const hasStoredSelections = Object.keys(configuration.selectedIngredientItems ?? {}).length > 0;
+    const fallbackSelectedIngredientItems = hasStoredSelections
+      ? configuration.selectedIngredientItems
+      : deriveSelectedIngredientsFromCustomizations(editingCartItem.customizations);
+    const hydrationConfiguration: BuildConfigurationSnapshot = {
+      ...configuration,
+      selectedIngredientItems: fallbackSelectedIngredientItems,
+    };
+    editingBuildBaselineConfigRef.current = hydrationConfiguration;
     hydratedEditItemIdRef.current = editingCartItem.id;
     const hydrateTimer = window.setTimeout(() => {
       const resolveIngredientId = (rawIngredientId: string) =>
@@ -1689,32 +1721,38 @@ export default function RestaurantView({
         ingredientItemsByLookupKey.get(normalizeIngredientLookupKey(rawIngredientId))?.id ??
         rawIngredientId;
       const normalizedSplitPortionModeById = Object.fromEntries(
-        Object.entries(configuration.splitPortionModeById).map(([rawIngredientId, splitMode]) => [
+        Object.entries(hydrationConfiguration.splitPortionModeById).map(([rawIngredientId, splitMode]) => [
           resolveIngredientId(rawIngredientId),
           splitMode,
         ])
       );
       const normalizedSelectedIngredientVariantIds = Object.fromEntries(
-        Object.entries(configuration.selectedIngredientVariantIds).map(([rawIngredientId, variantId]) => [
+        Object.entries(hydrationConfiguration.selectedIngredientVariantIds).map(([rawIngredientId, variantId]) => [
           resolveIngredientId(rawIngredientId),
           variantId,
         ])
       );
 
-      setSelectedTacoShell(configuration.selectedTacoShell);
-      setSelectedTacoCount(configuration.selectedTacoCount);
-      setSelectedKidsMeal(configuration.selectedKidsMeal);
-      setSelectedEntree((configuration.selectedEntree as EntreeSelection) ?? null);
-      setProteinPortionMode(configuration.proteinPortionMode);
+      setSelectedTacoShell(hydrationConfiguration.selectedTacoShell);
+      setSelectedTacoCount(hydrationConfiguration.selectedTacoCount);
+      setSelectedKidsMeal(hydrationConfiguration.selectedKidsMeal);
+      setSelectedEntree((hydrationConfiguration.selectedEntree as EntreeSelection) ?? null);
+      setProteinPortionMode(hydrationConfiguration.proteinPortionMode);
       setSplitPortionModeById(normalizedSplitPortionModeById);
       setSelectedIngredientVariantIds(normalizedSelectedIngredientVariantIds);
-      setSelectedIngredientItems(() => buildSelectedItemsFromConfiguration(configuration));
+      setSelectedIngredientItems(() => buildSelectedItemsFromConfiguration(hydrationConfiguration));
     }, 0);
 
     return () => {
       window.clearTimeout(hydrateTimer);
     };
-  }, [buildSelectedItemsFromConfiguration, editingCartItem, ingredientItemsById, ingredientItemsByLookupKey]);
+  }, [
+    buildSelectedItemsFromConfiguration,
+    deriveSelectedIngredientsFromCustomizations,
+    editingCartItem,
+    ingredientItemsById,
+    ingredientItemsByLookupKey,
+  ]);
 
   const adjustIngredientQuantity = (ingredientId: string, delta: 1 | -1) => {
     if (lockedIngredientIds.has(ingredientId)) return;
