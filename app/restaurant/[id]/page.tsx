@@ -1,5 +1,4 @@
 import Link from "next/link";
-import restaurants from "../../data/index.json";
 import RestaurantView from "@/components/RestaurantView";
 import RecentRestaurantTracker from "@/components/RecentRestaurantTracker";
 import ScrollToTopOnMount from "@/components/ScrollToTopOnMount";
@@ -15,10 +14,9 @@ export default async function RestaurantPage({
 }) {
   const { id } = await params;
 
-  const restaurant = restaurants.find((r) => r.id === id);
   const restaurantData = await getRestaurantData(id);
 
-  if (!restaurant || !restaurantData) {
+  if (!restaurantData) {
     return (
       <main style={{ maxWidth: 900, margin: "48px auto", padding: 16 }}>
         <Link href="/" style={{ textDecoration: "none", cursor: "pointer" }}>
@@ -33,14 +31,14 @@ export default async function RestaurantPage({
     <RestaurantSearchProvider>
       <RestaurantUiProvider>
         <div className="w-full pt-28 sm:pt-36">
-          <RecentRestaurantTracker restaurantId={restaurant.id} />
+          <RecentRestaurantTracker restaurantId={restaurantData.id} />
           <ScrollToTopOnMount />
 
           <main className="mx-auto w-full max-w-6xl px-4 pb-12 sm:px-6">
             <RestaurantView
-              restaurantId={restaurant.id}
-              restaurantName={restaurant.name}
-              restaurantLogo={restaurant.logo}
+              restaurantId={restaurantData.id}
+              restaurantName={restaurantData.name}
+              restaurantLogo={restaurantData.logo}
               isBuildYourOwn={restaurantData.isBuildYourOwn}
               items={restaurantData.items}
               ingredients={restaurantData.ingredients}

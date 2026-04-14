@@ -27,6 +27,40 @@ export type RestaurantData = {
   builderConfig?: RestaurantBuilderConfig;
 };
 
+const RESTAURANT_ID_ALIASES: Record<string, string> = {
+  "chick-fil-a": "chickfila",
+  chickfilaa: "chickfila",
+  chickfilet: "chickfila",
+  pandaexpress: "panda",
+  "panda-express": "panda",
+  habitburger: "habit",
+  "habit-burger": "habit",
+  "the-habit": "habit",
+  modpizza: "mod",
+  "mod-pizza": "mod",
+};
+
+function normalizeRestaurantId(value: string) {
+  return value.trim().toLowerCase();
+}
+
+function collapseRestaurantId(value: string) {
+  return normalizeRestaurantId(value).replace(/[^a-z0-9]/g, "");
+}
+
+export function resolveRestaurantId(id: string) {
+  const normalizedId = normalizeRestaurantId(id);
+  const collapsedId = collapseRestaurantId(id);
+  const directAlias = RESTAURANT_ID_ALIASES[normalizedId] ?? RESTAURANT_ID_ALIASES[collapsedId];
+  if (directAlias) return directAlias;
+
+  const directMatch = restaurants.find((entry) => entry.id === normalizedId);
+  if (directMatch) return directMatch.id;
+
+  const collapsedMatch = restaurants.find((entry) => collapseRestaurantId(entry.id) === collapsedId);
+  return collapsedMatch?.id ?? normalizedId;
+}
+
 export function toItemSlug(item: MenuItem) {
   const raw = item.id ?? item.name;
   return raw
@@ -37,7 +71,8 @@ export function toItemSlug(item: MenuItem) {
 }
 
 export async function getRestaurantData(id: string): Promise<RestaurantData | null> {
-  const restaurant = restaurants.find((entry) => entry.id === id);
+  const resolvedId = resolveRestaurantId(id);
+  const restaurant = restaurants.find((entry) => entry.id === resolvedId);
   if (!restaurant) return null;
 
   const menuModule = await import(`@/app/data/${restaurant.menuFile}`);
