@@ -235,7 +235,7 @@ export default function ControlsRow({
   return (
     <>
       <div id={wrapperId} className="grid gap-2">
-        <div className="flex min-w-0 flex-wrap items-center gap-2.5">
+        <div className="flex min-w-0 flex-wrap items-center justify-center gap-2.5">
           {hideViewSelector ? null : (
             <div ref={viewMenuRef} className="relative w-full shrink-0 sm:w-auto">
               <button
@@ -286,7 +286,7 @@ export default function ControlsRow({
             </div>
           )}
 
-          <div className="ml-auto flex w-full flex-wrap items-center gap-2.5 sm:w-auto sm:flex-nowrap">
+          <div className="flex w-full flex-wrap items-center justify-center gap-2.5 sm:w-auto sm:flex-nowrap">
             <div ref={sortMenuRef} className="relative w-full shrink-0 sm:w-auto">
               <button
                 type="button"
