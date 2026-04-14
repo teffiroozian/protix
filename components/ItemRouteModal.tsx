@@ -60,6 +60,7 @@ import {
   type SplitPortionMode,
 } from "@/lib/chipotleBuild";
 import { resolvePrimaryCategory } from "@/lib/ingredientTabs";
+import type { CartItem } from "@/stores/cartStore";
 
 const emptyAddon: AddonOption = {
   name: "None",
@@ -127,20 +128,27 @@ export default function ItemRouteModal({
     (item.ingredients?.length ?? 0) > 0;
   const canCustomizeViaBuildPage =
     isChipotlePrebuiltBuilderItem && Boolean(editingCartItem);
-  const chipotleBuildConfiguration = useMemo(
-    () =>
-      (editingCartItem?.buildConfiguration as
-        | {
-            selectedIngredientItems?: Record<string, { quantity: number }>;
-            selectedIngredientVariantIds?: Record<string, string>;
-            proteinPortionMode?: ProteinPortionMode;
-            splitPortionModeById?: Record<string, SplitPortionMode>;
-            selectedTacoShell?: "crispy" | "soft";
-            selectedTacoCount?: 1 | 3;
-          }
-        | undefined) ?? buildHighProteinBuildConfiguration(item, ingredients),
-    [editingCartItem?.buildConfiguration, ingredients, item]
-  );
+  const chipotleBuildConfiguration = useMemo<NonNullable<CartItem["buildConfiguration"]>>(() => {
+    if (editingCartItem?.buildConfiguration) {
+      return editingCartItem.buildConfiguration;
+    }
+
+    const highProteinConfiguration = buildHighProteinBuildConfiguration(item, ingredients);
+    if (highProteinConfiguration) {
+      return highProteinConfiguration;
+    }
+
+    return {
+      selectedEntree: null,
+      selectedIngredientItems: {},
+      selectedIngredientVariantIds: {},
+      proteinPortionMode: "normal",
+      splitPortionModeById: {},
+      selectedTacoShell: "crispy",
+      selectedTacoCount: 1,
+      selectedKidsMeal: "build-your-own",
+    };
+  }, [editingCartItem?.buildConfiguration, ingredients, item]);
   const parsedInitialComboCustomization = useMemo(
     () => parseComboCustomization(editingCartItem?.customizations),
     [editingCartItem?.customizations]
@@ -922,7 +930,7 @@ export default function ItemRouteModal({
 
   const handleSaveItem = () => {
     if (isChipotlePrebuiltBuilderItem) {
-      const nextBuildConfiguration = {
+      const nextBuildConfiguration: NonNullable<CartItem["buildConfiguration"]> = {
         ...chipotleBuildConfiguration,
         selectedIngredientItems: Object.fromEntries(
           Object.entries(selectedChipotleIngredientItems).map(([ingredientId, selectedIngredient]) => [
