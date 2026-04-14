@@ -58,7 +58,7 @@ export function FilterChips({
   withMargin?: boolean;
 }) {
   return (
-    <div className={`${withMargin ? "mt-2.5" : "mt-0"} flex w-full flex-wrap justify-end gap-2`}>
+    <div className={`${withMargin ? "mt-2.5" : "mt-0"} flex w-full flex-wrap justify-start gap-2 sm:justify-end`}>
       {filters.proteinMin ? (
         <button type="button" onClick={onClearProtein} className="cursor-pointer rounded-full border border-black/20 bg-black/5 px-2.5 py-1 text-xs font-semibold">
           Protein {filters.proteinMin}g+ ✕
@@ -181,10 +181,10 @@ export default function ControlsRow({
   };
 
   const filtersDialog = isFiltersOpen ? (
-    <div role="dialog" aria-modal="true" className="fixed inset-0 z-[200] flex items-center justify-center bg-black/35 p-4" onClick={() => setIsFiltersOpen(false)}>
-      <div className="w-full max-w-[520px] rounded-[20px] bg-white p-5 shadow-[0_16px_40px_rgba(0,0,0,0.2)]" onClick={(event) => event.stopPropagation()}>
+    <div role="dialog" aria-modal="true" className="fixed inset-0 z-[200] flex items-end justify-center bg-black/35 p-3 sm:items-center sm:p-4" onClick={() => setIsFiltersOpen(false)}>
+      <div className="flex max-h-[min(92vh,720px)] w-full max-w-[520px] flex-col overflow-hidden rounded-[20px] bg-white p-4 shadow-[0_16px_40px_rgba(0,0,0,0.2)] sm:p-5" onClick={(event) => event.stopPropagation()}>
         <h3 className="mb-4 text-xl font-bold">Filters</h3>
-        <div className="grid gap-4">
+        <div className="grid gap-4 overflow-y-auto pr-1">
           <div>
             <div className="mb-2 font-semibold">Protein minimum</div>
             <div className="flex flex-wrap gap-2">
@@ -220,7 +220,7 @@ export default function ControlsRow({
             </div>
           </div>
         </div>
-        <div className="mt-5 flex justify-end gap-3">
+        <div className="mt-5 flex flex-wrap justify-end gap-2.5 border-t border-black/10 pt-4">
           <button type="button" onClick={handleResetFilters} className="cursor-pointer rounded-full border border-black/20 bg-white px-4 py-2 font-semibold text-black/80">
             Reset
           </button>
@@ -235,9 +235,9 @@ export default function ControlsRow({
   return (
     <>
       <div id={wrapperId} className="grid gap-2">
-        <div className="flex min-w-0 items-center justify-between gap-2.5">
+        <div className="flex min-w-0 flex-wrap items-center gap-2.5">
           {hideViewSelector ? null : (
-            <div ref={viewMenuRef} className="relative shrink-0">
+            <div ref={viewMenuRef} className="relative w-full shrink-0 sm:w-auto">
               <button
                 type="button"
                 onClick={() => {
@@ -246,7 +246,7 @@ export default function ControlsRow({
                 }}
                 aria-haspopup="menu"
                 aria-expanded={isViewOpen}
-                className="cursor-pointer inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-black/20 bg-white px-[14px] py-[6px] font-semibold text-black/85"
+                className="cursor-pointer inline-flex w-full items-center justify-between gap-2 rounded-full border border-black/20 bg-white px-[14px] py-[8px] text-left font-semibold text-black/85 sm:w-auto sm:justify-start sm:whitespace-nowrap sm:py-[6px]"
               >
                 <currentViewOption.icon className="h-4 w-4" strokeWidth={2.2} />
                 {currentViewOption.label}
@@ -254,7 +254,7 @@ export default function ControlsRow({
               </button>
 
               {isViewOpen ? (
-                <div role="menu" className="absolute left-0 top-[calc(100%+8px)] z-20 w-[220px] rounded-[14px] border border-black/15 bg-white p-2 shadow-[0_12px_28px_rgba(0,0,0,0.12)]">
+                <div role="menu" className="absolute left-0 top-[calc(100%+8px)] z-20 w-full rounded-[14px] border border-black/15 bg-white p-2 shadow-[0_12px_28px_rgba(0,0,0,0.12)] sm:w-[220px]">
                   <div className="grid gap-1">
                     {VIEW_OPTIONS.map((option) => {
                       const isActive = option.value === view;
@@ -286,8 +286,8 @@ export default function ControlsRow({
             </div>
           )}
 
-          <div className="ml-auto flex items-center gap-2.5">
-            <div ref={sortMenuRef} className="relative shrink-0">
+          <div className="ml-auto flex w-full flex-wrap items-center gap-2.5 sm:w-auto sm:flex-nowrap">
+            <div ref={sortMenuRef} className="relative w-full shrink-0 sm:w-auto">
               <button
                 type="button"
                 onClick={() => {
@@ -296,7 +296,7 @@ export default function ControlsRow({
                 }}
                 aria-haspopup="menu"
                 aria-expanded={isSortOpen}
-                className="cursor-pointer inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-black/20 bg-white px-[14px] py-[6px] font-semibold text-black/85"
+                className="cursor-pointer inline-flex w-full items-center justify-between gap-2 rounded-full border border-black/20 bg-white px-[14px] py-[8px] text-left font-semibold text-black/85 sm:w-auto sm:justify-start sm:whitespace-nowrap sm:py-[6px]"
               >
                 <currentSortOption.icon className="h-4 w-4" strokeWidth={2.2} />
                 {currentSortOption.label}
@@ -304,7 +304,7 @@ export default function ControlsRow({
               </button>
 
               {isSortOpen ? (
-                <div role="menu" className="absolute right-0 top-[calc(100%+8px)] z-20 w-[220px] rounded-[14px] border border-black/15 bg-white p-2 shadow-[0_12px_28px_rgba(0,0,0,0.12)]">
+                <div role="menu" className="absolute right-0 top-[calc(100%+8px)] z-20 w-full rounded-[14px] border border-black/15 bg-white p-2 shadow-[0_12px_28px_rgba(0,0,0,0.12)] sm:w-[220px]">
                   <div className="grid gap-1">
                     {visibleSortOptions.map((option) => {
                       const isActive = option.value === sort;
@@ -338,7 +338,7 @@ export default function ControlsRow({
             <button
               type="button"
               onClick={openFilters}
-              className="cursor-pointer inline-flex items-center gap-2 rounded-full border border-black/20 bg-white px-[14px] py-[6px] font-semibold text-black/80 whitespace-nowrap shrink-0"
+              className="cursor-pointer inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-full border border-black/20 bg-white px-[14px] py-[8px] font-semibold text-black/80 sm:w-auto sm:whitespace-nowrap sm:py-[6px]"
             >
               Filters
               <SlidersHorizontal className="h-4 w-4" strokeWidth={2.5} />

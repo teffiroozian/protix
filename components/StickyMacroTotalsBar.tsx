@@ -45,15 +45,15 @@ export default function StickyMacroTotalsBar({
 
   const wrapperClassName = inline
     ? "w-full"
-    : `fixed left-0 right-0 ${isCartLayout ? "bottom-4 max-w-5xl px-4 sm:px-6" : "bottom-1 max-w-6xl px-2"} mx-auto z-[120] transition-all duration-300 ease-out ${
+    : `fixed left-0 right-0 ${isCartLayout ? "bottom-2 max-w-5xl px-2 sm:bottom-4 sm:px-6" : "bottom-1 max-w-6xl px-2"} mx-auto z-[120] transition-all duration-300 ease-out ${
         visible
           ? "pointer-events-none translate-y-0 opacity-100"
           : "pointer-events-none translate-y-4 opacity-0"
       }`;
 
   const panelClassName = inline
-    ? `w-full rounded-3xl border border-black/10 bg-white px-4 ${isCartLayout ? "py-4" : "py-3"}`
-    : `mx-auto w-full ${isCartLayout ? "rounded-[2.25rem] border-black/10 px-6 py-6" : "rounded-2xl border-slate-200/70 px-4 py-6"} border bg-white shadow-[0_10px_30px_rgba(0,0,0,0.24)] transition-all duration-300 ${
+    ? `w-full rounded-3xl border border-black/10 bg-white px-3 sm:px-4 ${isCartLayout ? "py-4" : "py-3"}`
+    : `mx-auto w-full ${isCartLayout ? "rounded-2xl border-black/10 px-3 py-4 sm:rounded-[2.25rem] sm:px-6 sm:py-6" : "rounded-2xl border-slate-200/70 px-4 py-6"} border bg-white shadow-[0_10px_30px_rgba(0,0,0,0.24)] transition-all duration-300 ${
         visible ? "pointer-events-auto" : "pointer-events-none"
       } ${detailsOpen && detailsContent ? "flex max-h-[calc(100vh-0.5rem)] flex-col" : ""}`;
 
@@ -93,7 +93,7 @@ export default function StickyMacroTotalsBar({
               />
             </section>
 
-            <div className={`flex w-full gap-3 sm:w-auto ${isCartLayout ? "flex-col" : "flex-row"}`}>
+            <div className={`flex w-full gap-2.5 sm:w-auto sm:gap-3 ${isCartLayout ? "flex-col" : "flex-col sm:flex-row"}`}>
               <button
                 type="button"
                 onClick={onSecondaryAction}

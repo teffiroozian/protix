@@ -957,29 +957,29 @@ export default function ItemRouteModal({
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center" role="dialog" aria-modal="true" aria-label={item.name}>
+    <div className="fixed inset-0 z-[100] flex items-end justify-center sm:items-center" role="dialog" aria-modal="true" aria-label={item.name}>
       <button
         type="button"
         className="cursor-pointer absolute inset-0 border-0 bg-slate-900/66"
         onClick={handleClose}
         aria-label="Close item modal"
       />
-      <div className="relative m-4 h-[calc(100%-32px)] w-[min(1024px,calc(100%-32px))] overflow-hidden rounded-2xl bg-white px-6 pt-6">
+      <div className="relative h-[min(100dvh,100%)] w-full overflow-hidden rounded-t-2xl bg-white px-3 pt-3 sm:m-4 sm:h-[calc(100%-32px)] sm:w-[min(1024px,calc(100%-32px))] sm:rounded-2xl sm:px-6 sm:pt-6">
         <button
           type="button"
-          className="cursor-pointer sticky top-0 ml-auto h-9 w-9 rounded-full border border-black/12 bg-white/95 text-2xl"
+          className="cursor-pointer sticky top-0 z-20 ml-auto h-9 w-9 rounded-full border border-black/12 bg-white/95 text-2xl"
           onClick={handleClose}
           aria-label="Close item modal"
         >
           ×
         </button>
 
-        <div ref={scrollContainerRef} className="h-[calc(100%-52px-56px)] overflow-y-auto pr-2 pb-6">
-        <div className="grid justify-items-center gap-16">
-          <div className="grid justify-items-center gap-8">
-            <h1 className="text-center text-[32px] font-extrabold">{item.name}</h1>
+        <div ref={scrollContainerRef} className="h-[calc(100%-52px-72px)] overflow-y-auto pb-4 pr-1 sm:h-[calc(100%-52px-56px)] sm:pb-6 sm:pr-2">
+        <div className="grid justify-items-center gap-10 sm:gap-16">
+          <div className="grid justify-items-center gap-6 sm:gap-8">
+            <h1 className="text-center text-[28px] font-extrabold leading-tight sm:text-[32px]">{item.name}</h1>
             {selectedItemImage ? (
-              <img className="max-h-[300px] w-[300px] bg-[#efefef] shadow-[0_0_5px_rgba(0,0,0,0.25)] rounded-[14px] object-contain" src={selectedItemImage} alt={item.name} />
+              <img className="max-h-[240px] w-full max-w-[300px] rounded-[14px] bg-[#efefef] object-contain shadow-[0_0_5px_rgba(0,0,0,0.25)] sm:max-h-[300px]" src={selectedItemImage} alt={item.name} />
             ) : null}
             <MacroTotalsGrid
               macros={{
@@ -1003,7 +1003,7 @@ export default function ItemRouteModal({
             />
           </div>
 
-          <div className="w-[min(720px,100%)] grid gap-7">
+          <div className="grid w-full max-w-[720px] gap-6 sm:gap-7">
             {variants && variants.length > 0 && !item.hideVariantSelector ? (
               <div className="w-full">
                 <PortionSelector
@@ -1040,7 +1040,7 @@ export default function ItemRouteModal({
                         <button
                           key={option.id}
                           type="button"
-                          className={`inline-flex min-w-[220px] cursor-pointer items-center justify-center gap-3 rounded-2xl border px-5 py-2.5 text-left transition-all duration-150 ${variantColorClasses}`}
+                          className={`inline-flex w-full cursor-pointer items-center justify-center gap-3 rounded-2xl border px-4 py-2.5 text-left transition-all duration-150 sm:w-auto sm:min-w-[220px] sm:px-5 ${variantColorClasses}`}
                           onClick={() => setComboType(option.id)}
                         >
                           <span className={`inline-flex h-9 w-9 items-center justify-center rounded-full border ${iconClasses}`}>
@@ -1439,7 +1439,7 @@ export default function ItemRouteModal({
         </div>
         </div>
 
-        <div className="sticky bottom-0 -mx-6 z-10 flex h-fit flex-wrap items-center justify-between gap-3 border-t border-black/10 bg-white p-4 shadow-[0_-4px_10px_rgba(0,0,0,0.08)]">
+        <div className="sticky bottom-0 -mx-3 z-10 flex h-fit flex-wrap items-center gap-3 border-t border-black/10 bg-white p-3 shadow-[0_-4px_10px_rgba(0,0,0,0.08)] sm:-mx-6 sm:justify-between sm:p-4">
           <MacroTotalsGrid
             macros={{
               calories: Math.round(isChipotlePrebuiltBuilderItem ? chipotleAdjustedTotals.calories : (nutrition.calories ?? 0)),
@@ -1452,7 +1452,7 @@ export default function ItemRouteModal({
             itemClassName="px-2 py-0.5"
             labelClassName="text-[#64748b]"
           />
-          <div className="ml-auto flex items-center gap-3">
+          <div className="ml-auto flex w-full flex-wrap items-center justify-end gap-2 sm:w-auto sm:gap-3">
             <div className="inline-flex items-center rounded-xl border border-slate-200 bg-slate-50 p-1">
               <button
                 type="button"
@@ -1475,7 +1475,7 @@ export default function ItemRouteModal({
             {isCustomizeMode ? (
               <button
                 type="button"
-                className="cursor-pointer rounded-xl border border-black/20 bg-white px-6 py-2.5 text-base font-bold text-black/80"
+                className="cursor-pointer rounded-xl border border-black/20 bg-white px-4 py-2.5 text-base font-bold text-black/80 sm:px-6"
                 onClick={handleClose}
               >
                 Cancel
@@ -1483,7 +1483,7 @@ export default function ItemRouteModal({
             ) : null}
             <button
               type="button"
-              className="cursor-pointer rounded-xl border border-black/20 bg-black/90 px-6 py-2.5 text-base font-bold text-white"
+              className="cursor-pointer rounded-xl border border-black/20 bg-black/90 px-4 py-2.5 text-base font-bold text-white sm:px-6"
               onClick={handleSaveItem}
             >
               {isCustomizeMode ? "Update" : "Add to Cart"}

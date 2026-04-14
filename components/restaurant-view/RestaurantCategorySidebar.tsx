@@ -39,14 +39,14 @@ export default function RestaurantCategorySidebar({
   };
 
   return (
-    <aside className="sticky top-[160px] flex max-h-[calc(100vh-160px)] flex-col py-6">
-      <h3 className="mb-8 shrink-0 text-2xl font-bold text-slate-900">
+    <aside className="flex flex-col py-2 lg:sticky lg:top-[160px] lg:max-h-[calc(100vh-160px)] lg:py-6">
+      <h3 className="mb-3 shrink-0 text-lg font-bold text-slate-900 lg:mb-8 lg:text-2xl">
         {effectiveViewMode === "ranking" ? "Show" : effectiveViewMode === "ingredients" ? "Ingredients" : "Categories"}
       </h3>
 
-      <div className="min-h-0 flex-1 overflow-y-auto px-2 py-2">
+      <div className="min-h-0 flex-1 overflow-x-auto overflow-y-visible px-0 py-1 lg:overflow-y-auto lg:px-2 lg:py-2">
         {effectiveViewMode === "ranking" ? (
-          <div className="grid gap-4" role="group" aria-label="Ranking categories">
+          <div className="flex gap-2 pb-1 lg:grid lg:gap-4" role="group" aria-label="Ranking categories">
             {rankingOptions.map((option) => {
               const isChecked = rankedAllFilters[option.key];
               const Icon = categoryIcons[option.iconKey] ?? rankingFallbackIcons[option.key];
@@ -57,7 +57,7 @@ export default function RestaurantCategorySidebar({
                   type="button"
                   aria-pressed={isChecked}
                   onClick={() => toggleRankedAllFilter(option.key)}
-                  className={`inline-flex w-full cursor-pointer items-center gap-3 rounded-full px-4 py-2 text-left text-base font-semibold transition-colors duration-100 ${
+                  className={`inline-flex shrink-0 cursor-pointer items-center gap-2 rounded-full px-3 py-2 text-left text-sm font-semibold transition-colors duration-100 lg:w-full lg:gap-3 lg:px-4 lg:text-base ${
                     isChecked
                       ? "bg-white text-slate-800 shadow-[0px_0_8px_rgba(0,0,0,0.25)]"
                       : "text-slate-700 hover:bg-slate-200"
@@ -89,14 +89,14 @@ export default function RestaurantCategorySidebar({
         ) : (
           <nav
             aria-label={effectiveViewMode === "ingredients" ? "Ingredient categories" : "Menu categories"}
-            className="grid gap-4"
+            className="flex gap-2 pb-1 lg:grid lg:gap-4"
           >
             {categoryOptions.map((option) => {
               const isActive = option.id === resolvedActiveCategory;
               const Icon = categoryIcons[option.label.toLowerCase()] ?? Circle;
 
               return (
-                <div key={option.id} className="relative pl-3">
+                <div key={option.id} className="relative shrink-0 pl-0 lg:pl-3">
                   {isActive ? (
                     <span
                       className="absolute left-0 top-1/2 h-7 w-1 -translate-y-1/2 rounded-full shadow-[0px_0_8px_rgba(0,0,0,0.25)] bg-white"
@@ -107,7 +107,7 @@ export default function RestaurantCategorySidebar({
                   <button
                     type="button"
                     onClick={() => onCategorySelect(option.id)}
-                    className={`cursor-pointer inline-flex items-center gap-3 rounded-full px-4 py-2 text-left text-base font-semibold transition-colors duration-50 ease-in ${
+                    className={`cursor-pointer inline-flex items-center gap-2 rounded-full px-3 py-2 text-left text-sm font-semibold transition-colors duration-50 ease-in lg:gap-3 lg:px-4 lg:text-base ${
                       isActive
                         ? "shadow-[0px_0_8px_rgba(0,0,0,0.25)] bg-white text-slate-800"
                         : "text-slate-700 hover:bg-slate-200"

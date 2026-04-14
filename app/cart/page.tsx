@@ -183,7 +183,7 @@ export default function CartPage() {
   };
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-6 px-4 pb-10 pt-8 sm:px-6 sm:pt-10">
+    <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-5 px-3 pb-10 pt-6 sm:gap-6 sm:px-6 sm:pt-10">
       <header className="rounded-3xl border border-black/10 bg-white px-5 py-5 shadow-sm sm:px-6">
         <div className="mb-4">
           <Link
@@ -194,7 +194,7 @@ export default function CartPage() {
           </Link>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex flex-wrap items-center gap-3 sm:flex-nowrap sm:gap-4">
           <div className="h-14 w-14 overflow-hidden rounded-xl border border-black/10 bg-neutral-50 shadow-sm">
             {headerLogo ? (
               // eslint-disable-next-line @next/next/no-img-element
@@ -204,7 +204,7 @@ export default function CartPage() {
             )}
           </div>
 
-          <div>
+          <div className="min-w-0">
             <h1 className="text-2xl font-semibold tracking-tight text-neutral-900 sm:text-3xl">{headerTitle}</h1>
             <p className="mt-1 text-sm text-neutral-600">[{itemCount}] Items</p>
           </div>
@@ -297,7 +297,7 @@ export default function CartPage() {
       </section>
 
       <section className="rounded-3xl border border-black/10 bg-white p-4 shadow-sm">
-        <div className="grid grid-cols-1 gap-4 rounded-3xl bg-[#e0e0e0] p-4 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 rounded-3xl bg-[#e0e0e0] p-3 sm:p-4 lg:grid-cols-2">
 
             <CartNutritionSummary nutritionTotals={nutritionTotals} />
             
@@ -308,7 +308,7 @@ export default function CartPage() {
                 {items.length === 0 ? (
                   <p className="text-sm text-neutral-600">No meal items yet.</p>
                 ) : (
-                  <ul className="min-h-0 flex-1 space-y-2 overflow-y-auto max-h-[300px] bg-[#efefef] p-2 rounded-xl">
+                  <ul className="max-h-[300px] min-h-0 flex-1 space-y-2 overflow-y-auto rounded-xl bg-[#efefef] p-2">
                     {items.map((item) => {
                       const detailLine = summarizeItem(item);
                       const displayName = formatCartItemName(item.name, item.customizations);
@@ -360,7 +360,7 @@ export default function CartPage() {
                   </div>
               </div>
             </div>
-            <div ref={inlineMacroBarRef} className="col-span-2">
+            <div ref={inlineMacroBarRef} className="lg:col-span-2">
           <StickyMacroTotalsBar
             totals={totals}
             inline

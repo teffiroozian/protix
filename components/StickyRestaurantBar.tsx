@@ -85,11 +85,11 @@ export default function StickyRestaurantBar({
   return (
     <div className="fixed left-0 right-0 top-0 z-50" data-sticky-nav="true">
       <div
-        className={`relative z-[110] mx-auto flex max-w-6xl items-center mx-2 mt-1 border border-slate-200/70 bg-white shadow-[0_-6px_16px_rgba(15,23,42,0.12)] backdrop-blur ${
+        className={`relative z-[110] mx-auto mt-1 flex max-w-6xl items-center border border-slate-200/70 bg-white shadow-[0_-6px_16px_rgba(15,23,42,0.12)] backdrop-blur sm:mx-2 ${
           hideSecondaryNav ? "rounded-2xl" : "rounded-t-2xl"
         }`}
       >
-        <div className="mx-auto flex w-full max-w-5xl items-center gap-3 px-4 py-2 sm:px-6">
+        <div className="mx-auto flex w-full max-w-5xl items-center gap-2 px-3 py-2 sm:gap-3 sm:px-6">
           <button
             type="button"
             onClick={onBack ?? (() => router.back())}
@@ -102,7 +102,7 @@ export default function StickyRestaurantBar({
           <button
             type="button"
             onClick={handleBrandClick}
-            className="flex items-center gap-3 cursor-pointer"
+            className="flex min-w-0 flex-1 items-center gap-2 cursor-pointer sm:gap-3"
             aria-label={`Scroll to top of ${restaurantName} page`}
           >
             <span className="relative h-9 w-9 shrink-0 overflow-hidden rounded-lg border border-slate-300/80 bg-white">
@@ -114,13 +114,13 @@ export default function StickyRestaurantBar({
               />
             </span>
 
-            <span className="min-w-0 truncate text-left text-base font-semibold text-slate-900">
+            <span className="min-w-0 truncate text-left text-sm font-semibold text-slate-900 sm:text-base">
               {restaurantName}
             </span>
           </button>
 
-          <div className="ml-auto flex items-center gap-2">
-            <div className={`overflow-hidden transition-all duration-300 ${isSearchMode ? "w-[16rem] opacity-100" : "w-0 opacity-0"}`}>
+          <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
+            <div className={`overflow-hidden transition-all duration-300 ${isSearchMode ? "w-[min(44vw,16rem)] opacity-100 sm:w-[16rem]" : "w-0 opacity-0"}`}>
               <div className="relative">
                 <input
                   ref={searchInputRef}
@@ -128,7 +128,7 @@ export default function StickyRestaurantBar({
                   onChange={(event) => setSearchQuery(event.target.value)}
                   placeholder="Search menu items"
                   aria-label="Search menu items"
-                  className="h-9 w-full rounded-full border border-slate-300/80 bg-white px-3 text-sm text-slate-900 outline-none"
+                  className="h-9 w-full min-w-0 rounded-full border border-slate-300/80 bg-white px-3 text-sm text-slate-900 outline-none"
                 />
               </div>
             </div>
@@ -163,13 +163,13 @@ export default function StickyRestaurantBar({
         <div
           className="relative z-[100] mx-auto flex w-full max-w-6xl items-center rounded-b-2xl border border-slate-200/70 bg-white shadow-[0_6px_16px_rgba(15,23,42,0.12)] backdrop-blur"
         >
-          <div className="mx-auto flex w-full max-w-5xl items-center gap-3 px-4 py-2 sm:px-6">
+          <div className="mx-auto flex w-full max-w-5xl flex-wrap items-center gap-2 px-3 py-2 sm:gap-3 sm:px-6">
             {secondaryNavLeading ? (
-              <div className="shrink-0">
+              <div className="w-full shrink-0 sm:w-auto">
                 {secondaryNavLeading}
               </div>
             ) : null}
-            <div className={`min-w-0 ${secondaryNavLeading ? "ml-auto" : "flex-1"}`}>
+            <div className={`min-w-0 w-full ${secondaryNavLeading ? "sm:ml-auto sm:w-auto sm:flex-1" : "flex-1"}`}>
               <ControlsRow
                 view={view}
                 onChange={onChange}
@@ -187,8 +187,8 @@ export default function StickyRestaurantBar({
       )}
 
       {hasActiveFilters && !hideSecondaryNav ? (
-        <div className="relative z-[100] mx-auto mx-2 mt-0.5 max-w-6xl rounded-2xl border border-slate-200/70 bg-white/95 shadow-[0_6px_16px_rgba(15,23,42,0.12)] backdrop-blur">
-          <div className="mx-auto flex w-full max-w-5xl flex-wrap items-center gap-2 px-4 py-2 text-sm sm:flex-nowrap sm:px-6">
+        <div className="relative z-[100] mx-auto mt-0.5 max-w-6xl rounded-2xl border border-slate-200/70 bg-white/95 shadow-[0_6px_16px_rgba(15,23,42,0.12)] backdrop-blur sm:mx-2">
+          <div className="mx-auto flex w-full max-w-5xl flex-wrap items-center gap-2 px-3 py-2 text-sm sm:flex-nowrap sm:px-6">
             <FilterChips
               filters={filters}
               onClearProtein={clearProteinFilter}
