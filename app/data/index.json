@@ -19,7 +19,7 @@
     "id": "panera",
     "name": "Panera Bread",
     "logo": "/restaurants/panera/logo.jpeg",
-    "cover": "/restaurants/panera/cover4.jpeg",
+    "cover": "/restaurants/panera/cover.jpeg",
     "menuFile": "panera.json",
     "isMacroFriendly": true
   },
@@ -43,7 +43,7 @@
     "id": "habit",
     "name": "The Habit Burger Grill",
     "logo": "/restaurants/habitburger/logo.jpeg",
-    "cover": "/restaurants/habitburger/cover2.jpg",
+    "cover": "/restaurants/habitburger/cover.jpg",
     "menuFile": "habit.json",
     "isMacroFriendly": true
   },
