@@ -19,7 +19,7 @@
     "id": "panera",
     "name": "Panera Bread",
     "logo": "/restaurants/panera/logo.jpeg",
-    "cover": "/restaurants/panera/cover.png",
+    "cover": "/restaurants/panera/cover4.jpeg",
     "menuFile": "panera.json",
     "isMacroFriendly": true
   },
@@ -27,7 +27,7 @@
     "id": "mcdonalds",
     "name": "McDonald's",
     "logo": "/restaurants/mcdonalds/logo.png",
-    "cover": "/restaurants/mcdonalds/mcdcover.png",
+    "cover": "/restaurants/mcdonalds/cover.jpeg",
     "menuFile": "mcdonlads.json",
     "isMacroFriendly": false
   },
@@ -35,7 +35,7 @@
     "id": "starbucks",
     "name": "Starbucks",
     "logo": "/restaurants/starbucks/logo.jpeg",
-    "cover": "/restaurants/starbucks/cover.png",
+    "cover": "/restaurants/starbucks/cover.webp",
     "menuFile": "starbucks.json",
     "isMacroFriendly": true
   },
@@ -43,7 +43,7 @@
     "id": "habit",
     "name": "The Habit Burger Grill",
     "logo": "/restaurants/habitburger/logo.jpeg",
-    "cover": "/restaurants/habitburger/cover.png",
+    "cover": "/restaurants/habitburger/cover2.jpg",
     "menuFile": "habit.json",
     "isMacroFriendly": true
   },
@@ -51,7 +51,7 @@
     "id": "panda",
     "name": "Panda Express",
     "logo": "/restaurants/pandaexpress/logo.jpeg",
-    "cover": "/restaurants/pandaexpress/cover.png",
+    "cover": "/restaurants/pandaexpress/cover.jpg",
     "menuFile": "panda.json",
     "isMacroFriendly": true
   },
@@ -59,7 +59,7 @@
     "id": "mod",
     "name": "MOD Pizza",
     "logo": "/restaurants/modpizza/logo.jpeg",
-    "cover": "/restaurants/modpizza/cover.png",
+    "cover": "/restaurants/modpizza/cover.webp",
     "menuFile": "mod.json",
     "isMacroFriendly": true
   },
@@ -67,7 +67,7 @@
     "id": "subway",
     "name": "Subway",
     "logo": "/restaurants/subway/logo.png",
-    "cover": "/restaurants/subway/cover.png",
+    "cover": "/restaurants/subway/cover.jpg",
     "menuFile": "subway.json",
     "isMacroFriendly": true
   }
