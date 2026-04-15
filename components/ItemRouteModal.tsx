@@ -1175,7 +1175,7 @@ export default function ItemRouteModal({
                   <MenuSections
                     restaurantId={restaurantId}
                     items={chipotleIncludedIngredientDisplayItems}
-                    sort="default"
+                    sort="default-order"
                     groupByCategory={false}
                     categoryMode="ingredients"
                     isBuildYourOwn
@@ -1256,7 +1256,7 @@ export default function ItemRouteModal({
                 <MenuSections
                   restaurantId={restaurantId}
                   items={chipotleIngredientDisplayItems}
-                  sort="default"
+                  sort="default-order"
                   groupByCategory
                   categoryMode="ingredients"
                   isBuildYourOwn
