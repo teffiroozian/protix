@@ -1,36 +1,51 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Protix
 
-## Getting Started
+A macro-focused fast food app that lets users find high-protein meals across multiple restaurants and customize items with real-time nutrition tracking.
 
-First, run the development server:
+## 🌍 Live Demo
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+https://protix-ten.vercel.app/
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🧠 The Problem
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Finding meals that match specific macro goals when eating out is time-consuming. Users have to visit multiple restaurant websites, search through menus, open individual items, and manually check nutrition labels. Comparing options across restaurants or finding the best choice (high protein, low calories, etc.) becomes slow and inefficient.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 💡 The Solution
 
-## Learn More
+Protix brings multiple restaurant menus into one place and makes nutrition data instantly accessible. Users can quickly scan items, compare macros, and customize meals to match their goals without jumping between pages or apps.
 
-To learn more about Next.js, take a look at the following resources:
+## 🚀 Features
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Browse restaurant menus with macro-focused data
+- Customize items with ingredients, add-ons, and variations
+- Real-time macro calculation based on selections
+- Build-your-own system (Chipotle-style flow)
+- Ranking system (high protein, lowest calories, best ratio)
+- Responsive design across mobile and desktop
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📸 Screenshots
 
-## Deploy on Vercel
+(Will add screenshots here later)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🛠 Tech Stack
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+- JSON data modeling
+
+## 📈 What I Learned
+
+- Structuring reusable data models for different restaurant types
+- Managing dynamic UI state and interactions
+- Designing user-friendly interfaces for complex data
+- Building scalable component architecture
+
+## 🔮 Future Improvements
+
+- Search and filtering
+- Favorites / saved meals
+- Daily macro tracking
+- More restaurants
+- Progressive Web App (PWA)
