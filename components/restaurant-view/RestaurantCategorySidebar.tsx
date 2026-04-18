@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { Circle, type LucideIcon, UtensilsCrossed, Soup, SquareStack, CupSoda, Check } from "lucide-react";
 
 type RankedAllFilterKey = "main-entrees" | "breakfast" | "shareables" | "sides" | "drinks";
@@ -23,6 +26,29 @@ export default function RestaurantCategorySidebar({
   onCategorySelect,
   categoryIcons,
 }: Props) {
+  const [mobileNavTop, setMobileNavTop] = useState(0);
+
+  useEffect(() => {
+    const syncMobileNavTop = () => {
+      const stickyNav = document.querySelector('[data-sticky-nav="true"]');
+      if (!(stickyNav instanceof HTMLElement)) {
+        setMobileNavTop(0);
+        return;
+      }
+
+      setMobileNavTop(Math.max(0, Math.ceil(stickyNav.getBoundingClientRect().bottom)));
+    };
+
+    syncMobileNavTop();
+    window.addEventListener("resize", syncMobileNavTop);
+    window.addEventListener("scroll", syncMobileNavTop, { passive: true });
+
+    return () => {
+      window.removeEventListener("resize", syncMobileNavTop);
+      window.removeEventListener("scroll", syncMobileNavTop);
+    };
+  }, []);
+
   const rankingOptions: Array<{ key: RankedAllFilterKey; label: string; iconKey: string }> = [
     { key: "main-entrees", label: "Main Entrees", iconKey: "entrees" },
     { key: "breakfast", label: "Breakfast", iconKey: "breakfast" },
@@ -46,8 +72,9 @@ export default function RestaurantCategorySidebar({
 
   return (
     <>
-      <div className="relative z-[90] mx-auto mt-0 w-[calc(100dvw-0.5rem)] max-w-6xl rounded-2xl border border-slate-200/70 bg-white/95 shadow-[0_6px_16px_rgba(15,23,42,0.12)] backdrop-blur sm:w-[calc(100dvw-1rem)] lg:hidden">
-        <div className="mx-auto flex w-full max-w-5xl items-center gap-2 overflow-x-auto px-3 py-2 sm:px-6">
+      <div className="fixed left-0 right-0 z-[90] lg:hidden" style={{ top: mobileNavTop }}>
+        <div className="mx-auto w-[calc(100%-0.5rem)] max-w-6xl rounded-2xl border border-slate-200/70 bg-white/95 shadow-[0_6px_16px_rgba(15,23,42,0.12)] backdrop-blur sm:w-[calc(100%-1rem)]">
+          <div className="mx-auto flex w-full max-w-5xl items-center gap-2 overflow-x-auto px-2 py-1.5 sm:px-4 sm:py-2">
           {effectiveViewMode === "ranking" ? (
             <div className="flex min-w-0 items-center gap-2" role="group" aria-label={categoryNavLabel}>
               {rankingOptions.map((option) => {
@@ -97,8 +124,10 @@ export default function RestaurantCategorySidebar({
               })}
             </nav>
           )}
+          </div>
         </div>
       </div>
+      <div className="h-[64px] lg:hidden" aria-hidden="true" />
 
       <aside className="sticky top-[160px] hidden max-h-[calc(100vh-160px)] flex-col py-6 lg:flex">
         <h3 className="mb-8 shrink-0 text-2xl font-bold text-slate-900">
