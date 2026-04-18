@@ -72,8 +72,8 @@ export default function RestaurantCategorySidebar({
 
   return (
     <>
-      <div className="fixed left-0 right-0 z-[90] lg:hidden" style={{ top: mobileNavTop }}>
-        <div className="mx-auto w-[calc(100%-0.5rem)] max-w-6xl rounded-2xl border border-slate-200/70 bg-white/95 shadow-[0_6px_16px_rgba(15,23,42,0.12)] backdrop-blur sm:w-[calc(100%-1rem)]">
+      <div className="fixed left-0 right-0 z-[90] lg:hidden" style={{ top: mobileNavTop + 4 }}>
+        <div className="relative mx-auto w-[calc(100%-0.5rem)] max-w-6xl overflow-hidden rounded-2xl border border-slate-200/70 bg-white/95 shadow-[0_6px_16px_rgba(15,23,42,0.12)] backdrop-blur sm:w-[calc(100%-1rem)]">
           <div className="mx-auto flex w-full max-w-5xl items-center gap-2 overflow-x-auto px-2 py-1.5 sm:px-4 sm:py-2">
           {effectiveViewMode === "ranking" ? (
             <div className="flex min-w-0 items-center gap-2" role="group" aria-label={categoryNavLabel}>
@@ -125,6 +125,8 @@ export default function RestaurantCategorySidebar({
             </nav>
           )}
           </div>
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-6 bg-gradient-to-r from-white/95 to-transparent" aria-hidden="true" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-6 bg-gradient-to-l from-white/95 to-transparent" aria-hidden="true" />
         </div>
       </div>
       <div className="h-[64px] lg:hidden" aria-hidden="true" />
