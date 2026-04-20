@@ -499,27 +499,25 @@ export default function ItemDetailsPanel({
       {hasBuildContent ? (
       <div className="grid grid-cols-2 gap-3 rounded-[18px] bg-[#e9e9e9] p-3">
       {sectionNavItems && sectionNavItems.length > 0 ? (
-        <div className="col-span-2 sticky top-0 z-20 w-full rounded-2xl border border-black/10 bg-white/95 px-2 py-1.5 shadow-[0_3px_10px_rgba(15,23,42,0.08)] backdrop-blur">
-          <div className="flex items-stretch justify-between">
-            {sectionNavItems.map((section, index) => {
+        <div className="col-span-2 sticky top-0 z-[5] w-full rounded-2xl border border-black/10 bg-white/95 px-2 py-1.5 shadow-[0_3px_10px_rgba(15,23,42,0.08)] backdrop-blur">
+          <div className="flex items-stretch gap-2 overflow-x-auto pb-1">
+            {sectionNavItems.map((section) => {
               const isActive = activeSectionId === section.id;
               const Icon = section.icon;
               return (
-                <div key={section.id} className="flex flex-1 items-center">
-                  <button
-                    type="button"
-                    className="cursor-pointer flex w-full flex-col items-center gap-1 px-2 py-1.5 text-center"
-                    onClick={() => onSelectSection?.(section.id)}
-                  >
-                    <span className={`inline-flex h-8 w-8 items-center justify-center rounded-full border text-[13px] ${isActive ? "border-blue-500 bg-blue-50 text-blue-600" : "border-slate-200 bg-slate-50 text-slate-500"}`}>
-                      <Icon size={15} />
-                    </span>
-                    <span className={`text-[11px] font-semibold uppercase tracking-wide ${isActive ? "text-blue-600" : "text-slate-500"}`}>
-                      {section.label}
-                    </span>
-                  </button>
-                  {index < sectionNavItems.length - 1 ? <span className="h-8 w-px bg-slate-200/80" /> : null}
-                </div>
+                <button
+                  key={section.id}
+                  type="button"
+                  className="cursor-pointer flex min-w-[120px] flex-none flex-col items-center gap-1 rounded-xl border border-slate-200/80 bg-white px-3 py-1.5 text-center"
+                  onClick={() => onSelectSection?.(section.id)}
+                >
+                  <span className={`inline-flex h-8 w-8 items-center justify-center rounded-full border text-[13px] ${isActive ? "border-blue-500 bg-blue-50 text-blue-600" : "border-slate-200 bg-slate-50 text-slate-500"}`}>
+                    <Icon size={15} />
+                  </span>
+                  <span className={`text-[11px] font-semibold uppercase tracking-wide ${isActive ? "text-blue-600" : "text-slate-500"}`}>
+                    {section.label}
+                  </span>
+                </button>
               );
             })}
           </div>
@@ -563,7 +561,7 @@ export default function ItemDetailsPanel({
             </div>
           ) : null}
           {displayIngredients.length > 0 ? (
-            <ul className="grid list-none grid-cols-2 items-stretch gap-[10px] pl-0">
+            <ul className="grid list-none grid-cols-1 items-stretch gap-[10px] pl-0 sm:grid-cols-2">
               {displayIngredients.map((ingredient) => {
                 const ingredientCount = selectedIngredientCounts?.[ingredient.id] ?? ingredient.defaultCount;
                 const isSelected = ingredientCount > 0;
@@ -752,7 +750,7 @@ export default function ItemDetailsPanel({
         <>
           <section ref={sidesSectionRef} className="col-span-2 rounded-[14px] border border-black/12 bg-white p-5">
             <h2 className="mb-6 text-2xl font-bold">Sides</h2>
-            <ul className="grid list-none grid-cols-2 items-stretch gap-[10px] pl-0">
+            <ul className="grid list-none grid-cols-1 items-stretch gap-[10px] pl-0 sm:grid-cols-2">
               {comboSides.map((side) => {
                 const sideId = side.id ?? side.name;
                 const isSelected = selectedComboSideId === sideId;
@@ -829,7 +827,7 @@ export default function ItemDetailsPanel({
           </section>
           <section ref={drinksSectionRef} className="col-span-2 rounded-[14px] border border-black/12 bg-white p-5">
             <h2 className="mb-6 text-2xl font-bold">Drinks</h2>
-            <ul className="grid list-none grid-cols-2 items-stretch gap-[10px] pl-0">
+            <ul className="grid list-none grid-cols-1 items-stretch gap-[10px] pl-0 sm:grid-cols-2">
               {comboDrinks.map((drink) => {
                 const drinkId = drink.id ?? drink.name;
                 const isSelected = selectedComboDrinkId === drinkId;
@@ -966,7 +964,7 @@ export default function ItemDetailsPanel({
                     </div>
                   </div>
                   {isSectionOpen ? (
-                    <ul className="mt-4 grid list-none grid-cols-2 items-stretch gap-[10px] pl-0">
+                    <ul className="mt-4 grid list-none grid-cols-1 items-stretch gap-[10px] pl-0 sm:grid-cols-2">
                       {section.addons.map((addon) => {
                         const sauceCount = section.ref === "sauces" ? (sauceSelectionCounts?.[addon.name] ?? 0) : 0;
                         const isSelected =
@@ -1137,7 +1135,7 @@ export default function ItemDetailsPanel({
                       </span>
                     </div>
                     {isCommonOpen ? (
-                      <ul className="mt-4 grid list-none grid-cols-2 items-stretch gap-[10px] pl-0">
+                      <ul className="mt-4 grid list-none grid-cols-1 items-stretch gap-[10px] pl-0 sm:grid-cols-2">
                         {commonChanges.map((change) => {
                           const isActive = selectedCommonChangeIds?.includes(change.id) ?? false;
                           const calorieDeltaLabel = `${change.delta.calories >= 0 ? "+" : ""}${change.delta.calories}cal`;
@@ -1178,7 +1176,7 @@ export default function ItemDetailsPanel({
       ) : null}
 
       {shouldShowInfoSection ? (
-      <div className="grid grid-cols-2 gap-3 rounded-[18px] border border-black/8 bg-[#efefef] p-3">
+      <div className="grid grid-cols-1 gap-3 rounded-[18px] border border-black/8 bg-[#efefef] p-3 md:grid-cols-2">
       <section className="rounded-[18px] border border-[rgba(0,0,0,0.15)] bg-white p-5">
         <h2 className="mb-4 text-2xl font-bold">Nutrition Facts</h2>
 
