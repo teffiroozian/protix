@@ -75,9 +75,9 @@ function QuickMacro({
           : "text-slate-700";
 
   return (
-    <div className="flex min-w-[44px] flex-col items-center justify-center">
-      <span className={`text-[21px] leading-5 font-bold ${toneClass}`}>{toMacroNumber(value)}</span>
-      <span className="mt-1 text-[9px] font-bold uppercase tracking-[0.06em] text-slate-600">{label}</span>
+    <div className="flex min-w-[34px] flex-col items-center justify-center">
+      <span className={`text-[14px] leading-4 font-bold sm:text-[18px] sm:leading-5 ${toneClass}`}>{toMacroNumber(value)}</span>
+      <span className="mt-0.5 text-[8px] font-bold uppercase tracking-[0.05em] text-slate-600">{label}</span>
     </div>
   );
 }
@@ -1193,8 +1193,8 @@ export default function MenuItemCard({
               <div className="space-y-3">
                 <section>
                   <p className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-600">Main</p>
-                  <div className="grid grid-cols-[72px_minmax(0,1fr)_auto] items-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2.5">
-                    <div className="h-[72px] w-[72px] overflow-hidden rounded-lg border border-black/10 bg-white">
+                  <div className="flex items-center gap-2 overflow-hidden rounded-xl border border-slate-200 bg-white px-2.5 py-2.5">
+                    <div className="h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-black/10 bg-white">
                       {selectedItemImage ? (
                         <img src={selectedItemImage} alt={item.name} className="h-full w-full object-contain p-1" />
                       ) : null}
@@ -1215,7 +1215,7 @@ export default function MenuItemCard({
                         ) : null}
                       </div>
                     </div>
-                    <div className="flex items-end justify-end gap-4">
+                    <div className="grid shrink-0 grid-cols-2 gap-x-2 gap-y-1 sm:flex sm:items-end sm:justify-end sm:gap-3">
                       <QuickMacro value={displayCalories} label="Cal" tone="calories" />
                       <QuickMacro value={displayProtein} label="Protein" tone="protein" />
                       <QuickMacro value={displayCarbs} label="Carbs" tone="carbs" />
@@ -1227,8 +1227,8 @@ export default function MenuItemCard({
                 {comboType === "combo-meal" && selectedComboSide ? (
                   <section>
                     <p className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-600">Side</p>
-                    <div className="grid grid-cols-[72px_minmax(0,1fr)_auto] items-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2.5">
-                      <div className="h-[72px] w-[72px] overflow-hidden rounded-lg border border-black/10 bg-white">
+                    <div className="flex items-center gap-2 overflow-hidden rounded-xl border border-slate-200 bg-white px-2.5 py-2.5">
+                      <div className="h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-black/10 bg-white">
                         {selectedComboSide.image ? (
                           <img src={selectedComboSide.image} alt={selectedComboSide.name} className="h-full w-full object-contain p-1" />
                         ) : null}
@@ -1249,7 +1249,7 @@ export default function MenuItemCard({
                           ) : null}
                         </div>
                       </div>
-                      <div className="flex items-end justify-end gap-4">
+                      <div className="grid shrink-0 grid-cols-2 gap-x-2 gap-y-1 sm:flex sm:items-end sm:justify-end sm:gap-3">
                         <QuickMacro value={selectedComboSideVariant?.nutrition.calories ?? selectedComboSide.nutrition.calories} label="Cal" tone="calories" />
                         <QuickMacro value={selectedComboSideVariant?.nutrition.protein ?? selectedComboSide.nutrition.protein} label="Protein" tone="protein" />
                         <QuickMacro value={selectedComboSideVariant?.nutrition.carbs ?? selectedComboSide.nutrition.carbs} label="Carbs" tone="carbs" />
@@ -1262,8 +1262,8 @@ export default function MenuItemCard({
                 {comboType === "combo-meal" && selectedComboDrink ? (
                   <section>
                     <p className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-600">Drink</p>
-                    <div className="grid grid-cols-[72px_minmax(0,1fr)_auto] items-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2.5">
-                      <div className="h-[72px] w-[72px] overflow-hidden rounded-lg border border-black/10 bg-white">
+                    <div className="flex items-center gap-2 overflow-hidden rounded-xl border border-slate-200 bg-white px-2.5 py-2.5">
+                      <div className="h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-black/10 bg-white">
                         {selectedComboDrink.image ? (
                           <img src={selectedComboDrink.image} alt={selectedComboDrink.name} className="h-full w-full object-contain p-1" />
                         ) : null}
@@ -1284,7 +1284,7 @@ export default function MenuItemCard({
                           ) : null}
                         </div>
                       </div>
-                      <div className="flex items-end justify-end gap-4">
+                      <div className="grid shrink-0 grid-cols-2 gap-x-2 gap-y-1 sm:flex sm:items-end sm:justify-end sm:gap-3">
                         <QuickMacro value={selectedComboDrinkVariant?.nutrition.calories ?? selectedComboDrink.nutrition.calories} label="Cal" tone="calories" />
                         <QuickMacro value={selectedComboDrinkVariant?.nutrition.protein ?? selectedComboDrink.nutrition.protein} label="Protein" tone="protein" />
                         <QuickMacro value={selectedComboDrinkVariant?.nutrition.carbs ?? selectedComboDrink.nutrition.carbs} label="Carbs" tone="carbs" />
@@ -1305,14 +1305,14 @@ export default function MenuItemCard({
                         return (
                           <div
                             key={addon.name}
-                            className="grid grid-cols-[72px_minmax(0,1fr)_auto_auto] items-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2.5"
+                            className="flex items-center gap-2 overflow-hidden rounded-xl border border-slate-200 bg-white px-2.5 py-2.5"
                           >
-                            <div className="h-[72px] w-[72px] overflow-hidden rounded-lg border border-black/10 bg-white">
+                            <div className="h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-black/10 bg-white">
                               {addon.image ? (
                                 <img src={addon.image} alt={addon.name} className="h-full w-full object-contain p-1" />
                               ) : null}
                             </div>
-                            <p className="truncate text-sm font-semibold text-slate-900">{addon.name}</p>
+                            <p className="min-w-0 flex-1 truncate text-sm font-semibold text-slate-900">{addon.name}</p>
                             <div className="inline-flex items-center gap-2 rounded-lg border border-black/10 bg-white px-1 py-1">
                               <button
                                 type="button"
@@ -1351,7 +1351,7 @@ export default function MenuItemCard({
                                 +
                               </button>
                             </div>
-                            <div className="flex items-end justify-end gap-4">
+                            <div className="grid shrink-0 grid-cols-2 gap-x-2 gap-y-1 sm:flex sm:items-end sm:justify-end sm:gap-3">
                               <QuickMacro value={addon.calories * count} label="Cal" tone="calories" />
                               <QuickMacro value={addon.protein * count} label="Protein" tone="protein" />
                               <QuickMacro value={addon.carbs * count} label="Carbs" tone="carbs" />
@@ -1370,16 +1370,16 @@ export default function MenuItemCard({
                   <section>
                     <p className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-600">Dressings</p>
                     <div className="space-y-1.5">
-                      <div className="grid w-full grid-cols-[60px_minmax(0,1fr)_auto] items-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-left">
-                        <div className="h-[72px] w-[72px] overflow-hidden rounded-lg border border-black/10 bg-white">
+                      <div className="flex w-full items-center gap-2 overflow-hidden rounded-xl border border-slate-200 bg-white px-2.5 py-2.5 text-left">
+                        <div className="h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-black/10 bg-white">
                           {selectedAddons.dressings.image ? (
                             <img src={selectedAddons.dressings.image} alt={selectedAddons.dressings.name} className="h-full w-full object-contain p-1" />
                           ) : null}
                         </div>
-                        <div className="min-w-0">
-                          <p className="truncate text-sm font-semibold text-slate-900">{selectedAddons.dressings.name}</p>
+                        <div className="min-w-0 flex-1">
+                          <p className="w-full truncate text-sm font-semibold text-slate-900">{selectedAddons.dressings.name}</p>
                         </div>
-                        <div className="flex items-end justify-end gap-4">
+                        <div className="grid shrink-0 grid-cols-2 gap-x-2 gap-y-1 sm:flex sm:items-end sm:justify-end sm:gap-3">
                           <QuickMacro value={selectedAddons.dressings.calories} label="Cal" tone="calories" />
                           <QuickMacro value={selectedAddons.dressings.protein} label="Protein" tone="protein" />
                           <QuickMacro value={selectedAddons.dressings.carbs} label="Carbs" tone="carbs" />
