@@ -1200,8 +1200,8 @@ export default function MenuItemCard({
                       ) : null}
                     </div>
                     <div className="min-w-0">
-                      <div className="flex min-w-0 flex-col items-start gap-1.5">
-                        <p className="truncate text-sm font-semibold text-slate-900">{item.name}</p>
+                      <div className="flex min-w-0 w-full flex-col items-start gap-1.5">
+                        <p className="w-full truncate text-sm font-semibold text-slate-900">{item.name}</p>
                         {hasVariantDropdown ? (
                           <QuickVariantDropdown
                             ariaLabel={`${item.name} quick portion`}
@@ -1234,8 +1234,8 @@ export default function MenuItemCard({
                         ) : null}
                       </div>
                       <div className="min-w-0">
-                        <div className="flex min-w-0 flex-col items-start gap-1.5">
-                          <p className="truncate text-sm font-semibold text-slate-900">{selectedComboSide.name}</p>
+                        <div className="flex min-w-0 w-full flex-col items-start gap-1.5">
+                          <p className="w-full truncate text-sm font-semibold text-slate-900">{selectedComboSide.name}</p>
                           {selectedComboSide.variants && selectedComboSide.variants.length > 1 ? (
                             <QuickVariantDropdown
                               ariaLabel={`${selectedComboSide.name} size`}
@@ -1269,8 +1269,8 @@ export default function MenuItemCard({
                         ) : null}
                       </div>
                       <div className="min-w-0">
-                        <div className="flex min-w-0 flex-col items-start gap-1.5">
-                          <p className="truncate text-sm font-semibold text-slate-900">{selectedComboDrink.name}</p>
+                        <div className="flex min-w-0 w-full flex-col items-start gap-1.5">
+                          <p className="w-full truncate text-sm font-semibold text-slate-900">{selectedComboDrink.name}</p>
                           {selectedComboDrink.variants && selectedComboDrink.variants.length > 1 ? (
                             <QuickVariantDropdown
                               ariaLabel={`${selectedComboDrink.name} size`}
