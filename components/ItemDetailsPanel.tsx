@@ -90,7 +90,7 @@ export function PortionSelector({
         Portion
       </div>
       <div
-        className={isTopLayout ? "flex w-full flex-wrap justify-center gap-2" : "grid w-full grid-cols-3 gap-2"}
+        className={isTopLayout ? "flex w-full flex-wrap justify-center gap-2" : "grid w-full grid-flow-col auto-cols-fr gap-2"}
       >
         {variants.map((variant) => {
           const isActive = variant.id === selectedVariantId;
