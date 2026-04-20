@@ -1318,11 +1318,11 @@ export default function ItemDetailsPanel({
               const roundedPercent = Math.round(segment.percent);
               const shortLabel = segment.label === "Protein" ? "P" : segment.label === "Carbs" ? "C" : "F";
               const segmentLabel =
-                segment.percent >= 16
-                  ? `${shortLabel}: ${roundedPercent}%`
-                  : segment.percent >= 9
-                    ? `${roundedPercent}%`
-                    : "";
+                segment.percent >= 18
+                  ? `${segment.label} ${roundedPercent}%`
+                  : segment.percent >= 10
+                    ? `${shortLabel} ${roundedPercent}%`
+                    : `${roundedPercent}%`;
 
               return (
                 <div

@@ -1095,11 +1095,11 @@ export default function ItemRouteModal({
           ×
         </button>
 
-        <div ref={scrollContainerRef} className="h-[calc(100%-52px-72px)] overflow-y-auto pb-24 pr-1 pt-2 sm:h-[calc(100%-52px-56px)] sm:pr-2 sm:pt-3">
+        <div ref={scrollContainerRef} className="h-[calc(100%-52px-72px)] overflow-y-auto pb-24 pr-1 sm:h-[calc(100%-52px-56px)] sm:pr-2">
         <div className="grid justify-items-center gap-16">
           <div className="grid w-full justify-items-center gap-6">
             {selectedItemImage ? (
-              <img className="h-[220px] w-full rounded-[14px] bg-[#efefef] object-contain p-2 shadow-[0_0_5px_rgba(0,0,0,0.25)] sm:h-[300px]" src={selectedItemImage} alt={item.name} />
+              <img className="mt-2 h-[220px] w-full rounded-[14px] bg-[#efefef] object-contain p-2 shadow-[0_0_5px_rgba(0,0,0,0.25)] sm:mt-3 sm:h-[300px]" src={selectedItemImage} alt={item.name} />
             ) : null}
             <h1 className="text-center text-2xl font-extrabold sm:text-[32px]">{item.name}</h1>
           </div>
