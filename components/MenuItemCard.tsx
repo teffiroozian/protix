@@ -75,7 +75,7 @@ function QuickMacro({
           : "text-slate-700";
 
   return (
-    <div className="flex min-w-[44px] flex-col items-center justify-center">
+    <div className="flex min-w-0 flex-col items-center justify-center">
       <span className={`text-[21px] leading-5 font-bold ${toneClass}`}>{toMacroNumber(value)}</span>
       <span className="mt-1 text-[9px] font-bold uppercase tracking-[0.06em] text-slate-600">{label}</span>
     </div>
@@ -1214,7 +1214,7 @@ export default function MenuItemCard({
                           />
                         </div>
                       ) : null}
-                      <div className="mt-2 flex flex-wrap items-end gap-x-3 gap-y-2">
+                      <div className="mt-2 grid grid-cols-2 gap-x-3 gap-y-2 sm:grid-cols-4">
                         <QuickMacro value={displayCalories} label="Cal" tone="calories" />
                         <QuickMacro value={displayProtein} label="Protein" tone="protein" />
                         <QuickMacro value={displayCarbs} label="Carbs" tone="carbs" />
@@ -1248,7 +1248,7 @@ export default function MenuItemCard({
                             />
                           </div>
                         ) : null}
-                        <div className="mt-2 flex flex-wrap items-end gap-x-3 gap-y-2">
+                        <div className="mt-2 grid grid-cols-2 gap-x-3 gap-y-2 sm:grid-cols-4">
                           <QuickMacro value={selectedComboSideVariant?.nutrition.calories ?? selectedComboSide.nutrition.calories} label="Cal" tone="calories" />
                           <QuickMacro value={selectedComboSideVariant?.nutrition.protein ?? selectedComboSide.nutrition.protein} label="Protein" tone="protein" />
                           <QuickMacro value={selectedComboSideVariant?.nutrition.carbs ?? selectedComboSide.nutrition.carbs} label="Carbs" tone="carbs" />
@@ -1283,7 +1283,7 @@ export default function MenuItemCard({
                             />
                           </div>
                         ) : null}
-                        <div className="mt-2 flex flex-wrap items-end gap-x-3 gap-y-2">
+                        <div className="mt-2 grid grid-cols-2 gap-x-3 gap-y-2 sm:grid-cols-4">
                           <QuickMacro value={selectedComboDrinkVariant?.nutrition.calories ?? selectedComboDrink.nutrition.calories} label="Cal" tone="calories" />
                           <QuickMacro value={selectedComboDrinkVariant?.nutrition.protein ?? selectedComboDrink.nutrition.protein} label="Protein" tone="protein" />
                           <QuickMacro value={selectedComboDrinkVariant?.nutrition.carbs ?? selectedComboDrink.nutrition.carbs} label="Carbs" tone="carbs" />
@@ -1305,57 +1305,59 @@ export default function MenuItemCard({
                         return (
                           <div
                             key={addon.name}
-                            className="grid grid-cols-[72px_minmax(0,1fr)_auto_auto] items-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2.5"
+                            className="grid grid-cols-[72px_minmax(0,1fr)] items-start gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2.5"
                           >
                             <div className="h-[72px] w-[72px] overflow-hidden rounded-lg border border-black/10 bg-white">
                               {addon.image ? (
                                 <img src={addon.image} alt={addon.name} className="h-full w-full object-contain p-1" />
                               ) : null}
                             </div>
-                            <p className="truncate text-sm font-semibold text-slate-900">{addon.name}</p>
-                            <div className="inline-flex items-center gap-2 rounded-lg border border-black/10 bg-white px-1 py-1">
-                              <button
-                                type="button"
-                                className="h-7 w-7 rounded-md border border-black/15 text-base font-semibold text-slate-800"
-                                onClick={() => {
-                                  setSelectedSauceCounts((prev) => {
-                                    const current = prev[addon.name] ?? 0;
-                                    if (current <= 0) return prev;
-                                    const next = { ...prev };
-                                    if (current === 1) {
-                                      delete next[addon.name];
-                                    } else {
-                                      next[addon.name] = current - 1;
-                                    }
-                                    emitCartConfiguration(selectedVariantId, selectedAddons, next, selectedCommonChangeIds);
-                                    return next;
-                                  });
-                                }}
-                              >
-                                -
-                              </button>
-                              <span className="min-w-4 text-center text-sm font-semibold">{count}</span>
-                              <button
-                                type="button"
-                                className="h-7 w-7 rounded-md border border-black/15 text-base font-semibold text-slate-800"
-                                onClick={() => {
-                                  setSelectedSauceCounts((prev) => {
-                                    const currentTotal = Object.values(prev).reduce((sum, selectedCount) => sum + selectedCount, 0);
-                                    if (currentTotal >= maxSauceSelections) return prev;
-                                    const next = { ...prev, [addon.name]: (prev[addon.name] ?? 0) + 1 };
-                                    emitCartConfiguration(selectedVariantId, selectedAddons, next, selectedCommonChangeIds);
-                                    return next;
-                                  });
-                                }}
-                              >
-                                +
-                              </button>
-                            </div>
-                            <div className="flex items-end justify-end gap-4">
-                              <QuickMacro value={addon.calories * count} label="Cal" tone="calories" />
-                              <QuickMacro value={addon.protein * count} label="Protein" tone="protein" />
-                              <QuickMacro value={addon.carbs * count} label="Carbs" tone="carbs" />
-                              <QuickMacro value={addon.totalFat * count} label="Fat" tone="totalFat" />
+                            <div className="min-w-0">
+                              <p className="truncate text-sm font-semibold text-slate-900">{addon.name}</p>
+                              <div className="mt-2 inline-flex items-center gap-2 rounded-lg border border-black/10 bg-white px-1 py-1">
+                                <button
+                                  type="button"
+                                  className="h-7 w-7 rounded-md border border-black/15 text-base font-semibold text-slate-800"
+                                  onClick={() => {
+                                    setSelectedSauceCounts((prev) => {
+                                      const current = prev[addon.name] ?? 0;
+                                      if (current <= 0) return prev;
+                                      const next = { ...prev };
+                                      if (current === 1) {
+                                        delete next[addon.name];
+                                      } else {
+                                        next[addon.name] = current - 1;
+                                      }
+                                      emitCartConfiguration(selectedVariantId, selectedAddons, next, selectedCommonChangeIds);
+                                      return next;
+                                    });
+                                  }}
+                                >
+                                  -
+                                </button>
+                                <span className="min-w-4 text-center text-sm font-semibold">{count}</span>
+                                <button
+                                  type="button"
+                                  className="h-7 w-7 rounded-md border border-black/15 text-base font-semibold text-slate-800"
+                                  onClick={() => {
+                                    setSelectedSauceCounts((prev) => {
+                                      const currentTotal = Object.values(prev).reduce((sum, selectedCount) => sum + selectedCount, 0);
+                                      if (currentTotal >= maxSauceSelections) return prev;
+                                      const next = { ...prev, [addon.name]: (prev[addon.name] ?? 0) + 1 };
+                                      emitCartConfiguration(selectedVariantId, selectedAddons, next, selectedCommonChangeIds);
+                                      return next;
+                                    });
+                                  }}
+                                >
+                                  +
+                                </button>
+                              </div>
+                              <div className="mt-2 grid grid-cols-2 gap-x-3 gap-y-2 sm:grid-cols-4">
+                                <QuickMacro value={addon.calories * count} label="Cal" tone="calories" />
+                                <QuickMacro value={addon.protein * count} label="Protein" tone="protein" />
+                                <QuickMacro value={addon.carbs * count} label="Carbs" tone="carbs" />
+                                <QuickMacro value={addon.totalFat * count} label="Fat" tone="totalFat" />
+                              </div>
                             </div>
                           </div>
                         );
@@ -1370,7 +1372,7 @@ export default function MenuItemCard({
                   <section>
                     <p className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-600">Dressings</p>
                     <div className="space-y-1.5">
-                      <div className="grid w-full grid-cols-[60px_minmax(0,1fr)_auto] items-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-left">
+                      <div className="grid w-full grid-cols-[72px_minmax(0,1fr)] items-start gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-left">
                         <div className="h-[72px] w-[72px] overflow-hidden rounded-lg border border-black/10 bg-white">
                           {selectedAddons.dressings.image ? (
                             <img src={selectedAddons.dressings.image} alt={selectedAddons.dressings.name} className="h-full w-full object-contain p-1" />
@@ -1378,12 +1380,12 @@ export default function MenuItemCard({
                         </div>
                         <div className="min-w-0">
                           <p className="truncate text-sm font-semibold text-slate-900">{selectedAddons.dressings.name}</p>
-                        </div>
-                        <div className="flex items-end justify-end gap-4">
-                          <QuickMacro value={selectedAddons.dressings.calories} label="Cal" tone="calories" />
-                          <QuickMacro value={selectedAddons.dressings.protein} label="Protein" tone="protein" />
-                          <QuickMacro value={selectedAddons.dressings.carbs} label="Carbs" tone="carbs" />
-                          <QuickMacro value={selectedAddons.dressings.totalFat} label="Fat" tone="totalFat" />
+                          <div className="mt-2 grid grid-cols-2 gap-x-3 gap-y-2 sm:grid-cols-4">
+                            <QuickMacro value={selectedAddons.dressings.calories} label="Cal" tone="calories" />
+                            <QuickMacro value={selectedAddons.dressings.protein} label="Protein" tone="protein" />
+                            <QuickMacro value={selectedAddons.dressings.carbs} label="Carbs" tone="carbs" />
+                            <QuickMacro value={selectedAddons.dressings.totalFat} label="Fat" tone="totalFat" />
+                          </div>
                         </div>
                       </div>
                     </div>
