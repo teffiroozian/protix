@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { ChevronDown, Pencil } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import type {
   AddonOption,
   AddonRef,
@@ -1193,16 +1193,16 @@ export default function MenuItemCard({
               <div className="space-y-3">
                 <section>
                   <p className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-600">Main</p>
-                  <div className="grid grid-cols-[72px_minmax(0,1fr)_auto] items-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2.5">
+                  <div className="grid grid-cols-[72px_minmax(0,1fr)] items-start gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2.5">
                     <div className="h-[72px] w-[72px] overflow-hidden rounded-lg border border-black/10 bg-white">
                       {selectedItemImage ? (
                         <img src={selectedItemImage} alt={item.name} className="h-full w-full object-contain p-1" />
                       ) : null}
                     </div>
                     <div className="min-w-0">
-                      <div className="flex min-w-0 items-center gap-2">
-                        <p className="truncate text-sm font-semibold text-slate-900">{item.name}</p>
-                        {hasVariantDropdown ? (
+                      <p className="truncate text-sm font-semibold text-slate-900">{item.name}</p>
+                      {hasVariantDropdown ? (
+                        <div className="mt-2">
                           <QuickVariantDropdown
                             ariaLabel={`${item.name} quick portion`}
                             value={selectedVariantId}
@@ -1212,14 +1212,14 @@ export default function MenuItemCard({
                               emitCartConfiguration(nextVariantId, selectedAddons, selectedSauceCounts, selectedCommonChangeIds);
                             }}
                           />
-                        ) : null}
+                        </div>
+                      ) : null}
+                      <div className="mt-2 flex flex-wrap items-end gap-x-3 gap-y-2">
+                        <QuickMacro value={displayCalories} label="Cal" tone="calories" />
+                        <QuickMacro value={displayProtein} label="Protein" tone="protein" />
+                        <QuickMacro value={displayCarbs} label="Carbs" tone="carbs" />
+                        <QuickMacro value={displayFat} label="Fat" tone="totalFat" />
                       </div>
-                    </div>
-                    <div className="flex items-end justify-end gap-4">
-                      <QuickMacro value={displayCalories} label="Cal" tone="calories" />
-                      <QuickMacro value={displayProtein} label="Protein" tone="protein" />
-                      <QuickMacro value={displayCarbs} label="Carbs" tone="carbs" />
-                      <QuickMacro value={displayFat} label="Fat" tone="totalFat" />
                     </div>
                   </div>
                 </section>
@@ -1227,16 +1227,16 @@ export default function MenuItemCard({
                 {comboType === "combo-meal" && selectedComboSide ? (
                   <section>
                     <p className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-600">Side</p>
-                    <div className="grid grid-cols-[72px_minmax(0,1fr)_auto] items-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2.5">
+                    <div className="grid grid-cols-[72px_minmax(0,1fr)] items-start gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2.5">
                       <div className="h-[72px] w-[72px] overflow-hidden rounded-lg border border-black/10 bg-white">
                         {selectedComboSide.image ? (
                           <img src={selectedComboSide.image} alt={selectedComboSide.name} className="h-full w-full object-contain p-1" />
                         ) : null}
                       </div>
                       <div className="min-w-0">
-                        <div className="flex items-center gap-2">
-                          <p className="truncate text-sm font-semibold text-slate-900">{selectedComboSide.name}</p>
-                          {selectedComboSide.variants && selectedComboSide.variants.length > 1 ? (
+                        <p className="truncate text-sm font-semibold text-slate-900">{selectedComboSide.name}</p>
+                        {selectedComboSide.variants && selectedComboSide.variants.length > 1 ? (
+                          <div className="mt-2">
                             <QuickVariantDropdown
                               ariaLabel={`${selectedComboSide.name} size`}
                               value={selectedComboSideVariantId}
@@ -1246,14 +1246,14 @@ export default function MenuItemCard({
                                 emitCartConfiguration(selectedVariantId, selectedAddons, selectedSauceCounts, selectedCommonChangeIds, ingredientCounts, comboType, selectedComboSideId, selectedComboDrinkId, variantId, selectedComboDrinkVariantId);
                               }}
                             />
-                          ) : null}
+                          </div>
+                        ) : null}
+                        <div className="mt-2 flex flex-wrap items-end gap-x-3 gap-y-2">
+                          <QuickMacro value={selectedComboSideVariant?.nutrition.calories ?? selectedComboSide.nutrition.calories} label="Cal" tone="calories" />
+                          <QuickMacro value={selectedComboSideVariant?.nutrition.protein ?? selectedComboSide.nutrition.protein} label="Protein" tone="protein" />
+                          <QuickMacro value={selectedComboSideVariant?.nutrition.carbs ?? selectedComboSide.nutrition.carbs} label="Carbs" tone="carbs" />
+                          <QuickMacro value={selectedComboSideVariant?.nutrition.totalFat ?? selectedComboSide.nutrition.totalFat} label="Fat" tone="totalFat" />
                         </div>
-                      </div>
-                      <div className="flex items-end justify-end gap-4">
-                        <QuickMacro value={selectedComboSideVariant?.nutrition.calories ?? selectedComboSide.nutrition.calories} label="Cal" tone="calories" />
-                        <QuickMacro value={selectedComboSideVariant?.nutrition.protein ?? selectedComboSide.nutrition.protein} label="Protein" tone="protein" />
-                        <QuickMacro value={selectedComboSideVariant?.nutrition.carbs ?? selectedComboSide.nutrition.carbs} label="Carbs" tone="carbs" />
-                        <QuickMacro value={selectedComboSideVariant?.nutrition.totalFat ?? selectedComboSide.nutrition.totalFat} label="Fat" tone="totalFat" />
                       </div>
                     </div>
                   </section>
@@ -1262,16 +1262,16 @@ export default function MenuItemCard({
                 {comboType === "combo-meal" && selectedComboDrink ? (
                   <section>
                     <p className="mb-2 px-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-600">Drink</p>
-                    <div className="grid grid-cols-[72px_minmax(0,1fr)_auto] items-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2.5">
+                    <div className="grid grid-cols-[72px_minmax(0,1fr)] items-start gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2.5">
                       <div className="h-[72px] w-[72px] overflow-hidden rounded-lg border border-black/10 bg-white">
                         {selectedComboDrink.image ? (
                           <img src={selectedComboDrink.image} alt={selectedComboDrink.name} className="h-full w-full object-contain p-1" />
                         ) : null}
                       </div>
                       <div className="min-w-0">
-                        <div className="flex items-center gap-2">
-                          <p className="truncate text-sm font-semibold text-slate-900">{selectedComboDrink.name}</p>
-                          {selectedComboDrink.variants && selectedComboDrink.variants.length > 1 ? (
+                        <p className="truncate text-sm font-semibold text-slate-900">{selectedComboDrink.name}</p>
+                        {selectedComboDrink.variants && selectedComboDrink.variants.length > 1 ? (
+                          <div className="mt-2">
                             <QuickVariantDropdown
                               ariaLabel={`${selectedComboDrink.name} size`}
                               value={selectedComboDrinkVariantId}
@@ -1281,14 +1281,14 @@ export default function MenuItemCard({
                                 emitCartConfiguration(selectedVariantId, selectedAddons, selectedSauceCounts, selectedCommonChangeIds, ingredientCounts, comboType, selectedComboSideId, selectedComboDrinkId, selectedComboSideVariantId, variantId);
                               }}
                             />
-                          ) : null}
+                          </div>
+                        ) : null}
+                        <div className="mt-2 flex flex-wrap items-end gap-x-3 gap-y-2">
+                          <QuickMacro value={selectedComboDrinkVariant?.nutrition.calories ?? selectedComboDrink.nutrition.calories} label="Cal" tone="calories" />
+                          <QuickMacro value={selectedComboDrinkVariant?.nutrition.protein ?? selectedComboDrink.nutrition.protein} label="Protein" tone="protein" />
+                          <QuickMacro value={selectedComboDrinkVariant?.nutrition.carbs ?? selectedComboDrink.nutrition.carbs} label="Carbs" tone="carbs" />
+                          <QuickMacro value={selectedComboDrinkVariant?.nutrition.totalFat ?? selectedComboDrink.nutrition.totalFat} label="Fat" tone="totalFat" />
                         </div>
-                      </div>
-                      <div className="flex items-end justify-end gap-4">
-                        <QuickMacro value={selectedComboDrinkVariant?.nutrition.calories ?? selectedComboDrink.nutrition.calories} label="Cal" tone="calories" />
-                        <QuickMacro value={selectedComboDrinkVariant?.nutrition.protein ?? selectedComboDrink.nutrition.protein} label="Protein" tone="protein" />
-                        <QuickMacro value={selectedComboDrinkVariant?.nutrition.carbs ?? selectedComboDrink.nutrition.carbs} label="Carbs" tone="carbs" />
-                        <QuickMacro value={selectedComboDrinkVariant?.nutrition.totalFat ?? selectedComboDrink.nutrition.totalFat} label="Fat" tone="totalFat" />
                       </div>
                     </div>
                   </section>
@@ -1390,16 +1390,6 @@ export default function MenuItemCard({
                   </section>
                 ) : null}
 
-                <div className="flex justify-end">
-                  <button
-                    type="button"
-                    onClick={() => onCartModify?.()}
-                    aria-label="Customize fully"
-                    className="cursor-pointer inline-flex h-10 w-10 items-center justify-center rounded-lg border border-black bg-black text-white transition hover:bg-slate-800"
-                  >
-                    <Pencil className="h-4 w-4" />
-                  </button>
-                </div>
               </div>
             </div>
           ) : (
