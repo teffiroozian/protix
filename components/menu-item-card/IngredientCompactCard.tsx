@@ -53,7 +53,7 @@ export default function IngredientCompactCard({
         aria-checked={ingredientSelectionState}
         aria-label={`${isIngredientSelectionDisabled ? ingredientDisabledReason ?? "Unavailable" : "Select"} ${item.name}`}
         tabIndex={isIngredientSelectionDisabled ? -1 : 0}
-        className={`flex items-start gap-3 px-4 py-3 lg:items-center lg:gap-4 ${isIngredientSelectionDisabled ? "cursor-not-allowed opacity-95" : "cursor-pointer"}`}
+        className={`flex items-center gap-3 px-4 py-3 lg:gap-4 ${isIngredientSelectionDisabled ? "cursor-not-allowed opacity-95" : "cursor-pointer"}`}
         onClick={() => {
           if (isIngredientSelectionDisabled) return;
           const nextSelected =
@@ -86,8 +86,8 @@ export default function IngredientCompactCard({
           <div className="h-24 w-24 shrink-0 rounded-xl bg-[#efefef]" />
         )}
 
-        <div className="flex min-w-0 flex-1 flex-col gap-3">
-          <div className="flex min-w-0 flex-wrap items-center gap-2 lg:gap-3">
+        <div className="flex min-w-0 flex-1 flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex min-w-0 flex-wrap items-center gap-2 lg:flex-1 lg:gap-3">
             {ingredientPortionBadge ? (
               <span className="inline-flex shrink-0 rounded-full bg-lime-500 px-2 py-0.5 text-xs font-bold text-black">{ingredientPortionBadge}</span>
             ) : null}
@@ -123,7 +123,7 @@ export default function IngredientCompactCard({
             </div>
           ) : null}
 
-          <div className="flex w-full items-center gap-4 text-center lg:gap-8">
+          <div className="flex w-full items-center gap-4 text-center lg:w-auto lg:gap-6">
             {[[calories, "black", "cal"], [protein, "#c2410c", "protein"], [carbs, "#ca8a04", "carbs"], [totalFat, "#2563eb", "fat"]].map(([value, color, label]) => (
               <div key={String(label)} className="flex min-w-[44px] flex-col items-center gap-1 sm:min-w-[54px]">
                 <div className="text-lg leading-none font-bold sm:text-xl" style={{ color: String(color) }}>
