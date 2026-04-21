@@ -45,7 +45,11 @@ export default function StickyMacroTotalsBar({
 
   const wrapperClassName = inline
     ? "w-full"
-    : `fixed left-0 right-0 ${isCartLayout ? "bottom-2 max-w-5xl px-2 sm:bottom-4 sm:px-6" : "bottom-1 max-w-6xl px-2"} mx-auto z-[120] transition-all duration-300 ease-out ${
+    : `fixed left-0 right-0 ${
+        isCartLayout
+          ? "bottom-2 max-w-5xl px-2 sm:bottom-4 sm:px-6"
+          : `${detailsOpen && detailsContent ? "top-1 bottom-1" : "bottom-1"} max-w-6xl px-2`
+      } mx-auto z-[120] transition-all duration-300 ease-out ${
         visible
           ? "pointer-events-none translate-y-0 opacity-100"
           : "pointer-events-none translate-y-4 opacity-0"
@@ -53,9 +57,13 @@ export default function StickyMacroTotalsBar({
 
   const panelClassName = inline
     ? `w-full rounded-3xl border border-black/10 bg-white px-4 ${isCartLayout ? "py-4" : "py-3"}`
-    : `mx-auto w-full ${isCartLayout ? "rounded-[1.5rem] border-black/10 px-3 py-4 sm:rounded-[2.25rem] sm:px-6 sm:py-6" : "rounded-2xl border-slate-200/70 px-4 py-6"} border bg-white shadow-[0_10px_30px_rgba(0,0,0,0.24)] transition-all duration-300 ${
+    : `mx-auto w-full ${
+        isCartLayout
+          ? "rounded-[1.5rem] border-black/10 px-3 py-4 sm:rounded-[2.25rem] sm:px-6 sm:py-6"
+          : "rounded-2xl border-slate-200/70 px-4 py-3 sm:py-4"
+      } border bg-white shadow-[0_10px_30px_rgba(0,0,0,0.24)] transition-all duration-300 ${
         visible ? "pointer-events-auto" : "pointer-events-none"
-      } ${detailsOpen && detailsContent ? "flex max-h-[calc(100vh-0.5rem)] flex-col" : ""}`;
+      } ${detailsOpen && detailsContent ? "flex h-full flex-col" : ""}`;
 
   const contentContainerClassName = `mx-auto w-full max-w-5xl ${
     detailsContent ? "flex min-h-0 flex-1 flex-col" : ""
@@ -72,7 +80,7 @@ export default function StickyMacroTotalsBar({
               }`}
             >
               <div className="min-h-0 overflow-hidden">
-                <div className="max-h-[calc(100vh-18rem)] overflow-y-auto overscroll-contain pr-1">
+                <div className="h-full overflow-y-auto overscroll-contain pr-1">
                   {detailsContent}
                 </div>
               </div>
@@ -127,7 +135,7 @@ export default function StickyMacroTotalsBar({
                 type="button"
                 onClick={onSecondaryAction}
                 className={`cursor-pointer inline-flex items-center justify-center gap-2 rounded-xl border-2 border-black/80 bg-transparent font-semibold text-[#1A1A1A] transition hover:bg-black/5 ${
-                  isCartLayout ? "h-11 px-6 text-base" : "h-9 px-4 text-sm"
+                  isCartLayout ? "h-11 px-6 text-base" : "h-11 px-6 text-base"
                 } ${
                   isCartLayout ? "" : "flex-1 sm:flex-none"
                 }`}
@@ -143,7 +151,7 @@ export default function StickyMacroTotalsBar({
                 type="button"
                 onClick={onPrimaryAction}
                 className={`cursor-pointer inline-flex items-center justify-center gap-2 rounded-xl border border-black bg-black font-semibold text-white transition hover:bg-neutral-900 ${
-                  isCartLayout ? "h-11 px-6 text-base" : "h-9 px-4 text-sm"
+                  isCartLayout ? "h-11 px-6 text-base" : "h-11 px-6 text-base"
                 } ${
                   isCartLayout ? "" : "flex-1 sm:flex-none"
                 }`}
