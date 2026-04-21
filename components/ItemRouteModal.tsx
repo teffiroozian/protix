@@ -1555,7 +1555,7 @@ export default function ItemRouteModal({
             labelClassName="text-[#64748b]"
           />
           <div className="flex w-full flex-row items-center gap-2 md:w-auto">
-            <div className="inline-flex w-full flex-1 items-center justify-between rounded-xl border border-slate-200 bg-slate-50 p-1 md:w-[180px] md:flex-none">
+            <div className="inline-flex w-full flex-1 items-center justify-between rounded-xl border border-slate-200 bg-slate-50 p-1 md:w-[100px] md:flex-none">
               <button
                 type="button"
                 onClick={handleDecrementQuantity}
