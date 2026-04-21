@@ -81,9 +81,9 @@ export default function IngredientCompactCard({
         </span>
 
         {selectedItemImage ? (
-          <img className="h-24 w-24 shrink-0 rounded-xl bg-[#efefef] object-cover" src={selectedItemImage} alt={item.name} />
+          <img className="h-20 w-20 shrink-0 rounded-xl bg-[#efefef] object-cover sm:h-24 sm:w-24" src={selectedItemImage} alt={item.name} />
         ) : (
-          <div className="h-24 w-24 shrink-0 rounded-xl bg-[#efefef]" />
+          <div className="h-20 w-20 shrink-0 rounded-xl bg-[#efefef] sm:h-24 sm:w-24" />
         )}
 
         <div className="flex min-w-0 flex-1 flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">

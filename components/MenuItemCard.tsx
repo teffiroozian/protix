@@ -1154,7 +1154,7 @@ export default function MenuItemCard({
           </div>
         </div>
 
-        <div className="absolute right-3 top-3 hidden items-center gap-2 sm:right-[18px] sm:top-[18px] sm:inline-flex">
+        <div className="absolute right-3 top-3 hidden items-center gap-2 sm:right-[18px] sm:top-[18px] lg:inline-flex">
           {hasMods && !isCartMode ? (
             <div
               role="button"
