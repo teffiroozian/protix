@@ -91,7 +91,7 @@ export default function IngredientCompactCard({
             {ingredientPortionBadge ? (
               <span className="inline-flex shrink-0 rounded-full bg-lime-500 px-2 py-0.5 text-xs font-bold text-black">{ingredientPortionBadge}</span>
             ) : null}
-            <div className="min-w-0 flex-1 truncate text-xl font-semibold text-black sm:text-2xl">{item.name}</div>
+            <div className="min-w-0 flex-1 truncate text-lg font-semibold text-black sm:text-xl">{item.name}</div>
             {activeCompactOptions && activeCompactOptions.length > 1 && ingredientSelectionState ? (
               <div className="flex flex-wrap gap-2">
                 {activeCompactOptions.map((variantOption) => (
@@ -129,7 +129,9 @@ export default function IngredientCompactCard({
                 <div className="text-lg leading-none font-bold sm:text-xl" style={{ color: String(color) }}>
                   {label === "cal" ? formatCalories(value as number | undefined) : formatMacro(value as number | undefined)}
                 </div>
-                <div className="text-[10px] font-semibold uppercase tracking-wide text-black/80">{label}</div>
+                <div className={`font-semibold uppercase tracking-wide text-black/80 ${label === "protein" ? "text-[9px] sm:text-[10px]" : "text-[10px]"}`}>
+                  {label}
+                </div>
               </div>
             ))}
           </div>

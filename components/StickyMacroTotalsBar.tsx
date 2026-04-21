@@ -77,7 +77,7 @@ export default function StickyMacroTotalsBar({
             className={`shrink-0 flex ${
               isCartLayout
                 ? "flex-col gap-5 lg:flex-row lg:items-center lg:gap-8"
-                : "flex-row items-end justify-between gap-3"
+                : "flex-row items-center justify-between gap-3"
             }`}
           >
             <section className={`${isCartLayout ? "flex-1" : "min-w-0 flex-1"}`}>
