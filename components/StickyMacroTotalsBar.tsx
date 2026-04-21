@@ -58,20 +58,33 @@ export default function StickyMacroTotalsBar({
       } ${detailsOpen && detailsContent ? "flex max-h-[calc(100vh-0.5rem)] flex-col" : ""}`;
 
   const contentContainerClassName = `mx-auto w-full max-w-5xl ${
-    detailsOpen && detailsContent ? "flex min-h-0 flex-1 flex-col" : ""
+    detailsContent ? "flex min-h-0 flex-1 flex-col" : ""
   }`;
 
   return (
     <div className={wrapperClassName}>
       <div className={panelClassName}>
         <div className={contentContainerClassName}>
-          {detailsOpen && detailsContent ? (
-            <div className="mb-4 min-h-0 flex-1 overflow-y-auto overscroll-contain pr-1">
-              {detailsContent}
+          {detailsContent ? (
+            <div
+              className={`grid min-h-0 transition-all duration-300 ease-out ${
+                detailsOpen ? "mb-4 grid-rows-[1fr] opacity-100" : "mb-0 grid-rows-[0fr] opacity-0"
+              }`}
+            >
+              <div className="min-h-0 overflow-hidden">
+                <div className="max-h-[calc(100vh-18rem)] overflow-y-auto overscroll-contain pr-1">
+                  {detailsContent}
+                </div>
+              </div>
             </div>
           ) : null}
-          {detailsOpen && detailsContent ? (
-            <div className="mb-4 border-t border-black/10" aria-hidden="true" />
+          {detailsContent ? (
+            <div
+              className={`border-t border-black/10 transition-all duration-300 ease-out ${
+                detailsOpen ? "mb-4 opacity-100" : "mb-0 opacity-0"
+              }`}
+              aria-hidden="true"
+            />
           ) : null}
           <div
             className={`shrink-0 flex ${
@@ -107,7 +120,7 @@ export default function StickyMacroTotalsBar({
 
             <div
               className={`flex gap-2 sm:gap-2.5 ${
-                isCartLayout ? "w-full flex-col sm:w-auto" : "w-auto shrink-0 flex-row"
+                isCartLayout ? "w-full flex-col sm:w-auto" : "w-auto shrink-0 flex-col sm:flex-row"
               }`}
             >
               <button
