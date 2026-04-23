@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useCart } from "@/stores/cartStore";
-import { useRestaurantUi } from "@/components/RestaurantUiContext";
+import { useOptionalRestaurantUi } from "@/components/RestaurantUiContext";
 import MacroTotalsGrid from "@/components/MacroTotalsGrid";
 import CartItemPreviewRow from "@/components/CartItemPreviewRow";
 import { ShoppingCart } from "lucide-react";
@@ -17,7 +18,8 @@ const SCROLL_CLOSE_THRESHOLD = 90;
 export default function CartIconDropdown({
   buttonClassName,
 }: CartIconDropdownProps) {
-  const { openCart } = useRestaurantUi();
+  const router = useRouter();
+  const restaurantUi = useOptionalRestaurantUi();
   const { items, totals, lastAddedItem, lastAddedAt } = useCart();
   const [dismissedAddedAt, setDismissedAddedAt] = useState<number | null>(() => lastAddedAt);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -95,7 +97,11 @@ export default function CartIconDropdown({
       <button
         type="button"
         onClick={() => {
-          openCart();
+          if (restaurantUi) {
+            restaurantUi.openCart();
+          } else {
+            router.push("/cart");
+          }
           if (lastAddedAt !== null) {
             setDismissedAddedAt(lastAddedAt);
           }
