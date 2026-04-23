@@ -15,6 +15,8 @@ export default function MobileNavDrawer({
   defaultTab = "browse",
   controlsContent,
   controlsFooter,
+  headerTitle,
+  headerLogoSrc,
 }: {
   isOpen: boolean;
   onClose: () => void;
@@ -22,6 +24,8 @@ export default function MobileNavDrawer({
   defaultTab?: DrawerTab;
   controlsContent?: React.ReactNode;
   controlsFooter?: React.ReactNode;
+  headerTitle?: string;
+  headerLogoSrc?: string;
 }) {
   const [activeTab, setActiveTab] = useState<DrawerTab>(defaultTab);
   const [isFeaturedOpen, setIsFeaturedOpen] = useState(true);
@@ -44,10 +48,20 @@ export default function MobileNavDrawer({
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="flex items-center border-b border-black/10 px-4 py-3">
+        <div className="flex items-center gap-2.5 border-b border-black/10 px-4 py-3">
           <button type="button" onClick={onClose} className="rounded-full border border-black/15 p-2 text-black/70">
             <X className="h-4 w-4" strokeWidth={2.5} />
           </button>
+          {headerTitle ? (
+            <div className="inline-flex min-w-0 items-center gap-2.5">
+              {headerLogoSrc ? (
+                <span className="relative h-8 w-8 shrink-0 overflow-hidden rounded-lg border border-slate-300/80 bg-white">
+                  <Image src={headerLogoSrc} alt={`${headerTitle} logo`} fill className="object-contain rounded-md" />
+                </span>
+              ) : null}
+              <span className="truncate text-base font-semibold text-slate-900">{headerTitle}</span>
+            </div>
+          ) : null}
         </div>
 
         <div className="border-b border-black/10 px-4 py-2.5">
