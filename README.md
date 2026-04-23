@@ -1,6 +1,6 @@
 # Macro Maxxer
 
-A macro-focused fast food app that lets users find high-protein meals across multiple restaurants and customize items with real-time nutrition tracking.
+A fast food macro tracking app that lets users find high-protein, low calorie meals across multiple restaurants and customize items with with ease, and see their final order macros before ordering .
 
 ## 🌍 Live Demo
 
