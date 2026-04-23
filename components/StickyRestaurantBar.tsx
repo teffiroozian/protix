@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import type { ReactNode } from "react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import CartIconDropdown from "@/components/CartIconDropdown";
@@ -64,6 +64,9 @@ export default function StickyRestaurantBar({
   const searchInputRef = useRef<HTMLInputElement>(null);
   const isSearchMode = searchOpen || searchQuery.trim().length > 0;
   const [openMobileControlsDrawer, setOpenMobileControlsDrawer] = useState<() => void>(() => () => {});
+  const handleMobileDrawerOpenReady = useCallback((openDrawer: () => void) => {
+    setOpenMobileControlsDrawer(() => openDrawer);
+  }, []);
 
   useEffect(() => {
     if (searchOpen) {
@@ -222,7 +225,7 @@ export default function StickyRestaurantBar({
                 calorieBounds={calorieBounds}
                 hideViewSelector={hideViewSelector}
                 showMobileTrigger={false}
-                onMobileDrawerOpenReady={setOpenMobileControlsDrawer}
+                onMobileDrawerOpenReady={handleMobileDrawerOpenReady}
               />
             </div>
           </div>

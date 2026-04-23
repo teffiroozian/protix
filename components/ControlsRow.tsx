@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
+import Image from "next/image";
 
 import { useFilterChipActions } from "./useFilterChipActions";
 import { SORT_OPTION_VALUES, type SortOption } from "@/lib/menuSections/sortOptions";
@@ -251,7 +252,12 @@ export default function ControlsRow({
                     onClick={() => setIsMobileDrawerOpen(false)}
                     className="inline-flex items-center justify-between rounded-xl border border-black/15 bg-white px-3 py-2.5 text-sm font-semibold text-black/85"
                   >
-                    {restaurant.name}
+                    <span className="inline-flex min-w-0 items-center gap-2.5">
+                      <span className="relative h-7 w-7 shrink-0 overflow-hidden rounded-md border border-black/10 bg-white">
+                        <Image src={restaurant.logo} alt={`${restaurant.name} logo`} fill className="object-cover" />
+                      </span>
+                      <span className="truncate">{restaurant.name}</span>
+                    </span>
                     <ChevronRight className="h-4 w-4 text-black/50" strokeWidth={2.5} />
                   </Link>
                 ))}
