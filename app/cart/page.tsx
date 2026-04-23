@@ -7,6 +7,7 @@ import type { CartMacros } from "@/stores/cartStore";
 import MenuItemCard from "@/components/MenuItemCard";
 import StickyMacroTotalsBar from "@/components/StickyMacroTotalsBar";
 import CartNutritionSummary from "@/components/cart/CartNutritionSummary";
+import GlobalMobileNav from "@/components/GlobalMobileNav";
 import restaurants from "@/app/data/index.json";
 import { useCart } from "@/stores/cartStore";
 import {
@@ -158,7 +159,9 @@ export default function CartPage() {
   };
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-6 px-4 pb-10 pt-8 sm:px-6 sm:pt-10">
+    <>
+      <GlobalMobileNav title="Cart" logoSrc={headerLogo ?? "/favicon.ico"} />
+      <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-6 px-4 pb-10 pt-28 sm:px-6 lg:pt-10">
       <header className="rounded-3xl border border-black/10 bg-white px-5 py-5 shadow-sm sm:px-6">
         <div className="mb-4">
           <Link
@@ -349,6 +352,7 @@ export default function CartPage() {
 
         
       </section>
-    </main>
+      </main>
+    </>
   );
 }

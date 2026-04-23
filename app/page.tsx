@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import restaurants from "./data/index.json";
+import GlobalMobileNav from "@/components/GlobalMobileNav";
 
 const RECENT_RESTAURANTS_KEY = "recentlySearchedRestaurants";
 
@@ -82,7 +83,7 @@ export default function Home() {
     });
 
     return Array.from(grouped.entries()).sort(([a], [b]) => a.localeCompare(b));
-  }, [restaurants]);
+  }, []);
 
   const isEmptyFocusedState = isFocused && !query.trim();
   const suggestions = isEmptyFocusedState
@@ -119,7 +120,9 @@ export default function Home() {
   };
 
   return (
-    <main className="mx-auto flex max-w-5xl flex-col gap-12 px-4 py-24 sm:px-6">
+    <>
+      <GlobalMobileNav />
+      <main className="mx-auto flex max-w-5xl flex-col gap-12 px-4 py-24 pt-28 sm:px-6 lg:pt-24">
       <header className="mx-auto max-w-3xl text-center">
         <h1 className="text-center text-4xl font-semibold tracking-tight leading-tight text-neutral-900">
           High-Protein Fast Food Orders
@@ -419,6 +422,7 @@ export default function Home() {
           ))}
         </div>
       </section>
-    </main>
+      </main>
+    </>
   );
 }
