@@ -81,7 +81,6 @@ import {
   type IncludedIngredientContext,
   type ProteinPortionMode,
   type SplitPortionMode,
-  getAllKnownIncludedIngredientIds,
   getIngredientCategoryMaxSelections,
   getProteinBadgeLabel,
   getProteinMultiplier,
@@ -279,6 +278,7 @@ export default function RestaurantView({
   const [isBuildSummaryExpanded, setIsBuildSummaryExpanded] = useState(false);
   const buildStickyContainerRef = useRef<HTMLDivElement | null>(null);
   const buildCustomizationModalScrollRef = useRef<HTMLDivElement | null>(null);
+  const appliedIncludedIngredientIdsRef = useRef<Set<string>>(new Set());
   const pendingBuildCustomizationResetRef = useRef<
     | { type: "none" }
     | {
@@ -1341,12 +1341,13 @@ export default function RestaurantView({
       selectedKidsMeal,
     }
   ) => {
-    const allIncludedIngredientIds = getAllKnownIncludedIngredientIds(chipotleBuilderConfig);
+    const previouslyAppliedIncludedIngredientIds = new Set(appliedIncludedIngredientIdsRef.current);
+    const nextIncludedIngredientIdSet = new Set(nextIncludedIngredientIds);
 
     setSelectedIngredientItems((previous) => {
       const next = { ...previous };
 
-      allIncludedIngredientIds.forEach((ingredientId) => {
+      previouslyAppliedIncludedIngredientIds.forEach((ingredientId) => {
         if (ingredientId in next) {
           delete next[ingredientId];
         }
@@ -1407,11 +1408,12 @@ export default function RestaurantView({
 
       return applyIngredientPortionNutrition(next);
     });
+    appliedIncludedIngredientIdsRef.current = nextIncludedIngredientIdSet;
 
     setSelectedIngredientVariantIds((previous) => {
       const next = { ...previous };
 
-      allIncludedIngredientIds.forEach((ingredientId) => {
+      previouslyAppliedIncludedIngredientIds.forEach((ingredientId) => {
         if (ingredientId in next) {
           delete next[ingredientId];
         }
@@ -1472,9 +1474,9 @@ export default function RestaurantView({
     getIngredientNutritionMultiplier,
     ingredients,
     ingredientItemsById,
+    appliedIncludedIngredientIdsRef,
     selectedEntree,
     selectedKidsMeal,
-    chipotleBuilderConfig,
     quesadillaTripleCheeseVariantId,
   ]);
 
