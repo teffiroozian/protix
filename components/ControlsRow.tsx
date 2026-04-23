@@ -200,7 +200,7 @@ export default function ControlsRow({
         className="absolute inset-0 bg-black/35"
         onClick={() => setIsMobileDrawerOpen(false)}
       />
-      <div className="absolute inset-y-0 left-0 flex w-[min(90vw,360px)] flex-col bg-[#F3F3F3] shadow-[0_18px_40px_rgba(0,0,0,0.24)]">
+      <div className="absolute inset-y-0 left-0 flex w-[min(90vw,360px)] flex-col bg-white shadow-[0_18px_40px_rgba(0,0,0,0.24)]">
         <div className="flex items-center justify-between border-b border-black/10 px-4 py-3">
           <h3 className="text-lg font-bold text-black/90">Controls</h3>
           <button type="button" onClick={() => setIsMobileDrawerOpen(false)} className="rounded-full border border-black/15 p-2 text-black/70">
@@ -222,7 +222,7 @@ export default function ControlsRow({
                       type="button"
                       onClick={() => onChange(option.value)}
                       className={`inline-flex items-center gap-2.5 rounded-xl border px-3 py-2.5 text-left text-sm font-semibold transition ${
-                        isActive ? "border-transparent bg-[#D9D9D9] text-black" : "border-transparent bg-transparent text-black/80"
+                        isActive ? "border-black/80 bg-black/85 text-white" : "border-black/15 bg-white text-black/80"
                       }`}
                     >
                       <Icon className="h-4 w-4" strokeWidth={2.2} />
@@ -234,6 +234,8 @@ export default function ControlsRow({
               </div>
             </section>
           )}
+
+          {hideViewSelector ? null : <div className="h-px bg-black/10" />}
 
           <section className="space-y-2.5">
             <h4 className="text-sm font-semibold uppercase tracking-wide text-black/50">Sort</h4>
@@ -247,7 +249,7 @@ export default function ControlsRow({
                     type="button"
                     onClick={() => onSortChange(option.value)}
                     className={`inline-flex items-center gap-2.5 rounded-xl border px-3 py-2.5 text-left text-sm font-semibold transition ${
-                      isActive ? "border-transparent bg-[#D9D9D9] text-black" : "border-transparent bg-transparent text-black/80"
+                      isActive ? "border-black/80 bg-black/85 text-white" : "border-black/15 bg-white text-black/80"
                     }`}
                   >
                     <Icon className="h-4 w-4" strokeWidth={2.2} />
@@ -258,6 +260,8 @@ export default function ControlsRow({
               })}
             </div>
           </section>
+
+          <div className="h-px bg-black/10" />
 
           <section className="space-y-3">
             <h4 className="text-sm font-semibold uppercase tracking-wide text-black/50">Filters</h4>
@@ -272,7 +276,7 @@ export default function ControlsRow({
                       type="button"
                       onClick={() => setDraftFilters((prev) => ({ ...prev, proteinMin: isActive ? undefined : value }))}
                       className={`rounded-full border px-3 py-1.5 text-sm font-semibold ${
-                        isActive ? "border-transparent bg-[#D9D9D9] text-black" : "border-black/20 bg-white text-black/80"
+                        isActive ? "border-black/80 bg-black/85 text-white" : "border-black/20 bg-white text-black/80"
                       }`}
                     >
                       {value}g+
@@ -494,10 +498,10 @@ export default function ControlsRow({
         </div>
 
         {hasActiveFilters && showChips ? (
-          <>
+          <div className="hidden md:block">
             <div className="h-px bg-slate-400/50" />
             <FilterChips filters={filters} onClearProtein={clearProteinFilter} onClearCalories={clearCaloriesFilter} onClearAll={resetFilters} withMargin={false} />
-          </>
+          </div>
         ) : null}
       </div>
 
