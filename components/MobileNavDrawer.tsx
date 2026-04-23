@@ -14,12 +14,14 @@ export default function MobileNavDrawer({
   showControls = false,
   defaultTab = "browse",
   controlsContent,
+  controlsFooter,
 }: {
   isOpen: boolean;
   onClose: () => void;
   showControls?: boolean;
   defaultTab?: DrawerTab;
   controlsContent?: React.ReactNode;
+  controlsFooter?: React.ReactNode;
 }) {
   const [activeTab, setActiveTab] = useState<DrawerTab>(defaultTab);
   const [isFeaturedOpen, setIsFeaturedOpen] = useState(true);
@@ -108,6 +110,11 @@ export default function MobileNavDrawer({
             </div>
           )}
         </div>
+        {activeTab === "controls" && showControls && controlsFooter ? (
+          <div className="sticky bottom-0 border-t border-black/10 bg-white px-4 py-3">
+            {controlsFooter}
+          </div>
+        ) : null}
       </div>
     </div>
   );

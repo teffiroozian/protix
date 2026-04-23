@@ -27,7 +27,6 @@ import {
   Award,
   ListOrdered,
   Menu,
-  Check,
 } from "lucide-react";
 
 const PROTEIN_OPTIONS = [20, 30, 40, 50];
@@ -223,12 +222,15 @@ export default function ControlsRow({
         <>
           <section className="space-y-2.5">
             <h4 className="text-sm font-semibold uppercase tracking-wide text-black/50">Entree</h4>
-            <div className="max-h-[40vh] space-y-2 overflow-y-auto rounded-xl border border-black/10 bg-white p-2">
+            <div className="max-h-[30vh] space-y-2 overflow-y-auto rounded-xl border border-black/10 bg-white p-2">
               {mobileEntreeOptions.map((option) => (
                 <button
                   key={option.key}
                   type="button"
-                  onClick={option.onSelect}
+                  onClick={() => {
+                    option.onSelect();
+                    setIsMobileDrawerOpen(false);
+                  }}
                   className={`inline-flex w-full items-center gap-2.5 rounded-xl border px-3 py-2.5 text-left text-sm font-semibold ${
                     option.selected ? "border-black/80 bg-black/85 text-white" : "border-black/15 bg-white text-black/80"
                   }`}
@@ -258,10 +260,12 @@ export default function ControlsRow({
                 const Icon = option.icon;
                 const isActive = option.value === view;
                 return (
-                  <button key={option.value} type="button" onClick={() => onChange(option.value)} className={`inline-flex items-center gap-2.5 rounded-xl border px-3 py-2.5 text-left text-sm font-semibold transition ${isActive ? "border-black/80 bg-black/85 text-white" : "border-black/15 bg-white text-black/80"}`}>
+                  <button key={option.value} type="button" onClick={() => {
+                    onChange(option.value);
+                    setIsMobileDrawerOpen(false);
+                  }} className={`inline-flex items-center gap-2.5 rounded-xl border px-3 py-2.5 text-left text-sm font-semibold transition ${isActive ? "border-black/80 bg-black/85 text-white" : "border-black/15 bg-white text-black/80"}`}>
                     <Icon className="h-4 w-4" strokeWidth={2.2} />
                     <span className="flex-1">{option.label}</span>
-                    {isActive ? <Check className="h-4 w-4" strokeWidth={2.5} /> : null}
                   </button>
                 );
               })}
@@ -281,10 +285,12 @@ export default function ControlsRow({
               const Icon = option.icon;
               const isActive = option.value === sort;
               return (
-                <button key={option.value} type="button" onClick={() => onSortChange(option.value)} className={`inline-flex items-center gap-2.5 rounded-xl border px-3 py-2.5 text-left text-sm font-semibold transition ${isActive ? "border-black/80 bg-black/85 text-white" : "border-black/15 bg-white text-black/80"}`}>
+                <button key={option.value} type="button" onClick={() => {
+                  onSortChange(option.value);
+                  setIsMobileDrawerOpen(false);
+                }} className={`inline-flex items-center gap-2.5 rounded-xl border px-3 py-2.5 text-left text-sm font-semibold transition ${isActive ? "border-black/80 bg-black/85 text-white" : "border-black/15 bg-white text-black/80"}`}>
                   <Icon className="h-4 w-4" strokeWidth={2.2} />
                   <span className="flex-1">{option.label}</span>
-                  {isActive ? <Check className="h-4 w-4" strokeWidth={2.5} /> : null}
                 </button>
               );
             })}
@@ -320,13 +326,16 @@ export default function ControlsRow({
                 <span>{calorieBounds.max}</span>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-2 border-t border-black/10 pt-3">
-              <button type="button" onClick={handleResetFilters} className="rounded-full border border-black/20 bg-white px-4 py-2 text-sm font-semibold text-black/80">Reset</button>
-              <button type="button" onClick={applyFilters} className="rounded-full border border-black/80 bg-black/85 px-4 py-2 text-sm font-bold text-white">Apply</button>
-            </div>
           </>
         ) : null}
       </section>
+    </div>
+  );
+
+  const controlsFooter = (
+    <div className="grid grid-cols-2 gap-2">
+      <button type="button" onClick={handleResetFilters} className="rounded-full border border-black/20 bg-white px-4 py-2 text-sm font-semibold text-black/80">Cancel</button>
+      <button type="button" onClick={applyFilters} className="rounded-full border border-black/80 bg-black/85 px-4 py-2 text-sm font-bold text-white">Apply</button>
     </div>
   );
 
@@ -338,6 +347,7 @@ export default function ControlsRow({
       showControls
       defaultTab="controls"
       controlsContent={controlsContent}
+      controlsFooter={controlsFooter}
     />
   );
 
