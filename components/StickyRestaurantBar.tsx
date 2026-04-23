@@ -3,7 +3,6 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import CartIconDropdown from "@/components/CartIconDropdown";
 import ControlsRow, {
@@ -45,7 +44,6 @@ type StickyRestaurantBarProps = {
   }>;
   hideViewSelector?: boolean;
   hideSecondaryNav?: boolean;
-  onBack?: () => void;
 };
 
 export default function StickyRestaurantBar({
@@ -67,9 +65,7 @@ export default function StickyRestaurantBar({
   mobileEntreeOptions,
   hideViewSelector = false,
   hideSecondaryNav = false,
-  onBack,
 }: StickyRestaurantBarProps) {
-  const router = useRouter();
   const searchInputRef = useRef<HTMLInputElement>(null);
   const isSearchMode = searchOpen || searchQuery.trim().length > 0;
   const [openMobileControlsDrawer, setOpenMobileControlsDrawer] = useState<() => void>(() => () => {});
@@ -150,21 +146,10 @@ export default function StickyRestaurantBar({
           </div>
 
           <div className="hidden min-w-0 flex-1 items-center gap-2 lg:flex">
-            <button
-              type="button"
-              onClick={onBack ?? (() => router.back())}
-              className="cursor-pointer inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-slate-300/80 bg-white text-base font-semibold text-slate-700 transition hover:text-slate-900"
-              aria-label="Back to previous page"
-            >
-              ←
-            </button>
-
-            <button
-              type="button"
-              onClick={handleBrandClick}
-              className="flex min-w-0 items-center gap-3 cursor-pointer"
-              aria-label={`Scroll to top of ${restaurantName} page`}
-            >
+            <Link href="/" className="inline-flex items-center gap-2 rounded-full border border-slate-300/80 bg-white px-3 py-2 text-sm font-semibold text-slate-800">
+              Home
+            </Link>
+            <button type="button" onClick={handleBrandClick} className="flex min-w-0 items-center gap-3 cursor-pointer" aria-label={`Scroll to top of ${restaurantName} page`}>
               <span className="relative h-9 w-9 shrink-0 overflow-hidden rounded-lg border border-slate-300/80 bg-white">
                 <Image
                   src={restaurantLogo}

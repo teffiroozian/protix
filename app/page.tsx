@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import restaurants from "./data/index.json";
 import GlobalMobileNav from "@/components/GlobalMobileNav";
+import DesktopNav from "@/components/DesktopNav";
 
 const RECENT_RESTAURANTS_KEY = "recentlySearchedRestaurants";
 
@@ -122,6 +123,9 @@ export default function Home() {
   return (
     <>
       <GlobalMobileNav />
+      <div className="px-4 pt-4 sm:px-6">
+        <DesktopNav />
+      </div>
       <main className="mx-auto flex max-w-5xl flex-col gap-12 px-4 py-24 pt-28 sm:px-6 lg:pt-24">
       <header className="mx-auto max-w-3xl text-center">
         <h1 className="text-center text-4xl font-semibold tracking-tight leading-tight text-neutral-900">
@@ -130,7 +134,7 @@ export default function Home() {
       </header>
 
       <section className="flex flex-col gap-3">
-        <div className="relative">
+        <div id="restaurant-search" className="relative">
           <input
             type="text"
             value={query}

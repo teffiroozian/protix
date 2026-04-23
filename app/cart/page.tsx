@@ -8,6 +8,7 @@ import MenuItemCard from "@/components/MenuItemCard";
 import StickyMacroTotalsBar from "@/components/StickyMacroTotalsBar";
 import CartNutritionSummary from "@/components/cart/CartNutritionSummary";
 import GlobalMobileNav from "@/components/GlobalMobileNav";
+import DesktopNav from "@/components/DesktopNav";
 import restaurants from "@/app/data/index.json";
 import { useCart } from "@/stores/cartStore";
 import {
@@ -171,6 +172,9 @@ export default function CartPage() {
           ) : null
         }
       />
+      <div className="px-4 pt-4 sm:px-6">
+        <DesktopNav />
+      </div>
       <main className="mx-auto flex min-h-screen w-full max-w-5xl flex-col gap-6 px-4 pb-10 pt-28 sm:px-6 lg:pt-10">
       <section className="w-full space-y-3">
         {items.length === 0 ? (

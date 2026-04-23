@@ -2538,15 +2538,6 @@ export default function RestaurantView({
         mobileEntreeOptions={mobileEntreeOptions}
         hideViewSelector={isBuildYourOwn}
         hideSecondaryNav={isChipotleBuildPage && selectedEntree === null}
-        onBack={
-          isChipotleBuildPage && selectedEntree !== null
-            ? () => {
-                setSelectedEntree(null);
-              }
-            : () => {
-                router.push("/");
-              }
-        }
       />
 
       {isChipotleBuildPage && selectedEntree === null ? (
