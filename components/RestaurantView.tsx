@@ -143,6 +143,7 @@ const CATEGORY_ICONS: Record<string, LucideIcon> = {
 
 
 type EntreeSelection = ChipotleEntreeSelection;
+type EntreeKey = Exclude<EntreeSelection, null>;
 type KidsMealSelection = ChipotleKidsMealId;
 type TacoShellSelection = ChipotleTacoShell;
 type TacoCountSelection = ChipotleTacoCount;
@@ -1505,7 +1506,7 @@ export default function RestaurantView({
     selectedKidsMeal,
   ]);
 
-  const handleEntreeSelection = (entree: Exclude<EntreeSelection, null>) => {
+  const handleEntreeSelection = (entree: EntreeKey) => {
     const nextIncludedIngredientIds = resolveIncludedIngredientIds({
       selectedEntree: entree,
       selectedKidsMeal,
@@ -2508,15 +2509,19 @@ export default function RestaurantView({
 
   const mobileEntreeOptions =
     isChipotleBuildPage && selectedEntree !== null
-      ? (Object.entries(entreeOptions)
-          .filter(([entreeKey]) => isChipotleEntreeId(entreeKey))
-          .map(([entreeKey, entree]) => ({
+      ? Object.entries(entreeOptions).flatMap(([entreeKey, entree]) => {
+          if (!isChipotleEntreeId(entreeKey)) {
+            return [];
+          }
+
+          return [{
             key: entreeKey,
             label: entree.label,
             imageSrc: entree.imageSrc,
             selected: entreeKey === selectedEntree,
             onSelect: () => handleEntreeSelection(entreeKey),
-          })))
+          }];
+        })
       : [];
 
   return (
