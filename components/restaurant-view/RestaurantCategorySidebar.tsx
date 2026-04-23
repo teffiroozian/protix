@@ -150,7 +150,7 @@ export default function RestaurantCategorySidebar({
                                 setIsMobileCategoryMenuOpen(false);
                               }}
                               className={`cursor-pointer inline-flex items-center gap-2 rounded-[10px] border-none px-2.5 py-2 text-left font-semibold text-black/88 transition-colors duration-100 ${
-                                isChecked ? "bg-black/10" : "hover:bg-slate-900/5"
+                                isChecked ? "bg-black text-white" : "hover:bg-slate-900/5"
                               }`}
                             >
                               <Icon className="h-4 w-4 shrink-0" strokeWidth={2.2} />
@@ -203,7 +203,7 @@ export default function RestaurantCategorySidebar({
                           onClick={() => toggleRankedAllFilter(option.key)}
                           className={`cursor-pointer inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full border px-[14px] py-[8px] text-sm font-semibold transition-colors duration-100 ${
                             isChecked
-                              ? "border-black/20 bg-white text-slate-800 shadow-[0px_0_8px_rgba(0,0,0,0.2)]"
+                              ? "border-black bg-black text-white shadow-[0px_0_8px_rgba(0,0,0,0.2)]"
                               : "border-black/20 bg-white text-slate-700 hover:bg-slate-50"
                           }`}
                         >
