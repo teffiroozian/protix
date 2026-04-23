@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { House, Menu, ShoppingCart } from "lucide-react";
@@ -37,6 +38,14 @@ export default function GlobalMobileNav({
                 <House className="h-4 w-4" strokeWidth={2.5} />
               </Link>
             )}
+            {isHomePageNav ? (
+              <div className="flex min-w-0 items-center gap-2.5">
+                <span className="relative h-9 w-9 shrink-0 overflow-hidden rounded-lg border border-slate-300/80 bg-white">
+                  <Image src={logoSrc} alt={`${title} logo`} fill className="object-contain rounded-md" />
+                </span>
+                <span className="truncate text-base font-semibold text-slate-900">{title}</span>
+              </div>
+            ) : null}
             <div className="ml-auto">
               <Link href="/cart" className="inline-flex h-9 min-w-9 items-center justify-center rounded-full border border-slate-300/80 bg-white px-2.5 text-slate-800" aria-label="Open cart">
                 <ShoppingCart className="h-4 w-4" strokeWidth={2.5} />
