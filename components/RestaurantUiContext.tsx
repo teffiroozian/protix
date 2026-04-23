@@ -34,3 +34,7 @@ export function useRestaurantUi() {
 
   return context;
 }
+
+export function useOptionalRestaurantUi() {
+  return useContext(RestaurantUiContext);
+}
