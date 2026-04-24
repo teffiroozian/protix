@@ -17,7 +17,6 @@ export default function MobileNavDrawer({
   controlsFooter,
   headerTitle,
   headerLogoSrc,
-  browseTopContent,
 }: {
   isOpen: boolean;
   onClose: () => void;
@@ -27,7 +26,6 @@ export default function MobileNavDrawer({
   controlsFooter?: React.ReactNode;
   headerTitle?: string;
   headerLogoSrc?: string;
-  browseTopContent?: React.ReactNode;
 }) {
   const [activeTab, setActiveTab] = useState<DrawerTab>(defaultTab);
   const [isFeaturedOpen, setIsFeaturedOpen] = useState(true);
@@ -66,9 +64,9 @@ export default function MobileNavDrawer({
           ) : null}
         </div>
 
-        <div className="border-b border-black/10 px-4 py-2.5">
-          <div className="flex gap-2">
-            {showControls ? (
+        {showControls ? (
+          <div className="border-b border-black/10 px-4 py-2.5">
+            <div className="flex gap-2">
               <button
                 type="button"
                 onClick={() => setActiveTab("controls")}
@@ -81,28 +79,27 @@ export default function MobileNavDrawer({
                 <SlidersHorizontal className="h-4 w-4" strokeWidth={2.4} />
                 Controls
               </button>
-            ) : null}
-            <button
-              type="button"
-              onClick={() => setActiveTab("browse")}
-              className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm font-semibold ${
-                activeTab === "browse"
-                  ? "border-blue-500 bg-blue-50 text-slate-900"
-                  : "border-blue-200 bg-blue-50/50 text-slate-600"
-              }`}
-            >
-              <Store className="h-4 w-4" strokeWidth={2.4} />
-              Restaurants
-            </button>
+              <button
+                type="button"
+                onClick={() => setActiveTab("browse")}
+                className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm font-semibold ${
+                  activeTab === "browse"
+                    ? "border-blue-500 bg-blue-50 text-slate-900"
+                    : "border-blue-200 bg-blue-50/50 text-slate-600"
+                }`}
+              >
+                <Store className="h-4 w-4" strokeWidth={2.4} />
+                Browse
+              </button>
+            </div>
           </div>
-        </div>
+        ) : null}
 
         <div className="flex-1 overflow-y-auto px-4 py-4">
           {activeTab === "controls" && showControls ? (
             <div>{controlsContent}</div>
           ) : (
             <div className="space-y-4">
-              {browseTopContent ? <div>{browseTopContent}</div> : null}
               <section className="space-y-2.5">
                 <button type="button" onClick={() => setIsFeaturedOpen((prev) => !prev)} className="flex w-full items-center justify-between text-left">
                   <h4 className="text-sm font-semibold uppercase tracking-wide text-black/50">Featured Restaurants</h4>
