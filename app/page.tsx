@@ -6,10 +6,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import GlobalMobileNav from "@/components/GlobalMobileNav";
 import DesktopNav from "@/components/DesktopNav";
-import { getVisibleRestaurants } from "@/lib/restaurants";
+import { getAllRestaurants, isRestaurantAvailable } from "@/lib/restaurants";
 
 const RECENT_RESTAURANTS_KEY = "recentlySearchedRestaurants";
-const restaurants = getVisibleRestaurants();
+const restaurants = getAllRestaurants();
 
 export default function Home() {
   const router = useRouter();
@@ -95,6 +95,10 @@ export default function Home() {
   const showSuggestions = isFocused && suggestions.length > 0;
 
   const handleSelect = (restaurant: (typeof restaurants)[number]) => {
+    if (!isRestaurantAvailable(restaurant.id)) {
+      return;
+    }
+
     setQuery(restaurant.name);
     setActiveIndex(-1);
     setIsFocused(false);
@@ -231,11 +235,18 @@ export default function Home() {
                         key={restaurant.id}
                         role="option"
                         aria-selected={activeIndex === index}
-                        className={`flex cursor-pointer items-center gap-3 px-4 py-2 text-sm text-neutral-700 transition hover:bg-neutral-100 ${
-                          activeIndex === index ? "bg-neutral-100" : ""
+                        aria-disabled={!isRestaurantAvailable(restaurant.id)}
+                        className={`flex items-center gap-3 px-4 py-2 text-sm transition ${
+                          isRestaurantAvailable(restaurant.id)
+                            ? `cursor-pointer text-neutral-700 hover:bg-neutral-100 ${activeIndex === index ? "bg-neutral-100" : ""}`
+                            : "cursor-default text-neutral-400"
                         }`}
                         onMouseDown={(event) => event.preventDefault()}
-                        onClick={() => handleSelect(restaurant)}
+                        onClick={() => {
+                          if (isRestaurantAvailable(restaurant.id)) {
+                            handleSelect(restaurant);
+                          }
+                        }}
                       >
                         <span className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-lg bg-neutral-50">
                           <Image
@@ -249,6 +260,11 @@ export default function Home() {
                         <span className="font-semibold text-neutral-900">
                           {restaurant.name}
                         </span>
+                        {!isRestaurantAvailable(restaurant.id) ? (
+                          <span className="ml-auto rounded-full border border-neutral-300 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-neutral-500">
+                            Coming Soon
+                          </span>
+                        ) : null}
                         <button
                           type="button"
                           className="ml-auto rounded-md p-1 text-neutral-400 cursor-pointer transition hover:bg-neutral-200 hover:text-neutral-700"
@@ -289,11 +305,18 @@ export default function Home() {
                           key={restaurant.id}
                           role="option"
                           aria-selected={activeIndex === absoluteIndex}
-                          className={`flex cursor-pointer items-center gap-3 px-4 py-2 text-sm text-neutral-700 transition hover:bg-neutral-100 ${
-                            activeIndex === absoluteIndex ? "bg-neutral-100" : ""
+                          aria-disabled={!isRestaurantAvailable(restaurant.id)}
+                          className={`flex items-center gap-3 px-4 py-2 text-sm transition ${
+                            isRestaurantAvailable(restaurant.id)
+                              ? `cursor-pointer text-neutral-700 hover:bg-neutral-100 ${activeIndex === absoluteIndex ? "bg-neutral-100" : ""}`
+                              : "cursor-default text-neutral-400"
                           }`}
                           onMouseDown={(event) => event.preventDefault()}
-                          onClick={() => handleSelect(restaurant)}
+                          onClick={() => {
+                            if (isRestaurantAvailable(restaurant.id)) {
+                              handleSelect(restaurant);
+                            }
+                          }}
                         >
                           <span className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-lg bg-neutral-50">
                             <Image
@@ -307,6 +330,11 @@ export default function Home() {
                           <span className="font-semibold text-neutral-900">
                             {restaurant.name}
                           </span>
+                          {!isRestaurantAvailable(restaurant.id) ? (
+                            <span className="ml-auto rounded-full border border-neutral-300 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-neutral-500">
+                              Coming Soon
+                            </span>
+                          ) : null}
                         </li>
                       );
                     })}
@@ -317,11 +345,18 @@ export default function Home() {
                       key={restaurant.id}
                       role="option"
                       aria-selected={activeIndex === index}
-                      className={`flex cursor-pointer items-center gap-3 px-4 py-2 text-sm text-neutral-700 transition hover:bg-neutral-100 ${
-                        activeIndex === index ? "bg-neutral-100" : ""
+                      aria-disabled={!isRestaurantAvailable(restaurant.id)}
+                      className={`flex items-center gap-3 px-4 py-2 text-sm transition ${
+                        isRestaurantAvailable(restaurant.id)
+                          ? `cursor-pointer text-neutral-700 hover:bg-neutral-100 ${activeIndex === index ? "bg-neutral-100" : ""}`
+                          : "cursor-default text-neutral-400"
                       }`}
                       onMouseDown={(event) => event.preventDefault()}
-                      onClick={() => handleSelect(restaurant)}
+                      onClick={() => {
+                        if (isRestaurantAvailable(restaurant.id)) {
+                          handleSelect(restaurant);
+                        }
+                      }}
                     >
                       <span className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-lg bg-neutral-50">
                         <Image
@@ -335,6 +370,11 @@ export default function Home() {
                       <span className="font-semibold text-neutral-900">
                         {restaurant.name}
                       </span>
+                      {!isRestaurantAvailable(restaurant.id) ? (
+                        <span className="ml-auto rounded-full border border-neutral-300 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-neutral-500">
+                          Coming Soon
+                        </span>
+                      ) : null}
                     </li>
                   ))
                 )}
@@ -353,14 +393,51 @@ export default function Home() {
         <section className="grid gap-4 sm:grid-cols-2">
           {restaurants
             .filter((restaurant) => restaurant.isMacroFriendly)
-            .map((restaurant) => (
-              <Link
-                key={restaurant.id}
-                href={`/restaurant/${restaurant.id}`}
-                scroll
-                className="group cursor-pointer"
-              >
-                <article className="overflow-hidden rounded-2xl border border-black/10 bg-white/70 shadow-sm transition group-hover:-translate-y-0.5 group-hover:shadow-md">
+            .map((restaurant) => {
+              const isAvailable = isRestaurantAvailable(restaurant.id);
+
+              if (isAvailable) {
+                return (
+                  <Link
+                    key={restaurant.id}
+                    href={`/restaurant/${restaurant.id}`}
+                    scroll
+                    className="group cursor-pointer"
+                  >
+                    <article className="overflow-hidden rounded-2xl border border-black/10 bg-white/70 shadow-sm transition group-hover:-translate-y-0.5 group-hover:shadow-md">
+                      <div className="relative h-44 w-full overflow-hidden">
+                        <Image
+                          src={restaurant.cover}
+                          alt={`${restaurant.name} cover`}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                      <div className="flex items-center gap-3 border-t border-black/5 bg-white/80 px-4 py-3">
+                        <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-xl">
+                          <Image
+                            src={restaurant.logo}
+                            alt={`${restaurant.name} logo`}
+                            width={36}
+                            height={36}
+                            className="object-contain"
+                          />
+                        </div>
+                        <span className="text-base font-semibold text-neutral-900">
+                          {restaurant.name}
+                        </span>
+                      </div>
+                    </article>
+                  </Link>
+                );
+              }
+
+              return (
+                <article
+                  key={restaurant.id}
+                  aria-disabled="true"
+                  className="relative overflow-hidden rounded-2xl border border-black/10 bg-white/70 opacity-40"
+                >
                   <div className="relative h-44 w-full overflow-hidden">
                     <Image
                       src={restaurant.cover}
@@ -383,9 +460,14 @@ export default function Home() {
                       {restaurant.name}
                     </span>
                   </div>
+                  <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/30">
+                    <span className="rounded-full bg-white px-3 py-1 text-xs font-bold uppercase tracking-[0.12em] text-neutral-700">
+                      Coming Soon
+                    </span>
+                  </div>
                 </article>
-              </Link>
-            ))}
+              );
+            })}
         </section>
       </section>
 
@@ -402,25 +484,49 @@ export default function Home() {
               </h3>
               <div className="space-y-2 ">
                 {items.map((restaurant) => (
-                  <Link
-                    key={restaurant.id}
-                    href={`/restaurant/${restaurant.id}`}
-                    scroll
-                    className="cursor-pointer flex w-full items-center gap-3 rounded-xl border border-black/10 bg-white px-3 py-2 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
-                  >
-                    <span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-lg bg-neutral-50">
-                      <Image
-                        src={restaurant.logo}
-                        alt={`${restaurant.name} logo`}
-                        width={28}
-                        height={28}
-                        className="object-contain rounded-md"
-                      />
-                    </span>
-                    <span className="text-sm font-semibold text-neutral-900">
-                      {restaurant.name}
-                    </span>
-                  </Link>
+                  isRestaurantAvailable(restaurant.id) ? (
+                    <Link
+                      key={restaurant.id}
+                      href={`/restaurant/${restaurant.id}`}
+                      scroll
+                      className="cursor-pointer flex w-full items-center gap-3 rounded-xl border border-black/10 bg-white px-3 py-2 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+                    >
+                      <span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-lg bg-neutral-50">
+                        <Image
+                          src={restaurant.logo}
+                          alt={`${restaurant.name} logo`}
+                          width={28}
+                          height={28}
+                          className="object-contain rounded-md"
+                        />
+                      </span>
+                      <span className="text-sm font-semibold text-neutral-900">
+                        {restaurant.name}
+                      </span>
+                    </Link>
+                  ) : (
+                    <div
+                      key={restaurant.id}
+                      aria-disabled="true"
+                      className="flex w-full items-center gap-3 rounded-xl border border-black/10 bg-white px-3 py-2 opacity-40"
+                    >
+                      <span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-lg bg-neutral-50">
+                        <Image
+                          src={restaurant.logo}
+                          alt={`${restaurant.name} logo`}
+                          width={28}
+                          height={28}
+                          className="object-contain rounded-md"
+                        />
+                      </span>
+                      <span className="text-sm font-semibold text-neutral-900">
+                        {restaurant.name}
+                      </span>
+                      <span className="ml-auto rounded-full border border-neutral-300 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-neutral-500">
+                        Coming Soon
+                      </span>
+                    </div>
+                  )
                 ))}
               </div>
             </section>
