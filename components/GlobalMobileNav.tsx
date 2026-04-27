@@ -39,7 +39,7 @@ export default function GlobalMobileNav({
             >
               <Menu className="h-4 w-4" strokeWidth={2.5} />
             </button>
-            <Link href="/" className="inline-flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-slate-300/80 bg-white" aria-label="Go to homepage">
+            <Link href="/" className="inline-flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-white" aria-label="Go to homepage">
               <span className="relative h-7 w-7">
                 <Image src={logoSrc} alt="Macro Maxxer logo" fill className="object-contain rounded-md" />
               </span>

@@ -58,7 +58,7 @@ export default function MobileNavDrawer({
           {headerTitle ? (
             <div className="inline-flex min-w-0 items-center gap-2.5">
               {headerLogoSrc ? (
-                <span className="relative h-8 w-8 shrink-0 overflow-hidden rounded-lg border border-slate-300/80 bg-white">
+                <span className="relative h-8 w-8 shrink-0 overflow-hidden rounded-lg bg-white">
                   <Image src={headerLogoSrc} alt={`${headerTitle} logo`} fill className="object-contain rounded-md" />
                 </span>
               ) : null}
