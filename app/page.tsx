@@ -127,102 +127,103 @@ export default function Home() {
 
   return (
     <>
-      <GlobalMobileNav />
-      <div className="px-4 pt-4 sm:px-6">
-        <DesktopNav />
-      </div>
-      <main className="mx-auto flex max-w-5xl flex-col gap-12 px-4 py-24 pt-28 sm:px-6 lg:pt-24">
-      <header className="mx-auto max-w-3xl text-center">
-        <h1 className="text-center text-4xl font-semibold tracking-tight leading-tight text-neutral-900">
-          High-Protein Fast Food Orders
-        </h1>
-      </header>
+      <section className="bg-emerald-100">
+        <GlobalMobileNav />
+        <div className="mx-auto max-w-5xl px-4 pt-4 sm:px-6">
+          <DesktopNav />
+        </div>
+        <div className="mx-auto flex max-w-5xl flex-col gap-12 px-4 p-24 sm:px-6">
+          <header className="mx-auto max-w-3xl text-center">
+            <h1 className="text-center text-4xl font-semibold leading-tight tracking-tight text-neutral-900">
+              Find High-Protein Fast Food Items in Seconds
+            </h1>
+          </header>
 
-      <section className="flex flex-col gap-3">
-        <div id="restaurant-search" className="relative">
-          <input
-            type="text"
-            value={query}
-            onChange={(event) => {
-              setQuery(event.target.value);
-              setActiveIndex(-1);
-            }}
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => {
-              setIsFocused(false);
-              setActiveIndex(-1);
-            }}
-            onKeyDown={(event) => {
-              if (!showSuggestions) {
-                return;
-              }
+          <section className="flex flex-col gap-3">
+            <div id="restaurant-search" className="relative">
+              <input
+                type="text"
+                value={query}
+                onChange={(event) => {
+                  setQuery(event.target.value);
+                  setActiveIndex(-1);
+                }}
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => {
+                  setIsFocused(false);
+                  setActiveIndex(-1);
+                }}
+                onKeyDown={(event) => {
+                  if (!showSuggestions) {
+                    return;
+                  }
 
-              if (event.key === "ArrowDown") {
-                event.preventDefault();
-                setActiveIndex((prev) =>
-                  Math.min(prev + 1, suggestions.length - 1)
-                );
-              }
+                  if (event.key === "ArrowDown") {
+                    event.preventDefault();
+                    setActiveIndex((prev) =>
+                      Math.min(prev + 1, suggestions.length - 1)
+                    );
+                  }
 
-              if (event.key === "ArrowUp") {
-                event.preventDefault();
-                setActiveIndex((prev) => Math.max(prev - 1, 0));
-              }
+                  if (event.key === "ArrowUp") {
+                    event.preventDefault();
+                    setActiveIndex((prev) => Math.max(prev - 1, 0));
+                  }
 
-              if (event.key === "Enter" && activeIndex >= 0) {
-                event.preventDefault();
-                handleSelect(suggestions[activeIndex]);
-              }
-            }}
-            placeholder="Start typing a restaurant name"
-            className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 pr-16 text-base text-neutral-900 shadow-[0_0_12px_rgba(0,0,0,0.15)] outline-none transition focus:border-black/30 focus:ring-4 focus:ring-black/5"
-          />
-          <span className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-neutral-400">
-            <svg
-              aria-hidden="true"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M11 19a8 8 0 1 1 0-16 8 8 0 0 1 0 16Zm10 2-4.35-4.35"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+                  if (event.key === "Enter" && activeIndex >= 0) {
+                    event.preventDefault();
+                    handleSelect(suggestions[activeIndex]);
+                  }
+                }}
+                placeholder="Start typing a restaurant name"
+                className="w-full rounded-2xl border border-black/10 bg-white px-4 py-3 pr-16 text-base text-neutral-900 shadow-[0_0_12px_rgba(0,0,0,0.15)] outline-none transition focus:border-black/30 focus:ring-4 focus:ring-black/5"
               />
-            </svg>
-          </span>
-          {query && (
-            <button
-              type="button"
-              onClick={handleClear}
-              className="cursor-pointer absolute inset-y-0 right-11 flex items-center rounded-full px-1 text-neutral-400 transition hover:text-neutral-600"
-              aria-label="Clear search"
-            >
-              <svg
-                aria-hidden="true"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="m7 7 10 10M17 7 7 17"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
-          )}
-          {showSuggestions && (
-            <div className="absolute left-0 right-0 top-full z-10 mt-2 overflow-hidden rounded-2xl border border-black/10 bg-white shadow-lg">
-              <ul role="listbox" className="max-h-60 overflow-y-auto py-2">
+              <span className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-neutral-400">
+                <svg
+                  aria-hidden="true"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M11 19a8 8 0 1 1 0-16 8 8 0 0 1 0 16Zm10 2-4.35-4.35"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </span>
+              {query && (
+                <button
+                  type="button"
+                  onClick={handleClear}
+                  className="cursor-pointer absolute inset-y-0 right-11 flex items-center rounded-full px-1 text-neutral-400 transition hover:text-neutral-600"
+                  aria-label="Clear search"
+                >
+                  <svg
+                    aria-hidden="true"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="m7 7 10 10M17 7 7 17"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+              )}
+              {showSuggestions && (
+                <div className="absolute left-0 right-0 top-full z-10 mt-2 overflow-hidden rounded-2xl border border-black/10 bg-white shadow-lg">
+                  <ul role="listbox" className="max-h-60 overflow-y-auto py-2">
                 {isEmptyFocusedState ? (
                   <>
                     {recentRestaurants.length > 0 && (
@@ -296,7 +297,7 @@ export default function Home() {
                     ))}
 
                     <li className="px-4 pt-2 text-xs font-medium uppercase tracking-wide text-neutral-500">
-                      Popular Restaurant
+                      Popular Restaurants
                     </li>
                     {popularRestaurants.map((restaurant, index) => {
                       const absoluteIndex = recentRestaurants.length + index;
@@ -378,13 +379,17 @@ export default function Home() {
                     </li>
                   ))
                 )}
-              </ul>
+                  </ul>
+                </div>
+              )}
             </div>
-          )}
+          </section>
         </div>
       </section>
 
-      <section id="macro-friendly-section" className="mt-20 flex flex-col gap-8">
+      <main className="mx-auto flex max-w-5xl flex-col gap-12 px-4 p-24 sm:px-6">
+
+      <section id="macro-friendly-section" className="flex flex-col gap-8">
         <div>
           <h2 className="text-center text-3xl font-semibold text-neutral-900">
             Macro Friendly Restaurants
