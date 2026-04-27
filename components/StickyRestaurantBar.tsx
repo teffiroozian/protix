@@ -116,12 +116,12 @@ export default function StickyRestaurantBar({
             </button>
             <Link
               href="/"
-              className="inline-flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-slate-300/80 bg-white"
+              className="inline-flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-white"
               aria-label="Go to homepage"
             >
               <span className="relative h-7 w-7">
                 <Image
-                  src="/favicon.ico"
+                  src="/logo.png"
                   alt="Macro Maxxer logo"
                   fill
                   className="object-contain rounded-md"
@@ -131,10 +131,10 @@ export default function StickyRestaurantBar({
           </div>
 
           <div className="hidden min-w-0 flex-1 items-center gap-2 lg:flex">
-            <Link href="/" className="inline-flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-slate-300/80 bg-white" aria-label="Go to homepage">
+            <Link href="/" className="inline-flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-white" aria-label="Go to homepage">
               <span className="relative h-7 w-7">
                 <Image
-                  src="/favicon.ico"
+                  src="/logo.png"
                   alt="Macro Maxxer logo"
                   fill
                   className="object-contain rounded-md"

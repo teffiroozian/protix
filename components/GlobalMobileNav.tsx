@@ -8,12 +8,16 @@ import { Menu, Search, ShoppingCart } from "lucide-react";
 import MobileNavDrawer from "@/components/MobileNavDrawer";
 
 export default function GlobalMobileNav({
-  title = "Browse",
-  logoSrc = "/favicon.ico",
+  title = "Restaurants",
+  logoSrc = "/logo.png",
+  showSearchButton = true,
+  showCartButton = true,
   browseTopContent,
 }: {
   title?: string;
   logoSrc?: string;
+  showSearchButton?: boolean;
+  showCartButton?: boolean;
   browseTopContent?: ReactNode;
 }) {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -35,19 +39,25 @@ export default function GlobalMobileNav({
             >
               <Menu className="h-4 w-4" strokeWidth={2.5} />
             </button>
-            <Link href="/" className="inline-flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-slate-300/80 bg-white" aria-label="Go to homepage">
+            <Link href="/" className="inline-flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-white" aria-label="Go to homepage">
               <span className="relative h-7 w-7">
                 <Image src={logoSrc} alt="Macro Maxxer logo" fill className="object-contain rounded-md" />
               </span>
             </Link>
-            <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
-              <Link href="/#restaurant-search" className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-300/80 bg-white text-slate-800" aria-label="Search restaurants">
-                <Search className="h-4 w-4" strokeWidth={2.5} />
-              </Link>
-              <Link href="/cart" className="inline-flex h-9 min-w-9 items-center justify-center rounded-full border border-slate-300/80 bg-white px-2.5 text-slate-800" aria-label="Open cart">
-                <ShoppingCart className="h-4 w-4" strokeWidth={2.5} />
-              </Link>
-            </div>
+            {showSearchButton || showCartButton ? (
+              <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
+                {showSearchButton ? (
+                  <Link href="/#restaurant-search" className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-300/80 bg-white text-slate-800" aria-label="Search restaurants">
+                    <Search className="h-4 w-4" strokeWidth={2.5} />
+                  </Link>
+                ) : null}
+                {showCartButton ? (
+                  <Link href="/cart" className="inline-flex h-9 min-w-9 items-center justify-center rounded-full border border-slate-300/80 bg-white px-2.5 text-slate-800" aria-label="Open cart">
+                    <ShoppingCart className="h-4 w-4" strokeWidth={2.5} />
+                  </Link>
+                ) : null}
+              </div>
+            ) : null}
           </div>
         </div>
       </div>
