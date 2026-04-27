@@ -121,7 +121,7 @@ export default function StickyRestaurantBar({
             >
               <span className="relative h-7 w-7">
                 <Image
-                  src="/favicon.ico"
+                  src="/logo.png"
                   alt="Macro Maxxer logo"
                   fill
                   className="object-contain rounded-md"
@@ -134,7 +134,7 @@ export default function StickyRestaurantBar({
             <Link href="/" className="inline-flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-slate-300/80 bg-white" aria-label="Go to homepage">
               <span className="relative h-7 w-7">
                 <Image
-                  src="/favicon.ico"
+                  src="/logo.png"
                   alt="Macro Maxxer logo"
                   fill
                   className="object-contain rounded-md"

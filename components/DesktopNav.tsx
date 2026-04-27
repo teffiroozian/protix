@@ -6,10 +6,12 @@ import { Search } from "lucide-react";
 import CartIconDropdown from "@/components/CartIconDropdown";
 
 export default function DesktopNav({
-  logoSrc = "/favicon.ico",
+  logoSrc = "/logo.png",
+  showSearchButton = true,
   showCartButton = true,
 }: {
   logoSrc?: string;
+  showSearchButton?: boolean;
   showCartButton?: boolean;
 }) {
   return (
@@ -23,9 +25,11 @@ export default function DesktopNav({
       </div>
 
       <div className="ml-auto flex items-center gap-2">
-        <Link href="/#restaurant-search" className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-300/80 bg-white text-slate-800" aria-label="Search restaurants">
-          <Search className="h-4 w-4" strokeWidth={2.5} />
-        </Link>
+        {showSearchButton ? (
+          <Link href="/#restaurant-search" className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-300/80 bg-white text-slate-800" aria-label="Search restaurants">
+            <Search className="h-4 w-4" strokeWidth={2.5} />
+          </Link>
+        ) : null}
         {showCartButton ? (
           <CartIconDropdown buttonClassName="inline-flex h-9 min-w-9 items-center justify-center rounded-full border border-slate-300/80 bg-white px-2.5 text-slate-800" />
         ) : null}

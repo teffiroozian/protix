@@ -6,13 +6,13 @@ import Link from "next/link";
 import { Store, ChevronDown, ChevronRight, SlidersHorizontal, X } from "lucide-react";
 import { getAllRestaurants, isRestaurantAvailable } from "@/lib/restaurants";
 
-type DrawerTab = "controls" | "browse";
+type DrawerTab = "controls" | "restaurants";
 
 export default function MobileNavDrawer({
   isOpen,
   onClose,
   showControls = false,
-  defaultTab = "browse",
+  defaultTab = "restaurants",
   controlsContent,
   controlsFooter,
   headerTitle,
@@ -67,16 +67,16 @@ export default function MobileNavDrawer({
           ) : null}
         </div>
 
-        <div className="border-b border-black/10 px-4 py-2.5">
-          <div className="flex gap-2">
+        <div className="border-b border-black/10 px-4 pt-2.5">
+          <div className="flex gap-1">
             {showControls ? (
               <button
                 type="button"
                 onClick={() => setActiveTab("controls")}
-                className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm font-semibold ${
+                className={`inline-flex items-center gap-2 border-b-2 px-3 pb-2 text-sm font-semibold transition-colors ${
                   activeTab === "controls"
-                    ? "border-blue-500 bg-blue-50 text-slate-900"
-                    : "border-blue-200 bg-blue-50/50 text-slate-600"
+                    ? "border-blue-600 text-slate-900"
+                    : "border-transparent text-slate-500 hover:text-slate-700"
                 }`}
               >
                 <SlidersHorizontal className="h-4 w-4" strokeWidth={2.4} />
@@ -85,15 +85,15 @@ export default function MobileNavDrawer({
             ) : null}
             <button
               type="button"
-              onClick={() => setActiveTab("browse")}
-              className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm font-semibold ${
-                activeTab === "browse"
-                  ? "border-blue-500 bg-blue-50 text-slate-900"
-                  : "border-blue-200 bg-blue-50/50 text-slate-600"
+              onClick={() => setActiveTab("restaurants")}
+              className={`inline-flex items-center gap-2 border-b-2 px-3 pb-2 text-sm font-semibold transition-colors ${
+                activeTab === "restaurants"
+                  ? "border-blue-600 text-slate-900"
+                  : "border-transparent text-slate-500 hover:text-slate-700"
               }`}
             >
               <Store className="h-4 w-4" strokeWidth={2.4} />
-              Browse
+              Restaurants
             </button>
           </div>
         </div>
