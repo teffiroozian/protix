@@ -127,12 +127,12 @@ export default function Home() {
 
   return (
     <>
-      <section className="bg-emerald-50">
+      <section className="bg-emerald-100">
         <GlobalMobileNav />
         <div className="mx-auto max-w-5xl px-4 pt-4 sm:px-6">
           <DesktopNav />
         </div>
-        <div className="mx-auto flex max-w-5xl flex-col gap-12 px-4 pb-16 pt-16 sm:px-6">
+        <div className="mx-auto flex max-w-5xl flex-col gap-12 px-4 p-24 sm:px-6">
           <header className="mx-auto max-w-3xl text-center">
             <h1 className="text-center text-4xl font-semibold leading-tight tracking-tight text-neutral-900">
               Find High-Protein Fast Food Items in Seconds
@@ -387,7 +387,7 @@ export default function Home() {
         </div>
       </section>
 
-      <main className="mx-auto flex max-w-5xl flex-col gap-12 px-4 pb-24 pt-16 sm:px-6">
+      <main className="mx-auto flex max-w-5xl flex-col gap-12 px-4 p-24 sm:px-6">
 
       <section id="macro-friendly-section" className="flex flex-col gap-8">
         <div>
