@@ -132,7 +132,7 @@ export default function Home() {
         <div className="mx-auto max-w-5xl px-4 pt-4 sm:px-6">
           <DesktopNav />
         </div>
-        <div className="mx-auto flex max-w-5xl flex-col gap-8 px-4 pb-12 pt-28 sm:px-6 lg:pt-24">
+        <div className="mx-auto flex max-w-5xl flex-col gap-12 px-4 pb-16 pt-16 sm:px-6">
           <header className="mx-auto max-w-3xl text-center">
             <h1 className="text-center text-4xl font-semibold leading-tight tracking-tight text-neutral-900">
               Find High-Protein Fast Food Items in Seconds
@@ -387,9 +387,9 @@ export default function Home() {
         </div>
       </section>
 
-      <main className="mx-auto flex max-w-5xl flex-col gap-12 px-4 py-20 sm:px-6 lg:py-24">
+      <main className="mx-auto flex max-w-5xl flex-col gap-12 px-4 pb-24 pt-16 sm:px-6">
 
-      <section id="macro-friendly-section" className="mt-20 flex flex-col gap-8">
+      <section id="macro-friendly-section" className="flex flex-col gap-8">
         <div>
           <h2 className="text-center text-3xl font-semibold text-neutral-900">
             Macro Friendly Restaurants
