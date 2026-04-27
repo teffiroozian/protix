@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Store, ChevronDown, ChevronRight, SlidersHorizontal, X } from "lucide-react";
-import { getVisibleRestaurants } from "@/lib/restaurants";
+import { getAllRestaurants, isRestaurantAvailable } from "@/lib/restaurants";
 
 type DrawerTab = "controls" | "browse";
 
@@ -31,7 +31,7 @@ export default function MobileNavDrawer({
 }) {
   const [activeTab, setActiveTab] = useState<DrawerTab>(defaultTab);
   const [isFeaturedOpen, setIsFeaturedOpen] = useState(true);
-  const visibleRestaurants = getVisibleRestaurants();
+  const visibleRestaurants = getAllRestaurants();
 
   const featuredRestaurants = useMemo(
     () => visibleRestaurants.filter((restaurant) => restaurant.isMacroFriendly),
@@ -111,17 +111,31 @@ export default function MobileNavDrawer({
                 </button>
                 {isFeaturedOpen ? (
                   <div className="grid gap-1.5">
-                    {featuredRestaurants.map((restaurant) => (
-                      <Link key={restaurant.id} href={`/restaurant/${restaurant.id}`} onClick={onClose} className="inline-flex items-center justify-between rounded-xl border border-black/15 bg-white px-3 py-2.5 text-sm font-semibold text-black/85">
-                        <span className="inline-flex min-w-0 items-center gap-2.5">
-                          <span className="relative h-7 w-7 shrink-0 overflow-hidden rounded-md border border-black/10 bg-white">
-                            <Image src={restaurant.logo} alt={`${restaurant.name} logo`} fill className="object-cover" />
+                    {featuredRestaurants.map((restaurant) =>
+                      isRestaurantAvailable(restaurant.id) ? (
+                        <Link key={restaurant.id} href={`/restaurant/${restaurant.id}`} onClick={onClose} className="inline-flex items-center justify-between rounded-xl border border-black/15 bg-white px-3 py-2.5 text-sm font-semibold text-black/85">
+                          <span className="inline-flex min-w-0 items-center gap-2.5">
+                            <span className="relative h-7 w-7 shrink-0 overflow-hidden rounded-md border border-black/10 bg-white">
+                              <Image src={restaurant.logo} alt={`${restaurant.name} logo`} fill className="object-cover" />
+                            </span>
+                            <span className="truncate">{restaurant.name}</span>
                           </span>
-                          <span className="truncate">{restaurant.name}</span>
-                        </span>
-                        <ChevronRight className="h-4 w-4 text-black/50" strokeWidth={2.5} />
-                      </Link>
-                    ))}
+                          <ChevronRight className="h-4 w-4 text-black/50" strokeWidth={2.5} />
+                        </Link>
+                      ) : (
+                        <div key={restaurant.id} aria-disabled="true" className="inline-flex items-center justify-between rounded-xl border border-black/15 bg-white px-3 py-2.5 text-sm font-semibold text-black/85 opacity-40">
+                          <span className="inline-flex min-w-0 items-center gap-2.5">
+                            <span className="relative h-7 w-7 shrink-0 overflow-hidden rounded-md border border-black/10 bg-white">
+                              <Image src={restaurant.logo} alt={`${restaurant.name} logo`} fill className="object-cover" />
+                            </span>
+                            <span className="truncate">{restaurant.name}</span>
+                          </span>
+                          <span className="rounded-full border border-neutral-300 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-neutral-500">
+                            Coming Soon
+                          </span>
+                        </div>
+                      )
+                    )}
                   </div>
                 ) : null}
               </section>
