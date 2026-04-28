@@ -127,7 +127,7 @@ export default function Home() {
 
   return (
     <>
-      <section className="bg-emerald-100">
+      <section>
         <GlobalMobileNav />
         <div className="mx-auto max-w-5xl px-4 pt-4 sm:px-6">
           <DesktopNav />
