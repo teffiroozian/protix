@@ -10,7 +10,9 @@
             "categories": [
                 "Burger"
             ],
-            "defaultOrder": 1
+            "defaultOrder": 1,
+            "id": "mcdonalds_double_quarter_pounder_w_cheese",
+            "image": ""
         },
         {
             "name": "Bacon Quarter Pounder w Cheese",
@@ -21,7 +23,9 @@
             "categories": [
                 "Burger"
             ],
-            "defaultOrder": 2
+            "defaultOrder": 2,
+            "id": "mcdonalds_bacon_quarter_pounder_w_cheese",
+            "image": ""
         },
         {
             "name": "Big Breakfast w Hotcakes",
@@ -32,7 +36,9 @@
             "categories": [
                 "Breakfast"
             ],
-            "defaultOrder": 3
+            "defaultOrder": 3,
+            "id": "mcdonalds_big_breakfast_w_hotcakes",
+            "image": ""
         },
         {
             "name": "Steak Egg & Cheese Bagel",
@@ -43,7 +49,9 @@
             "categories": [
                 "Breakfast"
             ],
-            "defaultOrder": 4
+            "defaultOrder": 4,
+            "id": "mcdonalds_steak_egg_cheese_bagel",
+            "image": ""
         },
         {
             "name": "Triple Cheeseburger",
@@ -54,7 +62,9 @@
             "categories": [
                 "Burger"
             ],
-            "defaultOrder": 5
+            "defaultOrder": 5,
+            "id": "mcdonalds_triple_cheeseburger",
+            "image": ""
         }
     ]
 }

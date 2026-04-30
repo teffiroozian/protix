@@ -1,6 +1,6 @@
 import type { ChipotleKidsMealId, ChipotleTacoShell } from "@/lib/chipotleBuild/types";
 
-export const PORTION_TYPES = [
+export const SERVING_TYPES = [
   "single",
   "combo",
   "shareable",
@@ -13,7 +13,7 @@ export const PORTION_TYPES = [
   "entree",
 ] as const;
 
-export type PortionType = (typeof PORTION_TYPES)[number];
+export type ServingType = (typeof SERVING_TYPES)[number];
 
 export type Nutrition = {
   calories: number;
@@ -35,7 +35,7 @@ export type ItemVariant = {
   label: string;       // e.g. "8 piece"
   nutrition: Nutrition;
   image?: string;
-  portionType?: PortionType;   // Optional override: variant can differ from base item
+  servingType?: ServingType;   // Optional override: variant can differ from base item
   categories?: string[];
   isDefault?: boolean;
 };
@@ -99,16 +99,15 @@ export type RestaurantCustomizationRules = {
 };
 
 export type MenuItem = {
-  id?: string;          // optional but recommended later
+  id: string;
   ingredientRef?: string;
   name: string;
-  defaultOrder?: number;
+  defaultOrder: number;
   nutrition: Nutrition; // make this required so label is consistent
-  image?: string;
+  image: string;
   categories: string[];
   entreeGroup?: string;
-  portionType?: PortionType;
-  restaurant?: string;
+  servingType?: ServingType;
   variants?: ItemVariant[];
   defaultVariantId?: string;
   addonRefs?: AddonRef[];
@@ -119,17 +118,16 @@ export type MenuItem = {
 };
 
 export type IngredientItem = {
-  id?: string;
+  id: string;
   name: string;
-  defaultOrder?: number;
+  defaultOrder: number;
   nutrition: Nutrition;
   image?: string;
-  category?: string;
-  categories?: string[];
+  categories: string[];
   variants?: ItemVariant[];
   defaultVariantId?: string;
   hideVariantSelector?: boolean;
-  maxQuantity?: number;
+  maxQuantity: number;
   hideFromIngredientView?: boolean;
 };
 

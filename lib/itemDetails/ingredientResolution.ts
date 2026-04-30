@@ -71,11 +71,7 @@ function hasMeaningfulNutrition(nutrition?: Nutrition) {
 }
 
 function includedIngredientPriority(ingredient: ResolvedPanelIngredient) {
-  const categories = ingredient.ingredientItem?.categories?.length
-    ? ingredient.ingredientItem.categories
-    : ingredient.ingredientItem?.category
-      ? [ingredient.ingredientItem.category]
-      : [];
+  const categories = ingredient.ingredientItem?.categories ?? [];
   const normalizedCategories = categories.map((category) => normalizeIngredientCategory(category));
 
   if (normalizedCategories.some((category) => category.includes("bun"))) return 0;

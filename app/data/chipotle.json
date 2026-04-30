@@ -12,7 +12,7 @@
             "ingredients": [
                 "chips"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "image": "/restaurants/chipotle/menu/sides/chips.png",
             "nutrition": {
                 "calories": 540,
@@ -31,7 +31,7 @@
                 {
                     "id": "chips",
                     "label": "Regular",
-                    "portionType": "side",
+                    "servingType": "side",
                     "nutrition": {
                         "calories": 540,
                         "totalFat": 25,
@@ -48,7 +48,7 @@
                 {
                     "id": "large-chips",
                     "label": "Large",
-                    "portionType": "side",
+                    "servingType": "side",
                     "nutrition": {
                         "calories": 810,
                         "totalFat": 38,
@@ -74,13 +74,13 @@
                 "Toppings",
                 "Single Sides"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "defaultVariantId": "side-of-guacamole",
             "variants": [
                 {
                     "id": "side-of-guacamole",
                     "label": "Regular",
-                    "portionType": "side",
+                    "servingType": "side",
                     "nutrition": {
                         "calories": 230,
                         "totalFat": 22,
@@ -97,7 +97,7 @@
                 {
                     "id": "large-side-of-guacamole",
                     "label": "Large",
-                    "portionType": "side",
+                    "servingType": "side",
                     "nutrition": {
                         "calories": 460,
                         "totalFat": 44,
@@ -113,7 +113,8 @@
                 }
             ],
             "entreeGroup": "chips-sides",
-            "defaultOrder": 2
+            "defaultOrder": 2,
+            "image": ""
         },
         {
             "id": "chips-guacamole",
@@ -125,7 +126,7 @@
                 "chips",
                 "guacamole"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "image": "/restaurants/chipotle/menu/sides/chips-guacamole.png",
             "nutrition": {
                 "calories": 770,
@@ -144,7 +145,7 @@
                 {
                     "id": "chips-guacamole",
                     "label": "Regular",
-                    "portionType": "side",
+                    "servingType": "side",
                     "nutrition": {
                         "calories": 770,
                         "totalFat": 47,
@@ -161,7 +162,7 @@
                 {
                     "id": "large-chips-large-guacamole",
                     "label": "Large",
-                    "portionType": "side",
+                    "servingType": "side",
                     "nutrition": {
                         "calories": 1270,
                         "totalFat": 82,
@@ -190,7 +191,7 @@
                 "chips",
                 "fresh-tomato-salsa"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "image": "/restaurants/chipotle/menu/sides/chips-tomato-salsa.png",
             "nutrition": {
                 "calories": 565,
@@ -218,7 +219,7 @@
                 "chips",
                 "tomatillo-red-chili-salsa"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "image": "/restaurants/chipotle/menu/sides/chips-red-chili-salsa.png",
             "nutrition": {
                 "calories": 570,
@@ -246,7 +247,7 @@
                 "chips",
                 "tomatillo-green-chili-salsa"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "image": "/restaurants/chipotle/menu/sides/chips-green-chili-salsa.png",
             "nutrition": {
                 "calories": 555,
@@ -274,7 +275,7 @@
                 "chips",
                 "roasted-chili-corn-salsa"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "image": "/restaurants/chipotle/menu/sides/chips-chili-corn-salsa.png",
             "nutrition": {
                 "calories": 620,
@@ -301,7 +302,7 @@
                 "chips",
                 "queso-blanco"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "image": "/restaurants/chipotle/menu/sides/chips-queso-blanco.png",
             "nutrition": {
                 "calories": 780,
@@ -320,7 +321,7 @@
                 {
                     "id": "chips-queso-blanco",
                     "label": "Regular",
-                    "portionType": "side",
+                    "servingType": "side",
                     "nutrition": {
                         "calories": 780,
                         "totalFat": 43,
@@ -337,7 +338,7 @@
                 {
                     "id": "large-chips-large-queso-blanco",
                     "label": "Large",
-                    "portionType": "side",
+                    "servingType": "side",
                     "nutrition": {
                         "calories": 1290,
                         "totalFat": 75,
@@ -363,7 +364,7 @@
             "categories": [
                 "Single Sides"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "entreeGroup": "chips-sides",
             "defaultOrder": 9,
             "defaultVariantId": "side-of-cilantro-lime-sauce",
@@ -371,7 +372,7 @@
                 {
                     "id": "side-of-cilantro-lime-sauce",
                     "label": "Regular",
-                    "portionType": "side",
+                    "servingType": "side",
                     "nutrition": {
                         "calories": 80,
                         "protein": 2,
@@ -382,7 +383,7 @@
                 {
                     "id": "large-side-of-cilantro-lime-sauce",
                     "label": "Large",
-                    "portionType": "side",
+                    "servingType": "side",
                     "nutrition": {
                         "calories": 320,
                         "totalFat": 24,
@@ -390,7 +391,8 @@
                         "carbs": 12
                     }
                 }
-            ]
+            ],
+            "image": ""
         },
         {
             "id": "side-of-fresh-tomato-salsa",
@@ -400,13 +402,13 @@
             "categories": [
                 "Single Sides"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "defaultVariantId": "side-of-fresh-tomato-salsa",
             "variants": [
                 {
                     "id": "side-of-fresh-tomato-salsa",
                     "label": "Regular",
-                    "portionType": "side",
+                    "servingType": "side",
                     "nutrition": {
                         "calories": 25,
                         "totalFat": 0,
@@ -417,7 +419,7 @@
                 {
                     "id": "large-side-of-fresh-tomato-salsa",
                     "label": "Large",
-                    "portionType": "side",
+                    "servingType": "side",
                     "nutrition": {
                         "calories": 40,
                         "totalFat": 0,
@@ -427,7 +429,8 @@
                 }
             ],
             "entreeGroup": "chips-sides",
-            "defaultOrder": 10
+            "defaultOrder": 10,
+            "image": ""
         },
         {
             "id": "side-of-tomatillo-red-chili-salsa",
@@ -437,13 +440,13 @@
             "categories": [
                 "Single Sides"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "defaultVariantId": "side-of-tomatillo-red-chili-salsa",
             "variants": [
                 {
                     "id": "side-of-tomatillo-red-chili-salsa",
                     "label": "Regular",
-                    "portionType": "side",
+                    "servingType": "side",
                     "nutrition": {
                         "calories": 30,
                         "totalFat": 0,
@@ -454,7 +457,7 @@
                 {
                     "id": "large-side-of-tomatillo-red-chili-salsa",
                     "label": "Large",
-                    "portionType": "side",
+                    "servingType": "side",
                     "nutrition": {
                         "calories": 90,
                         "totalFat": 0,
@@ -464,7 +467,8 @@
                 }
             ],
             "entreeGroup": "chips-sides",
-            "defaultOrder": 11
+            "defaultOrder": 11,
+            "image": ""
         },
         {
             "id": "side-of-tomatillo-green-chili-salsa",
@@ -474,13 +478,13 @@
             "categories": [
                 "Single Sides"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "defaultVariantId": "side-of-tomatillo-green-chili-salsa",
             "variants": [
                 {
                     "id": "side-of-tomatillo-green-chili-salsa",
                     "label": "Regular",
-                    "portionType": "side",
+                    "servingType": "side",
                     "nutrition": {
                         "calories": 15,
                         "totalFat": 0,
@@ -491,7 +495,7 @@
                 {
                     "id": "large-side-of-tomatillo-green-chili-salsa",
                     "label": "Large",
-                    "portionType": "side",
+                    "servingType": "side",
                     "nutrition": {
                         "calories": 45,
                         "totalFat": 0,
@@ -501,7 +505,8 @@
                 }
             ],
             "entreeGroup": "chips-sides",
-            "defaultOrder": 12
+            "defaultOrder": 12,
+            "image": ""
         },
         {
             "id": "side-of-roasted-chili-corn-salsa",
@@ -511,13 +516,13 @@
             "categories": [
                 "Single Sides"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "defaultVariantId": "side-of-roasted-chili-corn-salsa",
             "variants": [
                 {
                     "id": "side-of-roasted-chili-corn-salsa",
                     "label": "Regular",
-                    "portionType": "side",
+                    "servingType": "side",
                     "nutrition": {
                         "calories": 80,
                         "totalFat": 1.5,
@@ -528,7 +533,7 @@
                 {
                     "id": "large-side-of-roasted-chili-corn-salsa",
                     "label": "Large",
-                    "portionType": "side",
+                    "servingType": "side",
                     "nutrition": {
                         "calories": 120,
                         "totalFat": 0,
@@ -538,7 +543,8 @@
                 }
             ],
             "entreeGroup": "chips-sides",
-            "defaultOrder": 13
+            "defaultOrder": 13,
+            "image": ""
         },
         {
             "id": "side-of-queso-blanco",
@@ -547,13 +553,13 @@
             "categories": [
                 "Single Sides"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "defaultVariantId": "side-of-queso-blanco",
             "variants": [
                 {
                     "id": "side-of-queso-blanco",
                     "label": "Regular",
-                    "portionType": "side",
+                    "servingType": "side",
                     "nutrition": {
                         "calories": 240,
                         "totalFat": 18,
@@ -570,7 +576,7 @@
                 {
                     "id": "large-side-of-queso-blanco",
                     "label": "Large",
-                    "portionType": "side",
+                    "servingType": "side",
                     "nutrition": {
                         "calories": 480,
                         "totalFat": 37,
@@ -586,7 +592,8 @@
                 }
             ],
             "entreeGroup": "chips-sides",
-            "defaultOrder": 14
+            "defaultOrder": 14,
+            "image": ""
         },
         {
             "id": "tortilla-on-the-side",
@@ -594,7 +601,7 @@
             "categories": [
                 "Single Sides"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "image": "/restaurants/chipotle/menu/sides/tortilla.png",
             "nutrition": {
                 "calories": 320,
@@ -617,7 +624,7 @@
             "categories": [
                 "Kids"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "image": "/restaurants/chipotle/menu/sides/chips.png",
             "nutrition": {
                 "calories": 140,
@@ -640,7 +647,7 @@
             "categories": [
                 "Kids"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "nutrition": {
                 "calories": 35,
                 "totalFat": 0,
@@ -654,7 +661,8 @@
                 "protein": 1
             },
             "entreeGroup": "chips-sides",
-            "defaultOrder": 17
+            "defaultOrder": 17,
+            "image": ""
         },
         {
             "id": "kids-blueberries",
@@ -662,7 +670,7 @@
             "categories": [
                 "Kids"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "nutrition": {
                 "calories": 20,
                 "totalFat": 0,
@@ -676,7 +684,8 @@
                 "protein": 1
             },
             "entreeGroup": "chips-sides",
-            "defaultOrder": 18
+            "defaultOrder": 18,
+            "image": ""
         },
         {
             "id": "high-protein-high-fiber-bowl",
@@ -684,7 +693,7 @@
             "categories": [
                 "Protein Meals"
             ],
-            "portionType": "entree",
+            "servingType": "entree",
             "image": "/restaurants/chipotle/menu/high-protein/high-protein-high-fiber-bowl.jpg",
             "entreeGroup": "high-protein-menu",
             "defaultOrder": 8,
@@ -704,7 +713,7 @@
             "categories": [
                 "Protein Meals"
             ],
-            "portionType": "entree",
+            "servingType": "entree",
             "image": "/restaurants/chipotle/menu/high-protein/high-protein-low-calorie-bowl.jpg",
             "entreeGroup": "high-protein-menu",
             "defaultOrder": 9,
@@ -722,7 +731,7 @@
             "categories": [
                 "Protein Meals"
             ],
-            "portionType": "entree",
+            "servingType": "entree",
             "image": "/restaurants/chipotle/menu/high-protein/double-high-protein-burrito.jpg",
             "entreeGroup": "high-protein-menu",
             "defaultOrder": 10,
@@ -741,7 +750,7 @@
             "categories": [
                 "Protein Meals"
             ],
-            "portionType": "entree",
+            "servingType": "entree",
             "image": "/restaurants/chipotle/menu/high-protein/high-protein-taco.jpg",
             "entreeGroup": "high-protein-menu",
             "defaultOrder": 11,
@@ -760,7 +769,7 @@
             "categories": [
                 "Protein Meals"
             ],
-            "portionType": "entree",
+            "servingType": "entree",
             "image": "/restaurants/chipotle/menu/high-protein/double-high-protein-bowl.jpg",
             "entreeGroup": "high-protein-menu",
             "defaultOrder": 7,
@@ -782,7 +791,7 @@
             "categories": [
                 "Protein Cups"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "image": "/restaurants/chipotle/menu/high-protein/chicken-al-pastor-cup.png",
             "entreeGroup": "high-protein-menu",
             "defaultOrder": 12
@@ -795,7 +804,7 @@
             "categories": [
                 "Protein Cups"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "image": "/restaurants/chipotle/menu/high-protein/chicken-cup.png",
             "entreeGroup": "high-protein-menu",
             "defaultOrder": 13
@@ -808,7 +817,7 @@
             "categories": [
                 "Protein Cups"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "image": "/restaurants/chipotle/menu/high-protein/steak-cup.png",
             "entreeGroup": "high-protein-menu",
             "defaultOrder": 14
@@ -819,7 +828,7 @@
             "categories": [
                 "Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "image": "/restaurants/chipotle/menu/drinks/mexican-coca-cola.png",
             "nutrition": {
                 "calories": 150,
@@ -845,7 +854,7 @@
             "categories": [
                 "Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "image": "/restaurants/chipotle/menu/drinks/mexican-sprite.png",
             "nutrition": {
                 "calories": 140,
@@ -867,7 +876,7 @@
             "categories": [
                 "Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "image": "/restaurants/chipotle/menu/drinks/topo-chico-mineral-water.png",
             "nutrition": {
                 "calories": 0,
@@ -886,7 +895,7 @@
             "categories": [
                 "Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "image": "/restaurants/chipotle/menu/drinks/coke-zero.png",
             "nutrition": {
                 "calories": 0,
@@ -908,7 +917,7 @@
             "categories": [
                 "Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "image": "/restaurants/chipotle/menu/drinks/poppi-strawberry-lemon.png",
             "nutrition": {
                 "calories": 30,
@@ -930,7 +939,7 @@
             "categories": [
                 "Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "image": "/restaurants/chipotle/menu/drinks/poppi-orange.png",
             "nutrition": {
                 "calories": 30,
@@ -952,7 +961,7 @@
             "categories": [
                 "Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "image": "/restaurants/chipotle/menu/drinks/grapefruit-izze.png",
             "nutrition": {
                 "calories": 100,
@@ -974,7 +983,7 @@
             "categories": [
                 "Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "image": "/restaurants/chipotle/menu/drinks/blackberry-izze.png",
             "nutrition": {
                 "calories": 100,
@@ -996,7 +1005,7 @@
             "categories": [
                 "Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "image": "/restaurants/chipotle/menu/drinks/apple-juice.png",
             "nutrition": {
                 "calories": 240,
@@ -1020,7 +1029,7 @@
             "categories": [
                 "Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "image": "/restaurants/chipotle/menu/drinks/open-still-water.png",
             "nutrition": {
                 "calories": 0,
@@ -1042,7 +1051,7 @@
             "categories": [
                 "Fountain Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "nutrition": {
                 "calories": 280,
                 "caloriesFromFat": 0,
@@ -1061,7 +1070,7 @@
                 {
                     "id": "barqs-root-beer-fountain-22-fl-oz",
                     "label": "22 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 280,
                         "caloriesFromFat": 0,
@@ -1079,7 +1088,7 @@
                 {
                     "id": "barqs-root-beer-fountain-32-fl-oz",
                     "label": "32 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 430,
                         "caloriesFromFat": 0,
@@ -1105,7 +1114,7 @@
             "categories": [
                 "Fountain Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "nutrition": {
                 "calories": 260,
                 "caloriesFromFat": 0,
@@ -1124,7 +1133,7 @@
                 {
                     "id": "coca-cola-classic-fountain-22-fl-oz",
                     "label": "22 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 260,
                         "caloriesFromFat": 0,
@@ -1142,7 +1151,7 @@
                 {
                     "id": "coca-cola-classic-fountain-32-fl-oz",
                     "label": "32 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 380,
                         "caloriesFromFat": 0,
@@ -1168,7 +1177,7 @@
             "categories": [
                 "Fountain Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "nutrition": {
                 "calories": 170,
                 "caloriesFromFat": 0,
@@ -1187,7 +1196,7 @@
                 {
                     "id": "coca-cola-life-fountain-22-fl-oz",
                     "label": "22 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 170,
                         "caloriesFromFat": 0,
@@ -1205,7 +1214,7 @@
                 {
                     "id": "coca-cola-life-fountain-32-fl-oz",
                     "label": "32 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 250,
                         "caloriesFromFat": 0,
@@ -1231,7 +1240,7 @@
             "categories": [
                 "Fountain Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "nutrition": {
                 "calories": 0,
                 "caloriesFromFat": 0,
@@ -1250,7 +1259,7 @@
                 {
                     "id": "coca-cola-zero-fountain-22-fl-oz",
                     "label": "22 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 0,
                         "caloriesFromFat": 0,
@@ -1268,7 +1277,7 @@
                 {
                     "id": "coca-cola-zero-fountain-32-fl-oz",
                     "label": "32 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 0,
                         "caloriesFromFat": 0,
@@ -1294,7 +1303,7 @@
             "categories": [
                 "Fountain Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "nutrition": {
                 "calories": 0,
                 "caloriesFromFat": 0,
@@ -1313,7 +1322,7 @@
                 {
                     "id": "diet-coke-fountain-22-fl-oz",
                     "label": "22 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 0,
                         "caloriesFromFat": 0,
@@ -1331,7 +1340,7 @@
                 {
                     "id": "diet-coke-fountain-32-fl-oz",
                     "label": "32 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 0,
                         "caloriesFromFat": 0,
@@ -1357,7 +1366,7 @@
             "categories": [
                 "Fountain Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "nutrition": {
                 "calories": 0,
                 "caloriesFromFat": 0,
@@ -1376,7 +1385,7 @@
                 {
                     "id": "diet-coke-caffeine-free-fountain-22-fl-oz",
                     "label": "22 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 0,
                         "caloriesFromFat": 0,
@@ -1394,7 +1403,7 @@
                 {
                     "id": "diet-coke-caffeine-free-fountain-32-fl-oz",
                     "label": "32 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 0,
                         "caloriesFromFat": 0,
@@ -1420,7 +1429,7 @@
             "categories": [
                 "Fountain Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "nutrition": {
                 "calories": 260,
                 "caloriesFromFat": 0,
@@ -1439,7 +1448,7 @@
                 {
                     "id": "pibb-xtra-fountain-22-fl-oz",
                     "label": "22 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 260,
                         "caloriesFromFat": 0,
@@ -1457,7 +1466,7 @@
                 {
                     "id": "pibb-xtra-fountain-32-fl-oz",
                     "label": "32 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 380,
                         "caloriesFromFat": 0,
@@ -1483,7 +1492,7 @@
             "categories": [
                 "Fountain Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "nutrition": {
                 "calories": 260,
                 "caloriesFromFat": 0,
@@ -1502,7 +1511,7 @@
                 {
                     "id": "sprite-fountain-22-fl-oz",
                     "label": "22 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 260,
                         "caloriesFromFat": 0,
@@ -1520,7 +1529,7 @@
                 {
                     "id": "sprite-fountain-32-fl-oz",
                     "label": "32 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 380,
                         "caloriesFromFat": 0,
@@ -1546,7 +1555,7 @@
             "categories": [
                 "Fountain Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "nutrition": {
                 "calories": 290,
                 "caloriesFromFat": 0,
@@ -1565,7 +1574,7 @@
                 {
                     "id": "fanta-orange-fountain-22-fl-oz",
                     "label": "22 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 290,
                         "caloriesFromFat": 0,
@@ -1583,7 +1592,7 @@
                 {
                     "id": "fanta-orange-fountain-32-fl-oz",
                     "label": "32 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 430,
                         "caloriesFromFat": 0,
@@ -1609,7 +1618,7 @@
             "categories": [
                 "Fountain Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "nutrition": {
                 "calories": 280,
                 "caloriesFromFat": 0,
@@ -1628,7 +1637,7 @@
                 {
                     "id": "minute-maid-lemonade-fountain-22-fl-oz",
                     "label": "22 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 280,
                         "caloriesFromFat": 0,
@@ -1646,7 +1655,7 @@
                 {
                     "id": "minute-maid-lemonade-fountain-32-fl-oz",
                     "label": "32 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 400,
                         "caloriesFromFat": 0,
@@ -1672,7 +1681,7 @@
             "categories": [
                 "Fountain Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "nutrition": {
                 "calories": 280,
                 "caloriesFromFat": 0,
@@ -1691,7 +1700,7 @@
                 {
                     "id": "powerade-mountain-berry-blast-fountain-22-fl-oz",
                     "label": "22 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 280,
                         "caloriesFromFat": 0,
@@ -1709,7 +1718,7 @@
                 {
                     "id": "powerade-mountain-berry-blast-fountain-32-fl-oz",
                     "label": "32 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 400,
                         "caloriesFromFat": 0,
@@ -1735,7 +1744,7 @@
             "categories": [
                 "Fountain Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "nutrition": {
                 "calories": 290,
                 "caloriesFromFat": 0,
@@ -1754,7 +1763,7 @@
                 {
                     "id": "mello-yello-fountain-22-fl-oz",
                     "label": "22 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 290,
                         "caloriesFromFat": 0,
@@ -1772,7 +1781,7 @@
                 {
                     "id": "mello-yello-fountain-32-fl-oz",
                     "label": "32 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 420,
                         "caloriesFromFat": 0,
@@ -1798,7 +1807,7 @@
             "categories": [
                 "Fountain Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "nutrition": {
                 "calories": 300,
                 "caloriesFromFat": 0,
@@ -1817,7 +1826,7 @@
                 {
                     "id": "lemonade-blue-sky-fountain-22-fl-oz",
                     "label": "22 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 300,
                         "caloriesFromFat": 0,
@@ -1835,7 +1844,7 @@
                 {
                     "id": "lemonade-blue-sky-fountain-32-fl-oz",
                     "label": "32 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 440,
                         "caloriesFromFat": 0,
@@ -1861,7 +1870,7 @@
             "categories": [
                 "Fountain Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "nutrition": {
                 "calories": 300,
                 "caloriesFromFat": 0,
@@ -1880,7 +1889,7 @@
                 {
                     "id": "mango-orange-blue-sky-fountain-22-fl-oz",
                     "label": "22 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 300,
                         "caloriesFromFat": 0,
@@ -1898,7 +1907,7 @@
                 {
                     "id": "mango-orange-blue-sky-fountain-32-fl-oz",
                     "label": "32 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 430,
                         "caloriesFromFat": 0,
@@ -1924,7 +1933,7 @@
             "categories": [
                 "Fountain Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "nutrition": {
                 "calories": 170,
                 "caloriesFromFat": 0,
@@ -1943,7 +1952,7 @@
                 {
                     "id": "maine-root-root-beer-fountain-22-fl-oz",
                     "label": "22 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 170,
                         "caloriesFromFat": 0,
@@ -1961,7 +1970,7 @@
                 {
                     "id": "maine-root-root-beer-fountain-32-fl-oz",
                     "label": "32 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 240,
                         "caloriesFromFat": 0,
@@ -1987,7 +1996,7 @@
             "categories": [
                 "Fountain Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "nutrition": {
                 "calories": 10,
                 "caloriesFromFat": 0,
@@ -2006,7 +2015,7 @@
                 {
                     "id": "chipotle-iced-tea-fountain-22-fl-oz",
                     "label": "22 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 10,
                         "caloriesFromFat": 0,
@@ -2024,7 +2033,7 @@
                 {
                     "id": "chipotle-iced-tea-fountain-32-fl-oz",
                     "label": "32 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 15,
                         "caloriesFromFat": 0,
@@ -2050,7 +2059,7 @@
             "categories": [
                 "Fountain Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "nutrition": {
                 "calories": 150,
                 "caloriesFromFat": 0,
@@ -2069,7 +2078,7 @@
                 {
                     "id": "chipotle-sweet-iced-tea-fountain-22-fl-oz",
                     "label": "22 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 150,
                         "caloriesFromFat": 0,
@@ -2087,7 +2096,7 @@
                 {
                     "id": "chipotle-sweet-iced-tea-fountain-32-fl-oz",
                     "label": "32 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 220,
                         "caloriesFromFat": 0,
@@ -2114,7 +2123,7 @@
             "categories": [
                 "Tractor Beverages"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "nutrition": {
                 "calories": 230,
                 "totalFat": 0,
@@ -2132,7 +2141,7 @@
                 {
                     "id": "organic-watermelon-limeade-22-fl-oz",
                     "label": "22 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 230,
                         "totalFat": 0,
@@ -2149,7 +2158,7 @@
                 {
                     "id": "organic-watermelon-limeade-32-fl-oz",
                     "label": "32 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 330,
                         "totalFat": 0,
@@ -2174,7 +2183,7 @@
             "categories": [
                 "Tractor Beverages"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "nutrition": {
                 "calories": 170,
                 "totalFat": 0,
@@ -2192,7 +2201,7 @@
                 {
                     "id": "organic-lemonade-22-fl-oz",
                     "label": "22 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 170,
                         "totalFat": 0,
@@ -2209,7 +2218,7 @@
                 {
                     "id": "organic-lemonade-32-fl-oz",
                     "label": "32 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 250,
                         "totalFat": 0,
@@ -2234,7 +2243,7 @@
             "categories": [
                 "Tractor Beverages"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "nutrition": {
                 "calories": 190,
                 "totalFat": 0,
@@ -2252,7 +2261,7 @@
                 {
                     "id": "organic-mandarin-agua-fresca-22-fl-oz",
                     "label": "22 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 190,
                         "totalFat": 0,
@@ -2269,7 +2278,7 @@
                 {
                     "id": "organic-mandarin-agua-fresca-32-fl-oz",
                     "label": "32 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 280,
                         "totalFat": 0,
@@ -2294,7 +2303,7 @@
             "categories": [
                 "Tractor Beverages"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "nutrition": {
                 "calories": 200,
                 "totalFat": 0,
@@ -2312,7 +2321,7 @@
                 {
                     "id": "organic-berry-agua-fresca-22-fl-oz",
                     "label": "22 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 200,
                         "totalFat": 0,
@@ -2329,7 +2338,7 @@
                 {
                     "id": "organic-berry-agua-fresca-32-fl-oz",
                     "label": "32 fl oz",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 290,
                         "totalFat": 0,
@@ -2353,7 +2362,7 @@
             "categories": [
                 "Kids Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "image": "/restaurants/chipotle/menu/drinks/organic-milk.png",
             "nutrition": {
                 "calories": 106,
@@ -2378,7 +2387,7 @@
             "categories": [
                 "Kids Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "image": "/restaurants/chipotle/menu/drinks/organic-chocolate-milk.png",
             "nutrition": {
                 "calories": 147,
@@ -2403,7 +2412,7 @@
             "categories": [
                 "Kids Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "image": "/restaurants/chipotle/menu/drinks/organic-apple-juice.png",
             "nutrition": {
                 "calories": 100,
@@ -2427,7 +2436,6 @@
         {
             "id": "tortilla",
             "name": "Tortilla",
-            "category": "Side",
             "image": "/restaurants/chipotle/menu/sides/tortilla.png",
             "nutrition": {
                 "calories": 320,
@@ -2440,12 +2448,16 @@
                 "fiber": 3,
                 "sugars": 0,
                 "protein": 8
-            }
+            },
+            "defaultOrder": 0,
+            "categories": [
+                "Side"
+            ],
+            "maxQuantity": 10
         },
         {
             "id": "crispy-corn-tortilla",
             "name": "Crispy Corn Tortilla",
-            "category": "Side",
             "image": "/restaurants/chipotle/menu/sides/crispy-corn-tortilla.png",
             "nutrition": {
                 "calories": 70,
@@ -2458,12 +2470,16 @@
                 "fiber": 1,
                 "sugars": 0,
                 "protein": 1
-            }
+            },
+            "defaultOrder": 1,
+            "categories": [
+                "Side"
+            ],
+            "maxQuantity": 10
         },
         {
             "id": "soft-flour-tortilla",
             "name": "Soft Flour Tortilla",
-            "category": "Side",
             "image": "/restaurants/chipotle/menu/sides/soft-flour-tortilla.png",
             "nutrition": {
                 "calories": 80,
@@ -2476,12 +2492,16 @@
                 "fiber": 0,
                 "sugars": 0,
                 "protein": 2
-            }
+            },
+            "defaultOrder": 2,
+            "categories": [
+                "Side"
+            ],
+            "maxQuantity": 10
         },
         {
             "id": "romaine-lettuce",
             "name": "Romaine Lettuce",
-            "category": "Toppings",
             "defaultOrder": 10,
             "image": "/restaurants/chipotle/ingredients/toppings/romaine-lettuce.png",
             "nutrition": {
@@ -2495,12 +2515,15 @@
                 "fiber": 1,
                 "sugars": 0,
                 "protein": 0
-            }
+            },
+            "categories": [
+                "Toppings"
+            ],
+            "maxQuantity": 10
         },
         {
             "id": "cheese",
             "name": "Cheese",
-            "category": "Toppings",
             "defaultOrder": 9,
             "image": "/restaurants/chipotle/ingredients/toppings/cheese.png",
             "nutrition": {
@@ -2514,12 +2537,15 @@
                 "fiber": 0,
                 "sugars": 0,
                 "protein": 6
-            }
+            },
+            "categories": [
+                "Toppings"
+            ],
+            "maxQuantity": 10
         },
         {
             "id": "guacamole",
             "name": "Guacamole",
-            "category": "Toppings",
             "defaultOrder": 2,
             "image": "/restaurants/chipotle/ingredients/toppings/gaucamole.png",
             "nutrition": {
@@ -2533,13 +2559,16 @@
                 "fiber": 6,
                 "sugars": 1,
                 "protein": 2
-            }
+            },
+            "categories": [
+                "Toppings"
+            ],
+            "maxQuantity": 10
         },
         {
             "id": "cilantro-lime-sauce",
             "name": "Cilantro Lime Sauce",
             "description": "Served on the Side",
-            "category": "Toppings",
             "defaultOrder": 1,
             "image": "/restaurants/chipotle/ingredients/toppings/cilantro-lime-sauce.png",
             "nutrition": {
@@ -2547,13 +2576,16 @@
                 "protein": 2,
                 "carbs": 3,
                 "totalFat": 6
-            }
+            },
+            "categories": [
+                "Toppings"
+            ],
+            "maxQuantity": 10
         },
         {
             "id": "fresh-tomato-salsa",
             "name": "Fresh Tomato Salsa",
             "description": "Mild",
-            "category": "Toppings",
             "defaultOrder": 3,
             "image": "/restaurants/chipotle/ingredients/toppings/tomato-salsa.png",
             "nutrition": {
@@ -2567,13 +2599,16 @@
                 "fiber": 1,
                 "sugars": 1,
                 "protein": 0
-            }
+            },
+            "categories": [
+                "Toppings"
+            ],
+            "maxQuantity": 10
         },
         {
             "id": "roasted-chili-corn-salsa",
             "name": "Roasted Chili-Corn Salsa",
             "description": "Medium",
-            "category": "Toppings",
             "defaultOrder": 4,
             "image": "/restaurants/chipotle/ingredients/toppings/chili-corn-salsa.png",
             "nutrition": {
@@ -2587,13 +2622,16 @@
                 "fiber": 3,
                 "sugars": 4,
                 "protein": 3
-            }
+            },
+            "categories": [
+                "Toppings"
+            ],
+            "maxQuantity": 10
         },
         {
             "id": "tomatillo-green-chili-salsa",
             "name": "Tomatillo-Green Chili Salsa",
             "description": "Medium",
-            "category": "Toppings",
             "defaultOrder": 5,
             "image": "/restaurants/chipotle/ingredients/toppings/green-chili-salsa.png",
             "nutrition": {
@@ -2607,13 +2645,16 @@
                 "fiber": 0,
                 "sugars": 2,
                 "protein": 0
-            }
+            },
+            "categories": [
+                "Toppings"
+            ],
+            "maxQuantity": 10
         },
         {
             "id": "tomatillo-red-chili-salsa",
             "name": "Tomatillo-Red Chili Salsa",
             "description": "Hot",
-            "category": "Toppings",
             "defaultOrder": 6,
             "image": "/restaurants/chipotle/ingredients/toppings/red-chili-salsa.png",
             "nutrition": {
@@ -2627,12 +2668,15 @@
                 "fiber": 1,
                 "sugars": 0,
                 "protein": 0
-            }
+            },
+            "categories": [
+                "Toppings"
+            ],
+            "maxQuantity": 10
         },
         {
             "id": "sour-cream",
             "name": "Sour Cream",
-            "category": "Toppings",
             "defaultOrder": 7,
             "image": "/restaurants/chipotle/ingredients/toppings/sour-cream.png",
             "nutrition": {
@@ -2646,12 +2690,15 @@
                 "fiber": 0,
                 "sugars": 2,
                 "protein": 2
-            }
+            },
+            "categories": [
+                "Toppings"
+            ],
+            "maxQuantity": 10
         },
         {
             "id": "fajita-veggies",
             "name": "Fajita Veggies",
-            "category": "Toppings",
             "defaultOrder": 8,
             "image": "/restaurants/chipotle/ingredients/toppings/fajita-veggies.png",
             "nutrition": {
@@ -2665,12 +2712,15 @@
                 "fiber": 1,
                 "sugars": 2,
                 "protein": 1
-            }
+            },
+            "categories": [
+                "Toppings"
+            ],
+            "maxQuantity": 10
         },
         {
             "id": "queso-blanco",
             "name": "Queso Blanco",
-            "category": "Toppings",
             "defaultOrder": 11,
             "image": "/restaurants/chipotle/ingredients/toppings/queso-blanco.png",
             "nutrition": {
@@ -2684,12 +2734,15 @@
                 "fiber": 0,
                 "sugars": 1,
                 "protein": 5
-            }
+            },
+            "categories": [
+                "Toppings"
+            ],
+            "maxQuantity": 10
         },
         {
             "id": "chicken-al-pastor",
             "name": "Chicken al Pastor",
-            "category": "Proteins",
             "defaultOrder": 1,
             "image": "/restaurants/chipotle/ingredients/proteins/chicken-al-pastor.png",
             "nutrition": {
@@ -2703,12 +2756,15 @@
                 "fiber": 0,
                 "sugars": 2,
                 "protein": 23
-            }
+            },
+            "categories": [
+                "Proteins"
+            ],
+            "maxQuantity": 1
         },
         {
             "id": "chicken",
             "name": "Chicken",
-            "category": "Proteins",
             "defaultOrder": 2,
             "image": "/restaurants/chipotle/ingredients/proteins/chicken.png",
             "nutrition": {
@@ -2722,12 +2778,15 @@
                 "fiber": 0,
                 "sugars": 0,
                 "protein": 32
-            }
+            },
+            "categories": [
+                "Proteins"
+            ],
+            "maxQuantity": 1
         },
         {
             "id": "steak",
             "name": "Steak",
-            "category": "Proteins",
             "defaultOrder": 3,
             "image": "/restaurants/chipotle/ingredients/proteins/steak.png",
             "nutrition": {
@@ -2741,12 +2800,15 @@
                 "fiber": 1,
                 "sugars": 0,
                 "protein": 21
-            }
+            },
+            "categories": [
+                "Proteins"
+            ],
+            "maxQuantity": 1
         },
         {
             "id": "beef-barbacoa",
             "name": "Beef Barbacoa",
-            "category": "Proteins",
             "defaultOrder": 4,
             "image": "/restaurants/chipotle/ingredients/proteins/beef-barbacoa.png",
             "nutrition": {
@@ -2760,12 +2822,15 @@
                 "fiber": 1,
                 "sugars": 0,
                 "protein": 24
-            }
+            },
+            "categories": [
+                "Proteins"
+            ],
+            "maxQuantity": 1
         },
         {
             "id": "carnitas",
             "name": "Carnitas",
-            "category": "Proteins",
             "defaultOrder": 5,
             "image": "/restaurants/chipotle/ingredients/proteins/carnitas.png",
             "nutrition": {
@@ -2779,13 +2844,16 @@
                 "fiber": 0,
                 "sugars": 0,
                 "protein": 23
-            }
+            },
+            "categories": [
+                "Proteins"
+            ],
+            "maxQuantity": 1
         },
         {
             "id": "sofritas",
             "name": "Sofritas",
             "description": "Plant-Based Protein",
-            "category": "Proteins",
             "defaultOrder": 6,
             "image": "/restaurants/chipotle/ingredients/proteins/sofritas.png",
             "nutrition": {
@@ -2799,12 +2867,15 @@
                 "fiber": 3,
                 "sugars": 5,
                 "protein": 8
-            }
+            },
+            "categories": [
+                "Proteins"
+            ],
+            "maxQuantity": 1
         },
         {
             "id": "white-rice",
             "name": "White Rice",
-            "category": "Rice",
             "defaultOrder": 1,
             "image": "/restaurants/chipotle/ingredients/rice/white-rice.png",
             "nutrition": {
@@ -2818,12 +2889,15 @@
                 "fiber": 1,
                 "sugars": 0,
                 "protein": 4
-            }
+            },
+            "categories": [
+                "Rice"
+            ],
+            "maxQuantity": 1
         },
         {
             "id": "brown-rice",
             "name": "Brown Rice",
-            "category": "Rice",
             "defaultOrder": 2,
             "image": "/restaurants/chipotle/ingredients/rice/brown-rice.png",
             "nutrition": {
@@ -2837,12 +2911,15 @@
                 "fiber": 2,
                 "sugars": 0,
                 "protein": 4
-            }
+            },
+            "categories": [
+                "Rice"
+            ],
+            "maxQuantity": 1
         },
         {
             "id": "black-beans",
             "name": "Black Beans",
-            "category": "Beans",
             "defaultOrder": 1,
             "image": "/restaurants/chipotle/ingredients/beans/black-beans.png",
             "nutrition": {
@@ -2856,12 +2933,15 @@
                 "fiber": 7,
                 "sugars": 2,
                 "protein": 8
-            }
+            },
+            "categories": [
+                "Beans"
+            ],
+            "maxQuantity": 1
         },
         {
             "id": "pinto-beans",
             "name": "Pinto Beans",
-            "category": "Beans",
             "defaultOrder": 2,
             "image": "/restaurants/chipotle/ingredients/beans/pinto-beans.png",
             "nutrition": {
@@ -2875,7 +2955,11 @@
                 "fiber": 8,
                 "sugars": 1,
                 "protein": 8
-            }
+            },
+            "categories": [
+                "Beans"
+            ],
+            "maxQuantity": 1
         }
     ],
     "builderConfig": {

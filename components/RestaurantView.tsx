@@ -423,6 +423,7 @@ export default function RestaurantView({
         options.map((option) => ({
           id: `${restaurantId}-${addonRef}-${option.name}`.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
           name: option.name,
+          defaultOrder: 0,
           nutrition: {
             calories: option.calories,
             protein: option.protein,
@@ -436,9 +437,9 @@ export default function RestaurantView({
             sugars: option.sugars,
           },
           categories: [categoryByAddonRef[addonRef]],
-          portionType: "addon" as const,
-          image: option.image,
-        }))
+          servingType: "addon" as const,
+          image: option.image ?? "",
+          }))
       );
   }, [addons, restaurantId]);
 
@@ -450,8 +451,7 @@ export default function RestaurantView({
         return normalizedCategories;
       }
 
-      const normalizedLegacyCategory = ingredient.category?.trim();
-      return normalizedLegacyCategory ? [normalizedLegacyCategory] : ["Other"];
+      return ["Other"];
     };
 
     const resolveIngredientCategory = (ingredient: IngredientItem) => {
@@ -568,15 +568,15 @@ export default function RestaurantView({
             selectedEntree !== "tacos" &&
             typeof includedIngredientOrder === "number"
               ? includedIngredientOrder
-              : ingredient.defaultOrder,
+              : (ingredient.defaultOrder ?? index),
           variants: tripleCheeseVariant ? [...(variants ?? []), tripleCheeseVariant] : variants,
           defaultVariantId,
           hideVariantSelector:
             ingredient.hideVariantSelector || isQuesadillaCheeseIncludedIngredient,
-          image: ingredient.image,
+          image: ingredient.image ?? "",
           categories: [displayCategory],
-          portionType: "addon",
-        };
+          servingType: "addon",
+          };
         return menuItem;
       });
 
@@ -667,9 +667,9 @@ export default function RestaurantView({
 
   const filteredItems = useMemo(() => {
     const getRankedAllFilterKey = (
-      portionType: MenuItem["portionType"] | undefined
+      servingType: MenuItem["servingType"] | undefined
     ): RankedAllFilterKey | null => {
-      switch (portionType) {
+      switch (servingType) {
         case "single":
         case "combo":
         case "kids":
@@ -705,7 +705,7 @@ export default function RestaurantView({
         );
 
         const filteredVariants = item.variants?.filter((variant) => {
-          const variantKey = getRankedAllFilterKey(variant.portionType);
+          const variantKey = getRankedAllFilterKey(variant.servingType);
           if (!variantKey) {
             return false;
           }
@@ -713,7 +713,7 @@ export default function RestaurantView({
           return selectedRankedKeys.has(variantKey);
         });
 
-        const itemKey = getRankedAllFilterKey(item.portionType);
+        const itemKey = getRankedAllFilterKey(item.servingType);
         const itemKeyMatches = itemKey ? selectedRankedKeys.has(itemKey) : false;
         const hasMatchingVariants = Boolean(filteredVariants && filteredVariants.length > 0);
 
@@ -1373,6 +1373,7 @@ export default function RestaurantView({
             return {
               id: includedIngredientId,
               name: fallbackIngredient.name,
+              defaultOrder: fallbackIngredient.defaultOrder ?? 0,
               nutrition: fallbackNutrition,
               variants: fallbackIngredient.variants?.map((variant) => ({
                 ...variant,
@@ -1383,10 +1384,10 @@ export default function RestaurantView({
               })),
               defaultVariantId: fallbackIngredient.defaultVariantId,
               hideVariantSelector: fallbackIngredient.hideVariantSelector,
-              image: fallbackIngredient.image,
+              image: fallbackIngredient.image ?? "",
               categories: ["Included Ingredient"],
-              portionType: "addon" as const,
-            } satisfies MenuItem;
+              servingType: "addon" as const,
+                  } satisfies MenuItem;
           })();
         if (!includedIngredientItem || next[includedIngredientId]) {
           return;
@@ -1434,6 +1435,7 @@ export default function RestaurantView({
             return {
               id: includedIngredientId,
               name: fallbackIngredient.name,
+              defaultOrder: fallbackIngredient.defaultOrder ?? 0,
               nutrition: scaleNutritionValues(
                 fallbackIngredient.nutrition,
                 getIngredientNutritionMultiplier(includedIngredientId)
@@ -1447,10 +1449,10 @@ export default function RestaurantView({
               })),
               defaultVariantId: fallbackIngredient.defaultVariantId,
               hideVariantSelector: fallbackIngredient.hideVariantSelector,
-              image: fallbackIngredient.image,
+              image: fallbackIngredient.image ?? "",
               categories: ["Included Ingredient"],
-              portionType: "addon" as const,
-            } satisfies MenuItem;
+              servingType: "addon" as const,
+                  } satisfies MenuItem;
           })();
         if (!includedIngredientItem) {
           return;

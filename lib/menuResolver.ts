@@ -81,9 +81,12 @@ function normalizeMenuItem(item: FlatLegacyMenuItem): MenuItem {
 
   return {
     ...rest,
+    id: item.id ?? item.name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
     name: item.name,
+    defaultOrder: item.defaultOrder ?? 0,
     nutrition,
-    portionType: item.portionType,
+    servingType: item.servingType,
+    image: item.image ?? "",
     categories: item.categories ?? ["Other"],
   };
 }

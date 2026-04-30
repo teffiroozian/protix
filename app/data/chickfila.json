@@ -81,7 +81,7 @@
             "categories": [
                 "Sandwich"
             ],
-            "portionType": "single",
+            "servingType": "single",
             "image": "/restaurants/chickfila/menu/sandwiches/chicken-sandwich.webp",
             "ingredients": [
                 "buttery-white-bun",
@@ -108,7 +108,7 @@
             "categories": [
                 "Sandwich"
             ],
-            "portionType": "single",
+            "servingType": "single",
             "image": "/restaurants/chickfila/menu/sandwiches/spicy-deluxe-sandwich.webp",
             "ingredients": [
                 "buttery-white-bun",
@@ -138,7 +138,7 @@
             "categories": [
                 "Sandwich"
             ],
-            "portionType": "single",
+            "servingType": "single",
             "image": "/restaurants/chickfila/menu/sandwiches/spicy-chicken-sandwich.webp",
             "ingredients": [
                 "buttery-white-bun",
@@ -165,7 +165,7 @@
             "categories": [
                 "Nuggets"
             ],
-            "portionType": "single",
+            "servingType": "single",
             "image": "/restaurants/chickfila/menu/chicken/crispy-nuggets.webp",
             "nutrition": {
                 "calories": 250,
@@ -190,7 +190,7 @@
                         "Nuggets",
                         "Kids"
                     ],
-                    "portionType": "kids",
+                    "servingType": "kids",
                     "nutrition": {
                         "calories": 160,
                         "totalFat": 7,
@@ -207,7 +207,7 @@
                 },
                 {
                     "id": "8pc",
-                    "portionType": "single",
+                    "servingType": "single",
                     "nutrition": {
                         "calories": 250,
                         "totalFat": 11,
@@ -224,7 +224,7 @@
                 },
                 {
                     "id": "12pc",
-                    "portionType": "single",
+                    "servingType": "single",
                     "nutrition": {
                         "calories": 380,
                         "totalFat": 17,
@@ -241,7 +241,7 @@
                 },
                 {
                     "id": "30pc",
-                    "portionType": "shareable",
+                    "servingType": "shareable",
                     "nutrition": {
                         "calories": 950,
                         "totalFat": 43,
@@ -265,7 +265,7 @@
             "categories": [
                 "Sandwich"
             ],
-            "portionType": "single",
+            "servingType": "single",
             "image": "/restaurants/chickfila/menu/sandwiches/deluxe-sandwich.webp",
             "ingredients": [
                 "buttery-white-bun",
@@ -295,7 +295,7 @@
             "categories": [
                 "Wrap"
             ],
-            "portionType": "single",
+            "servingType": "single",
             "image": "/restaurants/chickfila/menu/wraps/cool-wrap.webp",
             "ingredients": [
                 "shredded-cheddar"
@@ -323,7 +323,7 @@
             "categories": [
                 "Wrap"
             ],
-            "portionType": "single",
+            "servingType": "single",
             "image": "/restaurants/chickfila/menu/wraps/southwest-veggie-wrap.webp",
             "ingredients": [
                 "shredded-cheddar"
@@ -351,7 +351,7 @@
             "categories": [
                 "Nuggets"
             ],
-            "portionType": "single",
+            "servingType": "single",
             "image": "/restaurants/chickfila/menu/chicken/chicken-strips.webp",
             "nutrition": {
                 "calories": 310,
@@ -376,7 +376,7 @@
                         "Nuggets",
                         "Kids"
                     ],
-                    "portionType": "kids",
+                    "servingType": "kids",
                     "nutrition": {
                         "calories": 200,
                         "totalFat": 9,
@@ -393,7 +393,7 @@
                 },
                 {
                     "id": "3pc",
-                    "portionType": "single",
+                    "servingType": "single",
                     "nutrition": {
                         "calories": 310,
                         "totalFat": 14,
@@ -410,7 +410,7 @@
                 },
                 {
                     "id": "4pc",
-                    "portionType": "single",
+                    "servingType": "single",
                     "nutrition": {
                         "calories": 410,
                         "totalFat": 19,
@@ -427,7 +427,7 @@
                 },
                 {
                     "id": "10pc",
-                    "portionType": "shareable",
+                    "servingType": "shareable",
                     "nutrition": {
                         "calories": 1020,
                         "totalFat": 46,
@@ -451,7 +451,7 @@
             "categories": [
                 "Sandwich"
             ],
-            "portionType": "single",
+            "servingType": "single",
             "image": "/restaurants/chickfila/menu/sandwiches/grilled-chicken-sandwich.webp",
             "ingredients": [
                 "honey-roasted-bbq-sauce",
@@ -480,7 +480,7 @@
             "categories": [
                 "Sandwich"
             ],
-            "portionType": "single",
+            "servingType": "single",
             "image": "/restaurants/chickfila/menu/sandwiches/grilled-chicken-club.webp",
             "ingredients": [
                 "honey-roasted-bbq-sauce",
@@ -511,7 +511,7 @@
             "categories": [
                 "Nuggets"
             ],
-            "portionType": "single",
+            "servingType": "single",
             "image": "/restaurants/chickfila/menu/chicken/grilled-nuggets.webp",
             "nutrition": {
                 "calories": 130,
@@ -530,7 +530,7 @@
                         "Nuggets",
                         "Kids"
                     ],
-                    "portionType": "kids",
+                    "servingType": "kids",
                     "nutrition": {
                         "calories": 80,
                         "totalFat": 2,
@@ -547,7 +547,7 @@
                 },
                 {
                     "id": "8pc",
-                    "portionType": "single",
+                    "servingType": "single",
                     "nutrition": {
                         "calories": 130,
                         "totalFat": 3,
@@ -564,7 +564,7 @@
                 },
                 {
                     "id": "12pc",
-                    "portionType": "single",
+                    "servingType": "single",
                     "nutrition": {
                         "calories": 200,
                         "totalFat": 4.5,
@@ -581,7 +581,7 @@
                 },
                 {
                     "id": "30pc",
-                    "portionType": "shareable",
+                    "servingType": "shareable",
                     "nutrition": {
                         "calories": 510,
                         "totalFat": 11,
@@ -605,7 +605,7 @@
             "categories": [
                 "Salad"
             ],
-            "portionType": "single",
+            "servingType": "single",
             "image": "/restaurants/chickfila/menu/salads/cobb-salad.webp",
             "ingredients": [
                 "crispy-nuggets",
@@ -639,7 +639,7 @@
             "categories": [
                 "Salad"
             ],
-            "portionType": "single",
+            "servingType": "single",
             "image": "/restaurants/chickfila/menu/salads/spicy-southwest-salad.webp",
             "ingredients": [
                 "grilled-filet",
@@ -672,7 +672,7 @@
             "categories": [
                 "Salad"
             ],
-            "portionType": "single",
+            "servingType": "single",
             "image": "/restaurants/chickfila/menu/salads/market-salad.webp",
             "ingredients": [
                 "grilled-filet",
@@ -706,7 +706,7 @@
             "categories": [
                 "Side"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "image": "/restaurants/chickfila/menu/sides/kale-crunch-side.webp",
             "ingredients": [
                 "roasted-nut-blend"
@@ -731,7 +731,7 @@
             "categories": [
                 "Side"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "image": "/restaurants/chickfila/menu/sides/waffle-fries.webp",
             "nutrition": {
                 "calories": 420,
@@ -752,7 +752,7 @@
             "variants": [
                 {
                     "id": "small",
-                    "portionType": "side",
+                    "servingType": "side",
                     "nutrition": {
                         "calories": 320,
                         "totalFat": 19,
@@ -769,7 +769,7 @@
                 },
                 {
                     "id": "medium",
-                    "portionType": "side",
+                    "servingType": "side",
                     "nutrition": {
                         "calories": 420,
                         "totalFat": 24,
@@ -786,7 +786,7 @@
                 },
                 {
                     "id": "large",
-                    "portionType": "side",
+                    "servingType": "side",
                     "nutrition": {
                         "calories": 600,
                         "totalFat": 35,
@@ -815,7 +815,7 @@
             "categories": [
                 "Side"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "image": "/restaurants/chickfila/menu/sides/berry-parfait-granola.webp",
             "ingredients": [
                 "harvest-nut-granola",
@@ -837,7 +837,7 @@
             "variants": [
                 {
                     "id": "cookie_crumbs",
-                    "portionType": "side",
+                    "servingType": "side",
                     "image": "/restaurants/chickfila/menu/sides/berry-parfait-cookie-crumbs.webp",
                     "nutrition": {
                         "calories": 240,
@@ -855,7 +855,7 @@
                 },
                 {
                     "id": "granola",
-                    "portionType": "side",
+                    "servingType": "side",
                     "nutrition": {
                         "calories": 270,
                         "totalFat": 9,
@@ -893,7 +893,7 @@
             "categories": [
                 "Side"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "image": "/restaurants/chickfila/menu/sides/fruit-cup.webp",
             "nutrition": {
                 "calories": 70,
@@ -920,7 +920,7 @@
             "categories": [
                 "Side"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "image": "/restaurants/chickfila/menu/sides/mac-n-cheese.webp",
             "nutrition": {
                 "calories": 450,
@@ -938,7 +938,7 @@
             "variants": [
                 {
                     "id": "small",
-                    "portionType": "side",
+                    "servingType": "side",
                     "nutrition": {
                         "calories": 270,
                         "totalFat": 17,
@@ -955,7 +955,7 @@
                 },
                 {
                     "id": "medium",
-                    "portionType": "side",
+                    "servingType": "side",
                     "nutrition": {
                         "calories": 450,
                         "totalFat": 29,
@@ -998,7 +998,7 @@
             "categories": [
                 "Side"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "image": "/restaurants/chickfila/menu/sides/chicken-noodle-soup.webp",
             "ingredients": [
                 "saltines"
@@ -1019,7 +1019,7 @@
             "variants": [
                 {
                     "id": "cup",
-                    "portionType": "side",
+                    "servingType": "side",
                     "nutrition": {
                         "calories": 190,
                         "totalFat": 4.5,
@@ -1036,7 +1036,7 @@
                 },
                 {
                     "id": "bowl",
-                    "portionType": "side",
+                    "servingType": "side",
                     "nutrition": {
                         "calories": 320,
                         "totalFat": 8,
@@ -1073,7 +1073,7 @@
             "categories": [
                 "Side"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "image": "/restaurants/chickfila/menu/sides/side-salad.webp",
             "ingredients": [
                 "crispy-bell-peppers",
@@ -1103,7 +1103,7 @@
             "categories": [
                 "Side"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "image": "/restaurants/chickfila/menu/sides/chicken-tortilla-soup.webp",
             "ingredients": [
                 "seasoned-tortilla-strips"
@@ -1146,7 +1146,7 @@
             "categories": [
                 "Side"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "image": "/restaurants/chickfila/menu/sides/waffle-chips-original.webp",
             "nutrition": {
                 "calories": 220,
@@ -1173,7 +1173,7 @@
             "categories": [
                 "Side"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "image": "/restaurants/chickfila/menu/sides/apple-sauce.webp",
             "nutrition": {
                 "calories": 45,
@@ -1200,7 +1200,7 @@
             "categories": [
                 "Side"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "image": "/restaurants/chickfila/menu/sides/waffle-chips-cfa-sauce.webp",
             "nutrition": {
                 "calories": 210,
@@ -1227,7 +1227,7 @@
             "categories": [
                 "Breakfast"
             ],
-            "portionType": "breakfast",
+            "servingType": "breakfast",
             "image": "/restaurants/chickfila/menu/breakfast/spicy-chicken-biscuit.webp",
             "ingredients": [
                 "buttery-biscuit",
@@ -1253,7 +1253,7 @@
             "categories": [
                 "Breakfast"
             ],
-            "portionType": "breakfast",
+            "servingType": "breakfast",
             "image": "/restaurants/chickfila/menu/breakfast/chicken-minis.webp",
             "ingredients": [
                 "mini-yeast-rolls",
@@ -1275,7 +1275,7 @@
             "variants": [
                 {
                     "id": "4ct",
-                    "portionType": "single",
+                    "servingType": "single",
                     "nutrition": {
                         "calories": 360,
                         "totalFat": 13,
@@ -1304,7 +1304,7 @@
             "categories": [
                 "Breakfast"
             ],
-            "portionType": "breakfast",
+            "servingType": "breakfast",
             "image": "/restaurants/chickfila/menu/breakfast/egg-white-grill.webp",
             "ingredients": [
                 "english-muffin",
@@ -1332,7 +1332,7 @@
             "categories": [
                 "Breakfast"
             ],
-            "portionType": "breakfast",
+            "servingType": "breakfast",
             "image": "/restaurants/chickfila/menu/breakfast/hash-brown-scramble-burrito.webp",
             "ingredients": [
                 "shredded-cheddar"
@@ -1365,7 +1365,7 @@
             "categories": [
                 "Breakfast"
             ],
-            "portionType": "breakfast",
+            "servingType": "breakfast",
             "image": "/restaurants/chickfila/menu/breakfast/hash-brown-scramble-bowl.webp",
             "ingredients": [
                 "shredded-cheddar"
@@ -1398,7 +1398,7 @@
             "categories": [
                 "Breakfast"
             ],
-            "portionType": "breakfast",
+            "servingType": "breakfast",
             "image": "/restaurants/chickfila/menu/breakfast/chicken-egg-cheese-biscuit.webp",
             "ingredients": [
                 "buttery-biscuit",
@@ -1426,7 +1426,7 @@
             "categories": [
                 "Breakfast"
             ],
-            "portionType": "breakfast",
+            "servingType": "breakfast",
             "image": "/restaurants/chickfila/menu/breakfast/bacon-egg-cheese-biscuit.webp",
             "ingredients": [
                 "buttery-biscuit",
@@ -1454,7 +1454,7 @@
             "categories": [
                 "Breakfast"
             ],
-            "portionType": "breakfast",
+            "servingType": "breakfast",
             "image": "/restaurants/chickfila/menu/breakfast/sausage-egg-cheese-biscuit.webp",
             "ingredients": [
                 "buttery-biscuit",
@@ -1482,7 +1482,7 @@
             "categories": [
                 "Breakfast"
             ],
-            "portionType": "breakfast",
+            "servingType": "breakfast",
             "image": "/restaurants/chickfila/menu/breakfast/chicken-egg-cheese-muffin.webp",
             "ingredients": [
                 "english-muffin",
@@ -1510,7 +1510,7 @@
             "categories": [
                 "Breakfast"
             ],
-            "portionType": "breakfast",
+            "servingType": "breakfast",
             "image": "/restaurants/chickfila/menu/breakfast/bacon-egg-cheese-muffin.webp",
             "ingredients": [
                 "english-muffin",
@@ -1538,7 +1538,7 @@
             "categories": [
                 "Breakfast"
             ],
-            "portionType": "breakfast",
+            "servingType": "breakfast",
             "image": "/restaurants/chickfila/menu/breakfast/sausage-egg-cheese-muffin.webp",
             "ingredients": [
                 "english-muffin",
@@ -1566,7 +1566,7 @@
             "categories": [
                 "Breakfast Sides"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "image": "/restaurants/chickfila/menu/breakfast/hash-browns.webp",
             "ingredients": [
                 "hash-browns"
@@ -1587,7 +1587,7 @@
             "variants": [
                 {
                     "id": "small",
-                    "portionType": "side",
+                    "servingType": "side",
                     "nutrition": {
                         "calories": 270,
                         "totalFat": 18,
@@ -1604,7 +1604,7 @@
                 },
                 {
                     "id": "large",
-                    "portionType": "side",
+                    "servingType": "side",
                     "nutrition": {
                         "calories": 420,
                         "totalFat": 29,
@@ -1633,7 +1633,7 @@
             "categories": [
                 "Breakfast"
             ],
-            "portionType": "breakfast",
+            "servingType": "breakfast",
             "image": "/restaurants/chickfila/menu/breakfast/chicken-biscuit.webp",
             "ingredients": [
                 "buttery-biscuit",
@@ -1659,7 +1659,7 @@
             "categories": [
                 "Treats"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "image": "/restaurants/chickfila/menu/treats/frosted-lemonade.webp",
             "nutrition": {
                 "calories": 350,
@@ -1680,7 +1680,7 @@
                     "categories": [
                         "Treats"
                     ],
-                    "portionType": "side",
+                    "servingType": "side",
                     "nutrition": {
                         "calories": 350,
                         "totalFat": 7,
@@ -1700,7 +1700,7 @@
                     "categories": [
                         "Treats"
                     ],
-                    "portionType": "side",
+                    "servingType": "side",
                     "nutrition": {
                         "calories": 280,
                         "totalFat": 7,
@@ -1724,7 +1724,7 @@
             "categories": [
                 "Treats"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "image": "/restaurants/chickfila/menu/treats/frosted-coffee.webp",
             "ingredients": [
                 "cookie-crumbles",
@@ -1750,7 +1750,7 @@
             "categories": [
                 "Treats"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "image": "/restaurants/chickfila/menu/treats/frosted-soda.webp",
             "nutrition": {
                 "calories": 320,
@@ -1772,7 +1772,7 @@
             "categories": [
                 "Treats"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "image": "/restaurants/chickfila/menu/treats/vanilla-milkshake.webp",
             "ingredients": [
                 "whipped-cream",
@@ -1812,7 +1812,7 @@
             "categories": [
                 "Treats"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "image": "/restaurants/chickfila/menu/treats/cookies-cream-milkshake.webp",
             "ingredients": [
                 "whipped-cream",
@@ -1852,7 +1852,7 @@
             "categories": [
                 "Treats"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "image": "/restaurants/chickfila/menu/treats/chocolate-milkshake.webp",
             "ingredients": [
                 "whipped-cream",
@@ -1892,7 +1892,7 @@
             "categories": [
                 "Treats"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "image": "/restaurants/chickfila/menu/treats/strawberry-milkshake.webp",
             "ingredients": [
                 "whipped-cream",
@@ -1932,7 +1932,7 @@
             "categories": [
                 "Treats"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "image": "/restaurants/chickfila/menu/treats/icedream-cup.webp",
             "nutrition": {
                 "calories": 140,
@@ -1954,7 +1954,7 @@
             "categories": [
                 "Treats"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "image": "/restaurants/chickfila/menu/treats/icedream-cone.webp",
             "nutrition": {
                 "calories": 180,
@@ -1976,7 +1976,7 @@
             "categories": [
                 "Treats"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "image": "/restaurants/chickfila/menu/treats/chocolate-chunk-cookie.webp",
             "nutrition": {
                 "calories": 370,
@@ -1998,7 +1998,7 @@
             "categories": [
                 "Treats"
             ],
-            "portionType": "side",
+            "servingType": "side",
             "image": "/restaurants/chickfila/menu/treats/chocolate-fudge-brownie.webp",
             "nutrition": {
                 "calories": 370,
@@ -2020,7 +2020,7 @@
             "categories": [
                 "Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "image": "/restaurants/chickfila/menu/drinks/iced-tea.webp",
             "nutrition": {
                 "calories": 120,
@@ -2041,7 +2041,7 @@
                     "categories": [
                         "Drinks"
                     ],
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 90,
                         "totalFat": 0,
@@ -2061,7 +2061,7 @@
                     "categories": [
                         "Drinks"
                     ],
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 120,
                         "totalFat": 0,
@@ -2081,7 +2081,7 @@
                     "categories": [
                         "Drinks"
                     ],
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 170,
                         "totalFat": 0,
@@ -2105,7 +2105,7 @@
             "categories": [
                 "Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "image": "/restaurants/chickfila/menu/drinks/iced-tea.webp",
             "nutrition": {
                 "calories": 0,
@@ -2126,7 +2126,7 @@
                     "categories": [
                         "Drinks"
                     ],
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 0,
                         "totalFat": 0,
@@ -2146,7 +2146,7 @@
                     "categories": [
                         "Drinks"
                     ],
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 0,
                         "totalFat": 0,
@@ -2166,7 +2166,7 @@
                     "categories": [
                         "Drinks"
                     ],
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 0,
                         "totalFat": 0,
@@ -2190,7 +2190,7 @@
             "categories": [
                 "Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "image": "/restaurants/chickfila/menu/drinks/lemonade.webp",
             "nutrition": {
                 "calories": 260,
@@ -2211,7 +2211,7 @@
                     "categories": [
                         "Drinks"
                     ],
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 190,
                         "totalFat": 0,
@@ -2231,7 +2231,7 @@
                     "categories": [
                         "Drinks"
                     ],
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 260,
                         "totalFat": 0,
@@ -2251,7 +2251,7 @@
                     "categories": [
                         "Drinks"
                     ],
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 380,
                         "totalFat": 0,
@@ -2275,7 +2275,7 @@
             "categories": [
                 "Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "image": "/restaurants/chickfila/menu/drinks/lemonade.webp",
             "nutrition": {
                 "calories": 60,
@@ -2296,7 +2296,7 @@
                     "categories": [
                         "Drinks"
                     ],
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 40,
                         "totalFat": 0,
@@ -2316,7 +2316,7 @@
                     "categories": [
                         "Drinks"
                     ],
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 60,
                         "totalFat": 0,
@@ -2336,7 +2336,7 @@
                     "categories": [
                         "Drinks"
                     ],
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 80,
                         "totalFat": 0,
@@ -2360,7 +2360,7 @@
             "categories": [
                 "Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "image": "/restaurants/chickfila/menu/drinks/sunjoy.webp",
             "nutrition": {
                 "calories": 240,
@@ -2378,7 +2378,7 @@
             "variants": [
                 {
                     "id": "small",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 180,
                         "totalFat": 0,
@@ -2395,7 +2395,7 @@
                 },
                 {
                     "id": "medium",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 240,
                         "totalFat": 0,
@@ -2412,7 +2412,7 @@
                 },
                 {
                     "id": "large",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 350,
                         "totalFat": 0,
@@ -2436,7 +2436,7 @@
             "categories": [
                 "Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "image": "/restaurants/chickfila/menu/drinks/sunjoy.webp",
             "nutrition": {
                 "calories": 110,
@@ -2454,7 +2454,7 @@
             "variants": [
                 {
                     "id": "small",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 80,
                         "totalFat": 0,
@@ -2471,7 +2471,7 @@
                 },
                 {
                     "id": "medium",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 110,
                         "totalFat": 0,
@@ -2488,7 +2488,7 @@
                 },
                 {
                     "id": "large",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 150,
                         "totalFat": 0,
@@ -2512,7 +2512,7 @@
             "categories": [
                 "Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "image": "/restaurants/chickfila/menu/drinks/sunjoy.webp",
             "nutrition": {
                 "calories": 160,
@@ -2530,7 +2530,7 @@
             "variants": [
                 {
                     "id": "small",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 130,
                         "totalFat": 0,
@@ -2547,7 +2547,7 @@
                 },
                 {
                     "id": "medium",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 160,
                         "totalFat": 0,
@@ -2564,7 +2564,7 @@
                 },
                 {
                     "id": "large",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 260,
                         "totalFat": 0,
@@ -2588,7 +2588,7 @@
             "categories": [
                 "Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "image": "/restaurants/chickfila/menu/drinks/sunjoy.webp",
             "nutrition": {
                 "calories": 35,
@@ -2606,7 +2606,7 @@
             "variants": [
                 {
                     "id": "small",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 30,
                         "totalFat": 0,
@@ -2623,7 +2623,7 @@
                 },
                 {
                     "id": "medium",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 35,
                         "totalFat": 0,
@@ -2640,7 +2640,7 @@
                 },
                 {
                     "id": "large",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 60,
                         "totalFat": 0,
@@ -2664,7 +2664,7 @@
             "categories": [
                 "Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "image": "/restaurants/chickfila/menu/drinks/iced-coffee.webp",
             "nutrition": {
                 "calories": 200,
@@ -2682,7 +2682,7 @@
             "variants": [
                 {
                     "id": "original",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 200,
                         "totalFat": 4,
@@ -2699,7 +2699,7 @@
                 },
                 {
                     "id": "vanilla",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 200,
                         "totalFat": 4,
@@ -2723,7 +2723,7 @@
             "categories": [
                 "Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "image": "/restaurants/chickfila/menu/drinks/coca-cola.webp",
             "nutrition": {
                 "calories": 170,
@@ -2741,7 +2741,7 @@
             "variants": [
                 {
                     "id": "small",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 130,
                         "totalFat": 0,
@@ -2758,7 +2758,7 @@
                 },
                 {
                     "id": "medium",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 170,
                         "totalFat": 0,
@@ -2775,7 +2775,7 @@
                 },
                 {
                     "id": "large",
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 250,
                         "totalFat": 0,
@@ -2799,7 +2799,7 @@
             "categories": [
                 "Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "image": "/restaurants/chickfila/menu/drinks/dasani-water.webp",
             "nutrition": {
                 "calories": 0,
@@ -2821,7 +2821,7 @@
             "categories": [
                 "Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "image": "/restaurants/chickfila/menu/drinks/apple-juice.webp",
             "nutrition": {
                 "calories": 35,
@@ -2843,7 +2843,7 @@
             "categories": [
                 "Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "image": "/restaurants/chickfila/menu/drinks/orange-juice.webp",
             "nutrition": {
                 "calories": 160,
@@ -2865,7 +2865,7 @@
             "categories": [
                 "Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "image": "/restaurants/chickfila/menu/drinks/1-chocolate-milk.webp",
             "nutrition": {
                 "calories": 140,
@@ -2887,7 +2887,7 @@
             "categories": [
                 "Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "image": "/restaurants/chickfila/menu/drinks/1-milk.webp",
             "nutrition": {
                 "calories": 90,
@@ -2909,7 +2909,7 @@
             "categories": [
                 "Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "image": "/restaurants/chickfila/menu/drinks/dr-pepper.webp",
             "nutrition": {
                 "calories": 170,
@@ -2930,7 +2930,7 @@
                     "categories": [
                         "Drinks"
                     ],
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 130,
                         "totalFat": 0,
@@ -2950,7 +2950,7 @@
                     "categories": [
                         "Drinks"
                     ],
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 170,
                         "totalFat": 0,
@@ -2970,7 +2970,7 @@
                     "categories": [
                         "Drinks"
                     ],
-                    "portionType": "drink",
+                    "servingType": "drink",
                     "nutrition": {
                         "calories": 250,
                         "totalFat": 0,
@@ -2994,7 +2994,7 @@
             "categories": [
                 "Drinks"
             ],
-            "portionType": "drink",
+            "servingType": "drink",
             "image": "/restaurants/chickfila/menu/drinks/coffee.webp",
             "nutrition": {
                 "calories": 0,
@@ -3031,7 +3031,9 @@
                 "fiber": 2,
                 "sugars": 7,
                 "protein": 3
-            }
+            },
+            "defaultOrder": 0,
+            "maxQuantity": 10
         },
         {
             "id": "buttery-white-bun",
@@ -3052,7 +3054,9 @@
                 "fiber": 1,
                 "sugars": 4,
                 "protein": 5
-            }
+            },
+            "defaultOrder": 1,
+            "maxQuantity": 10
         },
         {
             "id": "multigrain-brioche-bun",
@@ -3073,7 +3077,9 @@
                 "fiber": 3,
                 "sugars": 7,
                 "protein": 7
-            }
+            },
+            "defaultOrder": 2,
+            "maxQuantity": 10
         },
         {
             "id": "white-bun-unbuttered",
@@ -3094,7 +3100,9 @@
                 "fiber": 1,
                 "sugars": 4,
                 "protein": 5
-            }
+            },
+            "defaultOrder": 3,
+            "maxQuantity": 10
         },
         {
             "id": "wrapped-in-lettuce",
@@ -3114,7 +3122,9 @@
                 "fiber": 0,
                 "sugars": 0,
                 "protein": 0
-            }
+            },
+            "defaultOrder": 4,
+            "maxQuantity": 10
         },
         {
             "id": "grilled-breakfast-filet",
@@ -3135,7 +3145,8 @@
                 "sugars": 0,
                 "protein": 13
             },
-            "defaultOrder": 3
+            "defaultOrder": 3,
+            "maxQuantity": 10
         },
         {
             "id": "cfa-breakfast-filet",
@@ -3156,7 +3167,8 @@
                 "sugars": 2,
                 "protein": 15
             },
-            "defaultOrder": 1
+            "defaultOrder": 1,
+            "maxQuantity": 10
         },
         {
             "id": "spicy-breakfast-filet",
@@ -3177,7 +3189,8 @@
                 "sugars": 1,
                 "protein": 15
             },
-            "defaultOrder": 2
+            "defaultOrder": 2,
+            "maxQuantity": 10
         },
         {
             "id": "grilled-filet",
@@ -3198,7 +3211,8 @@
                 "sugars": 1,
                 "protein": 21
             },
-            "defaultOrder": 3
+            "defaultOrder": 3,
+            "maxQuantity": 1
         },
         {
             "id": "spicy-filet",
@@ -3219,7 +3233,8 @@
                 "sugars": 2,
                 "protein": 23
             },
-            "defaultOrder": 2
+            "defaultOrder": 2,
+            "maxQuantity": 1
         },
         {
             "id": "cfa-filet",
@@ -3240,7 +3255,8 @@
                 "sugars": 1,
                 "protein": 24
             },
-            "defaultOrder": 1
+            "defaultOrder": 1,
+            "maxQuantity": 1
         },
         {
             "id": "bacon",
@@ -3284,7 +3300,8 @@
                 "sugars": 0,
                 "protein": 11
             },
-            "defaultOrder": 5
+            "defaultOrder": 5,
+            "maxQuantity": 1
         },
         {
             "id": "roasted-nut-blend",
@@ -3304,7 +3321,9 @@
                 "fiber": 1,
                 "sugars": 1,
                 "protein": 1
-            }
+            },
+            "defaultOrder": 13,
+            "maxQuantity": 10
         },
         {
             "id": "harvest-nut-granola",
@@ -3324,7 +3343,9 @@
                 "fiber": 0,
                 "sugars": 4,
                 "protein": 1
-            }
+            },
+            "defaultOrder": 14,
+            "maxQuantity": 10
         },
         {
             "id": "seasoned-tortilla-strips",
@@ -3344,7 +3365,9 @@
                 "fiber": 1,
                 "sugars": 0,
                 "protein": 1
-            }
+            },
+            "defaultOrder": 15,
+            "maxQuantity": 10
         },
         {
             "id": "blue-cheese-crumbles",
@@ -3365,7 +3388,8 @@
                 "sugars": 0,
                 "protein": 2
             },
-            "defaultOrder": 3
+            "defaultOrder": 3,
+            "maxQuantity": 10
         },
         {
             "id": "crispy-bell-peppers",
@@ -3385,7 +3409,9 @@
                 "fiber": 0,
                 "sugars": 0,
                 "protein": 1
-            }
+            },
+            "defaultOrder": 17,
+            "maxQuantity": 10
         },
         {
             "id": "chili-lime-pepitas",
@@ -3405,7 +3431,9 @@
                 "fiber": 1,
                 "sugars": 0,
                 "protein": 4
-            }
+            },
+            "defaultOrder": 18,
+            "maxQuantity": 10
         },
         {
             "id": "american-cheese",
@@ -3425,7 +3453,9 @@
                 "fiber": 0,
                 "sugars": 0,
                 "protein": 3
-            }
+            },
+            "defaultOrder": 19,
+            "maxQuantity": 10
         },
         {
             "id": "colby-jack-cheese",
@@ -3445,7 +3475,9 @@
                 "fiber": 0,
                 "sugars": 0,
                 "protein": 5
-            }
+            },
+            "defaultOrder": 20,
+            "maxQuantity": 10
         },
         {
             "id": "pepper-jack",
@@ -3465,7 +3497,9 @@
                 "fiber": 0,
                 "sugars": 0,
                 "protein": 4
-            }
+            },
+            "defaultOrder": 21,
+            "maxQuantity": 10
         },
         {
             "id": "tomato",
@@ -3486,7 +3520,8 @@
                 "sugars": 1,
                 "protein": 0
             },
-            "maxQuantity": 3
+            "maxQuantity": 3,
+            "defaultOrder": 22
         },
         {
             "id": "lettuce",
@@ -3507,7 +3542,8 @@
                 "sugars": 0,
                 "protein": 0
             },
-            "maxQuantity": 3
+            "maxQuantity": 3,
+            "defaultOrder": 23
         },
         {
             "id": "pickles",
@@ -3527,7 +3563,9 @@
                 "fiber": 0,
                 "sugars": 0,
                 "protein": 0
-            }
+            },
+            "defaultOrder": 24,
+            "maxQuantity": 10
         },
         {
             "id": "saltines",
@@ -3547,7 +3585,9 @@
                 "fiber": 0,
                 "sugars": 0,
                 "protein": 1
-            }
+            },
+            "defaultOrder": 25,
+            "maxQuantity": 10
         },
         {
             "id": "shredded-cheddar",
@@ -3563,7 +3603,8 @@
                 "carbs": 0,
                 "protein": 3
             },
-            "defaultOrder": 7
+            "defaultOrder": 7,
+            "maxQuantity": 10
         },
         {
             "id": "grape-tomato",
@@ -3575,7 +3616,8 @@
             "nutrition": {
                 "calories": 15
             },
-            "defaultOrder": 8
+            "defaultOrder": 8,
+            "maxQuantity": 10
         },
         {
             "id": "roasted-corn",
@@ -3587,7 +3629,8 @@
             "nutrition": {
                 "calories": 10
             },
-            "defaultOrder": 9
+            "defaultOrder": 9,
+            "maxQuantity": 10
         },
         {
             "id": "black-beans-corn",
@@ -3599,7 +3642,8 @@
             "nutrition": {
                 "calories": 45
             },
-            "defaultOrder": 10
+            "defaultOrder": 10,
+            "maxQuantity": 10
         },
         {
             "id": "jalapenos",
@@ -3611,7 +3655,8 @@
             "nutrition": {
                 "calories": 5
             },
-            "defaultOrder": 11
+            "defaultOrder": 11,
+            "maxQuantity": 10
         },
         {
             "id": "blueberries",
@@ -3623,7 +3668,8 @@
             "nutrition": {
                 "calories": 5
             },
-            "defaultOrder": 4
+            "defaultOrder": 4,
+            "maxQuantity": 10
         },
         {
             "id": "apples",
@@ -3635,7 +3681,8 @@
             "nutrition": {
                 "calories": 15
             },
-            "defaultOrder": 5
+            "defaultOrder": 5,
+            "maxQuantity": 10
         },
         {
             "id": "strawberries",
@@ -3647,7 +3694,8 @@
             "nutrition": {
                 "calories": 5
             },
-            "defaultOrder": 6
+            "defaultOrder": 6,
+            "maxQuantity": 10
         },
         {
             "id": "bacon-crumbles",
@@ -3659,7 +3707,8 @@
             "nutrition": {
                 "calories": 35
             },
-            "defaultOrder": 1
+            "defaultOrder": 1,
+            "maxQuantity": 10
         },
         {
             "id": "sliced-egg",
@@ -3671,7 +3720,8 @@
             "nutrition": {
                 "calories": 20
             },
-            "defaultOrder": 2
+            "defaultOrder": 2,
+            "maxQuantity": 10
         },
         {
             "id": "parfait-fruit",
@@ -3683,7 +3733,8 @@
             "nutrition": {
                 "calories": 15
             },
-            "defaultOrder": 5
+            "defaultOrder": 5,
+            "maxQuantity": 10
         },
         {
             "id": "buttery-biscuit",
@@ -3694,7 +3745,9 @@
             "image": "/restaurants/chickfila/ingredients/breakfast/buttery-biscuit.png",
             "nutrition": {
                 "calories": 290
-            }
+            },
+            "defaultOrder": 37,
+            "maxQuantity": 10
         },
         {
             "id": "english-muffin",
@@ -3705,7 +3758,9 @@
             "image": "/restaurants/chickfila/ingredients/breakfast/english-muffin.webp",
             "nutrition": {
                 "calories": 140
-            }
+            },
+            "defaultOrder": 38,
+            "maxQuantity": 10
         },
         {
             "id": "egg-whites",
@@ -3716,7 +3771,9 @@
             "image": "/restaurants/chickfila/ingredients/breakfast/egg-whites.webp",
             "nutrition": {
                 "calories": 30
-            }
+            },
+            "defaultOrder": 39,
+            "maxQuantity": 10
         },
         {
             "id": "egg",
@@ -3727,7 +3784,9 @@
             "image": "/restaurants/chickfila/ingredients/breakfast/egg.webp",
             "nutrition": {
                 "calories": 60
-            }
+            },
+            "defaultOrder": 40,
+            "maxQuantity": 10
         },
         {
             "id": "mini-yeast-rolls",
@@ -3747,7 +3806,9 @@
                 "fiber": 2,
                 "sugars": 7,
                 "protein": 6
-            }
+            },
+            "defaultOrder": 41,
+            "maxQuantity": 10
         },
         {
             "id": "cookie-crumbles",
@@ -3762,7 +3823,8 @@
                 "carbs": 7,
                 "protein": 0
             },
-            "defaultOrder": 4
+            "defaultOrder": 4,
+            "maxQuantity": 10
         },
         {
             "id": "chocolate-syrup",
@@ -3777,7 +3839,8 @@
                 "carbs": 8,
                 "protein": 0
             },
-            "defaultOrder": 2
+            "defaultOrder": 2,
+            "maxQuantity": 10
         },
         {
             "id": "strawberry-syrup",
@@ -3792,7 +3855,8 @@
                 "carbs": 13,
                 "protein": 0
             },
-            "defaultOrder": 3
+            "defaultOrder": 3,
+            "maxQuantity": 10
         },
         {
             "id": "whipped-cream",
@@ -3807,7 +3871,8 @@
                 "carbs": 4,
                 "protein": 0
             },
-            "defaultOrder": 1
+            "defaultOrder": 1,
+            "maxQuantity": 10
         },
         {
             "id": "cherry",
@@ -3822,7 +3887,8 @@
                 "carbs": 1,
                 "protein": 0
             },
-            "defaultOrder": 6
+            "defaultOrder": 6,
+            "maxQuantity": 10
         },
         {
             "id": "honey-roasted-bbq-sauce",
@@ -3835,7 +3901,8 @@
                 "calories": 60
             },
             "maxQuantity": 2,
-            "hideFromIngredientView": true
+            "hideFromIngredientView": true,
+            "defaultOrder": 47
         },
         {
             "id": "crispy-nuggets",
@@ -3848,7 +3915,8 @@
                 "calories": 250
             },
             "hideFromIngredientView": true,
-            "defaultOrder": 6
+            "defaultOrder": 6,
+            "maxQuantity": 1
         },
         {
             "id": "grilled-nuggets",
@@ -3861,7 +3929,8 @@
                 "calories": 130
             },
             "hideFromIngredientView": true,
-            "defaultOrder": 7
+            "defaultOrder": 7,
+            "maxQuantity": 1
         },
         {
             "id": "chick-n-strips",
@@ -3874,7 +3943,8 @@
                 "calories": 310
             },
             "hideFromIngredientView": true,
-            "defaultOrder": 8
+            "defaultOrder": 8,
+            "maxQuantity": 1
         },
         {
             "id": "hash-browns",
@@ -3886,7 +3956,9 @@
             "nutrition": {
                 "calories": 270
             },
-            "hideFromIngredientView": true
+            "hideFromIngredientView": true,
+            "defaultOrder": 51,
+            "maxQuantity": 10
         }
     ],
     "addons": {

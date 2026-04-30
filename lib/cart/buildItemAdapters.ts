@@ -16,9 +16,10 @@ function buildCartFallbackMenuItem(cartItem: CartItem): MenuItem {
   return {
     id: cartItem.itemId,
     name: cartItem.name,
-    image: cartItem.image,
+    image: cartItem.image ?? "",
+    defaultOrder: 0,
     categories: ["Cart"],
-    portionType: "single",
+    servingType: "single",
     nutrition: {
       calories: cartItem.macrosPerItem.calories,
       protein: cartItem.macrosPerItem.protein,
@@ -36,7 +37,7 @@ function buildChipotleBuildYourOwnMenuItem(cartItem: CartItem, ingredientItems?:
 
   const ingredientOptionsByTab = ingredientCatalog.reduce<Record<string, string[]>>((acc, ingredient) => {
     const ingredientId = ingredient.id ?? ingredient.name;
-    const tabName = toTitleCase((ingredient.categories?.[0] ?? ingredient.category ?? "Ingredients").trim());
+    const tabName = toTitleCase((ingredient.categories[0] ?? "Ingredients").trim());
 
     if (!acc[tabName]) {
       acc[tabName] = [];

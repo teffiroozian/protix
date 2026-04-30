@@ -28,7 +28,7 @@ function getProteinIngredientIds(ingredientItems: IngredientItem[] = []) {
   return new Set(
     ingredientItems
       .filter((ingredient) => {
-        const categories = ingredient.categories ?? (ingredient.category ? [ingredient.category] : []);
+        const categories = ingredient.categories;
         return categories.some((category) => category.trim().toLowerCase() === "proteins");
       })
       .map((ingredient) => (ingredient.id ?? ingredient.name).toLowerCase())
