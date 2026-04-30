@@ -5,7 +5,6 @@ import type {
   AddonRef,
   CommonChange,
   IngredientItem,
-  IngredientModifier,
   MenuItem,
   RestaurantAddons,
   RestaurantBuilderConfig,
@@ -22,7 +21,6 @@ export type RestaurantData = {
   ingredients: IngredientItem[];
   addons: RestaurantAddons;
   commonChanges: CommonChange[];
-  ingredientModifiers: IngredientModifier[];
   customizationRules?: RestaurantCustomizationRules;
   builderConfig?: RestaurantBuilderConfig;
 };
@@ -59,7 +57,6 @@ export async function getRestaurantData(id: string): Promise<RestaurantData | nu
   const ingredients = menu.ingredients ?? [];
   const items = menu.items ?? [];
   const commonChanges: CommonChange[] = menu.commonChanges ?? [];
-  const ingredientModifiers: IngredientModifier[] = menu.ingredientModifiers ?? [];
   return {
     id: restaurant.id,
     name: restaurant.name,
@@ -71,7 +68,6 @@ export async function getRestaurantData(id: string): Promise<RestaurantData | nu
     ingredients,
     addons: normalizeAddons(menu.addons ?? {}),
     commonChanges,
-    ingredientModifiers,
     customizationRules: menu.customizationRules,
     builderConfig: menu.builderConfig,
   };
