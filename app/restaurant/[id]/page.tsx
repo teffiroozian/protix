@@ -41,7 +41,7 @@ export default async function RestaurantPage({
               restaurantId={restaurant.id}
               restaurantName={restaurant.name}
               restaurantLogo={restaurant.logo}
-              isBuildYourOwn={restaurantData.isBuildYourOwn}
+              hasBuildYourOwn={restaurantData.hasBuildYourOwn}
               items={restaurantData.items}
               ingredients={restaurantData.ingredients}
               addons={restaurantData.addons}
