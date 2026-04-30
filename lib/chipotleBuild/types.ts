@@ -1,3 +1,5 @@
+import type { RestaurantBuilderConfig } from "@/types/menu";
+
 export const CHIPOTLE_ENTREE_IDS = [
   "bowl",
   "burrito",
@@ -46,4 +48,18 @@ export type IncludedIngredientContext = {
   selectedEntree: ChipotleEntreeSelection;
   selectedKidsMeal: ChipotleKidsMealId;
   selectedTacoShell?: ChipotleTacoShell;
+};
+
+export type ChipotleSpecificBuilderConfig = {
+  tacoShellIngredientIds?: string[];
+  kidsQuesadillaIncludedIngredientIds?: string[];
+  kidsBuildYourOwnDoubleSideIds?: string[];
+  kidsMealOptions?: Array<{ id: ChipotleKidsMealId; label: string; image: string }>;
+  specialVariantIds?: {
+    quesadillaTripleCheese?: string;
+  };
+};
+
+export type ChipotleBuilderConfig = RestaurantBuilderConfig & {
+  chipotle?: ChipotleSpecificBuilderConfig;
 };
