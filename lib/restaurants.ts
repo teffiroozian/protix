@@ -17,7 +17,7 @@ export type RestaurantData = {
   name: string;
   logo: string;
   menuFile: string;
-  isBuildYourOwn: boolean;
+  hasBuildYourOwn: boolean;
   items: MenuItem[];
   ingredients: IngredientItem[];
   addons: RestaurantAddons;
@@ -65,7 +65,8 @@ export async function getRestaurantData(id: string): Promise<RestaurantData | nu
     name: restaurant.name,
     logo: restaurant.logo,
     menuFile: restaurant.menuFile,
-    isBuildYourOwn: menu.isBuildYourOwn ?? false,
+    hasBuildYourOwn:
+      menu.hasBuildYourOwn ?? (menu as { isBuildYourOwn?: boolean }).isBuildYourOwn ?? false,
     items,
     ingredients,
     addons: normalizeAddons(menu.addons ?? {}),

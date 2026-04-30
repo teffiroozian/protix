@@ -150,7 +150,7 @@ export type RestaurantBuilderConfig = {
 export type RestaurantMenu = {
   id: string;
   name?: string;
-  isBuildYourOwn?: boolean;
+  hasBuildYourOwn?: boolean;
   items: MenuItem[];
   ingredients?: IngredientItem[];
   addons?: RestaurantAddons;
