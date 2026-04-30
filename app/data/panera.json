@@ -10,7 +10,10 @@
             "categories": [
                 "Sandwich"
             ],
-            "defaultOrder": 1
+            "defaultOrder": 1,
+            "id": "panera_french_ciabatta_dipper",
+            "image": "",
+            "restaurant": "panera"
         },
         {
             "name": "Chicken Pesto Ciabatta Dipper",
@@ -21,7 +24,10 @@
             "categories": [
                 "Sandwich"
             ],
-            "defaultOrder": 2
+            "defaultOrder": 2,
+            "id": "panera_chicken_pesto_ciabatta_dipper",
+            "image": "",
+            "restaurant": "panera"
         },
         {
             "name": "Toasted Italiano",
@@ -32,7 +38,10 @@
             "categories": [
                 "Sandwich"
             ],
-            "defaultOrder": 3
+            "defaultOrder": 3,
+            "id": "panera_toasted_italiano",
+            "image": "",
+            "restaurant": "panera"
         },
         {
             "name": "Spicy Fiesta Chicken",
@@ -43,7 +52,10 @@
             "categories": [
                 "Sandwich"
             ],
-            "defaultOrder": 4
+            "defaultOrder": 4,
+            "id": "panera_spicy_fiesta_chicken",
+            "image": "",
+            "restaurant": "panera"
         },
         {
             "name": "Chicken Bacon Rancher",
@@ -54,7 +66,10 @@
             "categories": [
                 "Sandwich"
             ],
-            "defaultOrder": 5
+            "defaultOrder": 5,
+            "id": "panera_chicken_bacon_rancher",
+            "image": "",
+            "restaurant": "panera"
         }
     ]
 }

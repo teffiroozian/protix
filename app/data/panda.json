@@ -5,19 +5,28 @@
             "name": "Grilled Teriyaki Chicken",
             "calories": 300,
             "protein": 36,
-            "defaultOrder": 1
+            "defaultOrder": 1,
+            "id": "panda_grilled_teriyaki_chicken",
+            "image": "",
+            "restaurant": "panda"
         },
         {
             "name": "Broccoli Beef",
             "calories": 150,
             "protein": 9,
-            "defaultOrder": 2
+            "defaultOrder": 2,
+            "id": "panda_broccoli_beef",
+            "image": "",
+            "restaurant": "panda"
         },
         {
             "name": "Black Pepper Angus Steak",
             "calories": 180,
             "protein": 19,
-            "defaultOrder": 3
+            "defaultOrder": 3,
+            "id": "panda_black_pepper_angus_steak",
+            "image": "",
+            "restaurant": "panda"
         }
     ]
 }

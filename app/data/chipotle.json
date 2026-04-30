@@ -64,7 +64,8 @@
                 }
             ],
             "entreeGroup": "chips-sides",
-            "defaultOrder": 1
+            "defaultOrder": 1,
+            "restaurant": "chipotle"
         },
         {
             "id": "side-of-guacamole",
@@ -113,7 +114,9 @@
                 }
             ],
             "entreeGroup": "chips-sides",
-            "defaultOrder": 2
+            "defaultOrder": 2,
+            "image": "",
+            "restaurant": "chipotle"
         },
         {
             "id": "chips-guacamole",
@@ -177,7 +180,8 @@
                 }
             ],
             "entreeGroup": "chips-sides",
-            "defaultOrder": 3
+            "defaultOrder": 3,
+            "restaurant": "chipotle"
         },
         {
             "id": "chips-fresh-tomato-salsa",
@@ -205,7 +209,8 @@
                 "protein": 7
             },
             "entreeGroup": "chips-sides",
-            "defaultOrder": 4
+            "defaultOrder": 4,
+            "restaurant": "chipotle"
         },
         {
             "id": "chips-tomatillo-red-chili-salsa",
@@ -233,7 +238,8 @@
                 "protein": 7
             },
             "entreeGroup": "chips-sides",
-            "defaultOrder": 5
+            "defaultOrder": 5,
+            "restaurant": "chipotle"
         },
         {
             "id": "chips-tomatillo-green-chili-salsa",
@@ -261,7 +267,8 @@
                 "protein": 7
             },
             "entreeGroup": "chips-sides",
-            "defaultOrder": 6
+            "defaultOrder": 6,
+            "restaurant": "chipotle"
         },
         {
             "id": "chips-roasted-chili-corn-salsa",
@@ -289,7 +296,8 @@
                 "protein": 10
             },
             "entreeGroup": "chips-sides",
-            "defaultOrder": 7
+            "defaultOrder": 7,
+            "restaurant": "chipotle"
         },
         {
             "id": "chips-queso-blanco",
@@ -353,7 +361,8 @@
                 }
             ],
             "entreeGroup": "chips-sides",
-            "defaultOrder": 8
+            "defaultOrder": 8,
+            "restaurant": "chipotle"
         },
         {
             "id": "side-of-cilantro-lime-sauce",
@@ -390,7 +399,9 @@
                         "carbs": 12
                     }
                 }
-            ]
+            ],
+            "image": "",
+            "restaurant": "chipotle"
         },
         {
             "id": "side-of-fresh-tomato-salsa",
@@ -427,7 +438,9 @@
                 }
             ],
             "entreeGroup": "chips-sides",
-            "defaultOrder": 10
+            "defaultOrder": 10,
+            "image": "",
+            "restaurant": "chipotle"
         },
         {
             "id": "side-of-tomatillo-red-chili-salsa",
@@ -464,7 +477,9 @@
                 }
             ],
             "entreeGroup": "chips-sides",
-            "defaultOrder": 11
+            "defaultOrder": 11,
+            "image": "",
+            "restaurant": "chipotle"
         },
         {
             "id": "side-of-tomatillo-green-chili-salsa",
@@ -501,7 +516,9 @@
                 }
             ],
             "entreeGroup": "chips-sides",
-            "defaultOrder": 12
+            "defaultOrder": 12,
+            "image": "",
+            "restaurant": "chipotle"
         },
         {
             "id": "side-of-roasted-chili-corn-salsa",
@@ -538,7 +555,9 @@
                 }
             ],
             "entreeGroup": "chips-sides",
-            "defaultOrder": 13
+            "defaultOrder": 13,
+            "image": "",
+            "restaurant": "chipotle"
         },
         {
             "id": "side-of-queso-blanco",
@@ -586,7 +605,9 @@
                 }
             ],
             "entreeGroup": "chips-sides",
-            "defaultOrder": 14
+            "defaultOrder": 14,
+            "image": "",
+            "restaurant": "chipotle"
         },
         {
             "id": "tortilla-on-the-side",
@@ -609,7 +630,8 @@
                 "protein": 8
             },
             "entreeGroup": "chips-sides",
-            "defaultOrder": 15
+            "defaultOrder": 15,
+            "restaurant": "chipotle"
         },
         {
             "id": "kids-chips",
@@ -632,7 +654,8 @@
                 "protein": 2
             },
             "entreeGroup": "chips-sides",
-            "defaultOrder": 16
+            "defaultOrder": 16,
+            "restaurant": "chipotle"
         },
         {
             "id": "kids-mandarins",
@@ -654,7 +677,9 @@
                 "protein": 1
             },
             "entreeGroup": "chips-sides",
-            "defaultOrder": 17
+            "defaultOrder": 17,
+            "image": "",
+            "restaurant": "chipotle"
         },
         {
             "id": "kids-blueberries",
@@ -676,7 +701,9 @@
                 "protein": 1
             },
             "entreeGroup": "chips-sides",
-            "defaultOrder": 18
+            "defaultOrder": 18,
+            "image": "",
+            "restaurant": "chipotle"
         },
         {
             "id": "high-protein-high-fiber-bowl",
@@ -696,7 +723,8 @@
                 "roasted-chili-corn-salsa",
                 "fajita-veggies",
                 "romaine-lettuce"
-            ]
+            ],
+            "restaurant": "chipotle"
         },
         {
             "id": "high-protein-low-calorie-bowl",
@@ -714,7 +742,8 @@
                 "fajita-veggies",
                 "fresh-tomato-salsa",
                 "guacamole"
-            ]
+            ],
+            "restaurant": "chipotle"
         },
         {
             "id": "double-high-protein-burrito",
@@ -733,7 +762,8 @@
                 "fresh-tomato-salsa",
                 "cheese",
                 "romaine-lettuce"
-            ]
+            ],
+            "restaurant": "chipotle"
         },
         {
             "id": "high-protein-taco",
@@ -752,7 +782,8 @@
                 "fresh-tomato-salsa",
                 "cheese",
                 "romaine-lettuce"
-            ]
+            ],
+            "restaurant": "chipotle"
         },
         {
             "id": "double-high-protein-bowl",
@@ -772,7 +803,8 @@
                 "fajita-veggies",
                 "cheese",
                 "romaine-lettuce"
-            ]
+            ],
+            "restaurant": "chipotle"
         },
         {
             "id": "side-of-chicken-al-pastor-high-protein",
@@ -785,7 +817,8 @@
             "servingType": "side",
             "image": "/restaurants/chipotle/menu/high-protein/chicken-al-pastor-cup.png",
             "entreeGroup": "high-protein-menu",
-            "defaultOrder": 12
+            "defaultOrder": 12,
+            "restaurant": "chipotle"
         },
         {
             "id": "side-of-chicken-high-protein",
@@ -798,7 +831,8 @@
             "servingType": "side",
             "image": "/restaurants/chipotle/menu/high-protein/chicken-cup.png",
             "entreeGroup": "high-protein-menu",
-            "defaultOrder": 13
+            "defaultOrder": 13,
+            "restaurant": "chipotle"
         },
         {
             "id": "side-of-steak-high-protein",
@@ -811,7 +845,8 @@
             "servingType": "side",
             "image": "/restaurants/chipotle/menu/high-protein/steak-cup.png",
             "entreeGroup": "high-protein-menu",
-            "defaultOrder": 14
+            "defaultOrder": 14,
+            "restaurant": "chipotle"
         },
         {
             "id": "mexican-coca-cola",
@@ -837,7 +872,8 @@
             },
             "source": "third party",
             "entreeGroup": "drinks",
-            "defaultOrder": 15
+            "defaultOrder": 15,
+            "restaurant": "chipotle"
         },
         {
             "id": "mexican-sprite",
@@ -859,7 +895,8 @@
             },
             "source": "third party",
             "entreeGroup": "drinks",
-            "defaultOrder": 16
+            "defaultOrder": 16,
+            "restaurant": "chipotle"
         },
         {
             "id": "topo-chico-mineral-water",
@@ -878,7 +915,8 @@
             },
             "source": "third party",
             "entreeGroup": "drinks",
-            "defaultOrder": 17
+            "defaultOrder": 17,
+            "restaurant": "chipotle"
         },
         {
             "id": "coke-zero",
@@ -900,7 +938,8 @@
             },
             "source": "third party",
             "entreeGroup": "drinks",
-            "defaultOrder": 18
+            "defaultOrder": 18,
+            "restaurant": "chipotle"
         },
         {
             "id": "poppi-strawberry-lemon",
@@ -922,7 +961,8 @@
             },
             "source": "third party",
             "entreeGroup": "drinks",
-            "defaultOrder": 19
+            "defaultOrder": 19,
+            "restaurant": "chipotle"
         },
         {
             "id": "poppi-orange",
@@ -944,7 +984,8 @@
             },
             "source": "third party",
             "entreeGroup": "drinks",
-            "defaultOrder": 20
+            "defaultOrder": 20,
+            "restaurant": "chipotle"
         },
         {
             "id": "grapefruit-izze",
@@ -966,7 +1007,8 @@
             },
             "source": "third party",
             "entreeGroup": "drinks",
-            "defaultOrder": 21
+            "defaultOrder": 21,
+            "restaurant": "chipotle"
         },
         {
             "id": "blackberry-izze",
@@ -988,7 +1030,8 @@
             },
             "source": "third party",
             "entreeGroup": "drinks",
-            "defaultOrder": 22
+            "defaultOrder": 22,
+            "restaurant": "chipotle"
         },
         {
             "id": "apple-juice",
@@ -1012,7 +1055,8 @@
             },
             "source": "third party",
             "entreeGroup": "drinks",
-            "defaultOrder": 23
+            "defaultOrder": 23,
+            "restaurant": "chipotle"
         },
         {
             "id": "open-water-still",
@@ -1034,7 +1078,8 @@
             },
             "source": "third party",
             "entreeGroup": "drinks",
-            "defaultOrder": 24
+            "defaultOrder": 24,
+            "restaurant": "chipotle"
         },
         {
             "id": "barqs-root-beer-fountain",
@@ -1097,7 +1142,8 @@
             ],
             "entreeGroup": "drinks",
             "defaultOrder": 25,
-            "image": "/restaurants/chipotle/menu/drinks/fountain-drink.webp"
+            "image": "/restaurants/chipotle/menu/drinks/fountain-drink.webp",
+            "restaurant": "chipotle"
         },
         {
             "id": "coca-cola-classic-fountain",
@@ -1160,7 +1206,8 @@
             ],
             "entreeGroup": "drinks",
             "defaultOrder": 26,
-            "image": "/restaurants/chipotle/menu/drinks/fountain-drink.webp"
+            "image": "/restaurants/chipotle/menu/drinks/fountain-drink.webp",
+            "restaurant": "chipotle"
         },
         {
             "id": "coca-cola-life-fountain",
@@ -1223,7 +1270,8 @@
             ],
             "entreeGroup": "drinks",
             "defaultOrder": 27,
-            "image": "/restaurants/chipotle/menu/drinks/fountain-drink.webp"
+            "image": "/restaurants/chipotle/menu/drinks/fountain-drink.webp",
+            "restaurant": "chipotle"
         },
         {
             "id": "coca-cola-zero-fountain",
@@ -1286,7 +1334,8 @@
             ],
             "entreeGroup": "drinks",
             "defaultOrder": 28,
-            "image": "/restaurants/chipotle/menu/drinks/fountain-drink.webp"
+            "image": "/restaurants/chipotle/menu/drinks/fountain-drink.webp",
+            "restaurant": "chipotle"
         },
         {
             "id": "diet-coke-fountain",
@@ -1349,7 +1398,8 @@
             ],
             "entreeGroup": "drinks",
             "defaultOrder": 29,
-            "image": "/restaurants/chipotle/menu/drinks/fountain-drink.webp"
+            "image": "/restaurants/chipotle/menu/drinks/fountain-drink.webp",
+            "restaurant": "chipotle"
         },
         {
             "id": "diet-coke-caffeine-free-fountain",
@@ -1412,7 +1462,8 @@
             ],
             "entreeGroup": "drinks",
             "defaultOrder": 30,
-            "image": "/restaurants/chipotle/menu/drinks/fountain-drink.webp"
+            "image": "/restaurants/chipotle/menu/drinks/fountain-drink.webp",
+            "restaurant": "chipotle"
         },
         {
             "id": "pibb-xtra-fountain",
@@ -1475,7 +1526,8 @@
             ],
             "entreeGroup": "drinks",
             "defaultOrder": 31,
-            "image": "/restaurants/chipotle/menu/drinks/fountain-drink.webp"
+            "image": "/restaurants/chipotle/menu/drinks/fountain-drink.webp",
+            "restaurant": "chipotle"
         },
         {
             "id": "sprite-fountain",
@@ -1538,7 +1590,8 @@
             ],
             "entreeGroup": "drinks",
             "defaultOrder": 32,
-            "image": "/restaurants/chipotle/menu/drinks/fountain-drink.webp"
+            "image": "/restaurants/chipotle/menu/drinks/fountain-drink.webp",
+            "restaurant": "chipotle"
         },
         {
             "id": "fanta-orange-fountain",
@@ -1601,7 +1654,8 @@
             ],
             "entreeGroup": "drinks",
             "defaultOrder": 33,
-            "image": "/restaurants/chipotle/menu/drinks/fountain-drink.webp"
+            "image": "/restaurants/chipotle/menu/drinks/fountain-drink.webp",
+            "restaurant": "chipotle"
         },
         {
             "id": "minute-maid-lemonade-fountain",
@@ -1664,7 +1718,8 @@
             ],
             "entreeGroup": "drinks",
             "defaultOrder": 34,
-            "image": "/restaurants/chipotle/menu/drinks/fountain-drink.webp"
+            "image": "/restaurants/chipotle/menu/drinks/fountain-drink.webp",
+            "restaurant": "chipotle"
         },
         {
             "id": "powerade-mountain-berry-blast-fountain",
@@ -1727,7 +1782,8 @@
             ],
             "entreeGroup": "drinks",
             "defaultOrder": 35,
-            "image": "/restaurants/chipotle/menu/drinks/fountain-drink.webp"
+            "image": "/restaurants/chipotle/menu/drinks/fountain-drink.webp",
+            "restaurant": "chipotle"
         },
         {
             "id": "mello-yello-fountain",
@@ -1790,7 +1846,8 @@
             ],
             "entreeGroup": "drinks",
             "defaultOrder": 36,
-            "image": "/restaurants/chipotle/menu/drinks/fountain-drink.webp"
+            "image": "/restaurants/chipotle/menu/drinks/fountain-drink.webp",
+            "restaurant": "chipotle"
         },
         {
             "id": "lemonade-blue-sky-fountain",
@@ -1853,7 +1910,8 @@
             ],
             "entreeGroup": "drinks",
             "defaultOrder": 37,
-            "image": "/restaurants/chipotle/menu/drinks/fountain-drink.webp"
+            "image": "/restaurants/chipotle/menu/drinks/fountain-drink.webp",
+            "restaurant": "chipotle"
         },
         {
             "id": "mango-orange-blue-sky-fountain",
@@ -1916,7 +1974,8 @@
             ],
             "entreeGroup": "drinks",
             "defaultOrder": 38,
-            "image": "/restaurants/chipotle/menu/drinks/fountain-drink.webp"
+            "image": "/restaurants/chipotle/menu/drinks/fountain-drink.webp",
+            "restaurant": "chipotle"
         },
         {
             "id": "maine-root-root-beer-fountain",
@@ -1979,7 +2038,8 @@
             ],
             "entreeGroup": "drinks",
             "defaultOrder": 39,
-            "image": "/restaurants/chipotle/menu/drinks/fountain-drink.webp"
+            "image": "/restaurants/chipotle/menu/drinks/fountain-drink.webp",
+            "restaurant": "chipotle"
         },
         {
             "id": "chipotle-iced-tea-fountain",
@@ -2042,7 +2102,8 @@
             ],
             "entreeGroup": "drinks",
             "defaultOrder": 40,
-            "image": "/restaurants/chipotle/menu/drinks/fountain-drink.webp"
+            "image": "/restaurants/chipotle/menu/drinks/fountain-drink.webp",
+            "restaurant": "chipotle"
         },
         {
             "id": "chipotle-sweet-iced-tea-fountain",
@@ -2105,7 +2166,8 @@
             ],
             "entreeGroup": "drinks",
             "defaultOrder": 41,
-            "image": "/restaurants/chipotle/menu/drinks/fountain-drink.webp"
+            "image": "/restaurants/chipotle/menu/drinks/fountain-drink.webp",
+            "restaurant": "chipotle"
         },
         {
             "id": "organic-watermelon-limeade",
@@ -2165,7 +2227,8 @@
                 }
             ],
             "entreeGroup": "drinks",
-            "defaultOrder": 42
+            "defaultOrder": 42,
+            "restaurant": "chipotle"
         },
         {
             "id": "organic-lemonade",
@@ -2225,7 +2288,8 @@
                 }
             ],
             "entreeGroup": "drinks",
-            "defaultOrder": 43
+            "defaultOrder": 43,
+            "restaurant": "chipotle"
         },
         {
             "id": "organic-mandarin-agua-fresca",
@@ -2285,7 +2349,8 @@
                 }
             ],
             "entreeGroup": "drinks",
-            "defaultOrder": 44
+            "defaultOrder": 44,
+            "restaurant": "chipotle"
         },
         {
             "id": "organic-berry-agua-fresca",
@@ -2345,7 +2410,8 @@
                 }
             ],
             "entreeGroup": "drinks",
-            "defaultOrder": 45
+            "defaultOrder": 45,
+            "restaurant": "chipotle"
         },
         {
             "id": "organic-milk-8-oz",
@@ -2370,7 +2436,8 @@
             },
             "source": "third party",
             "entreeGroup": "drinks",
-            "defaultOrder": 46
+            "defaultOrder": 46,
+            "restaurant": "chipotle"
         },
         {
             "id": "organic-chocolate-milk-8-oz",
@@ -2395,7 +2462,8 @@
             },
             "source": "third party",
             "entreeGroup": "drinks",
-            "defaultOrder": 47
+            "defaultOrder": 47,
+            "restaurant": "chipotle"
         },
         {
             "id": "organic-apple-juice-6-75-oz",
@@ -2420,7 +2488,8 @@
             },
             "source": "third party",
             "entreeGroup": "drinks",
-            "defaultOrder": 48
+            "defaultOrder": 48,
+            "restaurant": "chipotle"
         }
     ],
     "ingredients": [

@@ -94,6 +94,7 @@ export function buildAddonMenuItems(restaurantId: string, addons?: RestaurantAdd
       options.map((option) => ({
         id: `${restaurantId}-${addonRef}-${option.name}`.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
         name: option.name,
+        defaultOrder: 0,
         nutrition: {
           calories: option.calories,
           protein: option.protein,
@@ -108,7 +109,8 @@ export function buildAddonMenuItems(restaurantId: string, addons?: RestaurantAdd
         },
         categories: [categoryByAddonRef[addonRef]],
         servingType: "addon",
-        image: option.image,
+        image: option.image ?? "",
+        restaurant: restaurantId,
       }))
     );
 }

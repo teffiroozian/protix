@@ -100,7 +100,8 @@
                 "sugars": 6,
                 "protein": 29
             },
-            "defaultOrder": 1
+            "defaultOrder": 1,
+            "restaurant": "chickfila"
         },
         {
             "id": "spicy_deluxe_sandwich",
@@ -130,7 +131,8 @@
                 "sugars": 7,
                 "protein": 34
             },
-            "defaultOrder": 4
+            "defaultOrder": 4,
+            "restaurant": "chickfila"
         },
         {
             "id": "spicy_chicken_sandwich",
@@ -157,7 +159,8 @@
                 "sugars": 6,
                 "protein": 28
             },
-            "defaultOrder": 3
+            "defaultOrder": 3,
+            "restaurant": "chickfila"
         },
         {
             "id": "crispy-nuggets",
@@ -257,7 +260,8 @@
                     "label": "30 ct"
                 }
             ],
-            "defaultOrder": 1
+            "defaultOrder": 1,
+            "restaurant": "chickfila"
         },
         {
             "id": "chick_fil_a_deluxe_sandwich",
@@ -287,7 +291,8 @@
                 "sugars": 7,
                 "protein": 32
             },
-            "defaultOrder": 2
+            "defaultOrder": 2,
+            "restaurant": "chickfila"
         },
         {
             "id": "chick_fil_a_cool_wrap",
@@ -315,7 +320,8 @@
             "addonRefs": [
                 "dressings"
             ],
-            "defaultOrder": 6
+            "defaultOrder": 6,
+            "restaurant": "chickfila"
         },
         {
             "id": "southwest_veggie_wrap",
@@ -343,7 +349,8 @@
             "addonRefs": [
                 "dressings"
             ],
-            "defaultOrder": 7
+            "defaultOrder": 7,
+            "restaurant": "chickfila"
         },
         {
             "id": "chick_fil_a_chick_n_strips",
@@ -443,7 +450,8 @@
                     "label": "10 ct"
                 }
             ],
-            "defaultOrder": 3
+            "defaultOrder": 3,
+            "restaurant": "chickfila"
         },
         {
             "id": "grilled_chicken_sandwich",
@@ -472,7 +480,8 @@
                 "sugars": 11,
                 "protein": 28
             },
-            "defaultOrder": 5
+            "defaultOrder": 5,
+            "restaurant": "chickfila"
         },
         {
             "id": "cfa-grilled-chicken-club-sandwich",
@@ -503,7 +512,8 @@
                 "sugars": 12,
                 "protein": 37
             },
-            "defaultOrder": 6
+            "defaultOrder": 6,
+            "restaurant": "chickfila"
         },
         {
             "id": "grilled_nuggets",
@@ -597,7 +607,8 @@
                     "label": "30 ct"
                 }
             ],
-            "defaultOrder": 2
+            "defaultOrder": 2,
+            "restaurant": "chickfila"
         },
         {
             "id": "cobb_salad",
@@ -631,7 +642,8 @@
             "addonRefs": [
                 "dressings"
             ],
-            "defaultOrder": 12
+            "defaultOrder": 12,
+            "restaurant": "chickfila"
         },
         {
             "id": "spicy_southwest_salad",
@@ -664,7 +676,8 @@
             "addonRefs": [
                 "dressings"
             ],
-            "defaultOrder": 13
+            "defaultOrder": 13,
+            "restaurant": "chickfila"
         },
         {
             "id": "market_salad",
@@ -698,7 +711,8 @@
             "addonRefs": [
                 "dressings"
             ],
-            "defaultOrder": 14
+            "defaultOrder": 14,
+            "restaurant": "chickfila"
         },
         {
             "id": "kale_crunch_side",
@@ -723,7 +737,8 @@
                 "sugars": 8,
                 "protein": 4
             },
-            "defaultOrder": 6
+            "defaultOrder": 6,
+            "restaurant": "chickfila"
         },
         {
             "id": "chick_fil_a_waffle_potato_fries",
@@ -807,7 +822,8 @@
                     "Included"
                 ]
             },
-            "defaultOrder": 1
+            "defaultOrder": 1,
+            "restaurant": "chickfila"
         },
         {
             "id": "berry_parfait",
@@ -885,7 +901,8 @@
                     ]
                 }
             },
-            "defaultOrder": 7
+            "defaultOrder": 7,
+            "restaurant": "chickfila"
         },
         {
             "id": "fruit_cup",
@@ -912,7 +929,8 @@
                     "Included"
                 ]
             },
-            "defaultOrder": 8
+            "defaultOrder": 8,
+            "restaurant": "chickfila"
         },
         {
             "id": "mac_and_cheese",
@@ -990,7 +1008,8 @@
             "ingredients": [
                 "mac_and_cheese"
             ],
-            "defaultOrder": 2
+            "defaultOrder": 2,
+            "restaurant": "chickfila"
         },
         {
             "id": "chicken_noodle_soup",
@@ -1065,7 +1084,8 @@
                     ]
                 }
             },
-            "defaultOrder": 3
+            "defaultOrder": 3,
+            "restaurant": "chickfila"
         },
         {
             "id": "side_salad",
@@ -1095,7 +1115,8 @@
             "addonRefs": [
                 "dressings"
             ],
-            "defaultOrder": 5
+            "defaultOrder": 5,
+            "restaurant": "chickfila"
         },
         {
             "id": "chicken_tortilla_soup",
@@ -1138,7 +1159,8 @@
                     ]
                 }
             },
-            "defaultOrder": 4
+            "defaultOrder": 4,
+            "restaurant": "chickfila"
         },
         {
             "id": "original_flavor_waffle_potato_chips",
@@ -1165,7 +1187,8 @@
                     "Included"
                 ]
             },
-            "defaultOrder": 9
+            "defaultOrder": 9,
+            "restaurant": "chickfila"
         },
         {
             "id": "buddy_fruits_apple_sauce",
@@ -1192,7 +1215,8 @@
                     "Included"
                 ]
             },
-            "defaultOrder": 11
+            "defaultOrder": 11,
+            "restaurant": "chickfila"
         },
         {
             "id": "chick_fil_a_sauce_flavored_waffle_potato_chips",
@@ -1219,7 +1243,8 @@
                     "Included"
                 ]
             },
-            "defaultOrder": 10
+            "defaultOrder": 10,
+            "restaurant": "chickfila"
         },
         {
             "id": "spicy_chicken_biscuit",
@@ -1245,7 +1270,8 @@
                 "sugars": 5,
                 "protein": 19
             },
-            "defaultOrder": 2
+            "defaultOrder": 2,
+            "restaurant": "chickfila"
         },
         {
             "id": "chick_fil_a_chick_n_minis",
@@ -1296,7 +1322,8 @@
                     "Included"
                 ]
             },
-            "defaultOrder": 3
+            "defaultOrder": 3,
+            "restaurant": "chickfila"
         },
         {
             "id": "egg_white_grill",
@@ -1324,7 +1351,8 @@
                 "sugars": 2,
                 "protein": 27
             },
-            "defaultOrder": 4
+            "defaultOrder": 4,
+            "restaurant": "chickfila"
         },
         {
             "id": "hash_brown_scramble_burrito",
@@ -1357,7 +1385,8 @@
                     "Wrap Toppings": 2
                 }
             },
-            "defaultOrder": 5
+            "defaultOrder": 5,
+            "restaurant": "chickfila"
         },
         {
             "id": "hash_brown_scramble_bowl",
@@ -1390,7 +1419,8 @@
                     "Wrap Toppings": 2
                 }
             },
-            "defaultOrder": 6
+            "defaultOrder": 6,
+            "restaurant": "chickfila"
         },
         {
             "id": "chicken_egg_and_cheese_biscuit",
@@ -1418,7 +1448,8 @@
                 "sugars": 7,
                 "protein": 27
             },
-            "defaultOrder": 7
+            "defaultOrder": 7,
+            "restaurant": "chickfila"
         },
         {
             "id": "bacon_egg_and_cheese_biscuit",
@@ -1446,7 +1477,8 @@
                 "sugars": 4,
                 "protein": 15
             },
-            "defaultOrder": 8
+            "defaultOrder": 8,
+            "restaurant": "chickfila"
         },
         {
             "id": "sausage_egg_and_cheese_biscuit",
@@ -1474,7 +1506,8 @@
                 "sugars": 4,
                 "protein": 22
             },
-            "defaultOrder": 9
+            "defaultOrder": 9,
+            "restaurant": "chickfila"
         },
         {
             "id": "chicken_egg_and_cheese_muffin",
@@ -1502,7 +1535,8 @@
                 "sugars": 4,
                 "protein": 27
             },
-            "defaultOrder": 10
+            "defaultOrder": 10,
+            "restaurant": "chickfila"
         },
         {
             "id": "bacon_egg_and_cheese_muffin",
@@ -1530,7 +1564,8 @@
                 "sugars": 2,
                 "protein": 16
             },
-            "defaultOrder": 11
+            "defaultOrder": 11,
+            "restaurant": "chickfila"
         },
         {
             "id": "sausage_egg_and_cheese_muffin",
@@ -1558,7 +1593,8 @@
                 "sugars": 1,
                 "protein": 23
             },
-            "defaultOrder": 12
+            "defaultOrder": 12,
+            "restaurant": "chickfila"
         },
         {
             "id": "hash-browns",
@@ -1625,7 +1661,8 @@
                     "Included"
                 ]
             },
-            "defaultOrder": 13
+            "defaultOrder": 13,
+            "restaurant": "chickfila"
         },
         {
             "id": "chick_fil_a_chicken_biscuit",
@@ -1651,7 +1688,8 @@
                 "sugars": 6,
                 "protein": 19
             },
-            "defaultOrder": 1
+            "defaultOrder": 1,
+            "restaurant": "chickfila"
         },
         {
             "id": "frosted_lemonade",
@@ -1716,7 +1754,8 @@
                     "label": "Diet Lemonade"
                 }
             ],
-            "defaultOrder": 39
+            "defaultOrder": 39,
+            "restaurant": "chickfila"
         },
         {
             "id": "frosted_coffee",
@@ -1742,7 +1781,8 @@
                 "sugars": 44,
                 "protein": 7
             },
-            "defaultOrder": 41
+            "defaultOrder": 41,
+            "restaurant": "chickfila"
         },
         {
             "id": "frosted_soda",
@@ -1764,7 +1804,8 @@
                 "sugars": 59,
                 "protein": 7
             },
-            "defaultOrder": 40
+            "defaultOrder": 40,
+            "restaurant": "chickfila"
         },
         {
             "id": "vanilla_milkshake",
@@ -1804,7 +1845,8 @@
                     ]
                 }
             },
-            "defaultOrder": 42
+            "defaultOrder": 42,
+            "restaurant": "chickfila"
         },
         {
             "id": "cookies_and_cream_milkshake",
@@ -1844,7 +1886,8 @@
                     ]
                 }
             },
-            "defaultOrder": 43
+            "defaultOrder": 43,
+            "restaurant": "chickfila"
         },
         {
             "id": "chocolate_milkshake",
@@ -1884,7 +1927,8 @@
                     ]
                 }
             },
-            "defaultOrder": 44
+            "defaultOrder": 44,
+            "restaurant": "chickfila"
         },
         {
             "id": "strawberry_milkshake",
@@ -1924,7 +1968,8 @@
                     ]
                 }
             },
-            "defaultOrder": 45
+            "defaultOrder": 45,
+            "restaurant": "chickfila"
         },
         {
             "id": "chick_fil_a_icedream_cup",
@@ -1946,7 +1991,8 @@
                 "sugars": 24,
                 "protein": 4
             },
-            "defaultOrder": 46
+            "defaultOrder": 46,
+            "restaurant": "chickfila"
         },
         {
             "id": "chick_fil_a_icedream_cone",
@@ -1968,7 +2014,8 @@
                 "sugars": 25,
                 "protein": 4
             },
-            "defaultOrder": 47
+            "defaultOrder": 47,
+            "restaurant": "chickfila"
         },
         {
             "id": "chocolate_chunk_cookie",
@@ -1990,7 +2037,8 @@
                 "sugars": 26,
                 "protein": 5
             },
-            "defaultOrder": 48
+            "defaultOrder": 48,
+            "restaurant": "chickfila"
         },
         {
             "id": "chocolate_fudge_brownie",
@@ -2012,7 +2060,8 @@
                 "sugars": 35,
                 "protein": 4
             },
-            "defaultOrder": 49
+            "defaultOrder": 49,
+            "restaurant": "chickfila"
         },
         {
             "id": "freshly_brewed_iced_tea_sweetened",
@@ -2097,7 +2146,8 @@
                     "label": "Large"
                 }
             ],
-            "defaultOrder": 50
+            "defaultOrder": 50,
+            "restaurant": "chickfila"
         },
         {
             "id": "freshly_brewed_iced_tea_unsweetened",
@@ -2182,7 +2232,8 @@
                     "label": "Large"
                 }
             ],
-            "defaultOrder": 51
+            "defaultOrder": 51,
+            "restaurant": "chickfila"
         },
         {
             "id": "chick_fil_a_lemonade",
@@ -2267,7 +2318,8 @@
                     "label": "Large"
                 }
             ],
-            "defaultOrder": 52
+            "defaultOrder": 52,
+            "restaurant": "chickfila"
         },
         {
             "id": "chick_fil_a_diet_lemonade",
@@ -2352,7 +2404,8 @@
                     "label": "Large"
                 }
             ],
-            "defaultOrder": 53
+            "defaultOrder": 53,
+            "restaurant": "chickfila"
         },
         {
             "id": "sunjoy_1_2_sweet_tea_1_2_lemonade",
@@ -2428,7 +2481,8 @@
                     "label": "Large"
                 }
             ],
-            "defaultOrder": 54
+            "defaultOrder": 54,
+            "restaurant": "chickfila"
         },
         {
             "id": "sunjoy_1_2_sweet_tea_1_2_diet_lemonade",
@@ -2504,7 +2558,8 @@
                     "label": "Large"
                 }
             ],
-            "defaultOrder": 55
+            "defaultOrder": 55,
+            "restaurant": "chickfila"
         },
         {
             "id": "sunjoy_1_2_unsweet_tea_1_2_lemonade",
@@ -2580,7 +2635,8 @@
                     "label": "Large"
                 }
             ],
-            "defaultOrder": 56
+            "defaultOrder": 56,
+            "restaurant": "chickfila"
         },
         {
             "id": "sunjoy_1_2_unsweet_tea_1_2_diet_lemonade",
@@ -2656,7 +2712,8 @@
                     "label": "Large"
                 }
             ],
-            "defaultOrder": 57
+            "defaultOrder": 57,
+            "restaurant": "chickfila"
         },
         {
             "id": "iced_coffee",
@@ -2715,7 +2772,8 @@
                     "label": "Vanilla Iced Coffee"
                 }
             ],
-            "defaultOrder": 60
+            "defaultOrder": 60,
+            "restaurant": "chickfila"
         },
         {
             "id": "coca_cola",
@@ -2791,7 +2849,8 @@
                     "label": "Large"
                 }
             ],
-            "defaultOrder": 58
+            "defaultOrder": 58,
+            "restaurant": "chickfila"
         },
         {
             "id": "dasani_bottled_water",
@@ -2813,7 +2872,8 @@
                 "sugars": 0,
                 "protein": 0
             },
-            "defaultOrder": 61
+            "defaultOrder": 61,
+            "restaurant": "chickfila"
         },
         {
             "id": "honest_kids_apple_juice",
@@ -2835,7 +2895,8 @@
                 "sugars": 8,
                 "protein": 0
             },
-            "defaultOrder": 62
+            "defaultOrder": 62,
+            "restaurant": "chickfila"
         },
         {
             "id": "simply_orange",
@@ -2857,7 +2918,8 @@
                 "sugars": 30,
                 "protein": 2
             },
-            "defaultOrder": 63
+            "defaultOrder": 63,
+            "restaurant": "chickfila"
         },
         {
             "id": "1_chocolate_milk",
@@ -2879,7 +2941,8 @@
                 "sugars": 21,
                 "protein": 7
             },
-            "defaultOrder": 64
+            "defaultOrder": 64,
+            "restaurant": "chickfila"
         },
         {
             "id": "1_milk",
@@ -2901,7 +2964,8 @@
                 "sugars": 10,
                 "protein": 7
             },
-            "defaultOrder": 65
+            "defaultOrder": 65,
+            "restaurant": "chickfila"
         },
         {
             "id": "dr_pepper",
@@ -2986,7 +3050,8 @@
                     "label": "Large"
                 }
             ],
-            "defaultOrder": 59
+            "defaultOrder": 59,
+            "restaurant": "chickfila"
         },
         {
             "id": "coffee",
@@ -3008,7 +3073,8 @@
                 "sugars": 0,
                 "protein": 0
             },
-            "defaultOrder": 66
+            "defaultOrder": 66,
+            "restaurant": "chickfila"
         }
     ],
     "ingredients": [

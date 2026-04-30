@@ -423,6 +423,7 @@ export default function RestaurantView({
         options.map((option) => ({
           id: `${restaurantId}-${addonRef}-${option.name}`.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
           name: option.name,
+          defaultOrder: 0,
           nutrition: {
             calories: option.calories,
             protein: option.protein,
@@ -437,7 +438,8 @@ export default function RestaurantView({
           },
           categories: [categoryByAddonRef[addonRef]],
           servingType: "addon" as const,
-          image: option.image,
+          image: option.image ?? "",
+          restaurant: restaurantId,
         }))
       );
   }, [addons, restaurantId]);
@@ -568,14 +570,15 @@ export default function RestaurantView({
             selectedEntree !== "tacos" &&
             typeof includedIngredientOrder === "number"
               ? includedIngredientOrder
-              : ingredient.defaultOrder,
+              : (ingredient.defaultOrder ?? index),
           variants: tripleCheeseVariant ? [...(variants ?? []), tripleCheeseVariant] : variants,
           defaultVariantId,
           hideVariantSelector:
             ingredient.hideVariantSelector || isQuesadillaCheeseIncludedIngredient,
-          image: ingredient.image,
+          image: ingredient.image ?? "",
           categories: [displayCategory],
           servingType: "addon",
+          restaurant: restaurantId,
         };
         return menuItem;
       });
@@ -1373,6 +1376,7 @@ export default function RestaurantView({
             return {
               id: includedIngredientId,
               name: fallbackIngredient.name,
+              defaultOrder: fallbackIngredient.defaultOrder ?? 0,
               nutrition: fallbackNutrition,
               variants: fallbackIngredient.variants?.map((variant) => ({
                 ...variant,
@@ -1383,9 +1387,10 @@ export default function RestaurantView({
               })),
               defaultVariantId: fallbackIngredient.defaultVariantId,
               hideVariantSelector: fallbackIngredient.hideVariantSelector,
-              image: fallbackIngredient.image,
+              image: fallbackIngredient.image ?? "",
               categories: ["Included Ingredient"],
               servingType: "addon" as const,
+              restaurant: restaurantId,
             } satisfies MenuItem;
           })();
         if (!includedIngredientItem || next[includedIngredientId]) {
@@ -1434,6 +1439,7 @@ export default function RestaurantView({
             return {
               id: includedIngredientId,
               name: fallbackIngredient.name,
+              defaultOrder: fallbackIngredient.defaultOrder ?? 0,
               nutrition: scaleNutritionValues(
                 fallbackIngredient.nutrition,
                 getIngredientNutritionMultiplier(includedIngredientId)
@@ -1447,9 +1453,10 @@ export default function RestaurantView({
               })),
               defaultVariantId: fallbackIngredient.defaultVariantId,
               hideVariantSelector: fallbackIngredient.hideVariantSelector,
-              image: fallbackIngredient.image,
+              image: fallbackIngredient.image ?? "",
               categories: ["Included Ingredient"],
               servingType: "addon" as const,
+              restaurant: restaurantId,
             } satisfies MenuItem;
           })();
         if (!includedIngredientItem) {

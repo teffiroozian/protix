@@ -10,7 +10,10 @@
             "categories": [
                 "Sandwich"
             ],
-            "defaultOrder": 1
+            "defaultOrder": 1,
+            "id": "subway_5_meat_italian",
+            "image": "",
+            "restaurant": "subway"
         },
         {
             "name": "Chicken & Bacon Ranch",
@@ -21,7 +24,10 @@
             "categories": [
                 "Sandwich"
             ],
-            "defaultOrder": 2
+            "defaultOrder": 2,
+            "id": "subway_chicken_bacon_ranch",
+            "image": "",
+            "restaurant": "subway"
         },
         {
             "name": "Meatball Pepperoni",
@@ -32,7 +38,10 @@
             "categories": [
                 "Sandwich"
             ],
-            "defaultOrder": 3
+            "defaultOrder": 3,
+            "id": "subway_meatball_pepperoni",
+            "image": "",
+            "restaurant": "subway"
         },
         {
             "name": "Grilled Chicken",
@@ -43,7 +52,10 @@
             "categories": [
                 "Sandwich"
             ],
-            "defaultOrder": 4
+            "defaultOrder": 4,
+            "id": "subway_grilled_chicken",
+            "image": "",
+            "restaurant": "subway"
         },
         {
             "name": "Honey Mustard BBQ Chicken",
@@ -54,7 +66,10 @@
             "categories": [
                 "Sandwich"
             ],
-            "defaultOrder": 5
+            "defaultOrder": 5,
+            "id": "subway_honey_mustard_bbq_chicken",
+            "image": "",
+            "restaurant": "subway"
         }
     ]
 }

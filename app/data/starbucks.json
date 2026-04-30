@@ -10,7 +10,10 @@
             "categories": [
                 "Beverage"
             ],
-            "defaultOrder": 1
+            "defaultOrder": 1,
+            "id": "starbucks_iced_sf_vanilla_protein_matcha",
+            "image": "",
+            "restaurant": "starbucks"
         },
         {
             "name": "Iced Protein Matcha",
@@ -21,7 +24,10 @@
             "categories": [
                 "Beverage"
             ],
-            "defaultOrder": 2
+            "defaultOrder": 2,
+            "id": "starbucks_iced_protein_matcha",
+            "image": "",
+            "restaurant": "starbucks"
         },
         {
             "name": "Iced SF Vanilla Protein Latte",
@@ -32,7 +38,10 @@
             "categories": [
                 "Beverage"
             ],
-            "defaultOrder": 3
+            "defaultOrder": 3,
+            "id": "starbucks_iced_sf_vanilla_protein_latte",
+            "image": "",
+            "restaurant": "starbucks"
         },
         {
             "name": "Iced Vanilla Protein Latte",
@@ -43,7 +52,10 @@
             "categories": [
                 "Beverage"
             ],
-            "defaultOrder": 4
+            "defaultOrder": 4,
+            "id": "starbucks_iced_vanilla_protein_latte",
+            "image": "",
+            "restaurant": "starbucks"
         },
         {
             "name": "SF Protein Matcha",
@@ -54,7 +66,10 @@
             "categories": [
                 "Beverage"
             ],
-            "defaultOrder": 5
+            "defaultOrder": 5,
+            "id": "starbucks_sf_protein_matcha",
+            "image": "",
+            "restaurant": "starbucks"
         }
     ]
 }

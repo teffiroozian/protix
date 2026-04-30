@@ -10,7 +10,10 @@
             "categories": [
                 "Pizza"
             ],
-            "defaultOrder": 1
+            "defaultOrder": 1,
+            "id": "mod_calexico_mod",
+            "image": "",
+            "restaurant": "mod"
         },
         {
             "name": "Cheesy Garlic Bread",
@@ -21,7 +24,10 @@
             "categories": [
                 "Side"
             ],
-            "defaultOrder": 2
+            "defaultOrder": 2,
+            "id": "mod_cheesy_garlic_bread",
+            "image": "",
+            "restaurant": "mod"
         },
         {
             "name": "Caspian - MOD",
@@ -32,7 +38,10 @@
             "categories": [
                 "Pizza"
             ],
-            "defaultOrder": 3
+            "defaultOrder": 3,
+            "id": "mod_caspian_mod",
+            "image": "",
+            "restaurant": "mod"
         },
         {
             "name": "Mad Dog - MOD",
@@ -43,7 +52,10 @@
             "categories": [
                 "Pizza"
             ],
-            "defaultOrder": 4
+            "defaultOrder": 4,
+            "id": "mod_mad_dog_mod",
+            "image": "",
+            "restaurant": "mod"
         },
         {
             "name": "Jasper - MOD",
@@ -54,7 +66,10 @@
             "categories": [
                 "Pizza"
             ],
-            "defaultOrder": 5
+            "defaultOrder": 5,
+            "id": "mod_jasper_mod",
+            "image": "",
+            "restaurant": "mod"
         }
     ]
 }

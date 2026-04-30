@@ -193,9 +193,11 @@ export default function ItemRouteModal({
         .map((ingredient) => ({
           id: ingredient.id ?? ingredient.name,
           name: ingredient.name,
-          image: ingredient.image,
+          image: ingredient.image ?? "",
+          defaultOrder: ingredient.defaultOrder ?? 0,
           nutrition: ingredient.nutrition,
           categories: ingredient.categories ?? (ingredient.category ? [ingredient.category] : []),
+          restaurant: item.restaurant,
           variants: ingredient.variants,
           defaultVariantId: ingredient.defaultVariantId,
         })),

@@ -99,16 +99,16 @@ export type RestaurantCustomizationRules = {
 };
 
 export type MenuItem = {
-  id?: string;          // optional but recommended later
+  id: string;
   ingredientRef?: string;
   name: string;
-  defaultOrder?: number;
+  defaultOrder: number;
   nutrition: Nutrition; // make this required so label is consistent
-  image?: string;
+  image: string;
   categories: string[];
   entreeGroup?: string;
   servingType?: ServingType;
-  restaurant?: string;
+  restaurant: string;
   variants?: ItemVariant[];
   defaultVariantId?: string;
   addonRefs?: AddonRef[];

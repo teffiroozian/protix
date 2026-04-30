@@ -10,7 +10,10 @@
             "categories": [
                 "Burger"
             ],
-            "defaultOrder": 1
+            "defaultOrder": 1,
+            "id": "habit_double_char_w_cheese",
+            "image": "",
+            "restaurant": "habit"
         },
         {
             "name": "Santa Barbara Cobb",
@@ -21,7 +24,10 @@
             "categories": [
                 "Salad"
             ],
-            "defaultOrder": 2
+            "defaultOrder": 2,
+            "id": "habit_santa_barbara_cobb",
+            "image": "",
+            "restaurant": "habit"
         },
         {
             "name": "Santa Barbara Char",
@@ -32,7 +38,10 @@
             "categories": [
                 "Burger"
             ],
-            "defaultOrder": 3
+            "defaultOrder": 3,
+            "id": "habit_santa_barbara_char",
+            "image": "",
+            "restaurant": "habit"
         },
         {
             "name": "Chicken Club Sandwich",
@@ -43,7 +52,10 @@
             "categories": [
                 "Sandwich"
             ],
-            "defaultOrder": 4
+            "defaultOrder": 4,
+            "id": "habit_chicken_club_sandwich",
+            "image": "",
+            "restaurant": "habit"
         },
         {
             "name": "Grilled Chicken Sandwich",
@@ -54,7 +66,10 @@
             "categories": [
                 "Sandwich"
             ],
-            "defaultOrder": 5
+            "defaultOrder": 5,
+            "id": "habit_grilled_chicken_sandwich",
+            "image": "",
+            "restaurant": "habit"
         }
     ]
 }
