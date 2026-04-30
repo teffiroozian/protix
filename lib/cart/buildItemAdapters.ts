@@ -37,7 +37,7 @@ function buildChipotleBuildYourOwnMenuItem(cartItem: CartItem, ingredientItems?:
 
   const ingredientOptionsByTab = ingredientCatalog.reduce<Record<string, string[]>>((acc, ingredient) => {
     const ingredientId = ingredient.id ?? ingredient.name;
-    const tabName = toTitleCase((ingredient.categories?.[0] ?? ingredient.category ?? "Ingredients").trim());
+    const tabName = toTitleCase((ingredient.categories[0] ?? "Ingredients").trim());
 
     if (!acc[tabName]) {
       acc[tabName] = [];

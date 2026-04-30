@@ -2436,7 +2436,6 @@
         {
             "id": "tortilla",
             "name": "Tortilla",
-            "category": "Side",
             "image": "/restaurants/chipotle/menu/sides/tortilla.png",
             "nutrition": {
                 "calories": 320,
@@ -2449,12 +2448,16 @@
                 "fiber": 3,
                 "sugars": 0,
                 "protein": 8
-            }
+            },
+            "defaultOrder": 0,
+            "categories": [
+                "Side"
+            ],
+            "maxQuantity": 10
         },
         {
             "id": "crispy-corn-tortilla",
             "name": "Crispy Corn Tortilla",
-            "category": "Side",
             "image": "/restaurants/chipotle/menu/sides/crispy-corn-tortilla.png",
             "nutrition": {
                 "calories": 70,
@@ -2467,12 +2470,16 @@
                 "fiber": 1,
                 "sugars": 0,
                 "protein": 1
-            }
+            },
+            "defaultOrder": 1,
+            "categories": [
+                "Side"
+            ],
+            "maxQuantity": 10
         },
         {
             "id": "soft-flour-tortilla",
             "name": "Soft Flour Tortilla",
-            "category": "Side",
             "image": "/restaurants/chipotle/menu/sides/soft-flour-tortilla.png",
             "nutrition": {
                 "calories": 80,
@@ -2485,12 +2492,16 @@
                 "fiber": 0,
                 "sugars": 0,
                 "protein": 2
-            }
+            },
+            "defaultOrder": 2,
+            "categories": [
+                "Side"
+            ],
+            "maxQuantity": 10
         },
         {
             "id": "romaine-lettuce",
             "name": "Romaine Lettuce",
-            "category": "Toppings",
             "defaultOrder": 10,
             "image": "/restaurants/chipotle/ingredients/toppings/romaine-lettuce.png",
             "nutrition": {
@@ -2504,12 +2515,15 @@
                 "fiber": 1,
                 "sugars": 0,
                 "protein": 0
-            }
+            },
+            "categories": [
+                "Toppings"
+            ],
+            "maxQuantity": 10
         },
         {
             "id": "cheese",
             "name": "Cheese",
-            "category": "Toppings",
             "defaultOrder": 9,
             "image": "/restaurants/chipotle/ingredients/toppings/cheese.png",
             "nutrition": {
@@ -2523,12 +2537,15 @@
                 "fiber": 0,
                 "sugars": 0,
                 "protein": 6
-            }
+            },
+            "categories": [
+                "Toppings"
+            ],
+            "maxQuantity": 10
         },
         {
             "id": "guacamole",
             "name": "Guacamole",
-            "category": "Toppings",
             "defaultOrder": 2,
             "image": "/restaurants/chipotle/ingredients/toppings/gaucamole.png",
             "nutrition": {
@@ -2542,13 +2559,16 @@
                 "fiber": 6,
                 "sugars": 1,
                 "protein": 2
-            }
+            },
+            "categories": [
+                "Toppings"
+            ],
+            "maxQuantity": 10
         },
         {
             "id": "cilantro-lime-sauce",
             "name": "Cilantro Lime Sauce",
             "description": "Served on the Side",
-            "category": "Toppings",
             "defaultOrder": 1,
             "image": "/restaurants/chipotle/ingredients/toppings/cilantro-lime-sauce.png",
             "nutrition": {
@@ -2556,13 +2576,16 @@
                 "protein": 2,
                 "carbs": 3,
                 "totalFat": 6
-            }
+            },
+            "categories": [
+                "Toppings"
+            ],
+            "maxQuantity": 10
         },
         {
             "id": "fresh-tomato-salsa",
             "name": "Fresh Tomato Salsa",
             "description": "Mild",
-            "category": "Toppings",
             "defaultOrder": 3,
             "image": "/restaurants/chipotle/ingredients/toppings/tomato-salsa.png",
             "nutrition": {
@@ -2576,13 +2599,16 @@
                 "fiber": 1,
                 "sugars": 1,
                 "protein": 0
-            }
+            },
+            "categories": [
+                "Toppings"
+            ],
+            "maxQuantity": 10
         },
         {
             "id": "roasted-chili-corn-salsa",
             "name": "Roasted Chili-Corn Salsa",
             "description": "Medium",
-            "category": "Toppings",
             "defaultOrder": 4,
             "image": "/restaurants/chipotle/ingredients/toppings/chili-corn-salsa.png",
             "nutrition": {
@@ -2596,13 +2622,16 @@
                 "fiber": 3,
                 "sugars": 4,
                 "protein": 3
-            }
+            },
+            "categories": [
+                "Toppings"
+            ],
+            "maxQuantity": 10
         },
         {
             "id": "tomatillo-green-chili-salsa",
             "name": "Tomatillo-Green Chili Salsa",
             "description": "Medium",
-            "category": "Toppings",
             "defaultOrder": 5,
             "image": "/restaurants/chipotle/ingredients/toppings/green-chili-salsa.png",
             "nutrition": {
@@ -2616,13 +2645,16 @@
                 "fiber": 0,
                 "sugars": 2,
                 "protein": 0
-            }
+            },
+            "categories": [
+                "Toppings"
+            ],
+            "maxQuantity": 10
         },
         {
             "id": "tomatillo-red-chili-salsa",
             "name": "Tomatillo-Red Chili Salsa",
             "description": "Hot",
-            "category": "Toppings",
             "defaultOrder": 6,
             "image": "/restaurants/chipotle/ingredients/toppings/red-chili-salsa.png",
             "nutrition": {
@@ -2636,12 +2668,15 @@
                 "fiber": 1,
                 "sugars": 0,
                 "protein": 0
-            }
+            },
+            "categories": [
+                "Toppings"
+            ],
+            "maxQuantity": 10
         },
         {
             "id": "sour-cream",
             "name": "Sour Cream",
-            "category": "Toppings",
             "defaultOrder": 7,
             "image": "/restaurants/chipotle/ingredients/toppings/sour-cream.png",
             "nutrition": {
@@ -2655,12 +2690,15 @@
                 "fiber": 0,
                 "sugars": 2,
                 "protein": 2
-            }
+            },
+            "categories": [
+                "Toppings"
+            ],
+            "maxQuantity": 10
         },
         {
             "id": "fajita-veggies",
             "name": "Fajita Veggies",
-            "category": "Toppings",
             "defaultOrder": 8,
             "image": "/restaurants/chipotle/ingredients/toppings/fajita-veggies.png",
             "nutrition": {
@@ -2674,12 +2712,15 @@
                 "fiber": 1,
                 "sugars": 2,
                 "protein": 1
-            }
+            },
+            "categories": [
+                "Toppings"
+            ],
+            "maxQuantity": 10
         },
         {
             "id": "queso-blanco",
             "name": "Queso Blanco",
-            "category": "Toppings",
             "defaultOrder": 11,
             "image": "/restaurants/chipotle/ingredients/toppings/queso-blanco.png",
             "nutrition": {
@@ -2693,12 +2734,15 @@
                 "fiber": 0,
                 "sugars": 1,
                 "protein": 5
-            }
+            },
+            "categories": [
+                "Toppings"
+            ],
+            "maxQuantity": 10
         },
         {
             "id": "chicken-al-pastor",
             "name": "Chicken al Pastor",
-            "category": "Proteins",
             "defaultOrder": 1,
             "image": "/restaurants/chipotle/ingredients/proteins/chicken-al-pastor.png",
             "nutrition": {
@@ -2712,12 +2756,15 @@
                 "fiber": 0,
                 "sugars": 2,
                 "protein": 23
-            }
+            },
+            "categories": [
+                "Proteins"
+            ],
+            "maxQuantity": 1
         },
         {
             "id": "chicken",
             "name": "Chicken",
-            "category": "Proteins",
             "defaultOrder": 2,
             "image": "/restaurants/chipotle/ingredients/proteins/chicken.png",
             "nutrition": {
@@ -2731,12 +2778,15 @@
                 "fiber": 0,
                 "sugars": 0,
                 "protein": 32
-            }
+            },
+            "categories": [
+                "Proteins"
+            ],
+            "maxQuantity": 1
         },
         {
             "id": "steak",
             "name": "Steak",
-            "category": "Proteins",
             "defaultOrder": 3,
             "image": "/restaurants/chipotle/ingredients/proteins/steak.png",
             "nutrition": {
@@ -2750,12 +2800,15 @@
                 "fiber": 1,
                 "sugars": 0,
                 "protein": 21
-            }
+            },
+            "categories": [
+                "Proteins"
+            ],
+            "maxQuantity": 1
         },
         {
             "id": "beef-barbacoa",
             "name": "Beef Barbacoa",
-            "category": "Proteins",
             "defaultOrder": 4,
             "image": "/restaurants/chipotle/ingredients/proteins/beef-barbacoa.png",
             "nutrition": {
@@ -2769,12 +2822,15 @@
                 "fiber": 1,
                 "sugars": 0,
                 "protein": 24
-            }
+            },
+            "categories": [
+                "Proteins"
+            ],
+            "maxQuantity": 1
         },
         {
             "id": "carnitas",
             "name": "Carnitas",
-            "category": "Proteins",
             "defaultOrder": 5,
             "image": "/restaurants/chipotle/ingredients/proteins/carnitas.png",
             "nutrition": {
@@ -2788,13 +2844,16 @@
                 "fiber": 0,
                 "sugars": 0,
                 "protein": 23
-            }
+            },
+            "categories": [
+                "Proteins"
+            ],
+            "maxQuantity": 1
         },
         {
             "id": "sofritas",
             "name": "Sofritas",
             "description": "Plant-Based Protein",
-            "category": "Proteins",
             "defaultOrder": 6,
             "image": "/restaurants/chipotle/ingredients/proteins/sofritas.png",
             "nutrition": {
@@ -2808,12 +2867,15 @@
                 "fiber": 3,
                 "sugars": 5,
                 "protein": 8
-            }
+            },
+            "categories": [
+                "Proteins"
+            ],
+            "maxQuantity": 1
         },
         {
             "id": "white-rice",
             "name": "White Rice",
-            "category": "Rice",
             "defaultOrder": 1,
             "image": "/restaurants/chipotle/ingredients/rice/white-rice.png",
             "nutrition": {
@@ -2827,12 +2889,15 @@
                 "fiber": 1,
                 "sugars": 0,
                 "protein": 4
-            }
+            },
+            "categories": [
+                "Rice"
+            ],
+            "maxQuantity": 1
         },
         {
             "id": "brown-rice",
             "name": "Brown Rice",
-            "category": "Rice",
             "defaultOrder": 2,
             "image": "/restaurants/chipotle/ingredients/rice/brown-rice.png",
             "nutrition": {
@@ -2846,12 +2911,15 @@
                 "fiber": 2,
                 "sugars": 0,
                 "protein": 4
-            }
+            },
+            "categories": [
+                "Rice"
+            ],
+            "maxQuantity": 1
         },
         {
             "id": "black-beans",
             "name": "Black Beans",
-            "category": "Beans",
             "defaultOrder": 1,
             "image": "/restaurants/chipotle/ingredients/beans/black-beans.png",
             "nutrition": {
@@ -2865,12 +2933,15 @@
                 "fiber": 7,
                 "sugars": 2,
                 "protein": 8
-            }
+            },
+            "categories": [
+                "Beans"
+            ],
+            "maxQuantity": 1
         },
         {
             "id": "pinto-beans",
             "name": "Pinto Beans",
-            "category": "Beans",
             "defaultOrder": 2,
             "image": "/restaurants/chipotle/ingredients/beans/pinto-beans.png",
             "nutrition": {
@@ -2884,7 +2955,11 @@
                 "fiber": 8,
                 "sugars": 1,
                 "protein": 8
-            }
+            },
+            "categories": [
+                "Beans"
+            ],
+            "maxQuantity": 1
         }
     ],
     "builderConfig": {

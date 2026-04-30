@@ -118,17 +118,16 @@ export type MenuItem = {
 };
 
 export type IngredientItem = {
-  id?: string;
+  id: string;
   name: string;
-  defaultOrder?: number;
+  defaultOrder: number;
   nutrition: Nutrition;
   image?: string;
-  category?: string;
-  categories?: string[];
+  categories: string[];
   variants?: ItemVariant[];
   defaultVariantId?: string;
   hideVariantSelector?: boolean;
-  maxQuantity?: number;
+  maxQuantity: number;
   hideFromIngredientView?: boolean;
 };
 

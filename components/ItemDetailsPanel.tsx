@@ -404,7 +404,7 @@ export default function ItemDetailsPanel({
           const categoryPriority = (ingredient: ResolvedPanelIngredient) => {
             if (isLockedIngredient(ingredient.id)) return 0;
             const normalizedCategory = normalizeIngredientCategory(
-              ingredient.ingredientItem?.categories?.[0] ?? ingredient.ingredientItem?.category ?? ""
+              ingredient.ingredientItem?.categories?.[0] ?? ""
             );
             if (normalizedCategory === "proteins") return 1;
             if (normalizedCategory === "rice") return 2;

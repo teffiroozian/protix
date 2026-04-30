@@ -451,8 +451,7 @@ export default function RestaurantView({
         return normalizedCategories;
       }
 
-      const normalizedLegacyCategory = ingredient.category?.trim();
-      return normalizedLegacyCategory ? [normalizedLegacyCategory] : ["Other"];
+      return ["Other"];
     };
 
     const resolveIngredientCategory = (ingredient: IngredientItem) => {
