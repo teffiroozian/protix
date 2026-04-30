@@ -38,7 +38,7 @@ type StickyRestaurantBarProps = {
   mobileEntreeOptions?: Array<{
     key: string;
     label: string;
-    imageSrc?: string;
+    image?: string;
     selected?: boolean;
     onSelect: () => void;
   }>;

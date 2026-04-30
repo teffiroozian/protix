@@ -78,6 +78,7 @@ import {
   type ChipotleKidsMealId,
   type ChipotleTacoCount,
   type ChipotleTacoShell,
+  type ChipotleBuilderConfig,
   type IncludedIngredientContext,
   type ProteinPortionMode,
   type SplitPortionMode,
@@ -198,7 +199,7 @@ export default function RestaurantView({
 }) {
   const isChipotleBuildPage = isBuildYourOwn && restaurantId === "chipotle";
   const chipotleBuilderConfig = useMemo(
-    () => (isChipotleBuildPage ? builderConfig : undefined),
+    () => (isChipotleBuildPage ? (builderConfig as ChipotleBuilderConfig | undefined) : undefined),
     [isChipotleBuildPage, builderConfig]
   );
   const entreeOptions = useMemo(
@@ -206,23 +207,23 @@ export default function RestaurantView({
     [chipotleBuilderConfig]
   );
   const kidsMealOptions = useMemo(
-    () => chipotleBuilderConfig?.kidsMealOptions ?? [],
+    () => chipotleBuilderConfig?.chipotle?.kidsMealOptions ?? [],
     [chipotleBuilderConfig]
   );
   const tacoShellIngredientIds = useMemo(
-    () => chipotleBuilderConfig?.includedIngredientRules?.tacoShellIngredientIds ?? [],
+    () => chipotleBuilderConfig?.chipotle?.tacoShellIngredientIds ?? [],
     [chipotleBuilderConfig]
   );
   const kidsBuildYourOwnDoubleSideIds = useMemo(
-    () => new Set(chipotleBuilderConfig?.includedIngredientRules?.kidsBuildYourOwnDoubleSideIds ?? []),
+    () => new Set(chipotleBuilderConfig?.chipotle?.kidsBuildYourOwnDoubleSideIds ?? []),
     [chipotleBuilderConfig]
   );
   const kidsQuesadillaIncludedIngredientIds = useMemo(
-    () => chipotleBuilderConfig?.includedIngredientRules?.kidsQuesadillaIncludedIngredientIds ?? [],
+    () => chipotleBuilderConfig?.chipotle?.kidsQuesadillaIncludedIngredientIds ?? [],
     [chipotleBuilderConfig]
   );
   const quesadillaTripleCheeseVariantId = useMemo(
-    () => chipotleBuilderConfig?.specialVariantIds?.quesadillaTripleCheese ?? "quesadilla-triple-cheese",
+    () => chipotleBuilderConfig?.chipotle?.specialVariantIds?.quesadillaTripleCheese ?? "quesadilla-triple-cheese",
     [chipotleBuilderConfig]
   );
   const SECTION_HEADER_TOP_GAP = 24;
@@ -1074,15 +1075,15 @@ export default function RestaurantView({
   }, [selectedBuildEntreeLabel, selectedBuildProteinNames, selectedEntree, selectedKidsMeal]);
   const selectedBuildImageSrc = useMemo(() => {
     if (!selectedEntree) {
-      return entreeOptions.bowl?.imageSrc ?? "";
+      return entreeOptions.bowl?.image ?? "";
     }
     if (selectedEntree === "kids-meal") {
       return (
-        kidsMealOptions.find((option) => option.id === selectedKidsMeal)?.imageSrc ??
-        entreeOptions["kids-meal"]?.imageSrc ?? ""
+        kidsMealOptions.find((option) => option.id === selectedKidsMeal)?.image ??
+        entreeOptions["kids-meal"]?.image ?? ""
       );
     }
-    return entreeOptions[selectedEntree]?.imageSrc ?? "";
+    return entreeOptions[selectedEntree]?.image ?? "";
   }, [selectedEntree, selectedKidsMeal, entreeOptions, kidsMealOptions]);
   const buildName = selectedBuildName;
   const shouldShowBuildStickyBar =
@@ -2446,7 +2447,7 @@ export default function RestaurantView({
         >
           <span className="relative h-5 w-5 shrink-0 overflow-hidden rounded-full border border-slate-200 bg-white">
             <Image
-              src={entreeOptions[selectedEntree]?.imageSrc ?? ""}
+              src={entreeOptions[selectedEntree]?.image ?? ""}
               alt={entreeOptions[selectedEntree]?.label ?? selectedEntree}
               fill
               className="object-cover"
@@ -2493,7 +2494,7 @@ export default function RestaurantView({
                   >
                     <span className="relative h-6 w-6 shrink-0 overflow-hidden rounded-full border border-slate-200 bg-white">
                       <Image
-                        src={entree.imageSrc}
+                        src={entree.image}
                         alt={entree.label}
                         fill
                         className="object-cover"
@@ -2519,7 +2520,7 @@ export default function RestaurantView({
           return [{
             key: entreeKey,
             label: entree.label,
-            imageSrc: entree.imageSrc,
+            image: entree.image,
             selected: entreeKey === selectedEntree,
             onSelect: () => handleEntreeSelection(entreeKey),
           }];

@@ -4,7 +4,7 @@ import type { ChipotleKidsMealId } from "@/lib/chipotleBuild";
 type Props = {
   selectedKidsMeal: ChipotleKidsMealId;
   onSelectKidsMeal: (kidsMeal: ChipotleKidsMealId) => void;
-  options: Array<{ id: ChipotleKidsMealId; label: string; imageSrc: string }>;
+  options: Array<{ id: ChipotleKidsMealId; label: string; image: string }>;
 };
 
 export default function KidsMealSelector({ selectedKidsMeal, onSelectKidsMeal, options }: Props) {
@@ -36,7 +36,7 @@ export default function KidsMealSelector({ selectedKidsMeal, onSelectKidsMeal, o
                   {isActive ? <span className="h-2.5 w-2.5 rounded-full bg-lime-500" /> : null}
                 </span>
                 <span className="relative h-16 w-28 shrink-0 overflow-hidden rounded-2xl border border-black/5 bg-slate-50">
-                  <Image src={option.imageSrc} alt={option.label} fill className="object-contain p-2" />
+                  <Image src={option.image} alt={option.label} fill className="object-contain p-2" />
                 </span>
                 <span className="min-w-0 flex-1 text-sm font-semibold text-slate-900">
                   {option.label}

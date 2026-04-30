@@ -113,7 +113,7 @@ export default function ControlsRow({
   mobileEntreeOptions?: Array<{
     key: string;
     label: string;
-    imageSrc?: string;
+    image?: string;
     selected?: boolean;
     onSelect: () => void;
   }>;
@@ -239,9 +239,9 @@ export default function ControlsRow({
                     option.selected ? "border-black/80 bg-black/85 text-white" : "border-black/15 bg-white text-black/80"
                   }`}
                 >
-                  {option.imageSrc ? (
+                  {option.image ? (
                     <span className="relative h-6 w-6 shrink-0 overflow-hidden rounded-full border border-black/10 bg-white">
-                      <Image src={option.imageSrc} alt={option.label} fill className="object-cover" />
+                      <Image src={option.image} alt={option.label} fill className="object-cover" />
                     </span>
                   ) : null}
                   <span>{option.label}</span>
