@@ -42,7 +42,6 @@ import {
 import { useRestaurantSearch } from "@/components/RestaurantSearchContext";
 import type {
   AddonRef,
-  CommonChange,
   IngredientItem,
   MenuItem,
   RestaurantAddons,
@@ -178,26 +177,24 @@ export default function RestaurantView({
   restaurantId,
   restaurantName,
   restaurantLogo,
-  isBuildYourOwn = false,
+  hasBuildYourOwn = false,
   items,
   ingredients = [],
   addons,
-  commonChanges,
   customizationRules,
   builderConfig,
 }: {
   restaurantId: string;
   restaurantName: string;
   restaurantLogo: string;
-  isBuildYourOwn?: boolean;
+  hasBuildYourOwn?: boolean;
   items: MenuItem[];
   ingredients?: IngredientItem[];
   addons?: RestaurantAddons;
-  commonChanges?: CommonChange[];
   customizationRules?: RestaurantCustomizationRules;
   builderConfig?: RestaurantBuilderConfig;
 }) {
-  const isChipotleBuildPage = isBuildYourOwn && restaurantId === "chipotle";
+  const isChipotleBuildPage = hasBuildYourOwn && restaurantId === "chipotle";
   const chipotleBuilderConfig = useMemo(
     () => (isChipotleBuildPage ? (builderConfig as ChipotleBuilderConfig | undefined) : undefined),
     [isChipotleBuildPage, builderConfig]
@@ -247,7 +244,7 @@ export default function RestaurantView({
   const editOrigin = searchParams.get("editOrigin");
   const isEditingFromCart = editOrigin === "cart";
   const requestedView = searchParams.get("view");
-  const defaultView: ViewOption = isBuildYourOwn ? "ingredients" : "menu";
+  const defaultView: ViewOption = hasBuildYourOwn ? "ingredients" : "menu";
   const viewMode: ViewOption =
     requestedView === "ingredients"
       ? "ingredients"
@@ -1087,7 +1084,7 @@ export default function RestaurantView({
   }, [selectedEntree, selectedKidsMeal, entreeOptions, kidsMealOptions]);
   const buildName = selectedBuildName;
   const shouldShowBuildStickyBar =
-    isBuildYourOwn &&
+    hasBuildYourOwn &&
     effectiveViewMode === "ingredients" &&
     (!isChipotleBuildPage ||
       (selectedEntree !== null &&
@@ -2153,11 +2150,10 @@ export default function RestaurantView({
                   sort={sort}
                   addons={addons}
                   ingredients={ingredients}
-                  commonChanges={commonChanges}
                   customizationRules={customizationRules}
                   groupByCategory
                   categoryMode="ingredients"
-                  isBuildYourOwn={isBuildYourOwn}
+                  hasBuildYourOwn={hasBuildYourOwn}
                   selectedIngredientIds={selectedIngredientIdsForMenu}
                   lockedIngredientIds={lockedIngredientIds}
                   unavailableIngredientIds={unavailableIngredientIds}
@@ -2546,7 +2542,7 @@ export default function RestaurantView({
         calorieBounds={calorieBounds}
         secondaryNavLeading={entreeSelectionControl}
         mobileEntreeOptions={mobileEntreeOptions}
-        hideViewSelector={isBuildYourOwn}
+        hideViewSelector={hasBuildYourOwn}
         hideSecondaryNav={isChipotleBuildPage && selectedEntree === null}
       />
 
@@ -2581,11 +2577,10 @@ export default function RestaurantView({
                 sort={sort}
                 addons={addons}
                 ingredients={ingredients}
-                commonChanges={commonChanges}
                 customizationRules={customizationRules}
                 groupByCategory={effectiveViewMode !== "ranking"}
                 categoryMode={effectiveViewMode === "ranking" ? "menu" : effectiveViewMode}
-                isBuildYourOwn={isBuildYourOwn}
+                hasBuildYourOwn={hasBuildYourOwn}
                 selectedIngredientIds={selectedIngredientIdsForMenu}
                 lockedIngredientIds={lockedIngredientIds}
                 unavailableIngredientIds={unavailableIngredientIds}

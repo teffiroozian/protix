@@ -11,7 +11,6 @@ import DesktopNav from "@/components/DesktopNav";
 import { useCart } from "@/stores/cartStore";
 import {
   addonsLookupByRestaurant,
-  commonChangesLookupByRestaurant,
   customizationRulesLookupByRestaurant,
   ingredientLookupByRestaurant,
   menuLookupByRestaurant,
@@ -180,7 +179,6 @@ export default function CartPage() {
                   ingredientItems={ingredientItemsForRestaurant}
                   menuItems={menuLookupByRestaurant[cartItem.restaurantId]}
                   customizationRules={customizationRulesLookupByRestaurant[cartItem.restaurantId]}
-                  commonChanges={commonChangesLookupByRestaurant[cartItem.restaurantId]}
                   mode="cart"
                   cartQuantity={cartItem.quantity}
                   cartItemId={cartItem.id}

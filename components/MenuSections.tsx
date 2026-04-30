@@ -1,6 +1,5 @@
 "use client";
 
-import type { CommonChange, IngredientItem, MenuItem, RestaurantAddons, RestaurantCustomizationRules } from "@/types/menu";
 import type { SortOption } from "@/lib/menuSections/sortOptions";
 import MenuItemCard from "./MenuItemCard";
 import { toItemSlug } from "@/lib/restaurants";
@@ -70,11 +69,10 @@ export default function MenuSections({
   sort,
   addons,
   ingredients,
-  commonChanges,
   customizationRules,
   groupByCategory = true,
   categoryMode = "menu",
-  isBuildYourOwn = false,
+  hasBuildYourOwn = false,
   selectedIngredientIds,
   onIngredientSelectionChange,
   lockedIngredientIds,
@@ -95,11 +93,10 @@ export default function MenuSections({
   sort: SortOption;
   addons?: RestaurantAddons;
   ingredients?: IngredientItem[];
-  commonChanges?: CommonChange[];
   customizationRules?: RestaurantCustomizationRules;
   groupByCategory?: boolean;
   categoryMode?: CategoryMode;
-  isBuildYourOwn?: boolean;
+  hasBuildYourOwn?: boolean;
   selectedIngredientIds?: Set<string>;
   onIngredientSelectionChange?: (item: MenuItem, selected: boolean) => void;
   lockedIngredientIds?: Set<string>;
@@ -142,10 +139,9 @@ export default function MenuSections({
               ingredientItems={ingredients}
               menuItems={items}
               customizationRules={customizationRules}
-              commonChanges={commonChanges}
               itemHref={`/restaurant/${restaurantId}/items/${toItemSlug(item)}`}
               displayMode={
-                categoryMode === "ingredients" && isBuildYourOwn
+                categoryMode === "ingredients" && hasBuildYourOwn
                   ? "ingredient-compact"
                   : "default"
               }
@@ -237,10 +233,9 @@ export default function MenuSections({
                 ingredientItems={ingredients}
                 menuItems={items}
                 customizationRules={customizationRules}
-                commonChanges={commonChanges}
                 itemHref={`/restaurant/${restaurantId}/items/${toItemSlug(item)}`}
                 displayMode={
-                  categoryMode === "ingredients" && isBuildYourOwn
+                  categoryMode === "ingredients" && hasBuildYourOwn
                     ? "ingredient-compact"
                     : "default"
                 }

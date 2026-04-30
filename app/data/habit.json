@@ -1,70 +1,71 @@
 {
-    "id": "habit",
-    "items": [
-        {
-            "name": "Double Char w Cheese",
-            "calories": 870,
-            "protein": 53,
-            "carbs": 60,
-            "fat": 53,
-            "categories": [
-                "Burger"
-            ],
-            "defaultOrder": 1,
-            "id": "habit_double_char_w_cheese",
-            "image": ""
-        },
-        {
-            "name": "Santa Barbara Cobb",
-            "calories": 820,
-            "protein": 50,
-            "carbs": 18,
-            "fat": 62,
-            "categories": [
-                "Salad"
-            ],
-            "defaultOrder": 2,
-            "id": "habit_santa_barbara_cobb",
-            "image": ""
-        },
-        {
-            "name": "Santa Barbara Char",
-            "calories": 1210,
-            "protein": 48,
-            "carbs": 48,
-            "fat": 93,
-            "categories": [
-                "Burger"
-            ],
-            "defaultOrder": 3,
-            "id": "habit_santa_barbara_char",
-            "image": ""
-        },
-        {
-            "name": "Chicken Club Sandwich",
-            "calories": 880,
-            "protein": 47,
-            "carbs": 43,
-            "fat": 59,
-            "categories": [
-                "Sandwich"
-            ],
-            "defaultOrder": 4,
-            "id": "habit_chicken_club_sandwich",
-            "image": ""
-        },
-        {
-            "name": "Grilled Chicken Sandwich",
-            "calories": 910,
-            "protein": 45,
-            "carbs": 59,
-            "fat": 57,
-            "categories": [
-                "Sandwich"
-            ],
-            "defaultOrder": 5,
-            "id": "habit_grilled_chicken_sandwich",
-            "image": ""
-        }
-    ]
+  "id": "habit",
+  "items": [
+    {
+      "name": "Double Char w Cheese",
+      "calories": 870,
+      "protein": 53,
+      "carbs": 60,
+      "fat": 53,
+      "categories": [
+        "Burger"
+      ],
+      "defaultOrder": 1,
+      "id": "habit_double_char_w_cheese",
+      "image": ""
+    },
+    {
+      "name": "Santa Barbara Cobb",
+      "calories": 820,
+      "protein": 50,
+      "carbs": 18,
+      "fat": 62,
+      "categories": [
+        "Salad"
+      ],
+      "defaultOrder": 2,
+      "id": "habit_santa_barbara_cobb",
+      "image": ""
+    },
+    {
+      "name": "Santa Barbara Char",
+      "calories": 1210,
+      "protein": 48,
+      "carbs": 48,
+      "fat": 93,
+      "categories": [
+        "Burger"
+      ],
+      "defaultOrder": 3,
+      "id": "habit_santa_barbara_char",
+      "image": ""
+    },
+    {
+      "name": "Chicken Club Sandwich",
+      "calories": 880,
+      "protein": 47,
+      "carbs": 43,
+      "fat": 59,
+      "categories": [
+        "Sandwich"
+      ],
+      "defaultOrder": 4,
+      "id": "habit_chicken_club_sandwich",
+      "image": ""
+    },
+    {
+      "name": "Grilled Chicken Sandwich",
+      "calories": 910,
+      "protein": 45,
+      "carbs": 59,
+      "fat": 57,
+      "categories": [
+        "Sandwich"
+      ],
+      "defaultOrder": 5,
+      "id": "habit_grilled_chicken_sandwich",
+      "image": ""
+    }
+  ],
+  "name": "Habit"
 }
