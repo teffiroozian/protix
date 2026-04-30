@@ -1170,7 +1170,7 @@ export default function ItemRouteModal({
                     sort={SORT_OPTION_VALUES.DEFAULT_ORDER}
                     groupByCategory={false}
                     categoryMode="ingredients"
-                    isBuildYourOwn
+                    hasBuildYourOwn
                     selectedIngredientIds={new Set(Object.keys(selectedChipotleIngredientItems))}
                     lockedIngredientIds={chipotleLockedIngredientIds}
                     onIngredientSelectionChange={(nextItem, selected) =>
@@ -1251,7 +1251,7 @@ export default function ItemRouteModal({
                   sort={SORT_OPTION_VALUES.DEFAULT_ORDER}
                   groupByCategory
                   categoryMode="ingredients"
-                  isBuildYourOwn
+                  hasBuildYourOwn
                   selectedIngredientIds={new Set(Object.keys(selectedChipotleIngredientItems))}
                   lockedIngredientIds={chipotleLockedIngredientIds}
                   onIngredientSelectionChange={(nextItem, selected) =>

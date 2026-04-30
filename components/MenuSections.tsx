@@ -74,7 +74,7 @@ export default function MenuSections({
   customizationRules,
   groupByCategory = true,
   categoryMode = "menu",
-  isBuildYourOwn = false,
+  hasBuildYourOwn = false,
   selectedIngredientIds,
   onIngredientSelectionChange,
   lockedIngredientIds,
@@ -99,7 +99,7 @@ export default function MenuSections({
   customizationRules?: RestaurantCustomizationRules;
   groupByCategory?: boolean;
   categoryMode?: CategoryMode;
-  isBuildYourOwn?: boolean;
+  hasBuildYourOwn?: boolean;
   selectedIngredientIds?: Set<string>;
   onIngredientSelectionChange?: (item: MenuItem, selected: boolean) => void;
   lockedIngredientIds?: Set<string>;
@@ -145,7 +145,7 @@ export default function MenuSections({
               commonChanges={commonChanges}
               itemHref={`/restaurant/${restaurantId}/items/${toItemSlug(item)}`}
               displayMode={
-                categoryMode === "ingredients" && isBuildYourOwn
+                categoryMode === "ingredients" && hasBuildYourOwn
                   ? "ingredient-compact"
                   : "default"
               }
@@ -240,7 +240,7 @@ export default function MenuSections({
                 commonChanges={commonChanges}
                 itemHref={`/restaurant/${restaurantId}/items/${toItemSlug(item)}`}
                 displayMode={
-                  categoryMode === "ingredients" && isBuildYourOwn
+                  categoryMode === "ingredients" && hasBuildYourOwn
                     ? "ingredient-compact"
                     : "default"
                 }
