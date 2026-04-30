@@ -1,6 +1,6 @@
 import type { ChipotleKidsMealId, ChipotleTacoShell } from "@/lib/chipotleBuild/types";
 
-export const PORTION_TYPES = [
+export const SERVING_TYPES = [
   "single",
   "combo",
   "shareable",
@@ -13,7 +13,7 @@ export const PORTION_TYPES = [
   "entree",
 ] as const;
 
-export type PortionType = (typeof PORTION_TYPES)[number];
+export type ServingType = (typeof SERVING_TYPES)[number];
 
 export type Nutrition = {
   calories: number;
@@ -35,7 +35,7 @@ export type ItemVariant = {
   label: string;       // e.g. "8 piece"
   nutrition: Nutrition;
   image?: string;
-  portionType?: PortionType;   // Optional override: variant can differ from base item
+  servingType?: ServingType;   // Optional override: variant can differ from base item
   categories?: string[];
   isDefault?: boolean;
 };
@@ -107,7 +107,7 @@ export type MenuItem = {
   image?: string;
   categories: string[];
   entreeGroup?: string;
-  portionType?: PortionType;
+  servingType?: ServingType;
   restaurant?: string;
   variants?: ItemVariant[];
   defaultVariantId?: string;

@@ -107,7 +107,7 @@ export function buildAddonMenuItems(restaurantId: string, addons?: RestaurantAdd
           sugars: option.sugars,
         },
         categories: [categoryByAddonRef[addonRef]],
-        portionType: "addon",
+        servingType: "addon",
         image: option.image,
       }))
     );

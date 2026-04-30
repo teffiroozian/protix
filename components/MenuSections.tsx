@@ -27,8 +27,8 @@ function splitItemsByVariantForRanking(items: MenuItem[]) {
       return [item];
     }
 
-    const shareableVariants = variants.filter((variant) => variant.portionType === "shareable");
-    const splitVariants = variants.filter((variant) => variant.portionType !== "shareable");
+    const shareableVariants = variants.filter((variant) => variant.servingType === "shareable");
+    const splitVariants = variants.filter((variant) => variant.servingType !== "shareable");
     if (splitVariants.length === 0 && shareableVariants.length === 0) {
       return [item];
     }

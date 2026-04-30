@@ -83,7 +83,7 @@ function normalizeMenuItem(item: FlatLegacyMenuItem): MenuItem {
     ...rest,
     name: item.name,
     nutrition,
-    portionType: item.portionType,
+    servingType: item.servingType,
     categories: item.categories ?? ["Other"],
   };
 }
