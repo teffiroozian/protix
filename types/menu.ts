@@ -74,11 +74,6 @@ export type CommonChange = {
   delta: MacroDelta;
 };
 
-export type IngredientModifier = {
-  id: string;
-  label: string;
-  multiplier: number;
-};
 
 export type IngredientTabsOverride = {
   ingredientTabs?: string[];
@@ -155,7 +150,6 @@ export type RestaurantMenu = {
   ingredients?: IngredientItem[];
   addons?: RestaurantAddons;
   commonChanges?: CommonChange[];
-  ingredientModifiers?: IngredientModifier[];
   customizationRules?: RestaurantCustomizationRules;
   builderConfig?: RestaurantBuilderConfig;
 };
