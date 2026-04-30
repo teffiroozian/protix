@@ -7,8 +7,7 @@
             "protein": 36,
             "defaultOrder": 1,
             "id": "panda_grilled_teriyaki_chicken",
-            "image": "",
-            "restaurant": "panda"
+            "image": ""
         },
         {
             "name": "Broccoli Beef",
@@ -16,8 +15,7 @@
             "protein": 9,
             "defaultOrder": 2,
             "id": "panda_broccoli_beef",
-            "image": "",
-            "restaurant": "panda"
+            "image": ""
         },
         {
             "name": "Black Pepper Angus Steak",
@@ -25,8 +23,7 @@
             "protein": 19,
             "defaultOrder": 3,
             "id": "panda_black_pepper_angus_steak",
-            "image": "",
-            "restaurant": "panda"
+            "image": ""
         }
     ]
 }

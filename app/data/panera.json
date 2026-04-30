@@ -12,8 +12,7 @@
             ],
             "defaultOrder": 1,
             "id": "panera_french_ciabatta_dipper",
-            "image": "",
-            "restaurant": "panera"
+            "image": ""
         },
         {
             "name": "Chicken Pesto Ciabatta Dipper",
@@ -26,8 +25,7 @@
             ],
             "defaultOrder": 2,
             "id": "panera_chicken_pesto_ciabatta_dipper",
-            "image": "",
-            "restaurant": "panera"
+            "image": ""
         },
         {
             "name": "Toasted Italiano",
@@ -40,8 +38,7 @@
             ],
             "defaultOrder": 3,
             "id": "panera_toasted_italiano",
-            "image": "",
-            "restaurant": "panera"
+            "image": ""
         },
         {
             "name": "Spicy Fiesta Chicken",
@@ -54,8 +51,7 @@
             ],
             "defaultOrder": 4,
             "id": "panera_spicy_fiesta_chicken",
-            "image": "",
-            "restaurant": "panera"
+            "image": ""
         },
         {
             "name": "Chicken Bacon Rancher",
@@ -68,8 +64,7 @@
             ],
             "defaultOrder": 5,
             "id": "panera_chicken_bacon_rancher",
-            "image": "",
-            "restaurant": "panera"
+            "image": ""
         }
     ]
 }

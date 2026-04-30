@@ -12,8 +12,7 @@
             ],
             "defaultOrder": 1,
             "id": "starbucks_iced_sf_vanilla_protein_matcha",
-            "image": "",
-            "restaurant": "starbucks"
+            "image": ""
         },
         {
             "name": "Iced Protein Matcha",
@@ -26,8 +25,7 @@
             ],
             "defaultOrder": 2,
             "id": "starbucks_iced_protein_matcha",
-            "image": "",
-            "restaurant": "starbucks"
+            "image": ""
         },
         {
             "name": "Iced SF Vanilla Protein Latte",
@@ -40,8 +38,7 @@
             ],
             "defaultOrder": 3,
             "id": "starbucks_iced_sf_vanilla_protein_latte",
-            "image": "",
-            "restaurant": "starbucks"
+            "image": ""
         },
         {
             "name": "Iced Vanilla Protein Latte",
@@ -54,8 +51,7 @@
             ],
             "defaultOrder": 4,
             "id": "starbucks_iced_vanilla_protein_latte",
-            "image": "",
-            "restaurant": "starbucks"
+            "image": ""
         },
         {
             "name": "SF Protein Matcha",
@@ -68,8 +64,7 @@
             ],
             "defaultOrder": 5,
             "id": "starbucks_sf_protein_matcha",
-            "image": "",
-            "restaurant": "starbucks"
+            "image": ""
         }
     ]
 }

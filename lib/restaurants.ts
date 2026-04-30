@@ -110,7 +110,6 @@ export function buildAddonMenuItems(restaurantId: string, addons?: RestaurantAdd
         categories: [categoryByAddonRef[addonRef]],
         servingType: "addon",
         image: option.image ?? "",
-        restaurant: restaurantId,
       }))
     );
 }

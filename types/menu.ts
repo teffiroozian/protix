@@ -108,7 +108,6 @@ export type MenuItem = {
   categories: string[];
   entreeGroup?: string;
   servingType?: ServingType;
-  restaurant: string;
   variants?: ItemVariant[];
   defaultVariantId?: string;
   addonRefs?: AddonRef[];

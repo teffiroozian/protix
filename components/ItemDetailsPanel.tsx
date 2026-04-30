@@ -1359,16 +1359,6 @@ export default function ItemDetailsPanel({
           </div>
         </div>
 
-        {item.restaurant ? (
-          <>
-            <div className="mt-3 h-px bg-[rgba(0,0,0,0.2)]" />
-            <div className="mt-4 flex items-center justify-between gap-3">
-              <div className="text-4 font-semibold text-[rgba(0,0,0,0.8)]">Restaurant</div>
-              <div className="text-4 font-semibold">{item.restaurant}</div>
-            </div>
-          </>
-        ) : null}
-
       </section>
       </div>
       ) : null}

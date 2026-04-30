@@ -12,8 +12,7 @@
             ],
             "defaultOrder": 1,
             "id": "mcdonalds_double_quarter_pounder_w_cheese",
-            "image": "",
-            "restaurant": "mcdonalds"
+            "image": ""
         },
         {
             "name": "Bacon Quarter Pounder w Cheese",
@@ -26,8 +25,7 @@
             ],
             "defaultOrder": 2,
             "id": "mcdonalds_bacon_quarter_pounder_w_cheese",
-            "image": "",
-            "restaurant": "mcdonalds"
+            "image": ""
         },
         {
             "name": "Big Breakfast w Hotcakes",
@@ -40,8 +38,7 @@
             ],
             "defaultOrder": 3,
             "id": "mcdonalds_big_breakfast_w_hotcakes",
-            "image": "",
-            "restaurant": "mcdonalds"
+            "image": ""
         },
         {
             "name": "Steak Egg & Cheese Bagel",
@@ -54,8 +51,7 @@
             ],
             "defaultOrder": 4,
             "id": "mcdonalds_steak_egg_cheese_bagel",
-            "image": "",
-            "restaurant": "mcdonalds"
+            "image": ""
         },
         {
             "name": "Triple Cheeseburger",
@@ -68,8 +64,7 @@
             ],
             "defaultOrder": 5,
             "id": "mcdonalds_triple_cheeseburger",
-            "image": "",
-            "restaurant": "mcdonalds"
+            "image": ""
         }
     ]
 }

@@ -12,8 +12,7 @@
             ],
             "defaultOrder": 1,
             "id": "habit_double_char_w_cheese",
-            "image": "",
-            "restaurant": "habit"
+            "image": ""
         },
         {
             "name": "Santa Barbara Cobb",
@@ -26,8 +25,7 @@
             ],
             "defaultOrder": 2,
             "id": "habit_santa_barbara_cobb",
-            "image": "",
-            "restaurant": "habit"
+            "image": ""
         },
         {
             "name": "Santa Barbara Char",
@@ -40,8 +38,7 @@
             ],
             "defaultOrder": 3,
             "id": "habit_santa_barbara_char",
-            "image": "",
-            "restaurant": "habit"
+            "image": ""
         },
         {
             "name": "Chicken Club Sandwich",
@@ -54,8 +51,7 @@
             ],
             "defaultOrder": 4,
             "id": "habit_chicken_club_sandwich",
-            "image": "",
-            "restaurant": "habit"
+            "image": ""
         },
         {
             "name": "Grilled Chicken Sandwich",
@@ -68,8 +64,7 @@
             ],
             "defaultOrder": 5,
             "id": "habit_grilled_chicken_sandwich",
-            "image": "",
-            "restaurant": "habit"
+            "image": ""
         }
     ]
 }

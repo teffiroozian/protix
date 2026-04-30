@@ -197,7 +197,6 @@ export default function ItemRouteModal({
           defaultOrder: ingredient.defaultOrder ?? 0,
           nutrition: ingredient.nutrition,
           categories: ingredient.categories ?? (ingredient.category ? [ingredient.category] : []),
-          restaurant: item.restaurant,
           variants: ingredient.variants,
           defaultVariantId: ingredient.defaultVariantId,
         })),

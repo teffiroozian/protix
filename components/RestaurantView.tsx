@@ -439,8 +439,7 @@ export default function RestaurantView({
           categories: [categoryByAddonRef[addonRef]],
           servingType: "addon" as const,
           image: option.image ?? "",
-          restaurant: restaurantId,
-        }))
+          }))
       );
   }, [addons, restaurantId]);
 
@@ -578,8 +577,7 @@ export default function RestaurantView({
           image: ingredient.image ?? "",
           categories: [displayCategory],
           servingType: "addon",
-          restaurant: restaurantId,
-        };
+          };
         return menuItem;
       });
 
@@ -1390,8 +1388,7 @@ export default function RestaurantView({
               image: fallbackIngredient.image ?? "",
               categories: ["Included Ingredient"],
               servingType: "addon" as const,
-              restaurant: restaurantId,
-            } satisfies MenuItem;
+                  } satisfies MenuItem;
           })();
         if (!includedIngredientItem || next[includedIngredientId]) {
           return;
@@ -1456,8 +1453,7 @@ export default function RestaurantView({
               image: fallbackIngredient.image ?? "",
               categories: ["Included Ingredient"],
               servingType: "addon" as const,
-              restaurant: restaurantId,
-            } satisfies MenuItem;
+                  } satisfies MenuItem;
           })();
         if (!includedIngredientItem) {
           return;

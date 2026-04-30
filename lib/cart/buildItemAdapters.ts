@@ -20,7 +20,6 @@ function buildCartFallbackMenuItem(cartItem: CartItem): MenuItem {
     defaultOrder: 0,
     categories: ["Cart"],
     servingType: "single",
-    restaurant: cartItem.restaurantId,
     nutrition: {
       calories: cartItem.macrosPerItem.calories,
       protein: cartItem.macrosPerItem.protein,

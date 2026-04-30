@@ -12,8 +12,7 @@
             ],
             "defaultOrder": 1,
             "id": "subway_5_meat_italian",
-            "image": "",
-            "restaurant": "subway"
+            "image": ""
         },
         {
             "name": "Chicken & Bacon Ranch",
@@ -26,8 +25,7 @@
             ],
             "defaultOrder": 2,
             "id": "subway_chicken_bacon_ranch",
-            "image": "",
-            "restaurant": "subway"
+            "image": ""
         },
         {
             "name": "Meatball Pepperoni",
@@ -40,8 +38,7 @@
             ],
             "defaultOrder": 3,
             "id": "subway_meatball_pepperoni",
-            "image": "",
-            "restaurant": "subway"
+            "image": ""
         },
         {
             "name": "Grilled Chicken",
@@ -54,8 +51,7 @@
             ],
             "defaultOrder": 4,
             "id": "subway_grilled_chicken",
-            "image": "",
-            "restaurant": "subway"
+            "image": ""
         },
         {
             "name": "Honey Mustard BBQ Chicken",
@@ -68,8 +64,7 @@
             ],
             "defaultOrder": 5,
             "id": "subway_honey_mustard_bbq_chicken",
-            "image": "",
-            "restaurant": "subway"
+            "image": ""
         }
     ]
 }
