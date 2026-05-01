@@ -14,7 +14,6 @@ import BuildSummaryDrawer from "@/components/restaurant-view/BuildSummaryDrawer"
 import type {
   AddonOption,
   AddonRef,
-  CommonChange,
   MacroDelta,
   MenuItem,
   Nutrition,
@@ -82,7 +81,6 @@ export default function ItemRouteModal({
   restaurantPath,
   item,
   addons,
-  commonChanges,
   ingredients,
   menuItems,
   customizationRules,
@@ -91,7 +89,6 @@ export default function ItemRouteModal({
   restaurantPath: string;
   item: MenuItem;
   addons?: RestaurantAddons;
-  commonChanges?: CommonChange[];
   ingredients?: IngredientItem[];
   menuItems?: MenuItem[];
   customizationRules?: RestaurantCustomizationRules;
@@ -162,7 +159,7 @@ export default function ItemRouteModal({
     getSelectedSauceCountsFromLabel(item, addons, editingCartItem?.optionsLabel)
   );
   const [selectedCommonChangeIds, setSelectedCommonChangeIds] = useState<string[]>(() =>
-    getSelectedCommonChangeIdsFromCustomizations(commonChanges, editingCartItem?.customizations)
+    getSelectedCommonChangeIdsFromCustomizations(undefined, editingCartItem?.customizations)
   );
   const selectedVariant = variants?.find((variant) => variant.id === selectedVariantId);
   const selectedItemImage = selectedVariant?.image ?? item.image;
@@ -312,8 +309,8 @@ export default function ItemRouteModal({
   }, [item.id]);
 
   const applicableCommonChanges = useMemo(
-    () => getApplicableCommonChanges(item, commonChanges),
-    [item, commonChanges]
+    () => getApplicableCommonChanges(item),
+    [item]
   );
 
   const selectedSauceOptions = useMemo(() => {
@@ -1414,7 +1411,6 @@ export default function ItemRouteModal({
                 return { ...prev, [addon.name]: 1 };
               });
             }}
-            commonChanges={applicableCommonChanges}
             selectedCommonChangeIds={selectedCommonChangeIds}
             onToggleCommonChange={(changeId) =>
               setSelectedCommonChangeIds((prev) =>

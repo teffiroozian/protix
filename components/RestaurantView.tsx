@@ -42,7 +42,6 @@ import {
 import { useRestaurantSearch } from "@/components/RestaurantSearchContext";
 import type {
   AddonRef,
-  CommonChange,
   IngredientItem,
   MenuItem,
   RestaurantAddons,
@@ -182,7 +181,6 @@ export default function RestaurantView({
   items,
   ingredients = [],
   addons,
-  commonChanges,
   customizationRules,
   builderConfig,
 }: {
@@ -193,7 +191,6 @@ export default function RestaurantView({
   items: MenuItem[];
   ingredients?: IngredientItem[];
   addons?: RestaurantAddons;
-  commonChanges?: CommonChange[];
   customizationRules?: RestaurantCustomizationRules;
   builderConfig?: RestaurantBuilderConfig;
 }) {
@@ -2153,7 +2150,6 @@ export default function RestaurantView({
                   sort={sort}
                   addons={addons}
                   ingredients={ingredients}
-                  commonChanges={commonChanges}
                   customizationRules={customizationRules}
                   groupByCategory
                   categoryMode="ingredients"
@@ -2581,7 +2577,6 @@ export default function RestaurantView({
                 sort={sort}
                 addons={addons}
                 ingredients={ingredients}
-                commonChanges={commonChanges}
                 customizationRules={customizationRules}
                 groupByCategory={effectiveViewMode !== "ranking"}
                 categoryMode={effectiveViewMode === "ranking" ? "menu" : effectiveViewMode}
