@@ -62,6 +62,7 @@ import type { CartItem } from "@/stores/cartStore";
 import { SORT_OPTION_VALUES } from "@/lib/menuSections/sortOptions";
 
 const emptyAddon: AddonOption = {
+  id: "none",
   name: "None",
   calories: 0,
   protein: 0,

@@ -148,6 +148,7 @@ function QuickVariantDropdown({
 
 
 const emptyAddon: AddonOption = {
+  id: "none",
   name: "None",
   calories: 0,
   protein: 0,
