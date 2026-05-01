@@ -25,14 +25,14 @@ import { useCart } from "@/stores/cartStore";
 import { parseComboCustomization } from "@/lib/menuItemCard/comboCustomizationParser";
 import {
   getSelectedAddonsFromLabel,
-  getSelectedCommonChangeIdsFromCustomizations,
+  
   getSelectedSauceCountsFromLabel,
 } from "@/lib/menuItemCard/cartLabelUtils";
 import { getSelectedIngredientCountsFromCustomizations } from "@/lib/menuItemCard/ingredientCountCustomization";
 import {
   addonFat,
-  deltaFat,
-  getApplicableCommonChanges,
+  
+  
   getDefaultIngredientCounts,
   getDefaultVariantId,
   isChickfilaBreakfastItem,
@@ -158,7 +158,7 @@ export default function ItemRouteModal({
   const [selectedSauceCounts, setSelectedSauceCounts] = useState<Record<string, number>>(() =>
     getSelectedSauceCountsFromLabel(item, addons, editingCartItem?.optionsLabel)
   );
-  const [selectedCommonChangeIds, setSelectedCommonChangeIds] = useState<string[]>(() =>
+  const [, ] = useState<string[]>(() =>
     getSelectedCommonChangeIdsFromCustomizations(undefined, editingCartItem?.customizations)
   );
   const selectedVariant = variants?.find((variant) => variant.id === selectedVariantId);
@@ -373,11 +373,11 @@ export default function ItemRouteModal({
     }, {});
   }, [resolvedIngredients, selectedIngredientCounts]);
 
-  const commonChangeTotals = useMemo(
+  const  = useMemo(
     () =>
       applicableCommonChanges.reduce<MacroDelta>(
         (sum, change) => {
-          if (!selectedCommonChangeIds.includes(change.id)) return sum;
+          if (!.includes(change.id)) return sum;
           return {
             calories: sum.calories + change.delta.calories,
             protein: sum.protein + change.delta.protein,
@@ -387,7 +387,7 @@ export default function ItemRouteModal({
         },
         { calories: 0, protein: 0, carbs: 0, totalFat: 0 }
       ),
-    [applicableCommonChanges, selectedCommonChangeIds]
+    [applicableCommonChanges, ]
   );
 
   const ingredientCountTotals = useMemo(
@@ -426,9 +426,9 @@ export default function ItemRouteModal({
     return segments.length > 0 ? segments.join(" + ") : undefined;
   }, [selectedAddons, selectedSauceCounts]);
 
-  const selectedCommonChanges = useMemo(
-    () => applicableCommonChanges.filter((change) => selectedCommonChangeIds.includes(change.id)).map((change) => change.label),
-    [applicableCommonChanges, selectedCommonChangeIds]
+  const  = useMemo(
+    () => applicableCommonChanges.filter((change) => .includes(change.id)).map((change) => change.label),
+    [applicableCommonChanges, ]
   );
   const selectedIngredientCustomizations = useMemo(
     () =>
@@ -914,12 +914,12 @@ export default function ItemRouteModal({
 
   const customizationTotals = useMemo(
     () => ({
-      calories: addonTotals.calories + commonChangeTotals.calories + ingredientCountTotals.calories + activeComboNutritionTotals.calories,
-      protein: addonTotals.protein + commonChangeTotals.protein + ingredientCountTotals.protein + activeComboNutritionTotals.protein,
-      carbs: addonTotals.carbs + commonChangeTotals.carbs + ingredientCountTotals.carbs + activeComboNutritionTotals.carbs,
-      totalFat: addonTotals.totalFat + commonChangeTotals.totalFat + ingredientCountTotals.totalFat + activeComboNutritionTotals.totalFat,
+      calories: addonTotals.calories + .calories + ingredientCountTotals.calories + activeComboNutritionTotals.calories,
+      protein: addonTotals.protein + .protein + ingredientCountTotals.protein + activeComboNutritionTotals.protein,
+      carbs: addonTotals.carbs + .carbs + ingredientCountTotals.carbs + activeComboNutritionTotals.carbs,
+      totalFat: addonTotals.totalFat + .totalFat + ingredientCountTotals.totalFat + activeComboNutritionTotals.totalFat,
     }),
-    [activeComboNutritionTotals, addonTotals, commonChangeTotals, ingredientCountTotals]
+    [activeComboNutritionTotals, addonTotals, , ingredientCountTotals]
   );
 
   const hasActiveCustomization = useMemo(
@@ -1029,7 +1029,7 @@ export default function ItemRouteModal({
               : undefined,
           ].filter((entry): entry is string => Boolean(entry))
         : [];
-    const customizations = [...selectedCommonChanges, ...selectedIngredientCustomizations, ...comboCustomizations];
+    const customizations = [..., ...selectedIngredientCustomizations, ...comboCustomizations];
 
     const nextCartItemPayload = {
       name: item.name,
@@ -1411,9 +1411,9 @@ export default function ItemRouteModal({
                 return { ...prev, [addon.name]: 1 };
               });
             }}
-            selectedCommonChangeIds={selectedCommonChangeIds}
-            onToggleCommonChange={(changeId) =>
-              setSelectedCommonChangeIds((prev) =>
+            ={}
+            ={(changeId) =>
+              ((prev) =>
                 prev.includes(changeId) ? prev.filter((id) => id !== changeId) : [...prev, changeId]
               )
             }

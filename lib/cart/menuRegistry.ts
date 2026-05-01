@@ -10,7 +10,6 @@ import subwayMenu from "@/app/data/subway.json";
 import { normalizeAddons } from "@/lib/addons";
 import { resolveMenuDataset } from "@/lib/menuResolver";
 import type {
-  CommonChange,
   IngredientItem,
   MenuItem,
   RestaurantAddons,
@@ -56,9 +55,6 @@ export const ingredientLookupByRestaurant: Partial<Record<string, IngredientItem
   chipotle: chipotleData.ingredients,
 };
 
-export const commonChangesLookupByRestaurant: Partial<Record<string, CommonChange[]>> = {
-  chickfila: chickfilaData.commonChanges,
-};
 
 export const customizationRulesLookupByRestaurant: Partial<Record<string, RestaurantCustomizationRules>> = {
   chickfila: chickfilaData.customizationRules,

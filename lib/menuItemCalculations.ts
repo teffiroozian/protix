@@ -1,7 +1,6 @@
 import { Drumstick, EggFried, Salad, Sandwich, Shell } from "lucide-react";
 import type {
   AddonOption,
-  CommonChange,
   MenuItem,
 } from "@/types/menu";
 import type { ResolvedPanelIngredient } from "@/components/ItemDetailsPanel";
@@ -97,9 +96,6 @@ export function menuItemFatWithFallback(item?: MenuItem) {
   return menuItemFat(item);
 }
 
-export function deltaFat(change: CommonChange) {
-  return change.delta.totalFat ?? 0;
-}
 
 export function getDefaultVariantId(item?: MenuItem) {
   if (!item) return undefined;
@@ -112,16 +108,6 @@ export function getDefaultVariantId(item?: MenuItem) {
   return flaggedDefault?.id ?? variants[0]?.id;
 }
 
-export function getApplicableCommonChanges(item: MenuItem, commonChanges?: CommonChange[]) {
-  if (!commonChanges || commonChanges.length === 0) return [];
-  const itemCategories = new Set((item.categories ?? []).map((category) => normalizeCategory(category)));
-
-  return commonChanges.filter((change) => {
-    const categories = change.appliesTo?.categories;
-    if (!categories || categories.length === 0) return false;
-    return categories.some((category) => itemCategories.has(normalizeCategory(category)));
-  });
-}
 
 export function getDefaultIngredientCounts(resolvedIngredients: ResolvedPanelIngredient[]) {
   return resolvedIngredients.reduce<Record<string, number>>((acc, ingredient) => {

@@ -1,18 +1,8 @@
-import type { AddonOption, AddonRef, CommonChange, MenuItem, RestaurantAddons } from "@/types/menu";
+import type { AddonOption, AddonRef, MenuItem, RestaurantAddons } from "@/types/menu";
 import { parseOptionLabelCounts, type OptionLabelCountMap } from "@/lib/cartOptionLabels";
 
 const sauceRef: AddonRef = "sauces";
 
-export function formatCommonChangeForCart(label: string) {
-  const [firstSegment] = label.split("→");
-  const normalized = firstSegment.trim();
-
-  if (!normalized) {
-    return label;
-  }
-
-  return normalized.charAt(0).toUpperCase() + normalized.slice(1);
-}
 
 export function buildOptionLabelCounts(
   selectedAddons: Partial<Record<AddonRef, AddonOption>>,
@@ -68,21 +58,3 @@ export function getSelectedSauceCountsFromLabel(item: MenuItem, addons: Restaura
   }, {});
 }
 
-export function getSelectedCommonChangeIdsFromCustomizations(
-  commonChanges: CommonChange[] | undefined,
-  customizations: string[] | undefined
-) {
-  if (!commonChanges || commonChanges.length === 0 || !customizations || customizations.length === 0) {
-    return [];
-  }
-
-  const normalizedCustomizations = new Set(customizations.map((label) => label.replace(/^\+\s*/, "").trim().toLowerCase()));
-
-  return commonChanges
-    .filter((change) => {
-      const normalizedLabel = change.label.trim().toLowerCase();
-      const normalizedCartLabel = formatCommonChangeForCart(change.label).trim().toLowerCase();
-      return normalizedCustomizations.has(normalizedLabel) || normalizedCustomizations.has(normalizedCartLabel);
-    })
-    .map((change) => change.id);
-}
