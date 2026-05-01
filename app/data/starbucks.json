@@ -1,5 +1,6 @@
 {
     "id": "starbucks",
+    "name": "Starbucks",
     "items": [
         {
             "name": "Iced SF Vanilla Protein Matcha",

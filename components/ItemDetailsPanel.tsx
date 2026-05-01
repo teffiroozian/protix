@@ -278,7 +278,7 @@ export default function ItemDetailsPanel({
   const selectedAddonItems = (Object.entries(selectedAddons ?? {}) as Array<[AddonRef, AddonOption | undefined]>)
     .filter(([, addon]) => Boolean(addon && addon.name !== "None"))
     .map(([ref, addon]) => ({
-      id: `${ref}-${addon?.name}`,
+      id: `${ref}-${addon?.id ?? addon?.name}`,
       name: addon?.name ?? "",
       quantity: 1,
       image: addon?.image,
@@ -984,10 +984,10 @@ export default function ItemDetailsPanel({
                         const isSelected =
                           section.ref === "sauces"
                             ? sauceCount > 0
-                            : selectedAddons?.[section.ref]?.name === addon.name;
+                            : selectedAddons?.[section.ref]?.id === addon.id;
 
                         return (
-                        <li key={`${section.ref}-${addon.name}`} className="flex">
+                        <li key={`${section.ref}-${addon.id}`} className="flex">
                           <button
                             type="button"
                             className={`box-border flex h-full w-full cursor-pointer flex-row items-center gap-3 rounded-[10px] border border-[rgba(0,0,0,0.15)] bg-[#f9f9f9] px-3 py-2 ${isSelected ? "shadow-[inset_0_0_0_3px_#16a34a]" : ""}`}

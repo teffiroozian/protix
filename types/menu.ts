@@ -41,6 +41,7 @@ export type ItemVariant = {
 export type AddonRef = "sauces" | "dressings" | "condiments";
 
 export type AddonOption = {
+  id: string;
   name: string;
   calories: number;
   protein: number;
@@ -134,7 +135,7 @@ export type RestaurantBuilderConfig = {
 
 export type RestaurantMenu = {
   id: string;
-  name?: string;
+  name: string;
   hasBuildYourOwn?: boolean;
   items: MenuItem[];
   ingredients?: IngredientItem[];

@@ -62,6 +62,8 @@ function extractExtraNutrition(addon: RawAddonOption) {
 
 function normalizeAddonOption(addon: RawAddonOption): AddonOption {
   const nutrition = addon.nutrition ?? {};
+  const resolvedName = addon.name ?? addon.id ?? "Unnamed Add-on";
+  const resolvedId = addon.id ?? resolvedName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
   const totalFat = toNumber(addon.totalFat ?? nutrition.totalFat);
   const extraNutrition = {
@@ -70,7 +72,8 @@ function normalizeAddonOption(addon: RawAddonOption): AddonOption {
   };
 
   return {
-    name: addon.name ?? addon.id ?? "Unnamed Add-on",
+    id: resolvedId || "unnamed-addon",
+    name: resolvedName,
     calories: toNumber(addon.calories ?? nutrition.calories) ?? 0,
     protein: toNumber(addon.protein ?? nutrition.protein) ?? 0,
     carbs: toNumber(addon.carbs ?? nutrition.carbs) ?? 0,
