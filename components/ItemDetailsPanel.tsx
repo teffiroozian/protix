@@ -3,7 +3,6 @@ import Image from "next/image";
 import type {
   AddonOption,
   AddonRef,
-  CommonChange,
   IngredientItem,
   ItemVariant,
   MacroDelta,
@@ -12,7 +11,7 @@ import type {
   RestaurantAddons,
   RestaurantCustomizationRules,
 } from "@/types/menu";
-import { Check, ChevronDown, ChevronRight, Pencil, type LucideIcon } from "lucide-react";
+import { ChevronDown, ChevronRight, Pencil, type LucideIcon } from "lucide-react";
 import {
   INCLUDED_INGREDIENT_TAB,
   getIngredientTabDisplayLabel,
@@ -130,9 +129,6 @@ export default function ItemDetailsPanel({
   onIncrementSauce,
   onDecrementSauce,
   onToggleSauce,
-  commonChanges,
-  selectedCommonChangeIds,
-  onToggleCommonChange,
   customizationTotals,
   showCustomizationDeltas,
   displayMode = "full",
@@ -181,9 +177,6 @@ export default function ItemDetailsPanel({
   onIncrementSauce?: (addon: AddonOption) => void;
   onDecrementSauce?: (addon: AddonOption) => void;
   onToggleSauce?: (addon: AddonOption) => void;
-  commonChanges?: CommonChange[];
-  selectedCommonChangeIds?: string[];
-  onToggleCommonChange?: (id: string) => void;
   customizationTotals?: MacroDelta;
   showCustomizationDeltas?: boolean;
   displayMode?: "full" | "addonsOnly";
@@ -512,8 +505,7 @@ export default function ItemDetailsPanel({
   const hasBuildContent =
     shouldShowIngredientSection ||
     shouldShowComboSelections ||
-    availableAddonSections.length > 0 ||
-    (displayMode === "full" && (commonChanges?.length ?? 0) > 0);
+    availableAddonSections.length > 0;
   const shouldShowInfoSection = displayMode === "full";
 
   return (
@@ -1099,97 +1091,6 @@ export default function ItemDetailsPanel({
                 </div>
               );
             })}
-          </div>
-        </section>
-      ) : null}
-
-      {displayMode === "full" && commonChanges && commonChanges.length > 0 ? (
-        <section className="col-span-2 rounded-[18px] border border-[rgba(0,0,0,0.15)] bg-white px-[18px] py-[14px]">
-          <div className="grid gap-[14px]">
-            <div className="min-w-0">
-              {(() => {
-                const commonKey = "common-changes";
-                const isCommonOpen = sectionOpenState[commonKey] ?? true;
-                const selectedCommonChanges = commonChanges.filter((change) =>
-                  selectedCommonChangeIds?.includes(change.id)
-                );
-                const firstSelectedCommon = selectedCommonChanges[0] ?? null;
-                const totalCommonCalories = selectedCommonChanges.reduce(
-                  (sum, change) => sum + change.delta.calories,
-                  0
-                );
-                const commonSummaryDetail = formatSummaryDetail(
-                  firstSelectedCommon?.label ?? "None",
-                  firstSelectedCommon ? totalCommonCalories : 0
-                );
-
-                return (
-                  <>
-                    <div
-                      className="flex min-h-[52px] w-full cursor-pointer items-center justify-between gap-[10px] rounded-[10px] border-0 bg-transparent p-3 text-left"
-                      role="button"
-                      tabIndex={0}
-                      onClick={() =>
-                        setSectionOpenState((prev) => ({
-                          ...prev,
-                          [commonKey]: !(prev[commonKey] ?? true),
-                        }))
-                      }
-                      onKeyDown={(event) => {
-                        if (event.key === "Enter" || event.key === " ") {
-                          event.preventDefault();
-                          setSectionOpenState((prev) => ({
-                            ...prev,
-                            [commonKey]: !(prev[commonKey] ?? true),
-                          }));
-                        }
-                      }}
-                    >
-                      <h3 className="m-0 text-2xl font-bold">
-                        Common Changes
-                        {!isCommonOpen ? <span className="text-[18px] font-semibold text-[rgba(0,0,0,0.5)]"> {commonSummaryDetail}</span> : null}
-                      </h3>
-                      <span className="inline-flex h-7 w-7 cursor-inherit items-center justify-center bg-white">
-                        <ChevronDown
-                          size={24}
-                          className={`transition-transform ${isCommonOpen ? "rotate-180" : ""}`}
-                        />
-                      </span>
-                    </div>
-                    {isCommonOpen ? (
-                      <ul className="mt-4 grid list-none grid-cols-1 items-stretch gap-[10px] pl-0 sm:grid-cols-2">
-                        {commonChanges.map((change) => {
-                          const isActive = selectedCommonChangeIds?.includes(change.id) ?? false;
-                          const calorieDeltaLabel = `${change.delta.calories >= 0 ? "+" : ""}${change.delta.calories}cal`;
-                          const proteinDeltaLabel = `${change.delta.protein >= 0 ? "+" : ""}${change.delta.protein}g protein`;
-                          return (
-                            <li key={change.id} className="flex">
-                              <button
-                                type="button"
-                                className={`box-border flex h-full w-full cursor-pointer flex-row items-center gap-3 rounded-[10px] border border-[rgba(0,0,0,0.15)] bg-[#f9f9f9] px-3 py-2 ${isActive ? "shadow-[inset_0_0_0_3px_#16a34a]" : ""}`}
-                                onClick={() => onToggleCommonChange?.(change.id)}
-                              >
-                                <div className={`grid h-[72px] w-[72px] min-w-[72px] place-items-center rounded-lg bg-cover bg-center text-[32px] font-bold text-black `}>↺</div>
-                                <div className="flex min-w-0 flex-col items-start justify-center gap-[6px]">
-                                  <div className="line-clamp-2 break-words text-left text-base font-bold leading-[1.2]">{change.label}</div>
-                                  <div className="text-sm font-bold text-[rgba(0,0,0,0.5)]">{`${calorieDeltaLabel} • ${proteinDeltaLabel}`}</div>
-                                </div>
-                                <span
-                                  className={`ml-auto inline-flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-[4px] border-2 transition-colors ${isActive ? "border-[#16a34a] bg-[#16a34a] text-white" : "border-[rgba(0,0,0,0.45)] bg-white text-transparent"}`}
-                                  aria-hidden="true"
-                                >
-                                  <Check size={14} strokeWidth={3} />
-                                </span>
-                              </button>
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    ) : null}
-                  </>
-                );
-              })()}
-            </div>
           </div>
         </section>
       ) : null}

@@ -6,7 +6,6 @@ import { ChevronDown } from "lucide-react";
 import type {
   AddonOption,
   AddonRef,
-  CommonChange,
   IngredientItem,
   MacroDelta,
   MenuItem,
@@ -185,7 +184,6 @@ export default function MenuItemCard({
   ingredientItems,
   menuItems,
   customizationRules,
-  commonChanges,
   mode = "menu",
   cartQuantity = 1,
   onCartIncrement,
@@ -225,7 +223,6 @@ export default function MenuItemCard({
   ingredientItems?: IngredientItem[];
   menuItems?: MenuItem[];
   customizationRules?: RestaurantCustomizationRules;
-  commonChanges?: CommonChange[];
   mode?: "menu" | "cart";
   cartQuantity?: number;
   onCartIncrement?: () => void;
@@ -287,8 +284,8 @@ export default function MenuItemCard({
   const baseNutrition = selectedVariant?.nutrition ?? item.nutrition;
 
   const applicableCommonChanges = useMemo(
-    () => getApplicableCommonChanges(item, commonChanges),
-    [item, commonChanges]
+    () => getApplicableCommonChanges(item),
+    [item]
   );
 
   const resolvedIngredients = useMemo(
@@ -312,8 +309,7 @@ export default function MenuItemCard({
     mode,
     item,
     addons,
-    commonChanges,
-    initialCartOptionsLabel,
+      initialCartOptionsLabel,
     initialCartCustomizations,
     resolvedIngredients,
   });
@@ -634,6 +630,7 @@ export default function MenuItemCard({
 
     return labels.length > 0 ? labels.join(" • ") : undefined;
   }, [ingredientItems, item, restaurantId]);
+  const commonChanges = [] as const;
   const isCartPage = pathname === "/cart";
   const useCartQuickEditPanel = isCartMode && isCartPage;
 
@@ -670,7 +667,7 @@ export default function MenuItemCard({
 
       return !addonNames.has(normalized) && !commonChangeLabels.has(normalized) && !isIngredientCustomization && normalized !== "Combo Meal" && !/^Side:\s*/i.test(normalized) && !/^Drink:\s*/i.test(normalized);
     });
-  }, [addons, commonChanges, initialCartCustomizations, item.addonRefs, resolvedIngredients]);
+  }, [addons, initialCartCustomizations, item.addonRefs, resolvedIngredients]);
 
   const optionsLabel = useMemo(() => {
     return formatOptionLabelCounts(buildOptionLabelCounts(selectedAddons, selectedSauceCounts));
@@ -1490,7 +1487,6 @@ export default function MenuItemCard({
                   return next;
                 });
               }}
-              commonChanges={applicableCommonChanges}
               selectedCommonChangeIds={selectedCommonChangeIds}
               onToggleCommonChange={(changeId) =>
                 setSelectedCommonChangeIds((prev) => {
