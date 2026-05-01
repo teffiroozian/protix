@@ -65,15 +65,6 @@ export type MacroDelta = {
   totalFat: number;
 };
 
-export type CommonChange = {
-  id: string;
-  label: string;
-  appliesTo?: {
-    categories?: string[];
-  };
-  delta: MacroDelta;
-};
-
 export type IngredientTabsOverride = {
   ingredientTabs?: string[];
   singleSelectIngredientTabs?: string[];
@@ -148,7 +139,6 @@ export type RestaurantMenu = {
   items: MenuItem[];
   ingredients?: IngredientItem[];
   addons?: RestaurantAddons;
-  commonChanges?: CommonChange[];
   customizationRules?: RestaurantCustomizationRules;
   builderConfig?: RestaurantBuilderConfig;
 };

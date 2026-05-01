@@ -45,7 +45,6 @@ export default async function RestaurantPage({
               items={restaurantData.items}
               ingredients={restaurantData.ingredients}
               addons={restaurantData.addons}
-              commonChanges={restaurantData.commonChanges}
               customizationRules={restaurantData.customizationRules}
               builderConfig={restaurantData.builderConfig}
             />

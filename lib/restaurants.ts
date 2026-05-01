@@ -3,7 +3,6 @@ import { normalizeAddons } from "@/lib/addons";
 import { resolveMenuDataset } from "@/lib/menuResolver";
 import type {
   AddonRef,
-  CommonChange,
   IngredientItem,
   MenuItem,
   RestaurantAddons,
@@ -20,7 +19,6 @@ export type RestaurantData = {
   items: MenuItem[];
   ingredients: IngredientItem[];
   addons: RestaurantAddons;
-  commonChanges: CommonChange[];
   customizationRules?: RestaurantCustomizationRules;
   builderConfig?: RestaurantBuilderConfig;
 };
@@ -56,7 +54,6 @@ export async function getRestaurantData(id: string): Promise<RestaurantData | nu
   const menu = resolveMenuDataset(menuModule.default);
   const ingredients = menu.ingredients ?? [];
   const items = menu.items ?? [];
-  const commonChanges: CommonChange[] = menu.commonChanges ?? [];
   return {
     id: restaurant.id,
     name: restaurant.name,
@@ -67,7 +64,6 @@ export async function getRestaurantData(id: string): Promise<RestaurantData | nu
     items,
     ingredients,
     addons: normalizeAddons(menu.addons ?? {}),
-    commonChanges,
     customizationRules: menu.customizationRules,
     builderConfig: menu.builderConfig,
   };
