@@ -66,13 +66,14 @@ export const metadata: Metadata = {
         ],
         type: "website",
     },
+    manifest: "/site.webmanifest",
     icons: {
         icon: [
-            { url: "/favicon.ico" },
-            { url: "/logo.png", type: "image/png" },
+            { url: "/favicon.svg", type: "image/svg+xml", sizes: "any" },
+            { url: "/favicon.ico", type: "image/x-icon" },
         ],
         shortcut: "/favicon.ico",
-        apple: "/logo.png",
+        apple: "/apple-touch-icon.png",
     },
 };
 
