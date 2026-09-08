@@ -11,7 +11,7 @@ import { useBuildInProgressGuard } from "@/components/BuildInProgressGuardContex
 import { isPlainLeftClick } from "@/lib/isPlainLeftClick";
 
 export default function GlobalMobileNav({
-  logoSrc = "/logo.png",
+  logoSrc = "/logo-white.svg",
   showSearchButton = true,
   showCartButton = true,
   leadingButton,
@@ -65,8 +65,8 @@ export default function GlobalMobileNav({
             className="inline-flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-white"
             aria-label="Go to homepage"
           >
-            <span className="relative h-7 w-7">
-              <Image src={logoSrc} alt="Macro Maxxer logo" fill className="object-contain rounded-md" />
+            <span className="relative h-7 w-7 rounded-md bg-black">
+              <Image src={logoSrc} alt="Macro Maxxer logo" fill className="object-contain p-1" />
             </span>
           </Link>
           {showTrailingCluster ? (

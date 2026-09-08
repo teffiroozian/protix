@@ -23,7 +23,9 @@ export default function SiteFooter() {
           <div className="grid gap-8 p-6 sm:grid-cols-[1.3fr_1fr] sm:items-center sm:gap-10 sm:p-10">
             <div>
               <Link href="/" className="inline-flex items-center gap-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900">
-                <Image src="/logo.png" alt="" width={28} height={28} aria-hidden="true" className="rounded-lg" />
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-black p-1">
+                  <Image src="/logo-white.svg" alt="" width={100} height={90} aria-hidden="true" className="h-full w-full object-contain" />
+                </span>
                 <span className="font-heading text-lg font-bold text-neutral-900">Macro Maxxer</span>
               </Link>
 

@@ -27,7 +27,9 @@ export default function TermsPage() {
             href="/"
             className="inline-flex items-center gap-2 rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-slate-900"
           >
-            <Image src="/logo.png" alt="" width={32} height={32} aria-hidden="true" className="rounded-lg" />
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-black p-1">
+              <Image src="/logo-white.svg" alt="" width={100} height={90} aria-hidden="true" className="h-full w-full object-contain" />
+            </span>
             <span className="font-heading text-lg font-bold text-neutral-900">Macro Maxxer</span>
           </Link>
         </HomeSectionContainer>
