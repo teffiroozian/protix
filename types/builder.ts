@@ -13,6 +13,8 @@ export type BuilderEntreeOption = {
 
 // whole build system for a restaurant
 export type RestaurantBuilderConfig = {
+  // Optional core protein category when its label is not Protein/Meat. Used by OG selection.
+  primaryProteinCategory?: string;
   // all the build-your-own options in a restaurant
   entreeOptions?: Record<string, BuilderEntreeOption>;
   hiddenSectionsByEntree?: Record<string, string[]>;

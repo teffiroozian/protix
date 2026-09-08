@@ -30,7 +30,8 @@
     "next": "16.1.4",
     "pdfjs-dist": "^6.2.108",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "sharp": "^0.34.5"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.18",

@@ -10,7 +10,7 @@ import type { ProteinScoreTier } from "@/lib/nutrition";
 // error state, so only Elite/Excellent get saturated, high-contrast
 // treatments. Good/Moderate/Low step down in saturation and contrast so a
 // below-average score reads as neutral information rather than a warning.
-const tierStyles: Record<
+export const tierStyles: Record<
   ProteinScoreTier,
   { chip: string; iconWrap: string; icon: string; value: string; supporting: string }
 > = {

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getRestaurantData } from "@/lib/restaurants";
+import { SITE_NAME } from "@/lib/site";
 
 type RestaurantLayoutProps = {
   children: React.ReactNode;
@@ -30,6 +31,13 @@ export async function generateMetadata({
   return {
     title,
     description,
+    openGraph: {
+      title,
+      description,
+      url: `/restaurant/${restaurant.id}`,
+      siteName: SITE_NAME,
+      type: "website",
+    },
     alternates: {
       canonical: `/restaurant/${restaurant.id}`,
     },

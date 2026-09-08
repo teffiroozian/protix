@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  outputFileTracingIncludes: {
+    '/restaurant/*/opengraph-image': ['./public/fonts/**/*', './public/logo.svg', './public/restaurants/**/*'],
+  },
   images: {
     remotePatterns: [
       // Official Chick-fil-A ordering-menu CDN — the generated Chick-fil-A
